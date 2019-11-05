@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>{% trans %}Select Documents For Compare{% endtrans %}</title><META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleViewDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var attInfo = window.dialogArguments;
+var info = {
+	  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	  "UserRoles" : "$$WebClient;[User]",
+	  "isSuperuser" : "",
+	  "HTTP_Referer" : "",
+	  "Query_String" : "OpenForm",
+	  "Query_String_Decoded" : "OpenForm",
+	  "Path_Info_Decoded" : "{{ path('docova_selectforcompare') }}?OpenForm",
+	  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 1] }}",
+	  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 1] }}"
+};
+function getinfovar() {
+	return info;
+}
+
+function completeWizard()
+{
+	//-----------------------------------------------
+	fileIndex1 = thingFactory.GetHTMLItemValue("FileAttach1");
+	fileIndex2 = thingFactory.GetHTMLItemValue("FileAttach2");
+	
+	if(fileIndex1 == "" || fileIndex2 == "") {
+		alert("{% trans %}Please select a file from both documents.{% endtrans %}");
+		return;
+	}
+	selFiles = [fileIndex1, fileIndex2]
+	window.returnValue=selFiles;
+	window.close();
+}
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	//some initial work
+	try{
+		var fileURL1 = attInfo[0].selectSingleNode("URL").text.split("*");
+		var fileName1 = attInfo[0].selectSingleNode("FILENAME").text.split("*");
+		var fileURL2 = attInfo[1].selectSingleNode("URL").text.split("*");
+		var fileName2 = attInfo[1].selectSingleNode("FILENAME").text.split("*");
+		
+		var obj1= document.getElementById("FirstDoc")
+		for(x=0; x<fileURL1.length; x++){
+			obj1.innerHTML += "<input type='radio' name='FileAttach1' value='" + x + "'>" + fileName1[x] + "<br>";	
+		}
+		
+		var obj2= document.getElementById("SecondDoc")
+		for(x=0; x<fileURL2.length; x++){
+			obj2.innerHTML += "<input type='radio' name='FileAttach2' value='" + x + "'>" + fileName2[x] + "<br>";	
+		}
+
+	}
+	catch(e){
+		alert("Error.");
+		window.returnValue=false;
+		window.close();
+	}
+
+}
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onload="initDialog();">
+<form method="post" action="{{ path('docova_selectforcompare') }}?OpenForm&amp;Seq=1" name="_dlgSelectDocsForCompare">
+<input type="hidden" name="__Click" value="0"></form>
+<!-- Subform -- thingFactory -->
+<script src="{{ path('docova_dlextensions') }}" language="javascript"></script>
+<!-- End Subform -- thingFactory -->
+<script language="javascript">InitVars(info);</script>
+<table class="DlgTable" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr valign="top">
+		<td width="100%"><img width="1" height="1" src="{{ asset('bundles/docova/images/icons/ecblank.gif') }}" border="0" alt=""></td>
+	</tr>
+
+	<tr valign="top">
+		<td class="DlgContentCell" width="100%">
+			<div id="dlgContentNh">
+				<div id="divCurrentList" style="padding: 4px;height:235px; overflow:hidden;">
+					<div style="padding-bottom:5px" class="txFldCell">{% trans %}Multiple files were found in one or both of the selected documents.{% endtrans %}<br>{% trans %}Please select the files that you want to compare{% endtrans %}:</div>
+					<table style="border: 1px ridge; background-color:#efefff;" width="100%" cellspacing="0" cellpadding="0">
+					<thead>
+					     <td class="txFldCell" width="15">&nbsp;</td>
+					     <td class="txFldCell" width="260"><b>{% trans %}First Document{% endtrans %}</b></td>
+					     <td class="txFldCell"><b>{% trans %}Second Document{% endtrans %}</b></td>
+					</thead>
+					</table>
+					<div style="width: 99%; height:185px; overflow-y:auto; overflow-x:hidden;">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr bgcolor="#ffffff">
+							     <td class="txFldCell" style="border-bottom: groove 2px;" width="12">&nbsp;</td>
+							     <td valign=top class="txFldCell" style="border-bottom: groove 2px;" width="260"><div id=FirstDoc style="font:normal 12px Arial;"></div></td>
+							     <td valign=top class="txFldCell" style="border-bottom: groove 2px;"><div id=SecondDoc style="font:normal 12px Arial;"></div></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+
+	<tr valign="top">
+		<td id="buttonCell" class="DlgButtonCell" width="100%" valign="middle"><div align="right">
+			<input type="button" onclick="completeWizard()" value="{% trans %}Done{% endtrans %}" id="btnFinish" class="txButtonSubmit">&nbsp;&nbsp;&nbsp;<font size="2"> </font>
+			<input type="button" onclick="window.returnValue=false; window.close()" value="{% trans %}Cancel{% endtrans %}" id="btnCancel" class="txButtonCancel"></div>
+		</td>
+	</tr>
+</table>
+<!------------------ SUBFORM sfKillCache ------------>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+
+</form>
+</body>
+</html>

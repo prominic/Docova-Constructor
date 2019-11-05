@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleWorkspaceOptions.css') }}" type="text/css"  />
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript">
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "NsfName" : "{{ path('docova_homepage')[1: path('docova_homepage')|length - 2] }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "SetTab" : "{{ app.request.query.get('settab') }}",
+  "UserRoles" : "{{ is_granted('ROLE_ADMIN') ? '[Administration]' : '' }}",
+  "CanCreateApps" : "{{ user.getUserProfile.getCanCreateApp ? 'Yes' : '' }}"
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+
+$(function(){
+	$(document).on("contextmenu", function(e){ e.preventDefault(); e.stopPropagation();});
+	
+	$( "#btn-WSOptions" )
+		.button({
+			text: false,
+			label: "{% trans %}Workspace Options{% endtrans %}",
+			icons: { primary: "far fa-bars" }
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			OpenOptionsMenu(this);
+		});					
+});
+
+function OpenOptionsMenu(actionButton){
+	if(docInfo.CanCreateApps == "Yes" | ((docInfo.UserRoles).indexOf("[Administration]") != -1) ){
+		var CanCreateApps = true;
+	}else{
+		var CanCreateApps = false;
+	}
+	window.top.Docova.Utils.menu({
+		position: "XandY",
+		shiftX: 140,
+		shiftY: 85,
+		delegate: actionButton,
+		width: 200,
+		menus: [
+			{ title: "{% trans %}Add an App{% endtrans %}", itemicon: "ui-icon-image", action: "Docova.getUIWorkspace(document).getDocovaFrame('fraWorkspaceApps', 'window').AddApp()" },
+			{ title: "{% trans %}Create a New App{% endtrans %}", itemicon: "ui-icon-copy", action: "Docova.getUIWorkspace(document).getDocovaFrame('fraWorkspaceApps', 'window').CreateApp()", disabled: !CanCreateApps },				
+			{ separator: true },
+			{ title: "{% trans %}Add New Panel{% endtrans %}", itemicon: "ui-icon-zoomin", action: "Docova.getUIWorkspace(document).getDocovaFrame('fraWorkspaceApps', 'window').AddWorkspacePanel()" },
+			{ title: "{% trans %}Delete Current Panel{% endtrans %}", itemicon: "ui-icon-wrench", action: "Docova.getUIWorkspace(document).getDocovaFrame('fraWorkspaceApps', 'window').DeleteWorkspacePanel()" },
+			{ title: "{% trans %}Current Panel Properties{% endtrans %}", itemicon: "ui-icon-key", action: "Docova.getUIWorkspace(document).getDocovaFrame('fraWorkspaceApps', 'window').OpenPanelProperties()" },
+		]
+	});
+}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" SCROLL="no">
+	<div id="WorkspaceHeader" class="ui-widget-header ui-corner-all" style="width: 100%; height: 35px; position: relative;">
+		<div id="WorkspaceButtons" style="position: absolute; right: 20px; top: 2px; font: 11px Verdana, Arial; z-index: 1;">
+			<button id="btn-WSOptions" class="btnWorkspace ui-widget-header ui-corner-all"></button>
+		</div>
+	</div>
+</body>
+</html>

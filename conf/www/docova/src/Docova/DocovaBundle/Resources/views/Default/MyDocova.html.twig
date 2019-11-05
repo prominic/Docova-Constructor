@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My DOCOVA</title>
+{% if panel is not defined or not panel %}
+<script type="text/javascript">
+location.reload();
+</script>
+</head>
+<body></body>
+{% else %}
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDashboardPanels.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="Javascript" type="text/javascript" src="{{ asset('bundles/docova/js/highcharts.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" language="Javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script type="text/javascript" language="Javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/viewObjects.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/embeddedViewObjects.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/sfDashboardCommonJavascript.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+//----- Globals -----
+var BoxNumber = "";
+var origShareType = ""; //ShareType status when Share dialog is initially opened
+var currShareType = ""; //ShareType as it get's changed in the Share dialog...needed to track on whether to reset shared options values or not.
+var AvailableLibraries;
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "UserRoles" : "$$WebClient;[Administration]",
+  "HTTP_Referer" : "{{ url('docova_dashboard') }}",
+  "Query_String" : "ReadForm",
+  "Query_String_Decoded" : "ReadForm",
+  "Path_Info_Decoded" : "{{ path('docova_mydocova') }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PanelKey" :  "{{ panel.getId }}",
+  "PanelLayoutID" : "{{ panel.getLayoutName }}",
+  "PanelEditors" : "{{ panel.getCreator.getUserNameDnAbbreviated }}",
+  "PanelTitle" : "{{ panel.getTitle }}",
+  "PanelDesc" : "{{ panel.getDescription }}",
+  "ShareType" : "{{ panel.getParentPanel ? panel.getParentPanel.getShareType : panel.getShareType }}",
+  "InPanelList" : "{{ panel.getPanelList ? 'Yes' : 'No' }}",
+  "ShareList" : "{{ shareList }}",
+  "PanelParentID" : "{{ panel.getParentPanel ? panel.getParentPanel.getId : '' }}",
+  {% set layouts = [] %}
+  {% set panelList = [] %}
+  {% set checkPanelList = [] %}
+  {% for p in userPanels %}
+  	{% set layouts = layouts|merge([p.getLayoutName]) %}
+  	{% set panelList = panelList|merge([p.getId]) %}
+  	{% set checkPanelList = checkPanelList|merge([p.getParentPanel ? p.getParentPanel.getId : p.getId]) %}
+  {% endfor %}
+  "UserPanelLayoutList" : "{{ layouts|join(',') }}",
+  "UserPanelUNIDList" : "{{ panelList|join(',') }}",
+  "CheckPanelUNIDList" : "{{ checkPanelList|join(',') }}",
+  "ImagesPath" : "{{ asset('bundles/docova/images/') }}",
+  "SessionDateFormat" : "{{ settings.getDefaultDateFormat|lower }}"
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+
+function refreshWidget(obj){
+	obj.setSrc(obj.getSrc()); //Reload the xml src
+}
+
+function GetPanelDescription(Obj){
+	var selectedPanelID = window.top.Docova.Utils.getField("PanelList"),
+		opts = {
+			view: 'luPanelByUNID',
+			key: selectedPanelID,
+			columns: [2, 3]
+		};
+	var values = lookupNode(opts);
+	window.top.document.getElementById("PanelDescription").value = values[2];
+	window.top.document.getElementById("PanelOwner").value = values[3];
+}
+
+function GetPanelList(listtype){
+	if (listtype == "Public"){
+	 	//var panellist = thingFactory.DbColumn( "",  "", "luPanelAddList", "", "2", ", " );
+	 	var opts = {
+			view: 'luPanelAddList',
+			key: '',
+			columns: [1]
+		}
+		var panellist = lookupNode(opts);
+	 	panellist = "<option value='-Select-'>-{% trans %}Select{% endtrans %}-</option>" + panellist[1]
+	 	window.top.$('#PanelList').empty().append(panellist);
+	}
+	
+	if (listtype == "Managed"){
+	 	//var panellist = thingFactory.DBLookup("", "", "luPanelManaged", docInfo.UserNameAB, 2)
+	 	var opts = {
+			view: 'luPanelManaged',
+			key: docInfo.UserNameAB,
+			columns: [1]
+	 	};
+	 	var panellist = lookupNode(opts);
+	 	panellist = "<option value='-Select-'>-Select-</option>" + panellist[1];
+	 	window.top.$('#PanelList').empty().append(panellist);
+	}
+}
+
+function SubmitRequest(request, agentName){
+	//send the request to server
+	var processUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" + agentName  + "?OpenAgent";
+//	Docova.Utils.showProgressMessage("{% trans %}One moment.{% endtrans %}...");
+	var httpObj = new objHTTP();
+	if(!httpObj.PostData(request, processUrl) || httpObj.status=="FAILED"){
+//		Docova.Utils.hideProgressMessage();
+		return false;
+	}
+//	Docova.Utils.hideProgressMessage();
+	return (httpObj.results.length)? httpObj.results[0] : httpObj.status;
+}
+
+function dlgCreatePanel(){
+	var dlgCreatePanel = window.top.Docova.Utils.createDialog({
+		id: "divDlgCreatePanel",
+		url: "_dlgCreatePanel?OpenPage",
+		title: "{% trans %}Create a Panel.{% endtrans %}",
+		height: 500,
+		width: 900,
+		useiframe: false,
+		sourcewindow: window,
+		sourcedocument: document,
+		buttons: {
+			"{% trans %}Create Panel{% endtrans %}": function(){
+				var parentWin = window.top.Docova.GlobalStorage["divDlgCreatePanel"].sourcewindow;
+				if(parentWin.CreatePanel()){;
+					dlgCreatePanel.closeDialog();
+				}
+			},
+			"{% trans %}Cancel{% endtrans %}": function(){
+				dlgCreatePanel.closeDialog();
+			}
+		}
+	});
+	return;
+}
+
+function CreatePanel(){
+	var agentName = "DashboardServices";
+	var PanelName = window.top.$('#PanelName').val();
+	var PanelDesc = window.top.$('#PanelDescription').val();
+	var uname = window.top.$('#Username').val();
+	var PanelLayout = window.top.$('input[name=panellayout]:checked').val();
+
+	//-----Validatation-----
+	if(PanelName == ""){
+		alert("{% trans %}Panel name is blank.  Please provide a panel name.{% endtrans %}");
+		return false;
+	}
+	var str = window.top.Docova.Utils.allTrim(PanelDesc); //Prevent just blanks entered
+	if(str == ""){
+		alert("{% trans %}Panel description is blank.  Please provide a description for this panel.{% endtrans %}");
+		return false;
+	}
+	
+	var agentName = "DashboardServices";
+	var request = "<Request><Action>CREATEPANEL</Action>";
+	request += "<Document>";
+	request += "<Username><![CDATA[" + uname + "]]></Username>";
+	request += "<PanelName><![CDATA[" + PanelName + "]]></PanelName>";
+	request += "<PanelDesc><![CDATA[" + PanelDesc + "]]></PanelDesc>";
+	request += "<PanelLayout>" + PanelLayout + "</PanelLayout>";
+	request += "</Document>";
+	request += "</Request>";
+	var result = SubmitRequest(request, agentName);
+
+	ResetTabs();
+	return true;
+}
+
+function dlgRemovePanel(paneltitle, panelId, panelsharetype, panelparentUNID){
+	if((panelsharetype == "Private") | (panelsharetype == "Shared" & panelparentUNID != "")){
+		var deleteoption = "Delete";
+		var dlgHTML = '<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{% trans with {'%paneltitle%' : '"\' + paneltitle + \'"'} %}You are requesting to delete the panel named %paneltitle% from your Dashboard. Are you sure?{% endtrans %}</p>';
+		var dlgRemovePanel = window.top.Docova.Utils.createDialog({
+			id: "divDlgRemovePanel",
+			dlghtml: dlgHTML,
+			title: "{% trans %}Delete Dashboard Panel?{% endtrans %}",
+			height: 200,
+			width: 500,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}Delete Panel{% endtrans %}": function() {
+					RemovePanel(panelId, panelparentUNID, panelsharetype, deleteoption);
+					dlgRemovePanel.closeDialog();
+				},
+				"{% trans %}Cancel{% endtrans %}": function() {
+					dlgRemovePanel.closeDialog();
+				}
+			}
+		});
+	}
+	
+	if(panelsharetype == "Shared" & panelparentUNID == ""){
+		var deleteoption = "";
+		var dlgRemoveSharedPanel = window.top.Docova.Utils.createDialog({
+			id: "divDlgRemoveSharedPanel",
+			url: "_dlgRemoveDeleteSharedPanel?OpenPage",
+			title: "{% trans %}Remove/Delete Panel.{% endtrans %}",
+			height: 300,
+			width: 500,
+			useiframe: false,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}Remove/Delete Panel{% endtrans %}": function() {
+					deleteoption = window.top.$("input[name=DeleteAction]:checked").val();
+					RemovePanel(panelId, panelparentUNID, panelsharetype, deleteoption);
+					dlgRemoveSharedPanel.closeDialog();
+				},
+				"{% trans %}Cancel{% endtrans %}": function() {
+					dlgRemoveSharedPanel.closeDialog();
+				}
+			}
+		});
+	}
+	return false;
+
+}
+
+function RemovePanel(panelId, panelparentUNID, panelsharetype, deleteoption){
+	var uname = docInfo.UserNameAB;
+	var agentName = "DashboardServices";
+	var userpanellayoutlist = docInfo.UserPanelLayoutList;
+	var userpanelUNIDlist = docInfo.UserPanelUNIDList;
+	var userpanellayoutarray = userpanellayoutlist.split(",");
+	var userpanelUNIDarray = userpanelUNIDlist.split(",");
+	
+	var request = "<Request><Action>REMOVEPANEL</Action>";
+	request += "<Document>";
+	request += "<Username><![CDATA[" + uname + "]]></Username>";
+	request += "<PanelID><![CDATA[" + panelId+ "]]></PanelID>";
+	request += "<PanelParentUNID>" + panelparentUNID + "</PanelParentUNID>";
+	request += "<PanelShareType>" + panelsharetype + "</PanelShareType>";
+	request += "<DeleteOption>" + deleteoption + "</DeleteOption>";
+	request += "</Document>";
+	request += "</Request>";
+
+	var result = SubmitRequest(request, agentName);
+	
+	//Check if this is the last panel being deleted
+	if (userpanelUNIDarray.length == 1){
+		parent.parent.fraDashboard.location.href = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" +  "DocovaDashboard?ReadForm";
+	}else{
+		window.parent.fraDashboardTabs.location.href = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" +  "UserPanelTabs?ReadForm";
+		//Check to see if this is the first tab being removed if so, we need to reload what is currently the second tab and panel
+		if (userpanelUNIDarray[0] == panelId){
+			ReloadPanel(userpanellayoutarray[1], userpanelUNIDarray[1]);
+		}else{
+			ReloadPanel(userpanellayoutarray[0], userpanelUNIDarray[0]);
+		}
+
+	}
+}
+
+function dlgChangePanel(){
+	//---Check access control to edit panel values---
+	if( docInfo.PanelEditors != docInfo.UserNameAB){
+		var dlgHTML = '<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{% trans %}Sorry, You do not have access to change this panel.{% endtrans %}\n\r';
+		dlgHTML += '{% trans with {'%paneleditor%' : '\' + docInfo.PanelEditors + \''} %}Contact the owner (%paneleditor%) to request changes.{% endtrans %}</p>';
+		var dlgNoChangePanel = window.top.Docova.Utils.createDialog({
+			id: "divDlgNoChangePanel",
+			dlghtml: dlgHTML,
+			title: "Change panel denied.",
+			height: 200,
+			width: 500,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}OK{% endtrans %}": function() {
+					dlgNoChangePanel.closeDialog();
+				}
+			}
+		});
+		return false;
+	}
+
+	var loadTarget = "_dlgChangePanel?OpenPage";
+	$("#dialogBox").empty();
+	$("#dialogBox").load(loadTarget, function(){
+      	var dlgHTML = $("#dialogBox").html();
+		var dlgChangePanel = window.top.Docova.Utils.createDialog({
+			id: "divDlgChangePanel",
+			dlghtml: dlgHTML,
+			title: "{% trans %}Change Panel.{% endtrans %}",
+			height: 500,
+			width: 900,
+			useiframe: false,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}Change Panel{% endtrans %}": function(){
+					if(ChangePanel()){
+						dlgChangePanel.closeDialog();
+					}
+				},
+				"{% trans %}Cancel{% endtrans %}": function(){
+					dlgChangePanel.closeDialog();
+				}
+			},
+		})
+		window.top.$("#PanelName").val(docInfo.PanelTitle);
+		window.top.$("#PanelDescription").val(docInfo.PanelDesc)
+		window.top.$("#Username").val(docInfo.PanelEditors)
+		var LayoutList = window.top.document.getElementsByName('panellayout');
+		for(var i = 0; i < LayoutList.length; i++){
+  	   		if(LayoutList[i].value == docInfo.PanelLayoutID){
+         		LayoutList[i].checked = true;
+        		}
+      	}
+    		window.top.$("#PanelName").focus();
+	});
+	
+	return;
+}
+
+function ChangePanel(){
+	var userpanellayoutlist = docInfo.UserPanelLayoutList;
+	var userpanelUNIDlist = docInfo.UserPanelUNIDList;
+	var userpanellayoutarray = userpanellayoutlist.split(",");
+	var userpanelUNIDarray = userpanelUNIDlist.split(",");
+	var agentName = "DashboardServices";
+	var PanelKey = docInfo.PanelKey;
+	var PanelName = window.top.$('#PanelName').val();
+	var PanelDesc = window.top.$('#PanelDescription').val();
+	var uname = window.top.$('#Username').val();
+	var PanelLayout = window.top.$('input[name=panellayout]:checked').val();
+
+	//-----Validatation-----
+	if(PanelName == ""){
+		alert("{% trans %}Panel name is blank.  Please provide a panel name.{% endtrans %}");
+		return false;
+	}
+	var str = Docova.Utils.allTrim(PanelDesc); //Prevent just blanks entered
+	if(str == ""){
+		alert("{% trans %}Panel description is blank.  Please provide a description for this panel.{% endtrans %}");
+		return false;
+	}
+	
+	var agentName = "DashboardServices";
+	var request = "<Request><Action>CHANGEPANEL</Action>";
+	request += "<Document>";
+	request += "<Username><![CDATA[" + uname + "]]></Username>";
+	request += "<PanelKey>" + PanelKey + "</PanelKey>";
+	request += "<PanelName><![CDATA[" + PanelName + "]]></PanelName>";
+	request += "<PanelDesc><![CDATA[" + PanelDesc + "]]></PanelDesc>";
+	request += "<PanelLayout>" + PanelLayout + "</PanelLayout>";
+	request += "</Document>";
+	request += "</Request>";
+
+	var result = SubmitRequest(request, agentName);
+	PanelKey = result;
+	ResetTabs();
+	ReloadPanel(PanelLayout, PanelKey); //Reloads current panel to get mods made
+	return true;
+}
+
+function dlgSharePanel(){
+	//---Check access control to edit panel values---
+	if( docInfo.PanelEditors != docInfo.UserNameAB){
+		var dlgHTML = '<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{% trans %}Sorry, You do not have access to share this panel.{% endtrans %}\n\r';
+		dlgHTML += '{% trans with {'%paneleditor%' : '\' + docInfo.PanelEditors + \''} %}Contact the owner (%paneleditor%) to request changes.{% endtrans %}</p>';
+		var dlgNoSharePanel = window.top.Docova.Utils.createDialog({
+			id: "divDlgNoSharePanel",
+			dlghtml: dlgHTML,
+			title: "{% trans %}Share panel denied.{% endtrans %}",
+			height: 200,
+			width: 500,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}OK{% endtrans %}": function() {
+					dlgNoSharePanel.closeDialog();
+				}
+			}
+		});
+		return false;
+	}
+
+	var loadTarget = "_dlgSharePanel?OpenPage";
+	$("#dialogBox").empty();
+	$("#dialogBox").load(loadTarget, function(){
+      	var dlgHTML = $("#dialogBox").html();
+		var dlgSharePanel = window.top.Docova.Utils.createDialog({
+			id: "divDlgSharePanel",
+			dlghtml: dlgHTML,
+			title: "{% trans %}Share this Panel.{% endtrans %}",
+			height: 400,
+			width: 410,
+			useiframe: false,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}Done{% endtrans %}": function(){
+					SharePanel();
+					dlgSharePanel.closeDialog();
+				},
+				"{% trans %}Cancel{% endtrans %}": function(){
+					dlgSharePanel.closeDialog();
+				}
+			},
+		});
+		SetRadioButton("ShareType", docInfo.ShareType)
+		currShareType = docInfo.ShareType //currShareType is used to track changes to ShareType on dialog by user
+		SetCheckboxSingle("InPanelList", docInfo.InPanelList)
+		//window.top.$("#ShareList").val((docInfo.ShareList).replace(/;/gi, "\n"))
+		window.top.$("#ShareList").val(docInfo.ShareList);
+		window.top.$( "#btn-SelectMultiNames" )
+			.button({
+				text:true,
+				label: "{% trans %}Share with{% endtrans %}:",
+				icons: {primary: "ui-icon-person"}
+			})
+			.click(function( event ) {
+				event.preventDefault();
+				if (checkShared(this) == false){
+					return false;
+				}
+				dlgSelectNamesMulti();
+		});
+	});	
+	return;
+}
+
+function SharePanel(){
+	origShareType = docInfo.ShareType;
+	var agentName = "DashboardServices";
+	var PanelKey = docInfo.PanelKey;
+	var PanelLayout = docInfo.PanelLayoutID;
+	var ShareType = window.top.$("input[name=ShareType]:checked").val();
+	var InPanelList = GetCheckbox("InPanelList");
+	var origShareList = docInfo.ShareList;
+	var origShareListArray = origShareList.split(";");
+	var RemoveList = ""; //For if someone was removed from the list
+	var tmpName = "";
+	var foundname = false;
+	var ShareList = "";
+	var uname = docInfo.UserNameAB;
+	var delim = ";";
+	var ShareListArray = (window.top.$('#ShareList').val()).split(delim);
+	for(var i=0; i<ShareListArray.length; i++){
+		if(ShareList == ""){
+			ShareList = ShareListArray[i];
+		}else{
+			ShareList += ";" + ShareListArray[i];
+		}
+	}
+	
+	for(var j=0; j < origShareListArray.length; j++){
+		tmpName = origShareListArray[j];
+		foundname = false;
+		for (var k=0; k < ShareListArray.length; k++){
+			if (tmpName == ShareListArray[k]){
+				foundname = true;
+			}
+		}
+		if (foundname == false){
+		//add to remove list
+			if(RemoveList == ""){
+				RemoveList = tmpName;
+			}else{
+				RemoveList += ";" + tmpName;
+			}
+		}
+	}
+
+	var agentName = "DashboardServices";
+	var request = "<Request><Action>SHAREPANEL</Action>";
+	request += "<Document>";
+	request += "<Username><![CDATA[" + uname + "]]></Username>";
+	request += "<PanelKey>" + PanelKey + "</PanelKey>";
+	request += "<ShareType>" + ShareType + "</ShareType>";
+	request += "<origShareType>" + origShareType + "</origShareType>";
+	request += "<InPanelList>" + InPanelList.join(';') + "</InPanelList>";
+	request += "<ShareList><![CDATA[" + ShareList + "]]></ShareList>";
+	request += "<RemoveList><![CDATA[" + RemoveList + "]]></RemoveList>";
+	request += "</Document>";
+	request += "</Request>";
+
+	var result = SubmitRequest(request, agentName);
+
+	ResetTabs();
+	ReloadPanel(PanelLayout, PanelKey); //Reloads current panel to get mods made	
+}
+
+function dlgAddPanel(){
+	var dlgAddPanel = window.top.Docova.Utils.createDialog({
+		id: "divDlgAddPanel",
+		url: "_dlgAddPanel?OpenPage",
+		title: "{% trans %}Add a Panel.{% endtrans %}",
+		height: 300,
+		width: 500,
+		useiframe: false,
+		sourcewindow: window,
+		sourcedocument: document,
+		buttons: {
+			"{% trans %}Add Panel{% endtrans %}": function() {
+				if(AddPanel()){
+					dlgAddPanel.closeDialog();
+				}
+			},
+			"{% trans %}Cancel{% endtrans %}": function() {
+				dlgAddPanel.closeDialog();
+			}
+		}
+	});
+	return;
+}
+
+function AddPanel(){
+	var objPanelList = window.top.document.getElementById("PanelList");
+	var PanelID = objPanelList.options[objPanelList.selectedIndex].value;
+	var checkpanelUNIDlist = docInfo.CheckPanelUNIDList;
+	var checkpanelUNIDarray = checkpanelUNIDlist.split(",");
+	var panelfound = false;
+	
+	if(PanelID == "-Select-"){
+		alert("{% trans %}No panel selected.{% endtrans %}");
+		return false;
+	}
+
+	for(var i = 0; i < checkpanelUNIDarray.length; i++){
+		if(checkpanelUNIDarray[i] == PanelID){
+			panelfound = true;
+		}
+	}
+	
+	if (panelfound){
+		var dlgHTML = '<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{% trans %}Sorry, that panel is already on your Dashboard.  Please select a different panel.{% endtrans %}</p>';
+		var dlgDuplicatePanel = window.top.Docova.Utils.createDialog({
+			id: "divDlgDuplicatePanel",
+			dlghtml: dlgHTML,
+			title: "{% trans %}Duplicate Panel.{% endtrans %}",
+			height: 200,
+			width: 500,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}OK{% endtrans %}": function() {
+					dlgDuplicatePanel.closeDialog();
+				}
+			}
+		});
+		return false;
+	}
+
+	var uname = docInfo.UserNameAB;
+	var agentName = "DashboardServices";
+
+	var request = "<Request><Action>ADDPANEL</Action>";
+	request += "<Document>";
+	request += "<Username><![CDATA[" + uname + "]]></Username>";
+	request += "<PanelID><![CDATA[" + PanelID + "]]></PanelID>";
+	request += "</Document>";
+	request += "</Request>";
+
+	var result = SubmitRequest(request, agentName);
+	parent.frames['fraDashboardTabs'].location.reload();
+	return true;
+}
+
+function ReorderPanels(taborderlist){
+	var uname = docInfo.UserNameAB;
+	var agentName = "DashboardServices";
+
+	var request = "<Request><Action>REORDERPANELS</Action>";
+	request += "<Document>";
+	request += "<Username><![CDATA[" + uname + "]]></Username>";
+	request += "<TabOrderList>" + taborderlist + "</TabOrderList>";
+	request += "</Document>";
+	request += "</Request>";
+
+	var result = SubmitRequest(request, agentName);
+}
+
+function dlgSelectNamesMulti(){
+	var loadTarget = "_dlgSelectNamesMulti?OpenPage";
+	var dialogTitle = "{% trans %}Select Names{% endtrans %}";
+	var dialogWidth = "500";
+	var dialogHeight = "550";
+	$("#subdialogBox").empty();
+	$("#subdialogBox").load(loadTarget, function(){
+      	var dlgHTML = $("#subdialogBox").html();
+		var dlgSelectNames = window.top.Docova.Utils.createDialog({
+			id: "divDlgSelectNames",
+			dlghtml: dlgHTML,
+			title: "{% trans %}Select Names.{% endtrans %}",
+			height: 550,
+			width: 500,
+			useiframe: false,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}Select Names{% endtrans %}": function(){
+					SelectNames();
+					dlgSelectNames.closeDialog();
+				},
+				"{% trans %}Cancel{% endtrans %}": function(){
+					dlgSelectNames.closeDialog();
+				}
+			},
+		});
+		var delim = ";"
+		var currentlist = window.top.$("#ShareList").val().split(delim)
+		SetCheckboxMulti("namelist", currentlist)
+		AddNames();
+		window.top.$( "#btn-AddNames" )
+			.button({
+				text:false,
+				label: "{% trans %}Add Selected Names{% endtrans %}",
+				icons: {primary: "ui-icon-seek-next"}
+			})
+			.click(function( event ) {
+				event.preventDefault();
+				AddNames();
+		});
+		window.top.$( "#btn-RemoveNames" )
+			.button({
+				text:false,
+				label: "{% trans %}Remove Selected Names{% endtrans %}",
+				icons: {primary: "ui-icon-seek-prev"}
+			})
+			.click(function( event ) {
+				event.preventDefault();
+				RemoveNames();
+		});
+	});
+	return;
+}
+
+function AddNames(){
+	var nameslist = GetCheckbox("namelist");
+	selectednamesHTML = "<table>";
+	for(var i=0; i<nameslist.length; i++){
+		selectednamesHTML += "<tr><td><input type='checkbox' name='selectednamelist' value='" + nameslist[i] + "'>" + nameslist[i] + "</input></td></tr>";
+	}
+	selectednamesHTML += "</table>";
+	window.top.$("#divTargetList").html(selectednamesHTML);
+}
+
+function RemoveNames(){
+	var optionlist = window.top.document.getElementsByName("selectednamelist");
+	var optionlistarray = [];
+	var newlistHTML = "<table>";
+	for (var i=0; i<optionlist.length; i++){
+		if($(optionlist[i]).prop("checked") == false){
+			newlistHTML += "<tr><td><input type='checkbox' name='selectednamelist' value='" + optionlist[i].value + "'>" + optionlist[i].value + "</input></td></tr>";
+			//Build array to send to SetCheckboxMulti function below
+			optionlistarray.push(optionlist[i].value);
+		}
+	}
+	newlistHTML += "</table>";
+	window.top.$("#divTargetList").html(newlistHTML);
+	
+	SetCheckboxMulti("namelist", optionlistarray);
+}
+
+function SelectNames(){
+	var selectedlist ="";
+	var delim = ";";
+	window.top.$('input[name=selectednamelist]').each(function() {
+		selectedlist += selectedlist == '' ? $(this).val() : (delim + $(this).val());
+	});
+	window.top.$('#ShareList').val(selectedlist);
+}
+
+function GetCheckbox(fieldname){
+	var selectedlist = window.top.$('input[name=' + fieldname + ']:checked').map(function() {
+		return $(this).val();
+	}).get();
+	return selectedlist;
+}
+
+function SetCheckboxMulti(fieldname, setlistarray){
+//For setting many checkboxes in a checkbox group
+	var  optionlist = window.top.document.getElementsByName(fieldname);
+	window.top.$('input[name=' + fieldname + ']').each(function() {
+		var found = false;
+		for (var i = 0; i < setlistarray.length; i++) {
+			if ($(this).val() == setlistarray[i]) {
+				found = true;
+				break;
+			}
+		}
+		if (found) {
+			$(this).prop('checked', true);
+		}
+		else {
+			$(this).prop('checked', false);
+		}
+	});
+}
+
+function SetCheckboxSingle(fieldname, fieldvalue){
+//For setting one checkbox in a checkbox group, good for when the group is just one checkbox, like an option.
+	var optionlist = window.top.document.getElementsByName(fieldname);
+	for(var i=0; i<optionlist.length; i++){
+		if(optionlist[i].value == fieldvalue){
+			optionlist[i].checked = true;
+		}else{
+			optionlist[i].checked = false;
+		}
+	}
+}
+
+/**
+ *  *** DEPRICATED ***
+ *
+function GetRadioButton(fieldname){
+	var optionlist = window.top.document.getElementsByName(fieldname);
+	var optionvalue = "";
+	for(var i = 0; i < optionlist.length; i++){
+    	   if(optionlist[i].checked){
+           optionvalue = optionlist[i].value;
+        }
+      }
+      return optionvalue;
+}
+*/
+function SetRadioButton(fieldname, value){
+	var optionlist = window.top.document.getElementsByName(fieldname);
+	var optionvalue = "";
+	for(var i = 0; i < optionlist.length; i++){
+    	   if(optionlist[i].value == value){
+           optionlist[i].checked = true;
+        }
+      }
+}
+
+function checkShared(obj){
+//For Share Panel dialog, checks to ensure user makes ShareType "Shared" before selecting more options.
+	obj = $(obj);
+	var sharetype = window.top.$("input[name=ShareType]:checked").val();
+	if (sharetype == "Private"){
+		if(obj.attr('id') == "InPanelList"){
+			alert("{% trans %}Please make this panel Shared before trying to add it to the Add List.{% endtrans %}");
+			obj.prop('checked', false);
+		}
+		if(obj.attr('id') == "btn-SelectMultiNames"){
+				alert("{% trans %}Please make this panel Shared before trying to add names.{% endtrans %}");
+		}
+		return false;
+	}else{
+		return true;
+	}
+}
+
+function InitiateShared(){
+	currShareType = "Shared";
+}
+
+function ClearSharedSettings(){
+//For SharePanel dialog. If user changes panel Shared settings from Shared to Private, then any Shared settings, the Share list and panel list checkbox need to be cleared
+	if (currShareType == "Private"){
+		return;
+	}
+	var dlgHTML = '<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{% trans %}You are changing this panel to be Private. Any sharing options will be cleared. Are you sure?{% endtrans %}</p>';
+	
+	var dlgClearSharedSettings = window.top.Docova.Utils.createDialog({
+		id: "divDlgClearSharedSettings",
+		dlghtml: dlgHTML,
+		title: "{% trans %}Remove sharing information?{% endtrans %}",
+		height: 200,
+		width: 500,
+		sourcewindow: window,
+		sourcedocument: document,
+		buttons: {
+			"{% trans %}OK{% endtrans %}": function() {
+				SetCheckboxSingle("InPanelList", "No");
+				$("#ShareList").val('');
+				currShareType = $("input[name=ShareType]:checked").val();
+				dlgClearSharedSettings.closeDialog();
+			},
+			"{% trans %}Cancel{% endtrans %}": function() {
+				SetRadioButton("ShareType", currShareType);
+				dlgClearSharedSettings.closeDialog();
+			}
+		}
+	});
+}
+
+function ReloadPanel(layoutname, panelkey){
+	window.parent.fraDashboardPanels.location.href = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" +  "MyDocova?ReadForm" +  "&layoutpanel=" + layoutname + "&panelkey=" + panelkey;	
+}
+
+function GetCurrentSelectedTab(){
+//Uses the current panel UNID to get the selected tab.  Using the current panel key, finds the key in the panel unid array which will correspond to the tab
+//that is selected
+//Can be used for resetting the selected tab after a refresh of the tabs is performed
+	var panelkey = docInfo.PanelKey;
+	var tabindex;
+	var userpanellayoutlist = docInfo.UserPanelLayoutList;
+	var userpanelUNIDlist = docInfo.UserPanelUNIDList;
+	var userpanellayoutarray = userpanellayoutlist.split(",");
+	var userpanelUNIDarray = userpanelUNIDlist.split(",");
+	for (var i = 0; i < userpanelUNIDarray.length; i++){
+		if (userpanelUNIDarray[i] == panelkey){
+			tabindex = i;
+		}
+	}
+	return tabindex;
+}
+
+function ResetTabs(){
+//Refreshes tabs and stays on current tab
+	var tabhref = 	window.parent.fraDashboardTabs.location.href = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" +  "UserPanelTabs?ReadForm";
+	var tabindex = GetCurrentSelectedTab();
+	parent.frames['fraDashboardTabs'].location.href = tabhref + "&settab=" + tabindex;
+	return true;
+}
+</script>
+</head>
+<body text="#000000" bgcolor="#ececec">
+<script type="text/javascript">
+	AvailableLibraries= new xmlDataIsland();
+	AvailableLibraries.id = "AvailableLibraries";
+	$(document).ready(function() {
+		$.ajax({
+			type : 'POST',
+			url : '{{ path('docova_subscriptionlist', {output : 'xml'}) }}',
+			async : true
+		})
+		.done(function(response) {
+			if(response)
+			{
+				AvailableLibraries.setXML('<?xml version="1.0" encoding="UTF-8"?>' + response);
+			}
+		});
+	});
+</script>
+	<!----Load Panel Layout----->
+	<table id="tblContent" class="tblContent" style="display: none;">
+		<tr>
+			<td>
+				<table id="tblPanelLayout" class="tblPanelLayout">
+					{% include 'DocovaBundle:Default:' ~ panel.getLayoutName ~ '.html.twig' with { 'panel' : panel } %}
+				</table>
+			</td>
+		</tr>
+	</table>
+	<div id="dialogBox" title="{% trans %}Standard Dialog Box{% endtrans %}" style="display: none;"></div>
+	<div id="subdialogBox" title="{% trans %}Standard Sub Dialog Box{% endtrans %}" style="display: none;"></div>
+	<!--------  This is a dummy div to force a refresh on the ipad...this div is updated when the user clicks the Libraries and Applications tab in an ipad----->
+	<div id="ipad" style="position:absolute; left:-300px; top:-300px" ></div>
+</body>
+{% endif %}
+</html>

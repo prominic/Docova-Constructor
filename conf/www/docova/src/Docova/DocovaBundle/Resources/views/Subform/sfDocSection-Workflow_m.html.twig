@@ -1,0 +1,142 @@
+<input type=hidden id="wfCustomizeAction" name="wfCustomizeAction" value="{{ workflow != false ? workflow['Author_Customization'] }} : ''"/>
+<input type=hidden id="isWorkflowStarted" name="isWorkflowStarted" value="{% if docstep|length > 0 and docstep['isStarted'] %}1{% endif %}"/>
+<input type=hidden id="wfEnableImmediateRelease" name="wfEnableImmediateRelease" value="{{ workflow != false ? workflow['Bypass_Rleasing'] : '' }}"/>
+<input type=hidden id="wfWorkflowName" name="wfWorkflowName" value="{{ workflow != false ? workflow['Workflow_Name'] : '' }}"/>
+<script language="javascript" type="text/javascript">
+var wfInfo = {
+	"wfStartTriggered" : "",
+	"wfStepStatus" : "{{ step ? step.getDocStatus : '' }}",
+	"wfAction" : "{{ step ? step.getStepType(true) : '' }}",
+	"wfType" : "{% if step %}{% if step.getDistribution == 1 %}Serial{% elseif step.getDistribution == 2 %}Parallel{% endif %}{% endif %}",
+	"isOriginator" : "{% if docstep|length > 0 %}{{ docstep['isOriginator'] }}{% else %}true{% endif %}",
+	"isPendingParticipant" : "{% if docstep|length > 0 %}{{ docstep['isPendingParticipant'] }}{% endif %}",
+	"isApprover" : "{% if docstep|length > 0 %}{{ docstep['isApprover'] }}{% endif %}",
+	"isReviewer" : "{% if docstep|length > 0 %}{{ docstep['isReviewer'] }}{% endif %}",
+	"isPublisher" : "{% if docstep|length > 0 %}{{ docstep['isPublisher'] }}{% endif %}",
+	"isStartStep" : "{% if docstep|length > 0 %}{{ docstep['isStartStep'] }}{% else %}true{% endif %}",
+	"isEndStep" : "{% if docstep|length > 0 %}{{ docstep['isEndStep'] }}{% endif %}",
+	"isCompleteStep" : "{% if docstep|length > 0 %}{{ docstep['isCompleteStep'] }}{% endif %}",
+	"isApproveStep" : "{% if docstep|length > 0 %}{{ docstep['isApproveStep'] }}{% endif %}",
+	"AllowUpdate" : "{% if docstep|length > 0 %}{{ docstep['AllowUpdate'] }}{% else %}true{% endif %}",
+	"AllowPause" : "{% if docstep|length > 0 %}{{ docstep['AllowPause'] }}{% else %}true{% endif %}",
+	"AllowCustomize" : "{% if docstep|length > 0 %}{{ docstep['AllowCustomize'] }}{% else %}{% if workflow != false and workflow['Author_Customization'] %}true{% endif %}{% endif %}",
+	"AllowBacktrack" : "{% if docstep|length > 0 %}{{ docstep['AllowBacktrack'] }}{% endif %}",
+	"AllowCancel" : "{% if docstep|length > 0 %}{{ docstep['AllowCancel'] }}{% endif %}",
+	"qsType" : "{{ app.request.query.get('type') }}",
+	"MajorVersion" : "",
+	"MinorVersion" : "",
+	"HasMultiWorkflow" : "{{ not workflow ? 'true' : '' }}"
+};
+var prmptMessages = {
+	'msgWF001' : "{% trans %}You have error{% endtrans %}",
+	'msgWF002' : "{% trans %}Before you can start the workflow you must check in any files you have checked out{% endtrans %}",
+	'msgWF003' : "{% trans %}Before you decline this workflow step you must check in any files you have checked out{% endtrans %}",
+	'msgWF004' : "{% trans %}Before you can complete your Approval step you must check in any files you have checked out{% endtrans %}",
+	'msgWF005' : "{% trans %}Before you can complete your workflow step you must check in any files you have checked out{% endtrans %}",
+	'msgWF006' : "{% trans %}Before you can complete this workflow step you must check in any files you have checked out{% endtrans %}",
+	'msgWF007' : "{% trans %}There are no steps that can be deleted.{% endtrans %}",
+	'msgWF008' : "{% trans %}There are no workflow processess available for this document.{% endtrans %}",
+	'msgWF009' : "{% trans %}You are about to start workflow process for this document.  Are you sure?{% endtrans %}",
+	'msgWF010' : "{% trans %}Submit for review?{% endtrans %}",
+	'msgWF011' : "{% trans %}You are about to deny the approval.  Are you sure?{% endtrans %}",
+	'msgWF012' : "{% trans %}Document Workflow{% endtrans %}",
+	'msgWF013' : "{% trans %}You are about to cancel the workflow. This action will delete the current workflow and return this document to Draft state.\r\rDo you want to continue?{% endtrans %}",
+	'msgWF014' : "{% trans %}You are about to pause the workflow. This action will stop past due reminders.\r\rAre you sure?{% endtrans %}",
+	'msgWF015' : "{% trans %}You are about to backtrack the workflow.  Are you sure?{% endtrans %}",
+	'msgWF016' : "{% trans %}No workflow actions are defined in this document{% endtrans %}",
+	'msgWF017' : "{% trans %}No Workflow Defined{% endtrans %}",
+	'msgWF018' : "{% trans %}Please select the applicable workflow.{% endtrans %}",
+	'msgWF019' : "{% trans %}You must select participant names for all steps of the document workflow.{% endtrans %}"
+}
+function IsValidWfData(action)
+{
+	try{
+		
+	} catch(e) {
+		alert('{% trans %}Workflow validation function could not be executed due to the following error{% endtrans %}: \r' + e); 
+		return false;
+	}
+	return true;
+}
+function onWorkflowStart()
+{
+	try{
+		{{ doctype.getCustomJSWFStart ? doctype.getCustomJSWFStart|raw : '' }}
+	} catch(e) {
+		alert('{% trans %}Workflow on start function could not be executed due to the following error{% endtrans %}: \r' + e); 
+		return false;
+	}
+	return true;
+}
+function onComplete(){
+	try{
+		{{ doctype.getCustomJSWFComplete ? doctype.getCustomJSWFComplete|raw : '' }}
+	} catch(e) {
+		alert('{% trans %}Workflow on complete function could not be executed due to the following error{% endtrans %}: \r' + e); 
+		return false;
+	}
+	return true;
+}
+function onApprove(){
+	try{
+		{{ doctype.getCustomJSWFApprove ? doctype.getCustomJSWFApprove|raw : '' }}
+	} catch(e) {
+		alert('{% trans %}Workflow on approve function could not be executed due to the following error{% endtrans %}: \r' + e); 
+		return false;
+	}
+	return true;
+}
+function onDeny() {
+	try{
+		{{ doctype.getCustomJSWFDeny ? doctype.getCustomJSWFDeny|raw : '' }}
+	} catch(e) {
+		alert('{% trans %}Workflow on deny  function could not be executed due to the following error{% endtrans %}: \r' + e); 
+		return false;
+	}
+	return true;
+}
+</script>
+<input type=hidden id="tmpWorkflowDataXml" name="tmpWorkflowDataXml" value=""/>
+<!------------------------------------------------------------>
+<div id="DataEditContainer" style="width: 100%; ">
+<!------------------------------------------------------------>
+<script type="text/javascript">
+var ProcessData = null;
+
+var getDataURL = "{% if workflow != false %}{{ url('docova_xViewData') }}?ReadForm&view={% if docstep|length == 0 %}xmlWorkflowStepsByProcessId{% else %}xmlWorkflowItemsByDocument{% endif %}&col=2&lkey={% if docstep|length == 0 %}{{ workflow['id'] }}{% else %}{{ docstep['document_id'] }}{% endif %}&{{ "now"|date() }}{% endif %}";
+$.ajax({
+	url: getDataURL, 
+	cache: false, 
+	async: true,
+	type: 'GET',
+	dataType: "xml"
+})
+.success( function (data, textStatus, jqxhr) {
+	ProcessData = data;
+	SetDataDefaults(ProcessData);
+})
+.error( function (jqxhr, ajaxOptions, thrownError) {
+
+});
+</script>
+<!------------------------------------------------------------>
+	<br/>
+	<div class='ui-body  ui-body-b ui-corner-all'>
+	<div data-role="header"  data-theme="c" >
+    	<h1>Workflow</h1>
+  	</div>
+  	<TABLE data-role="table"  id="tblDataEdit2"  style="font : normal 11px Verdana,  Arial, sans-serif;" class="ui-responsive table-stroke">
+		<THEAD>
+			<TR>
+				<TH >Action</TH>
+				<TH >Status</TH >
+				<TH >Pending for</TH >
+				<TH >Completed by</TH >
+			</TR>
+		</THEAD>
+		<TBODY>
+		
+		</TBODY>
+	</TABLE>
+	</div>
+</div>

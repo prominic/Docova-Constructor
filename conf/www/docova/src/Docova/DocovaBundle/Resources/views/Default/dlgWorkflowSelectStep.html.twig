@@ -1,0 +1,183 @@
+<!DOCTYPE html><html>
+<head>
+<title>{% trans %}Workflow Step Selection{% endtrans %}</title>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}" ></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var params= window.dialogArguments;
+window.returnValue=null;
+var dlgForm = null; //declare global variable to represent current form
+var dlgDoc = null;
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "UserRoles" : "$$WebClient;[User]",
+  "HTTP_Referer" : "",
+  "Query_String" : "OpenForm",
+  "Query_String_Decoded" : "OpenForm",
+  "Path_Info_Decoded" : "{{ path('docova_workflowselectstep') }}?OpenForm",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "Symfony/web/app_dev.php/Docova",
+  "PortalWebPath" : "{{ path('docova_homepage') }}",
+  "PortalNsfName" : "Symfony/web/app_dev.php/Docova"
+};
+function getinfovar() {
+	return info;
+}
+
+var WorkflowSteps = null; //data island object
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: LoadWorkflowSteps
+ * Retrieves workflow step listing from xml stored in global variable and displays selection table
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+function LoadWorkflowSteps(){
+	if(WorkflowSteps){
+		WorkflowSteps.reload();
+	}else{
+		WorkflowSteps = new xmlDataIsland();
+			
+		var dlgID = "divDlgSelectWorkflowStep";
+		if(window.top.Docova.GlobalStorage[dlgID] && window.top.Docova.GlobalStorage[dlgID].xml){
+			WorkflowSteps.setXML(window.top.Docova.GlobalStorage[dlgID].xml);
+		}			
+		WorkflowSteps.id = "WorkflowSteps";
+		WorkflowSteps.setTemplateName( "otblWorkflowSteps");
+		WorkflowSteps.selectdefault = false;
+		WorkflowSteps.process();	
+	}
+}//--end LoadWorkflowSteps
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: completeWizard
+ * Returns selected workflow steps and values
+ * Returns: result object containing the following data pairs
+ *                  wfOrder - 
+ *                  wfTitle - 
+ *                  or false if no value selected
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+function completeWizard()
+{
+	var result = false;
+	
+	var selectedvals = jQuery("[name=nSelect]:checked").map(function() { return this.value; }).get().join(',');
+                                   
+	if(selectedvals && selectedvals != ""){
+		result = selectedvals;	
+	}else{
+		window.top.Docova.Utils.messageBox({
+			icontype: 1,
+			msgboxtype: 0,
+			prompt: "{% trans %}Please select a workflow step.{% endtrans %}",
+			title:  "{% trans %}No Workflow Step Selected{% endtrans %}",
+			width: 300 
+		});
+	}	
+	return result;
+}//--end completeWizard
+
+
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	InitVars(info);	
+	
+	var dlgID = "divDlgSelectWorkflowStep";
+	if(window.top.Docova.GlobalStorage[dlgID]){
+		if(window.top.Docova.GlobalStorage[dlgID].multi && window.top.Docova.GlobalStorage[dlgID].multi == true){
+			jQuery("#otblWorkflowSteps").find("td.radio").addClass("chkbox").removeClass("radio");	
+			jQuery("input[name=nSelect]").attr("type", "checkbox");
+		} 
+
+		if(window.top.Docova.GlobalStorage[dlgID].fieldlabel && window.top.Docova.GlobalStorage[dlgID].fieldlabel != ""){
+			jQuery("#FieldLabel").text(window.top.Docova.GlobalStorage[dlgID].fieldlabel);			
+		} 
+
+		LoadWorkflowSteps();
+	}
+
+}//--end initDialog
+</script>
+<style type="text/css">
+table {
+	display: block; 
+	height: 170px; 
+	width: 100%; 
+	overflow-y: auto; 
+	table-layout:fixed;
+	border: 1px solid silver; 
+	border-collapse: collapse;
+}
+td {
+	border-bottom: 1px solid #C0C0C0;
+}
+td.chkbox, td.radio {
+	width: 25px;
+}
+td.col1 {
+	width: 200px;
+	color: #000080;
+}
+td.col2 {
+	width: 100px;
+	color: #000080;
+}
+td.col3, td.col4 {
+	width: 120px;
+}
+td.header {
+	background-color: #ECE9D8;
+	font-weight: bold;
+	color: #000000;
+}
+</style>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+<span id="FieldLabel">{% trans %}Please select the workflow step{% endtrans %}:</span>
+<!----workflow table header------->
+<table  id="tblWorkflowSteps" datasrc="#WorkflowSteps">
+<thead>
+	<tr>
+		<td  class="chkbox header">&nbsp;</td>
+		<td  class="header col1">{% trans %}Action{% endtrans %}</td>
+		<td  class="header col2">{% trans %}Status{% endtrans %}</td>
+		<td  class="header col3">{% trans %}Pending{% endtrans %}</td>
+		<td  class="header col4">{% trans %}Completed{% endtrans %}</td>
+	</tr>
+</thead>
+<!------ workflow steps content ------>
+<tbody id="otblWorkflowSteps">
+	<tr>
+		<td class="radio"><input type="radio" name="nSelect" datafld="wfOrder"></td>
+		<td class=""><span id=wfTitle datafld="wfTitle"></span></td>
+		<td class=""><span id="wfStatus" datafld="wfStatus"></span></td>
+		<td class=""><span id="wfDispReviewerApproverList" datafld="wfDispReviewerApproverList"></span></td>
+		<td class=""><span id="wfReviewApprovalComplete" datafld="wfReviewApprovalComplete"></span></td>
+	</tr>
+</tbody>
+</table>
+<!------------------------------------------------------------>
+<script>
+initDialog();
+</script>
+
+<!------------------ SUBFORM sfKillCache ------------>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

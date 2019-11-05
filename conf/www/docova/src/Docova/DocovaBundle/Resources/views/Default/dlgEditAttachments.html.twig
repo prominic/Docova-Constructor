@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>{% trans %}Recover Unsaved, Edited Attachments{% endtrans %}</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleViewDialogBase.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript">
+var attInfo = window.dialogArguments;
+var fileArr = attInfo[1];
+var warnOnExit = true;
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ user.username }}",
+  "UserRoles" : "$$WebClient;[Administration]",
+  "isSuperuser" : "",
+  "HTTP_Referer" : "",
+  "Query_String" : "OpenForm",
+  "Query_String_Decoded" : "OpenForm",
+  "Path_Info_Decoded" : "{{ path('docova_editedattachments') }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}"
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog() {
+	
+	try {
+		var obj = document.getElementById("fileAction");
+		var html = "<table width=\"100%\" border=0 cellspacing=0 cellpadding=0>";
+		
+		var copy = "Add:  The version of this file on your local PC will be uploaded to this document, with  \"COPY - \" added to the file name.";
+		var replace = "Replace: The version of this file on your local PC will be uploaded to this document, replacing any existing file with the same name.";
+		var del = "Delete:  The version of this file on your local PC will be deleted along with the log file that triggered this dialog to appear.  You will not recover the file.";
+		
+		for(x=0; x<fileArr.length; x++) {
+			var fileName = rightBack(fileArr[x], "\\");
+				
+			html += "<tr bgcolor=\"#ffffff\"><td class=\"txFldCell\" style=\"border-bottom: solid 1px silver;\" width=\"12\">&nbsp;</td>";
+			html += "<td valign=top class=\"txFldCell\" style=\"border-bottom: solid 1px silver;\" width=\"250\"><a href=\"#\" onclick=\"viewFile('" + fileArr[x].replace(/\\/g, "\\\\") + "')\">" + fileName + "</a></td>";
+			html += "<td valign=top class=\"txFldCell\" style=\"border-bottom: solid 1px silver;\">";
+			html += "<input type=\"radio\" name=\"Action" + x + "\" value=\"C\" checked class=\"inpRadioChkbox\"><span style=\"cursor:help\" title='" + copy + "'>Add as a copy</span>";
+			html += "<input type=\"radio\" name=\"Action" + x + "\" value=\"R\" class=\"inpRadioChkbox\"><span style=\"cursor:help\" title='" + replace + "'>Replace existing file</span>";
+			html += "<input type=\"radio\" name=\"Action" + x + "\" value=\"D\" class=\"inpRadioChkbox\" ><span style=\"cursor:help\" title='" + del + "'>Delete local file</span></td></tr>";
+		}
+
+		html += "</table>";
+		obj.innerHTML = html;
+	}
+	catch(e){
+		alert("Error.");
+		window.returnValue=false;
+		window.close();
+	}
+
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+function viewFile(filePath) {
+	DLExtensions.LaunchFile(filePath);
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+
+function completeWizard()
+{
+	var fileAction = [];
+	
+	for(x=0; x<fileArr.length; x++) {		
+		fileAction[x] = thingFactory.GetHTMLItemValue("Action" + x);
+	}
+	
+	window.returnValue=fileAction;
+	warnOnExit = false;
+	window.close();
+}
+
+//------------ onBeforeUnload --------------------------------------------------------------------------------------------
+
+//if user exits by closing the dlg window warn them that they may not be able to recover later
+function manageAbort() {
+	if(warnOnExit) {
+		return "WARNING: If you close this dialog then edit and save the document, you will not be able to recover any attachments.";
+	}
+}
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onbeforeunload="return manageAbort()" onload="initDialog();">
+	<!-- Subform -- thingFactory -->
+	<script src="{{ path('docova_dlextensions') }}" language="javascript"></script>
+	<script type="text/javascript">
+	var thingFactory = document.all.thingFactory;
+	</script>
+	<!-- End Subform -- thingFactory -->
+	<table class="DlgTable" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+			<td width="100%"><img width="1" height="1" src="{{ asset('bundles/docova/images/icons/ecblank.gif') }}" border="0" alt=""></td>
+		</tr>
+
+		<tr valign="top">
+			<td class="DlgContentCell" width="100%">
+				<div id="dlgContentNh">
+					<div id="divCurrentList" style="padding: 4px; height: 235px; overflow: hidden;">
+						<div style="padding-bottom: 10px" class=txFldCell>
+							Log files have been found that indicate you edited one or more attachments but
+							did not save your changes. Select an Action for each file listed below. Hover over an Action for additional information.
+						</div>
+						<table style="border: 1px ridge; background-color: #efefff;" width="98%" cellspacing="0" cellpadding="0">
+							<thead>
+								<td class="txFldCell" width="15">&nbsp;</td>
+								<td class="txFldCell" width="260"><b>Filename</b></td>
+								<td class="txFldCell"><b>Action</b></td>
+							</thead>
+						</table>
+						<div id=fileAction style="width: 98%; height: 175px; overflow-y: auto; overflow-x: hidden;"></div>
+					</div>
+					<div style="padding: 4px;" class=txFldCell>View the local file that is stored on your PC by clicking the file name.</div>
+				</div>
+			</td>
+		</tr>
+
+		<tr valign="top">
+			<td id="buttonCell" class="DlgButtonCell" width="100%" valign="middle">
+				<div align="right"> 
+					<input type="button" onclick="completeWizard()" value="Done" id="btnFinish" class="txButtonSubmit">
+				</div>
+			</td>
+		</tr>
+	</table>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

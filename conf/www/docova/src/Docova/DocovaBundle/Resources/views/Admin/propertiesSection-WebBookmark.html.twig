@@ -1,0 +1,28 @@
+	{% set selected_section = '' %}
+	{% set section_properties = '' %}
+	{% if document is defined and 'WEB' in document.getContentSections %}
+ 		{% for subform in document.getDocTypeSubform %}
+ 			{% if subform.getSubform.getFormName == 'Web bookmark' %}
+ 				{% set selected_section = subform %}
+ 				{% set section_properties = subform.getPropertiesXML(true) %}
+ 			{% endif %}
+ 		{% endfor %}
+ 	{% endif %}
+	<table cellspacing="0" class="elmContainer{{ selected_section != '' ? '' : ' hidden' }}">
+		<tr>
+			<td class="firstRw">{% trans %}Label{% endtrans %}:</td>
+			<td class="firstRw"><input type="text" name="lblBookmark" value="{{ section_properties|length > 0 ? section_properties['Interface']['BookmarkLabel'] : 'Web page bookmark' }}" class="text ui-widget-content ui-corner-all" /></td>
+		</tr>
+		<tr>
+			<td>{% trans %}Preview Height{% endtrans %}:</td>
+			<td><input type="text" name="PreviewHeightValue" value="{{ section_properties|length > 0 ? section_properties['Interface']['PreviewHeightValue'] : '100' }}" class="text ui-widget-content ui-corner-all" /> px</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Visibility{% endtrans %}:</td>
+            <td>
+            	{% trans %}Hide Web bookmark section when{% endtrans %} 
+				<label><input type="checkbox" name="HideWebBookmark[]" value="R" {{ section_properties|length > 0 and section_properties['Interface']['HideOnReading'] == 1 ? 'checked' : '' }} /> {% trans %}Reading{% endtrans %}</label>
+				<label><input type="checkbox" name="HideWebBookmark[]" value="E" {{ section_properties|length > 0 and section_properties['Interface']['HideOnEditing'] == 1 ? 'checked' : '' }} /> {% trans %}Editing{% endtrans %}</label>
+			</td>
+          </tr>
+	</table>

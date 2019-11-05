@@ -1,0 +1,471 @@
+<!doctype html>
+<html>
+<head>
+<META HTTP-EQUIV='Pragma' CONTENT='no-cache'>
+<META HTTP-EQUIV='CACHE-CONTROL' CONTENT='0'>
+<META HTTP-EQUIV='EXPIRES' CONTENT='0'>
+{% set appid = (app.request.query.get('AppID') ? app.request.query.get('AppID') : (app.request.query.get('ParentUNID') ? app.request.query.get('ParentUNID') : '')) %}
+{% set fprp = form.getFormProperties %}
+{{ f_SetIsMobile(true) }}
+{{ f_SetUser(user) }}
+{{ f_SetApplication(appid) }}
+{{f_SetDocument(object)}}
+{% set date_format = settings.getDefaultDateFormat|replace({'MM':'m', 'DD':'d', 'YYYY':'Y'}) %}
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/' ~ user.getUserProfile.getTheme ~ '/jquery-ui.css') }}" type="text/css" />
+<!-- <link rel="stylesheet" href="{{ asset('bundles/docova/css/styleActionBar.css') }}" type="text/css" /> -->
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/mobile/styleDocumentBaseMobile.css') }}" type="text/css" />
+<!-- <link rel="stylesheet" href="{{ asset('bundles/docova/css/autoCompleteNamePicker.css') }}" type="text/css" /> -->
+<!-- <link rel="stylesheet" href="{{ asset('bundles/docova/css/multiselect.css') }}" type="text/css" /> -->
+<!-- <link rel="stylesheet" href="{{ asset('bundles/docova/jquery.datetimepicker/jquery.datetimepicker.min.css') }}" type="text/css" /> -->
+<link rel="stylesheet" href="{{ asset('bundles/docova/jquery.mobile/jquery.mobile.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/jquery.mobile/jquery.mobile.structure.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/jquery.mobile/jquery.mobile.theme.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/mobile/mobile.css') }}" />
+{% if fprp and fprp.getEnableWorkflow and fprp.getWorkflowStyle == 'C' %}
+  <link rel="stylesheet" href="{{ asset('bundles/docova/css/styleContemporaryWorkflow.css') }}" type="text/css" />
+{% endif %}
+{% if form.getCSSFilename %}
+  {% set extraCss = form.getCSSFilename|split(';') %}
+  {% for css in extraCss %}
+    <link rel="stylesheet" href="{{ asset('bundles/docova/css/custom/' ~ appid ~ '/' ~ css ~ '.css' ) }}">
+  {% endfor %}
+{% endif %}
+<!-- INLINE CSS -->		
+{% include 'DocovaBundle:Mobile:mobileDocumentCommInlineCSS.html.twig'%}
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<!-- <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery.mobile/jquery.mobile.js') }}"></script> -->
+<!-- <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/autoCompleteNamePicker.js') }}"></script> -->
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<!-- <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/multiselect.js') }}"></script> -->
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/viewObjects.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/embeddedViewObjects.js') }}" charset="UTF-8"></script>
+<script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/js/AppFormJS.js') }}'></script>
+<script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/js/FormulaLanguage.js') }}'></script>
+<script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/js/DesignImportFunctions.js') }}'></script>
+<script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/jquery/numbro.min.js') }}'></script>
+<!-- <script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/jquery.datetimepicker/jquery.datetimepicker.full.min.js') }}'></script> -->
+<script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/js/Chart.js/Chart.bundle.js') }}'></script>
+<script language='JavaScript' type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-counterbox.js') }}"></script>
+{% if fprp and fprp.getAttachmentSection %}
+  <link rel="stylesheet" href="{{ asset('bundles/docova/css/uploader.css') }}" type="text/css" />
+  <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.fileupload.js') }}"></script>
+  <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.iframe-transport.js') }}"></script>
+  <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jQueryFileDownload.js') }}"></script>
+  <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Uploader.js') }}"></script>
+  <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-FormAttachments.js') }}"></script>
+{% endif %}
+{% if fprp and fprp.getEnableWorkflow %}
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-WorkflowCommon.js') }}"></script>
+  {% if fprp.getWorkflowStyle == 'C' %}
+    <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-WorkflowContemporary.js') }}"></script>
+  {% else %}
+    <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-Workflow.js') }}"></script>
+  {% endif %}
+{% endif %}
+{% if fprp and fprp.getEmailSection %}
+  <script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-RelatedEmails.js') }}"></script>
+{% endif %}
+<script type="text/javascript">var loadDocovaEditor = false;</script>
+{% if fprp and fprp.getSpecialEditorSectoin == 2 %}
+  <script type="text/javascript" src="{{ asset('bundles/docova/js/tinymce/tinymce.min.js') }}"></script>
+  <script type="text/javascript">var _show_editor=true;</script>
+{% elseif fprp and fprp.getSpecialEditorSectoin == 1 %}
+  <style type="text/css">
+    .dTool {
+      cursor:pointer;    
+      border:solid 3 #EFEFEF;
+    }
+    .selTool {
+      background-color:silver;
+      cursor:pointer;
+      border:solid 3 silver;
+    }
+    .ToolBar {
+      background-color:#EFEFEF;
+      padding-top:2px;
+      padding-bottom:2px;
+      padding-left:2px;
+      border: 1px solid silver !important;
+    }
+    .editArea {
+	height: auto;
+	border-style:groove;
+	border-width:2;
+	background-color:white;  
+	padding:2px;  
+	font-family:Verdana, Arial;
+	font-size:11px;
+	min-height: 100px;
+    }
+    .DropDown {
+      font-family:Verdana, Arial;
+      font-size:8pt;
+    }
+    div[elem='fields'] table { 
+      width:100%;
+    }
+  </style>
+  <script type="text/javascript">loadDocovaEditor = true;</script>
+{% endif %}
+{% if form.getJSFilename %}
+  {% set extraJs = form.getJSFilename|split(';') %}
+  {% for js in extraJs %}
+    <script language="JavaScript" type="text/javascript" charset="UTF-8" src="{{ asset('bundles/docova/js/custom/' ~ appid ~ '/' ~ js ~ '.js' ) }}"></script>
+  {% endfor %}
+{% endif %}
+
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var info = {
+  "DocID" : "{{ object.getId }}",
+  "DocKey" : "{{ object.getId }}",
+  "isUIDoc" : true,
+  "isPostRefresh" : false,
+  "appName": "{{ applicationname }}",
+  "ParentDocID" : "{{ app.request.query.get('isresponse') == 'true' ? app.request.query.get('ParentDocID') : '' }}",
+  "DocumentNumber" : "",
+  "DocStatus" : "{{ object.getDocStatus }}",
+  "DocStatusNo" : "{{ object.getStatusNo }}",
+  "ThreadKey" : "{{ object.getId }}",
+  "DocumentTypeKey" : "",
+  "FormName" : "{{ form.getFormName }}",
+  "UserRoles" : "{{ f_UserRoles()|join(":")}}",
+
+  "DocTitle" : "{{ object.getDocTitle }}",
+  "FolderUNID" : "appViewMain",
+  "DocumentType" : "{{ form.getFormName }}",
+  "SystemKey" :  "{{ settings.getSystemKey }}",
+  "UserName" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ user.getUserProfile.getDisplayName }}",
+  "TodayDate" : "{{ 'now'|date(date_format) }}",
+  "isNewDoc" : "",
+  "isDocBeingEdited" : "",
+  "CursorFocusField" : "",
+  "DocAccessLevel" : "{{ useraccess }}",
+  "CanDeleteDocuments" : "{{ useraccess > 2 ? 'true' : '' }}",
+  "DocAccessRole" : "{{ useraccess == 6 ? 'Manager' : (useraccess == 3 ? 'Author' : 'Reader') }}",
+  "DbAccessLevel" : "{{ useraccess }}",
+  "CanCreateRevisions" : "{{ useraccess > 2 ? 'true' : '' }}",
+  "IsAppForm" : "1",
+  "AppID" : "{{ appid }}",
+  "LibraryKey" : "{{ appid }}",
+  "Mode" : "{{ app.request.query.get("mode") ? app.request.query.get("mode") : '' }}",
+  "DialogID" : "{{ app.request.query.get('dialogid') ? app.request.query.get('dialogid') : '' }}",
+  "LoadAction" : "{{ app.request.query.get("loadaction") ? app.request.query.get("loadaction") : '' }}",
+  "DataDocUrl" : "{{ url('docova_readappdocument', {'docid' : object.getId}) }}?ReadDocument&ParentUNID={{ appid }}",
+  "HTTP_Referer" : "",
+  "Query_String" : "openform&AppID={{ appid }}&ParentUNID={{ appid }}{{ app.request.query.get('isresponse') == 'true' and app.request.query.get('ParentDocID') ? '&ParentDocID='~app.request.query.get('ParentDocID')~'&isresponse=true' : '' }}",
+  "Query_String_Decoded" : "openform&AppID={{ appid }}&ParentUNID={{ appid }}{{ app.request.query.get('isresponse') == 'true' and app.request.query.get('ParentDocID') ? '&ParentDocID='~app.request.query.get('ParentDocID')~'&isresponse=true' : '' }}",
+  "Path_Info_Decoded" : "{{ path('docova_openform', { 'formname':form.getFormName }) }}",
+  "SSLState" : "{{ app.request.getscheme == 'https' ? 'ON' : 'OFF' }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "LogNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "ImagesPath" : "{{ asset('bundles/docova/images/') }}",
+  "ArchiveNsfName" : "",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "CreatedBy" : "{{ object.getCreator.getUserNameDnAbbreviated }}",
+  "CreatedDate" : "{{ object.getDateCreated.format(date_format) }}",
+  "LastModifiedBy" : "{{ object.getModifier ? object.getModifier.getUserNameDnAbbreviated : user.getUserNameDnAbbreviated }}",
+  "LastModifiedDate" : "{{ object.getDateModified ? object.getDateModified.format(date_format~' h:i:s A') : 'now'|date(date_format~' h:i:s A') }}",
+  "LastModifiedServer" : "",
+  "isReplicated" : "",
+  "LockEditor" : "{{ object.getLockEditor ? object.getLockEditor.getUserNameDnAbbreviated : '' }}",
+  "LockDate" : "{{ object.getLocked ? object.getDateModified.format(date_format~' h:i:s A') : '' }}",
+  "LockServer" : "{{ object.getLocked ? app.request.server.get('HTTP_HOST') : '' }}",
+  "LockStatus" : "{{ object.getLocked ? 1 : 0 }}",
+  "isLockEditor" : "{{ object.getLockEditor and object.getLockEditor.getId == user.getId ? 'true' : '' }}",
+  "isLocked" : "{{ object.getLocked ? 'true' : '' }}",
+  "isEditable" : "true",
+  {% set att_properties = form.getAttachmentProp ? form.getAttachmentProp : false %}
+  "isFileCIAOEnabled" : "{{ att_properties and att_properties.getFileCiao ? 'true' : '' }}",
+  "isFileViewLoggingOn" : "{{ att_properties and att_properties.getFileViewLogging ? 'true' : '' }}",
+  "isFileDownloadLoggingOn" : "{{ att_properties and att_properties.getFileDownloadLogging ? 'true' : '' }}",
+  "MaxFiles" : "{{ att_properties ? att_properties.getMaxFiles ? 0 }}",
+  "AllowedFileExtensions" : "{{ att_properties ? att_properties.getAllowedExtensions : '' }}",
+  "AttachmentsReadOnly" : "{{ att_properties and att_properties.getReadOnly ? 'true' : '' }}",
+  "AttachmentsHidden" : "{{ att_properties and 'E' in att_properties.getHideAttachment ? 'true' : '' }}",
+  "EnableDiscussion" : "",
+  "EnableLocalScan" : "",
+  "EnableMailAcquire" : "",
+  "EnableDropboxAcquire" : "",
+  "EnableForwarding" : "",
+  "ForwardSave" : "",
+  "ForwardSaveAs" : "",
+  "EnableLinkedFiles" : "",
+  "LaunchLinkedFiles" : "",
+  "RestrictPrinting" : "",
+  "RequirePDFCreator" : "",
+  "TemplateList" : "{{ att_properties and att_properties.getTemplateType != 'None' ? att_properties.getTemplateList : '' }}",
+  "TemplateNameList" : "{{ att_templates['names'] is defined ? att_templates['names'] : '' }}",
+  "TemplateFileList" : "{{ att_templates['filenames'] is defined ? att_templates['filenames'] : '' }}",
+  "TemplateVersionList" : "{{ att_templates['versions'] is defined ? att_templates['versions'] : '' }}",
+  "TemplateType" : "{{ att_properties and att_properties.getTemplateType != 'None' ? att_properties.getTemplateType : '' }}",
+  "TemplateAutoAttach" : "{{ att_properties and att_properties.getTemplateType != 'None' and att_properties.getTemplateList and att_properties.getTemplateAutoAttach ? 'true' : '' }}",
+  "HasWorkflow" : "{{ fprp and fprp.getEnableLifeCycle and fprp.getEnableWorkflow ? 'true' : '' }}",
+  "HasLifecycle" : "{{ fprp and fprp.getEnableLifeCycle ? 'true' : '' }}",
+  "isWorkflowCreated" : "{% if workflow_options and workflow_options['isCreated'] %}true{% endif %}",
+  "isWorkflowCompleted" : "{% if workflow_options and workflow_options['isCompleted'] %}true{% endif %}",
+  "CreateWorkflowInDraft" : "{% if workflow_options and workflow_options['createInDraft'] %}true{% endif %}",
+  "EnableVersions" : "{{ fprp and fprp.getEnableLifeCycle and fprp.getEnableVersions ? 'true' : '' }}",
+  "isXLinkEnabled" : "",
+  "Version" : "{% if fprp and fprp.getEnableLifecycle and fprp.getEnableVersions %}{{ object.getDocVersion }}{% endif %}",
+  "FullVersion" : "{% if fprp and fprp.getEnableLifecycle and fprp.getEnableVersions %}{{ object.getDocVersion ~'.'~ object.getRevision }}{% endif %}",
+  "PreviousFullVersion" : "",
+  "NextFullVersion" : "",
+  "AvailableVersionList" : "{{ available_versions|length > 0 ? available_versions|join(',') : '1.0.0,0.1.0,0.0.1' }}",
+  "isInitialVersion" : "",
+  "isSupersededVersion" : "{{ fprp and fprp.getEnableLifecycle and fprp.getEnableVersions and object.getDocStatus == fprp.getSupersededStatus ? 'true' : '' }}",
+  "isDiscardedVersion" : "{{ fprp and fprp.getEnableLifecycle and fprp.getEnableVersions and object.getDocStatus == fprp.getDiscardedStatus ? 'true' : '' }}",
+  "isCurrentVersion" : "{{ fprp and fprp.getEnableLifecycle and object.getDocStatus == fprp.getFinalStatus ? 'true' : '' }}",
+  "isNewVersion" : "",
+  "StrictVersioning" : "{{ fprp and fprp.getEnableLifecycle and fprp.getEnableVersions and fprp.getStrictVersioning ? 'true' : '' }}",
+  "AllowRetract" : "{{ fprp and fprp.getEnableLifecycle and fprp.getEnableVersions and fprp.getStrictVersioning and fprp.getAllowRetract ? 'true' : '' }}",
+  "RestrictDrafts" : "{{ fprp and fprp.getEnableLifecycle and fprp.getEnableVersions and fprp.getStrictVersioning and fprp.getRestrictDrafts ? 'true' : '' }}",
+  "RestrictLiveDrafts" : "{{ fprp and fprp.getEnableLifecycle and fprp.getEnableVersions and fprp.getRestrictLiveDrafts ? 'true' : '' }}",
+  "AttachmentOptions" : "{{ fprp ? fprp.getAttachmentOptions : '' }}",
+  "HasAttachmentsSection" : "{{ fprp and fprp.getAttachmentSection ? 'true' : '' }}",
+  "HasMultiAttachmentSections" : "{{ fprp and fprp.getAttachmentSection ? 'true' : '' }}",
+  "TextContentType" : "",
+  "MailAcquireDialogUrl" : "{{ path('docova_mailacquire') }}?acquiretype=S",
+  "RelatedDocOpenMode" : "1",
+  "OMUserSelectDocTypeKey" : "",
+  "OMLatestDocTypeKey" : "",
+  "OMLinkedDocTypeKey" : "",
+  "MailAcquireMessagesDialogUrl" : "{% if user.getUserProfile.getUserMailSystem == 'O' %}{{ path('docova_outlookacquiremessages') }}{% else %}{{ path('docova_mailacquiremessages') }}{% endif %}",
+  "UserMailSystem" : "{{ user.getUserProfile.getUserMailSystem }}",
+  "UserMailImport" : "",
+{% set attachments = '' %}
+{% set outlook_file_size = '' %}
+{% if object and object.getAttachments and object.getAttachments.count > 0 %}
+	{% for attach in object.getAttachments %}
+		{% set attachments = attachments ~ '*' ~ attach.getFileName %}
+		{% set outlook_file_size = outlook_file_size ~ ',' ~ attach.getFileName ~ '*' ~ ((attach.getFileSize / 1024)|number_format) ~ ' KB' %}
+	{% endfor %}
+	{% set attachments = attachments[1:] %}
+	{% set outlook_file_size = outlook_file_size[1:] %}
+{% endif %}
+  "OutlookAttachmentsSize" : "{{ outlook_file_size }}",
+  "DocAttachmentNames" : "{{ attachments|raw }}",
+  "SessionDateFormat" : "{{ settings.getDefaultDateFormat|lower|replace({'yyyy':'yy'}) }}",
+  {% set _defnumformat = user.getUserProfile.getNumberFormat %}
+  {% set _tmpnum = _defnumformat|slice(0, -2) %}
+  {% set _thousep = ('.' in _tmpnum ? '.' : (',' in _tmpnum ? ',' : (' ' in _tmpnum ? ' ' : ''))) %}
+  {% set _tmpnum = _defnumformat|slice(-2) %}
+  {% set _decsep = ('.' in _tmpnum ? '.' : (',' in _tmpnum ? ',' : (' ' in _tmpnum ? ' ' : '.'))) %}  
+  "SessionNumberFormat" : "{{ _defnumformat }}",
+  "ThousandsSeparator" : "{{ _thousep }}",
+  "DecimalSeparator" : "{{ _decsep }}",  
+  "ShortName" : "{{ settings.getUserDisplayDefault ? '1' : '' }}",
+  "isLinkComments" : "",
+  "hasDrafts" : "",
+  "MoreSectionLabel" : "More",
+  "isBookmark" : "",
+  "BookmarkParentDocKey" : "",
+  "DisableBookmarks" : "",
+  "DocIsDeleted" : "",
+  "IncompleteEdits" : "",
+  "MembersEnabled" : false,
+  "SaveOptions" : '',
+  "HasActivities" : "0",
+  "isProfile" : {{ app.request.query.get('isProfile') ? 'true' : 'false' }},
+  "ProfileKey" : "{{ app.request.query.get('isProfile') and app.request.query.get('profilekey') ? app.request.query.get('profilekey') : '' }}",
+  "ProfileName" : "{{ app.request.query.get('isProfile') and app.request.query.get('profilename') ? app.request.query.get('profilename') : '' }}",
+  "ConvertRTtoHTML" : "",
+  "isMobile" : true,
+  "MBThemeTitleBar": "a",
+  "MBThemeFolders": "c",
+  "MBThemeDocuments": "c",
+  "isMobileWorkflowSave": "{{ app.request.query.get('type') == 'workflow' ? '1': '0' }}",
+  "MobileAppDevice":""  
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+InitDoc(); 
+window.onbeforeprint= printfix;
+window.onafterprint = removeprintfix;
+//---------pass Uploader to DocLogic----------
+if ($("#LoadedInDLE").val()== "1"){ 
+	var UploaderObj ;
+	if(typeof DLIUploader1 == 'undefined')
+		UploaderObj = false;
+	else
+	UploaderObj = DLIUploader1;
+	if (UploaderObj ){
+		window.external.DocLogic_SetUploader(UploaderObj);
+		window.external.DocLogic_ShowUploadFiles();
+	}
+}
+
+$(document).ready(function(){
+	$('#tdActionBar a').each(function(index,element) {
+   		$(element).button({
+   			text: $.trim($(this).text()) && $(this).attr('btntext') == 1 ? true : false,
+			label: $.trim($(this).text()),
+			icons: {
+		 		primary: ($.trim($(this).attr('primary'))) ? $(this).attr('Primary') : null,
+				secondary: ($.trim($(this).attr('secondary'))) ? $(this).attr('secondary') : null
+			}
+		});
+	});
+
+	$( "button" ).button().click(function( event ) {		
+		event.preventDefault();
+	});
+	$( ".btngroup" ).buttonset();
+	$('#FormHeader').show();
+	$('#loading_msg').hide();
+	try{window.parent.hideLoadingMessage();}catch(e){}
+});	
+
+function HandleSaveClick(refreshView)
+{
+	if(!IsValidData()) {return false;}
+	SaveAndClose(refreshView);
+}
+function HandleEditClick()
+{
+	EditDocument();
+}
+function IsValidData()
+{
+	try{
+		
+	} catch(e) {
+		alert('Validation function could not be executed due to the following error: \r' + e); 
+		return false;
+	}
+	return true;
+}
+function CustomOnLoadHandler()
+{
+	return true;
+}
+function CustomOnUnLoadHandler()
+{
+	return true;
+}
+function printPage()
+{
+	if(docInfo.RestrictPrinting) {
+		alert("You are not permitted to print this document");
+		return;
+	}
+	standardPrintPage();
+}
+
+function CustomOnBeforeReleaseHandler(){
+	try{
+		
+	} catch(e) {
+		alert('Workflow on before release function could not be executed due to the following error: \r' + e); 
+		return false;
+	}
+	return true;
+}
+function CustomOnAfterReleaseHandler(){
+	try{
+		
+	} catch(e) {
+		alert('Workflow on after release function could not be executed due to the following error: \r' + e); 
+		return false;
+	}
+	return true;
+}
+</script>
+{% set jsFile = form.getFormName|replace({'/':'-', '\\':'-'})|replace({' ':''}) %}
+<script language="JavaScript" type="text/javascript" charset="UTF-8" src="{{ asset('bundles/docova/js/custom/'~ appid ~'/FORM/' ~ jsFile ~ '.js' ) }}"></script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" onunload="thisUIDoc =Docova.getUIDocument();
+thisUIDoc.triggerHandlerAsync('terminate');
+if ( docInfo.Mode == 'apppreview' || docInfo.Mode == 'dialog'){
+	if ( docInfo.isRefresh ){
+		return true;
+	}
+}
+ClearTempFiles();
+if(docInfo.EnableLinkedFiles){
+	LinkedFilesOnUnLoad();
+}
+if(clearLock && docInfo.isLocked){
+	Unlock();
+}">
+	<div id="loading_msg" style="position:absolute;height:200px;width:220px;padding-top:30px;background:url('{{ asset('bundles/docova/images/plswait.gif') }}') top center no-repeat;background-size:50% 50%;top:22%;left:40%;z-index:1000"><p style="text-align:center;font-family:Verdana;font-size:1.2em;margin-top:91px;">One moment...</p></div>
+	<!-- data exchange -->
+    <span style="display:none;">
+        <input type="button" id="dleOk"><input type="button" id="dleCancel"><input type="button" id="dleFailed">
+        <input type="hidden" id="tmpDleDataXml" name="tmpDleDataXml" value=""/>
+        <input type="hidden" id="tmpDleStatusXml" name="tmpDleStatusXml" value=""/>
+        <input type="hidden" id="tmpBackendChangesXML" name="tmpBackendChangesXML" value=""/>
+        <input type=hidden id="tmpRequestDataXml" name="tmpRequestDataXml" value=""/>
+        <input type=hidden id="tmpLinkDataXml" name="tmpLinkDataXml" value=""/>
+        <input type=hidden id="tmpEmailAuditDataXml" name="tmpEmailAuditDataXml" value=""/>
+        <input type=hidden id="DocKey" name="DocKey" value="{{ object.getId }}"/>
+        <input type=hidden id="DocumentNumber" name="DocumentNumber" value=""/>
+        <input type="hidden" id="tmpAddedFiles" name="tmpAddedFiles" value=""/>
+        <input type="hidden" id="tmpRenamedFiles" name="tmpRenamedFiles" value=""/>
+        <input type="hidden" id="tmpDeletedFiles" name="tmpDeletedFiles" value=""/>
+        <input type=hidden id="tmpEditedFiles" name="tmpEditedFiles" value=""/>
+
+        <input type="hidden" id="LoadedInDLE" name="LoadedInDLE" value=""/>
+        <input type="hidden" id="OFileNames" name="OFileNames" value=""/>
+        <input type="hidden" id="OFileDates" name="OFileDates" value=""/>
+        <input type="hidden" id="ActivityRecipients" name="ActivityRecipients" value=""/>
+        <input type="hidden" id="tmpVersion" name="tmpVersion" value=""/>
+        <input type=hidden id="UserHomeServer" name="UserHomeServer" value=""/><br>
+        <font size="2" color="#ff0000">
+        <input name="isSave" value="0" id="isSave" style="display:none;"></font>
+    </span>
+
+	
+{% if app.request.query.get('type') == 'workflow' or app.request.query.get('type') == 'document' %}
+  <div  data-role="page">
+	<div data-role="content" data-theme="c">
+		<ul data-role="listview" data-inset="true" itemtype="document" data-theme="c">
+			<li>
+{% endif %}
+		<!-------------------- Top Section of Document -------------------------------------------->
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top" align="left">
+			  <td>
+                {% block actionbar %}
+                {% endblock %}
+                {% if fprp and fprp.getEnableWorkflow and workflow_buttons|length %}
+                    {% for button in workflow_buttons %}
+                        {% if button['Visible'] == true %}
+					<a onclick="{{ button['Script']|raw }}" btntext="1" href="" primary="{{ button['Primary'] }}" secondary="{{ button['Secondary'] }}">{{ button['Label']|trans }}</a>
+                        {% endif %}
+                    {% endfor %}
+			    {% endif %}
+	          {% block subactionbar %}{% endblock %}
+	          </td>
+	        </tr>
+	      </table>
+		<!-------------------- Default Document Fields -------------------------------------------->
+		<div id="divFormContentSection">
+    		{% block contentsection %}
+    		{% endblock %}
+    
+           	{% if fprp.getEnableWorkflow and workflows|length > 0 and (not workflow_options['isCreated'] or not workflow_options['isCompleted']) %}
+           		{% include 'DocovaBundle:Subform:sfDocSection-Workflow.html.twig' with {'workflow' : workflows, 'workflow_xml' : wf_xml, 'step' : current_step, 'docstep' : docstep, 'doctype' : fprp } %}
+           	{% endif %}
+		</div>
+ {% if app.request.query.get('type') == 'workflow' or app.request.query.get('type') == 'document' %}
+			</li>
+		</ul>
+	</div>
+  </div> 
+  <!-- end of JQM div page & content -->
+{% endif %} 
+</body>
+</html>

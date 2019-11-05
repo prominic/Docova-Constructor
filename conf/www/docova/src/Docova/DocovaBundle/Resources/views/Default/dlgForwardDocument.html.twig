@@ -1,0 +1,546 @@
+<!doctype html><html>
+<head>
+<title>{% trans %}Forward Document{% endtrans %}</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache"> <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0"> <META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleViewDialogBase.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDocumentBase.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/autoCompleteNamePicker.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}" ></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/autoCompleteNamePicker.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var dlgDoc = null;
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ user.getUserProfile.getDisplayName }}",
+  "UserRoles" : "$$WebClient;[Administration]",
+  "HTTP_Referer" : "",
+  "Query_String" : "OpenForm&SourceDocUNID={{ document ? document.getId }}&savecopy={{ app.request.query.get('savecopy') }}&DefaultSubject={{ document ? document.getDocTitle }}",
+  "Query_String_Decoded" : "OpenForm&SourceDocUNID={{ document ? document.getId }}&savecopy={{ app.request.query.get('savecopy') }}&DefaultSubject={{ document ? document.getDocTitle }}",
+  "Path_Info_Decoded" : "{{ path('docova_forwarddocument') }}?SourceDocUNID={{ document ? document.getId }}&savecopy={{ app.request.query.get('savecopy') }}&DefaultSubject={{ document ? document.getDocTitle }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "imagesPath" : "{{ asset('bundles/docova/images/') }}",
+  "SourceDocUNID" : "{{ document ? document.getId : '' }}",
+  "SavePref" : "{{ app.request.query.get('savecopy') }}",
+  "dispdelim" : '<br />'
+};
+
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+document.oncontextmenu=stopContextMenu;
+
+var globalOriginalImageData;
+
+$(document).ready(function(){
+	$('#inptSendTo').autoComplete({
+		url : '{{ path('docova_usernamelookup_json') }}',
+		selectionContainer : $(this).attr('target'),
+		shortName : false,
+		delimiter : '<br />'
+	});
+	
+	initDialog();
+	convertRTtoHTML(docInfo.SourceDocUNID, "Body", "OriginalBody", "OriginalImages");
+});
+
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	//Global variables for convenience
+	dlgDoc = document.all;
+	
+	
+	var objSaveCopy = document.getElementById("SaveCopy");
+	if(docInfo.SavePref == "0"){
+		objSaveCopy.checked = false;
+		objSaveCopy.disabled = true;
+	}else if(docInfo.SavePref == "1"){
+		objSaveCopy.checked = true;
+		objSaveCopy.disabled = true;
+	}else{
+		objSaveCopy.checked = false;
+		objSaveCopy.disabled = false;
+	}	
+	
+	try{dlgDoc.Body.focus();}catch(err){}
+}
+
+
+// For convenience
+function stopContextMenu()
+{
+return false;
+}
+
+function urlExists(url, callback){
+	$.ajax({
+		type: 'HEAD',
+		url: url,
+		success: function(){
+			callback(true);
+		},
+		error: function() {
+			callback(false);
+		}
+	});
+}
+
+function convertRTtoHTML(srcdocid, srcfieldname, destelementid, imageselementid) {
+	var randomnumber = Math.floor(Math.random()*1000001);
+	var RTFUrl =  docInfo.ServerUrl  + "/" + docInfo.NsfName + "/getBody/" + srcdocid + "?" + randomnumber.toString();
+		var element = null;
+		
+		$.ajax({
+			'type' : "GET",
+			'url' : RTFUrl,
+			'processData' : false,
+			'contentType': false,
+			'async' : false,
+			'dataType' : 'html'
+		})
+		.done(function(data) {
+			element = document.getElementById(destelementid);
+			element.innerHTML = data;
+		})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			if (jqXHR.status != 200) {
+				alert("Unable to retrieve the selected record's Body field. The Document must contain a Text Section.\rStatus code: " + jqXHR.status);
+				return false;
+			}
+		});
+		
+		globalOriginalImageData = "";  //--reset global variable
+		var imgcount = 0;	
+		var imagedata = "";
+		var matchurl = docInfo.ServerUrl  + "/" + docInfo.NsfName + "/0/" + srcdocid +"/" + srcfieldname + "/";
+		var images = element.getElementsByTagName("img");
+		for (var h=0; h<images.length; h++){
+			var imgsrc = images[h].src;
+			if (imgsrc.toLowerCase().indexOf(matchurl.toLowerCase()) > -1){
+				imgcount ++;
+				var filename = "image" + imgcount.toString() + ".jpg";
+				var cid = filename + "@" + randomnumber.toString() + "." + docInfo.SourceDocUNID;
+				appendFileContents("globalOriginalImageData", imgsrc, filename, cid);
+								
+				//-- remap the source url for the image
+				images[h].src = "cid:" + cid;
+			}
+		}
+}
+
+function appendFileContents(globalvarname, fileurl, filename, cid){
+	var fileContents = null;
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', fileurl, true);
+	xhr.responseType = 'arraybuffer';
+	xhr.onload = function(e) {
+		   fileContents = arrayBufferToBase64(e.currentTarget.response);
+
+	   		var imagedata = "";
+			imagedata +=  "<Image>";
+			imagedata +=  "<Filename>";
+			imagedata +=  filename;
+			imagedata += "</Filename>";
+			imagedata += "<CID>";
+			imagedata += cid;
+			imagedata += "</CID>";
+			imagedata += "<FileBase64>";
+			imagedata += fileContents;
+			imagedata += "</FileBase64>";
+			imagedata += "</Image>";		   
+				
+			window[globalvarname] += imagedata; //--append to global storage
+	}
+	xhr.send();
+	
+	return fileContents;
+}
+
+function arrayBufferToBase64( buffer ) {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+}
+
+
+function base64ArrayBufferV2(arrayBuffer) {
+  var base64    = '';
+  var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+  var bytes         = new Uint8Array(arrayBuffer);
+  var byteLength    = bytes.byteLength;
+  var byteRemainder = byteLength % 3;
+  var mainLength    = byteLength - byteRemainder;
+
+  var a, b, c, d;
+  var chunk;
+
+  // Main loop deals with bytes in chunks of 3
+  for (var i = 0; i < mainLength; i = i + 3) {
+    // Combine the three bytes into a single integer
+    chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+
+    // Use bitmasks to extract 6-bit segments from the triplet
+    a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
+    b = (chunk & 258048)   >> 12; // 258048   = (2^6 - 1) << 12
+    c = (chunk & 4032)     >>  6; // 4032     = (2^6 - 1) << 6
+    d = chunk & 63;               // 63       = 2^6 - 1
+
+    // Convert the raw binary segments to the appropriate ASCII encoding
+    base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
+  }
+
+  // Deal with the remaining bytes and padding
+  if (byteRemainder == 1) {
+    chunk = bytes[mainLength];
+
+    a = (chunk & 252) >> 2; // 252 = (2^6 - 1) << 2
+
+    // Set the 4 least significant bits to zero
+    b = (chunk & 3)   << 4; // 3   = 2^2 - 1
+
+    base64 += encodings[a] + encodings[b] + '==';
+  } else if (byteRemainder == 2) {
+    chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
+
+    a = (chunk & 64512) >> 10; // 64512 = (2^6 - 1) << 10
+    b = (chunk & 1008)  >>  4; // 1008  = (2^6 - 1) << 4
+
+    // Set the 2 least significant bits to zero
+    c = (chunk & 15)    <<  2; // 15    = 2^4 - 1
+
+    base64 += encodings[a] + encodings[b] + encodings[c] + '=';
+  }
+
+  return base64;
+}
+
+
+
+function completeWizard()
+{
+	var result = false;
+	// saveDocovaRichText();
+	
+	var sendto = window.top.Docova.Utils.allTrim($("#SendTo", document).val());
+	var subject = window.top.Docova.Utils.allTrim($("#Subject", document).val());
+				
+	if(!sendto) { //recipients required
+		window.top.Docova.Utils.messageBox({ prompt:"{% trans %}Please enter the recipient names.{% endtrans %}", title: "{% trans %}Invalid entry{% endtrans %}", width: 300 });
+		return result;
+	}
+	if(!subject) { //subject required
+		window.top.Docova.Utils.messageBox({ prompt: "{% trans %}Please enter the subject.{% endtrans %}", title: "{% trans %}Invalid entry{% endtrans %}" });
+		dlgDoc.getElementById("Subject").focus();
+		return result;
+	}
+	
+	$("#btnFinish").prop( "disabled", true );
+	window.top.Docova.Utils.showProgressMessage("{% trans %}Forwarding message. Please wait{% endtrans %}...");
+	
+	var msgbody = document.getElementById("dEdit0").innerHTML;		//daw
+	msgbody = encodeURIComponent(msgbody);
+	var contentinclude = window.top.Docova.Utils.allTrim(window.top.Docova.Utils.getField({ field: "ContentInclude" }, document));
+	var savecopy = window.top.Docova.Utils.allTrim(window.top.Docova.Utils.getField({ field: "SaveCopy" }, document));
+	var origbody = document.getElementById("OriginalBody").innerHTML;
+	origbody = encodeURIComponent(origbody);
+
+	var request = "";	
+	request += "<?xml version='1.0' encoding='UTF-8' ?>";
+	request += "<Request>";
+	request += "<Action>FORWARDDOCUMENT</Action>";
+	request += "<IncludeAttachments>" +  ((contentinclude=="A")? "1" : "") + "</IncludeAttachments>";
+	request += "<SaveCopy>" +  savecopy + "</SaveCopy>";
+	request += "<SendTo><![CDATA[" + sendto +  "]]></SendTo>";
+	request += "<Subject><![CDATA[" + subject +  "]]></Subject>";
+	request += "<Body><![CDATA[" + msgbody +  "]]></Body>";
+	request += "<UserName><![CDATA[" + docInfo.UserName +  "]]></UserName>";	
+	request += "<Unid>" + docInfo.SourceDocUNID +  "</Unid>";
+	request += "<OriginalBody><![CDATA[" + origbody + "]]></OriginalBody>";
+	request += "<InlineImages>" + globalOriginalImageData + "</InlineImages>";
+	request += "</Request>"
+
+	//-----------------------------------------------------------------------------------------------------------------------------------------------				
+	//--- process on server --				
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/MessagingServices?OpenAgent";
+	$.ajax({
+			'type' : "POST",
+			'url' : url,
+			'data' : encodeURIComponent(request),
+			'async' : false,
+			'contentType' : 'text/xml',
+			'dataType' : 'xml'
+		})
+		.done(function(data) {
+			result = true;
+		})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+		});
+
+	window.top.Docova.Utils.hideProgressMessage();	
+	return result;
+
+}
+</script>
+
+<script language="JavaScript" type="text/javascript">
+var storedTBarCount = null;
+
+$(document).ready(function(){
+	$( "button" ).button().click(function( event ) {		
+		event.preventDefault();
+	});
+	$( ".btngroup" ).buttonset();
+});	
+
+function saveDocovaRichText(){
+	var sourceDiv;
+	var sourceDivName;
+	var targetField;
+	for(z=0; z<=storedTBarCount; z++){
+		sourceDiv = document.getElementById("dEdit" + z);
+		sourceDivName = $(sourceDiv).attr("name");
+		targetField = document.getElementById(sourceDivName);
+		$(targetField).val($(sourceDiv).html()) 
+	} 
+}
+
+function setTargets() {
+	var link, i = 0;
+	while (link = document.links[i++]) {
+		link.target = '_blank';
+	}
+}
+
+function showHelp(clickObject){
+	window.top.Docova.Utils.messageBox({
+		title: "{% trans %}DOCOVA Richtext Editor Help{% endtrans %}",
+		prompt: helpText,
+		width: 400,
+		icontype : 4,
+		msgboxtype : 0		
+	})
+}
+
+var currEditAction = ""  //global so that it can be set in setColor where colorpicker utilizes a callback funtion to setTextColor
+function setTextColor(colorval){
+	document.execCommand(currEditAction, "", colorval);
+}
+
+function setColor(event){
+	var source = event.target;
+	var editAction = $(source).attr("editaction");
+	currEditAction = editAction;
+
+	window.top.Docova.Utils.colorPicker(event, "", setTextColor);
+}
+
+
+function applyTool(editObj, reset){  
+	var editAction = $(editObj).attr("editaction");
+	
+	if(editAction == "FontSize" || editAction == "FontName"){
+		var editValue = $(editObj).val();
+		document.execCommand(editAction, "", editValue);
+	}else{
+		document.execCommand(editAction);
+	}
+	
+	if(reset){$(editObj).val("null");}  
+}
+
+function loadIcons(toolBarCount)
+{
+	var spanrepeat = 0;
+	setTargets();  //force all links to open in a new window
+	if(loadDocovaEditor){
+		storedTBarCount = toolBarCount
+		var tools = ["sep","Bold","Italic","Underline","StrikeThrough","sep","JustifyLeft","JustifyCenter",
+		"JustifyRight","sep","Cut","Copy","Paste","sep","ForeColor","BackColor","sep","InsertUnorderedList",
+		"InsertOrderedList","Indent","Outdent","sep","CreateLink","Unlink","sep","Undo","Redo",
+		"InsertHorizontalRule","RemoveFormat","sep","Help","FontName","FontSize"];
+	
+		for(z=0; z<=toolBarCount; z++){
+			//load the toolbar
+			tbar = document.getElementById("dToolbar" + [z]);
+			tbarHTML = "";
+			for(x=0; x<tools.length; x++){
+				if(tools[x] == "sep"){ //uses sep to make buttonsets
+					spanrepeat = spanrepeat + 1;
+					if(spanrepeat == 1){
+							tbarHTML += "<span class='btngroup'>";
+					}
+					if(spanrepeat > 1){
+						tbarHTML += "</span><span class='btngroup'>";
+					}
+				}
+				else if(tools[x] == "FontName") {
+					tbarHTML += "<br><select unselectable='on' class='DropDown' id=" + tools[x]+[z] + " onchange='applyTool(this, true);' editaction='" + tools[x] + "'>" +
+					"<option value='null'>- Select Font -<option value='Arial'>Arial" +
+					"<option value='Book Antiqua'>Book Antiqua</font><option value='Comic Sans MS'>Comic Sans<option value='Courier New'>Courier New" + 
+					"<option value='Tahoma'>Tahoma<option value='Times New Roman'>Times New Roman<option value='Verdana'>Verdana</select>";
+				} 
+				else if(tools[x] == "FontSize") {
+					tbarHTML += " <select unselectable='on' class='DropDown' id=" + tools[x]+[z] + " onchange='applyTool(this, true);' editaction='" + tools[x] + "'>" + 
+					"<option value='null'>- Font Size -<option value='1'>1 (8pt)" +
+					"<option value='2'>2 (10pt)<option value='3'>3 (12pt)<option value='4'>4 (14pt)<option value='5'>5 (18pt)<option value='6'>6 (24pt)<option value='7'>7 (36pt)</select>";
+				} 
+				else if(tools[x] == "ForeColor" ||tools[x] == "BackColor") { 
+					tbarHTML += "<button unselectable='on' class='btnDEditor " + "edt" + tools[x] + "' onclick='setColor(event)' id=" + tools[x]+[z] + " editaction='" + tools[x] + "'></button>";
+				}
+				else if(tools[x] == "Help") {
+					tbarHTML += "<button unselectable='on' class='btnDEditor " + "edt" + tools[x] + "' onclick='showHelp(this);' id=" + tools[x]+[z] + " editaction='" + tools[x] + "'></button>";
+				}
+				else {
+					tbarHTML += "<button unselectable='on' class='btnDEditor " + "edt" + tools[x] + "' onclick='applyTool(this)' id=" + tools[x]+[z] + " editaction='" + tools[x] + "'></button>";
+				}
+			}
+			if(spanrepeat != 0){
+				tbarHTML += "</span>"; //close off last span tag for button groups if any
+			}
+			$(tbar).html(tbarHTML);
+			
+			//load any existing content into divs from source fields
+			targetDiv = document.getElementById("dEdit" + [z]);
+			srcField = document.getElementById($(targetDiv).attr("name"));
+			targetDiv.innerHTML = $(srcField).val();
+		}
+	}
+}
+
+function fixRelativeImagePaths(){
+  	//check if there are any attachments
+ 	 if (docInfo.DocAttachmentNames ==null || docInfo.DocAttachmentNames ==""){
+	 	 	return;
+ 	 }
+  	var attachList = docInfo.DocAttachmentNames.split("*"); 	 
+    jQuery("#spanBody, #dEdit0").find("img").each(function(){
+	 	var newSrc= jQuery(this).attr("src");
+	 	newSrc = newSrc.replace(/^.*[\\\/]/, '');
+		if (attachList.indexOf(newSrc) > -1){
+			newSrc = "/" + docInfo.NsfName + "/luAllByDocKey/" + docInfo.DocKey + "/$File/" + newSrc;
+			jQuery(this).attr("src", newSrc);
+		}
+    });
+}
+</script>
+<style type="text/css">
+#dlgContentNh {
+	height: expression(eval(document.body.clientHeight - 50)) !important;
+	padding: 3px 5px 3px 5px;
+	overflow: auto;
+	margin-top: 4px;
+}
+#inptSendTo {
+	float: left;
+	width: 30%;
+}
+#slContainersendto {
+	float: left;
+	height: 100px;
+	overflow: hidden;
+	overflow-y: auto;
+	margin-left: 7px;
+	width: 59% !important;
+	border: 1px #CCC solid;
+	border-radius: 1px;
+}
+#btnSendTo {
+	float: right;
+	margin: 5px 14px auto auto;
+}
+</style>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no">
+	<table class="DlgTable" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+			<td class="DlgContentCell" width="100%">
+				<div id="dlgContentNh" class="ui-widget" style="width:100%;">
+					{% trans %}Recipients{% endtrans %}:&nbsp&nbsp<br/>
+					<div id="recip_search">
+						<input type="text" id="inptSendTo" target="SendTo" />
+						<button id="btnSendTo" onclick="window.top.Docova.Utils.showAddressDialog({ fieldname: 'SendTo', dlgtype: 'multi', sourcedocument: document});"><IMG SRC= "{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" ALT="{% trans %}Name Selection{% endtrans %}"></button>
+						<input type="hidden" name="SendTo" id="SendTo" value="" />
+						<em class="slContainer" id="slContainersendto"></em>
+					</div>
+					<div>
+						<div style="float:left;">{% trans %}Subject{% endtrans %}:<br/>
+							<input name="Subject" value="Fwd: {{ document ? document.getDocTitle : '' }}" id="Subject" class="txFld" style="width:620px;margin-bottom:5px;padding:2px;">
+						</div><br/>
+						<div style="width:98%; float:left; margin-top:8px">{% trans %}Message{% endtrans %}:<br/>
+						<style>
+						.ToolBar {
+						    background-color:#FFFFFF;
+						    padding-top:2px;
+						    padding-bottom:2px;
+						    border: 1 solid silver;
+						}
+						.editArea {
+							height: 170px;
+							border: 1px groove #333;
+							background-color:white;  
+							padding:2px;  
+							font-family:Verdana, Arial;
+							font-size:11px;
+							overflow: auto;
+						}
+						.DropDown {
+						    font-family:Verdana, Arial;
+							font-size:10pt;
+						}
+						</style>
+						<script language="Javascript">
+						helpText = "<span style='font : bold 11px Verdana,  Arial, sans-serif;margin-left: 10px;'>Docova Rich Text Editor - Tips & Tricks</span><span><ul><li>When you press Enter, a new paragraph is started. Use Shift+Enter to enter a carriage return only.</li><li>To create a bulleted or numbered list, it's best to select the bullet or number list icon first</li><li>Standard windows shortcut keys work as well as the toolbar for the following:</li><ul><li>Ctrl+b for Bold</li><li>Ctrl+i for Italic</li><li>Ctrl+u for Underline</li><li>Ctrl+c for Copy</li><li>Ctrl+x for Cut</li><li>Ctrl+v for Paste</li><li>Ctrl+z for Undo</li></ul></ul></span>";
+						loadDocovaEditor = true;
+						docInfo.TextContentType = "HTML";   //required to allow Acquire from Email to work against this form
+						</script>
+						<div style="">
+							<fieldset>
+								<span style="margin: 4px 0px 4px 0px; font : bold 11px Verdana,  Arial, sans-serif;"></span>
+								<div id="dToolbar0" class="ToolBar"></div>
+								<div name="Body" id="dEdit0" class="editArea" contentEditable="true"></div><br>
+								<span id="spanBody" style="border:1px solid #CCC; padding:5px; display:none">
+									<textarea name="Body" id="Body" rows="7" cols="50"></textarea>
+								</span>
+							</fieldset><br>
+						</div>
+						<script language=Javascript>
+						   loadIcons(0);
+						   fixRelativeImagePaths();
+						</script></div>
+						<div style="float:left; margin-top:0px">
+							<label><input type="checkbox" name="ContentInclude" value="A" class="txFldRadio">{% trans %}Append File Attachments{% endtrans %}</label>&nbsp;&nbsp
+							<label><input type="checkbox" name="SaveCopy" value="1" id="SaveCopy" class="txFldRadio">{% trans %}Save a copy of this message{% endtrans %}</label>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<span>* {% trans %}Original source document content will be included when the forward is sent.{% endtrans %}</span>
+	<div id="OriginalBody" style="display:none;"></div>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+	<HEAD>
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+	</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

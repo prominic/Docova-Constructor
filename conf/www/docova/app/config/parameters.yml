@@ -1,0 +1,35 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_sqlsrv
+    database_host: 127.0.0.1
+    database_port: 1433
+    database_name: docova_db_dev
+    database_user: docova_user
+    database_password: L1m1t3dd12
+#    ldap_username: LDAPConnect
+#    ldap_password: 0ewwviqEuZQ8YlIV
+#    ldap_domain: null
+    ldap_username: LDAPConnect@docova.com
+    ldap_password: 0ewwviqEuZQ8YlIV
+    ldap_domain: DOCOVA
+    ldap_adkey: userPrincipalName
+    ldap_groupkey: null
+    mailer_transport: smtp
+    mailer_host: 10.0.0.3
+    mailer_user: 'DLI Tools/DLI'
+    mailer_password: newjersey
+    sender_address: dli_tools@dlitools.com
+    locale: en
+    secret: 550e822a52e9e2409087e81c7cc3aaa4cbec9ceb
+    document_root: 'C:\attachments'
+    domino_username: 'Dli Tools/DLI'
+    domino_password: newjersey
+    domino_services_url: 'http://dev01.dlitools.com/Docova/Dev/V5B/docovahome.nsf'
+    datamigrator_path: 'C:\DataMigrator\DOCOVAMigrator5\'
+    client_id: d14d2730-190b-4c97-95fa-fee85037b921
+    client_secret: '}a!x$@;e=qw6z-Xng5iI2A(!w5x3n*VW94d=1ooESK@e3fa=G|oBB'
+#    client_id: 55515e64-fd24-415e-90e1-414d492e4adc
+#    client_secret: 'exxKFKA447{gebzZRC30::%'
+    client_directory: f6bbeaa3-33d5-44c7-8953-069b6f95f066
+    google_api_key: AIzaSyDE66SxkBTqyrHOpF0FhZ0rm9F-rdA3ETI 
+    weather_api_key: 8fe4c7ec1d4d4dc9acce5e535d7c1a01

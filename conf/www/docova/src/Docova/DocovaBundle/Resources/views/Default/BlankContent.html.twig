@@ -1,0 +1,115 @@
+{% if app.request.query.get('uType') == 'user' %}
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+function closeDlg() {
+	if(window.top.Docova.GlobalStorage["divDlgUserProfile"] != null){
+		var parentWin = window.top.Docova.GlobalStorage["divDlgUserProfile"].sourcewindow;
+		if(parentWin){
+			parentWin.dlgUserProfile.closeDialog();
+			return false;
+		}
+	}
+}
+closeDlg();
+</script>
+</head>
+<body> </body>
+</html>
+{% else %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0"> 
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+{% if app.request.query.get('closeframe') %}
+<script type="text/javascript">
+function closeTabFrame() {
+	{% if app.request.query.get('loadaction') == 'reloadlastopenedview' %}
+	window.parent.frames['fraLeftFrame'].closeAppSettings();
+	{% else %}
+	var viewFrame=parent.frames['fraAdminFixedTab'];
+	var top_frame = parent.frames['fraAdminContentTop'];
+	//if (!top_frame) { return false; }
+	var index = top_frame.tabs.tabs("option", "active");
+	top_frame.removeTabByIndex(index);
+	//refresh the view
+	viewFrame.ViewLoadData();
+	{% endif %}
+}
+</script>
+{% endif %}
+{% if app.request.query.get('mode') == 'window' %}
+<script type="text/javascript">
+if ( window.opener.parent.fraTabbedTable ) {
+	window.opener.parent.fraTabbedTable.objTabBar.RefreshHelper.AddFolderToRefreshList('{{ app.request.query.get('fid') }}');
+	window.opener.parent.fraTabbedTable.objTabBar.ChangeState('{{ app.request.query.get('fid') }}');
+	
+}
+window.close();
+</script>
+{% endif %}
+{% if app.request.query.get('mode') == 'dialog' %}
+<script type="text/javascript">
+var dialogid = '{{ app.request.query.get('dialogid') }}';
+window.top.$("#" + dialogid).dialog("close");
+</script>
+{% endif %}
+{% if not app.request.query.get('closeframe') %}
+<script type="text/javascript">
+function doAction(){
+	//-- if this is a mobile phone page we need to trigger the iframe parent to perform the navigation
+	if(updateinfo.isMobile){
+		if(typeof window.parent.NavBack == "function"){			
+			window.parent.NavBack();
+		}
+		return;
+	}
+	
+	var docid = updateinfo.docid;
+	var folderid = updateinfo.FolderID;
+	var newdocframeid =  (window.frameElement) ? window.frameElement.id : "";
+
+	if ( newdocframeid != "" ){	
+		if (window.parent.fraTabbedTable){
+			window.parent.fraTabbedTable.objTabBar.CloseTab(newdocframeid, true, folderid );
+		}
+		
+		if (window.parent.fraTabbedTableSearch){
+			window.parent.fraTabbedTableSearch.objTabBarSearch.CloseTab(newdocframeid, true, folderid );
+		}
+		
+	}else{
+		if (window.parent.fraTabbedTable){
+			window.parent.fraTabbedTable.objTabBar.CloseTab(docid, true, folderid );
+		}
+		if (window.parent.fraTabbedTableSearch){
+			window.parent.fraTabbedTableSearch.objTabBarSearch.CloseTab(docid, true, folderid );
+		}
+	}
+}
+</script>
+{% endif %}
+</head>
+<body text="#000000" bgcolor="transparent" topmargin=4 bottommargin=4 leftmargin=0 rightmargin=0 marginheight=4 marginwidth=0 onload="{{ not app.request.query.get('closeframe') ? 'doAction();' : 'closeTabFrame();' }}">
+<form action="">
+	<script type="text/javascript">
+	var updateinfo={
+	  docid : "{{ app.request.query.get('docid') }}",
+	  tmpFrameID : "{{ app.request.query.get('tmpFrameID') }}",
+	  FolderID : "{{ app.request.query.get('fid') }}",
+	  isMobile : "{{ app.request.query.get('Mobile') }}" 
+	};
+	function getupdateinfovar(){
+	   return updateinfo;
+	}
+//	try{
+//		doAction();
+//	}catch(e){}
+	</script>
+</form>
+</body>
+</html>
+{% endif %}

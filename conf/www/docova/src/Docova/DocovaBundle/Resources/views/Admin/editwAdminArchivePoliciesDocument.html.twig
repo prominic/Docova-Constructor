@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{% trans %}Archive Policy{% endtrans %}</title>
+{% include 'DocovaBundle:Admin:sfWebAdminCommonScriptHeader.html.twig'%}
+
+{% if document is defined %}
+	{% set path_info = path('docova_admin_editdocument', { 'view_name' : view_name, 'doc_id' : document.getId }) %}
+{% else %}
+	{% set path_info = path('docova_admin_archivepolicy') %}
+{% endif %}
+{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+	'document' : document is defined ? document : '', 
+	'view_name' : view_name, 
+	'view_title' : view_title, 
+	'mode' : mode,
+	'path_info' : path_info
+} %}
+
+<script type="text/javascript">
+//validate user profile fields before submitting
+function validateDocumentFields()
+{
+	return true;
+}
+
+$(function() {
+	$("#PolicyName").focus();
+
+	$('#Library').multiselect({
+		position: { my: 'left top', at: 'left bottom'},
+		selectedList: 3,
+		appendTo: "#divFormContainer" 
+	});
+
+	$('#DocumentType').multiselect({
+		position: { my: 'left top', at: 'left bottom'}, 
+		selectedList: 3,
+		appendTo: "#divFormContainer" 
+	});
+});
+</script>
+</head>
+
+<body scroll="no">
+	<ul class="ui-widget-header actionBar hidetoload">
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+		<li id="saveAndCloseBtn">{% trans %}Save and Close{% endtrans %}</li>
+	</ul>
+	<form method="post" action="{{ path_info }}" class="hidetoload" autocomplete="off">
+		<div id="divFormContainer">
+			<table class="elmContainer" cellspacing="0">
+				<tr>
+					<td colspan="2" class="firstRw"><h3 class="headings1">{% trans %}Archive Policy Settings{% endtrans %}</h3></td>
+				</tr>
+	            <tr>
+					<td class="firstRw">{%trans%}Policy Name{%endtrans%}:</td>
+					<td class="firstRw"><input type="text" name="PolicyName" id="PolicyName" value="{{ document is defined ? document.getPolicyName : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+				</tr>
+				<tr>
+	                <td>{%trans%}Description{%endtrans%}:</td>
+					<td><input type="text" name="Description" value="{{ document is defined ? document.getDescription : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+				</tr>
+				<tr>
+					<td>{%trans%}Status{%endtrans%}:</td>
+					<td>
+						<label><input type="radio" value="1" name="PolicyStatus" {{ document is not defined or document.getPolicyStatus ? "checked":"" }} /> {%trans%}Active{%endtrans%}</label> 
+						<label><input type="radio" value="0" name="PolicyStatus" {{ document is defined and not document.getPolicyStatus ? 'checked':'' }} /> {%trans%}Inactive{%endtrans%}</label>
+					</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Priority{%endtrans%}:</td>
+					<td>
+						<label><input type="radio" value="3" name="PolicyPriority" {{ document is defined and document.getPolicyPriority == 3 ? "checked" : ""}} /> {%trans%}Low{%endtrans%}</label> 
+						<label><input type="radio" value="2" name="PolicyPriority" {{ document is not defined or document.getPolicyPriority == 2 ? "checked":"" }} /> {%trans%}Med{%endtrans%}</label> 
+						<label><input type="radio" value="1" name="PolicyPriority" {{ document is defined and document.getPolicyPriority ==1 ? "checked" : "" }} /> {%trans%}High{%endtrans%}</label>
+					</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Applicable Libraries{%endtrans%}:</td>
+					<td>
+						<label><input type="radio" value="A" name="LibraryOption" class="hideShow" hide="libs" {{ document is not defined or document.getLibraries.count == 0 ? "checked" : "" }}/> {%trans%}All{%endtrans%}</label> 
+						<label><input type="radio" value="S" name="LibraryOption" class="hideShow" show="libs" {{ document is defined and document.getLibraries.count > 0 ? "checked" : "" }}/> {%trans%}Selected{%endtrans%}</label>
+					</td>
+				</tr>
+				<tr class="libs{% if document is not defined or document.getLibraries.count == 0 %} hidden{% endif %}">
+					<td class="firstRw"></td>
+					<td class="firstRw">
+						<select id="Library" name="Library[]" multiple="multiple">
+						{% if libraries is defined and libraries|length %}
+							{% for item in  libraries %}
+								{% set selected = '' %}
+								{% if document is defined and document.getLibraries.count > 0 %}
+									{% for selLibrary in document.getLibraries %}
+										{% if selLibrary.id == item.getId %}
+											{% set selected = 'selected="selected"' %}
+										{% endif %}
+									{% endfor %}
+								{% endif %}
+							<option {{ selected }} value="{{ item.getId }}" >{{ item.getLibraryTitle }}</option>
+							{% endfor %}
+						{% endif %}
+						</select>					
+					</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Applicable Document Types{%endtrans%}:</td>
+					<td>
+						<label><input type="radio" value="A" name="DocumentTypeOption" class="hideShow" hide="doctypes" {{ document is not defined or document.getDocumentTypes.count == 0 ? "checked" : "" }} /> {%trans%}All{%endtrans%}</label> 
+						<label><input type="radio" value="S" name="DocumentTypeOption" class="hideShow" show="doctypes" {{ document is defined and document.getDocumentTypes.count > 0 ? "checked" : "" }} /> {%trans%}Selected{%endtrans%}</label>
+					</td>
+				</tr>
+				<tr class="doctypes{% if document is not defined or document.getDocumentTypes.count == 0 %} hidden{% endif %}">
+					<td class="firstRw"></td>
+					<td class="firstRw">
+						<select id="DocumentType" name="DocumentType[]" multiple="multiple">
+						{% if doctypes is defined and doctypes|length %}
+							{% for item in  doctypes %}
+								{% set selected = '' %}
+								{% if document is defined and document.getDocumentTypes.count > 0 %}
+									{% for selDocType in document.getDocumentTypes %}
+										{% if selDocType.id == item.getId %}
+											{% set selected = 'selected="selected"' %}
+										{% endif %}
+									{% endfor %}
+								{% endif %}
+							<option {{ selected }} value="{{ item.getId }}" >{{ item.getDocName }}</option>
+							{% endfor %}
+						{% endif %}
+						</select>					
+					</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Selection criteria{%endtrans%}:</td>
+					<td>
+						<label><input type="checkbox" value="1" name="EnableDateArchive" {{ document is defined and document.getEnableDateArchive ? 'checked' : '' }} /> {%trans%}Documents that were{%endtrans%}</label>
+						<select name="ArchiveDateSelect" class="text ui-widget-content ui-corner-all smCombo">
+							<option value="DateCreated" {{ document is not defined or document.getArchiveDateSelect == 'DateCreated' ? "selected" : "" }}>{%trans%}created{%endtrans%}</option>
+			                <option value="DateModified" {{ document is defined and document.getArchiveDateSelect == 'DateModified' ? "selected" : "" }}>{%trans%}last modified{%endtrans%}</option>
+			                <option value="ReleasedDate" {{ document is defined and document.getArchiveDateSelect == 'ReleasedDate' ? "selected" : "" }}>{%trans%}Released{%endtrans%}</option>
+						</select>
+						{%trans%}more than{%endtrans%} 
+						<!--  ArchiveDelay is a integer -->
+						<input type="text" name="ArchiveDelay" value="{{ document is defined ? document.getArchiveDelay : '365' }}" class="text ui-widget-content ui-corner-all numeric" />
+						{%trans%} day(s) ago.{%endtrans%}
+					</td>
+				</tr>
+				<tr>
+					<td class="firstRw"></td>
+					<td class="firstRw">
+              			{%trans%}and satisfy the following custom formula{%endtrans%}:<br />
+						<textarea class="text ui-widget-content ui-corner-all" name="ArchiveCustomFormula">{{ document is defined ? document.getArchiveCustomFormula : '' }}</textarea>
+						<span class="elNote">{%trans%}Optional Doctrine DQL where clause for a select from document table. "D" refers to Document; "CU" refers to Creator; "AU" refers to Authors.{%endtrans%}</span>
+						<span class="elNote">{%trans%}e.g. "D.Doc_Title = 'my_value' AND (CU.userNameDnAbbreviated = 'DLI Tools/DOCOVA' OR AU.userNameDnAbbreviated = 'DLI Tools/DOCOVA')"{%endtrans%}</span>
+					</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Exemptions{%endtrans%}:</td>
+					<td>
+						<label><input type="checkbox" value="1" name="ArchiveSkipWorkflow" {{ document is defined and document.getArchiveSkipWorkflow ? "checked" : "" }} /> {%trans%}Do not archive documents with active workflow{%endtrans%}</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="firstRw"></td>
+					<td class="firstRw">
+						<label><input type="checkbox" value="1" name="ArchiveSkipDrafts" {{ document is defined and document.getArchiveSkipDrafts ? "checked" : "" }} /> {%trans%}Do not archive active draft documents{%endtrans%}</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="firstRw"></td>
+					<td class="firstRw">
+						<label><input type="checkbox" value="1" name="ArchiveSkipVersions" {{ document is defined and document.getArchiveSkipVersions ? "checked" : "" }} /> {%trans%}Keep latest{%endtrans%}</label> 
+						<!--  integer -->
+						<input type="text" name="VersionCount" value="{{ document is defined ? document.getVersionCount : "5" }}" class="text ui-widget-content ui-corner-all numeric"/> 
+						{%trans%}releases in the version stream (discarded drafts are not counted){%endtrans%}
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</body>
+</html>

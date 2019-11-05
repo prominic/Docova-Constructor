@@ -1,0 +1,132 @@
+{% set selected_section = '' %}
+{% set section_properties = '' %}
+{% if document is defined and 'RDOC' in document.getContentSections %}
+	{% for subform in document.getDocTypeSubform %}
+		{% if subform.getSubform.getFormName == 'Related Documents' %}
+			{% set selected_section = subform %}
+			{% set section_properties = subform.getPropertiesXML(true) %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+	<table cellspacing="0" class="elmContainer {{ selected_section != '' ? '' : 'hidden' }}">
+		<tr>
+			<td class="firstRw">{% trans %}Default Open mode{% endtrans %}:</td>
+			<td class="firstRw">
+				<span class="elNote">{% trans %}When related document has newer version{% endtrans %}...</span>
+				<select name="RelatedDocOpenMode" class="text ui-widget-content ui-corner-all">
+					<option value="1" {{ section_properties|length > 0 and section_properties['RelatedDocOpenMode'] == 1 ? 'selected' : '' }}>{% trans %}Let user select which one to open{% endtrans %}</option>
+					<option value="2" {{ section_properties|length > 0 and section_properties['RelatedDocOpenMode'] == 2 ? 'selected' : '' }}>{% trans %}Always open the latest version{% endtrans %}</option>
+					<option value="3" {{ section_properties|length > 0 and section_properties['RelatedDocOpenMode'] == 3 ? 'selected' : '' }}>{% trans %}Always open the linked version{% endtrans %}</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Doc Specific Open Mode{% endtrans %}:</td>
+			<td>
+				<table cellspacing="0">
+					<tr>
+						<td class="firstRw exc">{% trans %}Open Mode{% endtrans %}</td>
+						<td class="firstRw">{% trans %}Applicable Document Types{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc">{% trans %}User selects version{% endtrans %}:</td>
+						<td class="firstRw">
+							<select class="multiSelector" name="OMUserSelectDocTypeKey[]" multiple="multiple">
+		                    {% if doctypes is defined %}
+		                    	{% for type in doctypes %}
+		                    	<option value="{{ type.getId }}" {{ section_properties|length > 0 and type.getId in (section_properties['OMUserSelectDocTypeKey']|split(';')) ? 'selected="selected"' : '' }}>{{ type.getDocName }}</option>
+		                    	{% endfor %}
+		                    {% endif %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc">{% trans %}Open latest version{% endtrans %}:</td>
+						<td class="firstRw">
+							<select class="multiSelector" name="OMLatestDocTypeKey[]" multiple="multiple">
+		                    {% if doctypes is defined %}
+		                    	{% for type in doctypes %}
+		                    	<option value="{{ type.getId }}" {{ section_properties|length > 0 and type.getId in (section_properties['OMLatestDocTypeKey']|split(';')) ? 'selected="selected"' : '' }}>{{ type.getDocName }}</option>
+		                    	{% endfor %}
+		                    {% endif %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc">{% trans %}Open linked version{% endtrans %}:</td>
+						<td class="firstRw">
+							<select class="multiSelector" name="OMLinkedDocTypeKey[]" multiple="multiple">
+		                    {% if doctypes is defined %}
+		                    	{% for type in doctypes %}
+		                    	<option value="{{ type.getId }}" {{ section_properties|length > 0 and type.getId in (section_properties['OMLinkedDocTypeKey']|split(';')) ? 'selected="selected"' : '' }}>{{ type.getDocName }}</option>
+		                    	{% endfor %}
+		                    {% endif %}
+							</select>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Cross link{% endtrans %}:</td>
+            <td>
+				<label><input type="checkbox" name="EnableXLink" value="1" {{ section_properties|length > 0 and section_properties['EnableXLink'] == 1 ? 'checked' : '' }} /> {% trans %}Enable cross linking{% endtrans %}</label>
+				<span class="elNote">{% trans %}When linking to one or more documents, cross link automatically, creating links to the source document in the target document simultaneously{% endtrans %}.</span>
+            </td>
+		</tr>
+		<tr>
+			<td>{% trans %}Linked Files{% endtrans %}:</td>
+            <td>
+				<label><input type="checkbox" name="EnableLinkedFiles" value="1" {{ section_properties|length > 0 and section_properties['Interface']['EnableLinkedFiles'] == 1 ? 'checked' : '' }} /> {% trans %}Enable linked files{% endtrans %}</label>
+				<span class="elNote">{% trans %}When linking to one or more documents, linked files option allows the attachments in related documents to be launched when the main file is viewe/edited. Allows for the use of embedded/linked content within Office documents (eg. Excel, Word, Powerpoint).{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">
+                <label><input type="checkbox" name="LaunchLinkedFiles" value="1" {{ section_properties|length > 0 and section_properties['LaunchLinkedFiles'] == 1 ? 'checked' : '' }} /> {% trans %}Auto launch linked files{% endtrans %}</label>
+				<span class="elNote">{% trans %}Automatically open linked file attachments.{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Location{% endtrans %}:</td>
+            <td>
+				<a name="_RefreshKW_HideRelatedDocs"></a> 
+				<label><input type="checkbox" name="HideRelatedDocs" value="1" {{ section_properties|length > 0 and section_properties['Interface']['DisplayInMore'] == 1 ? 'checked' : '' }} />{% trans %}Display Related Documents in "More" section{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+            <td>{% trans %}Document Versioning{% endtrans %}:</td>
+			<td>
+				<span class="elNote">{% trans %}When a new version is created, copy links for the following document types{% endtrans %}:</span>
+				<label><input type="radio" name="RelatedDocType" value="N" {{ section_properties|length == 0 or section_properties['RelatedDocType'] == 'N' ? 'checked' : '' }} class="hideShow" hide="selectedDocTypes" /> {% trans %}None{% endtrans %}</label>
+				<label><input type="radio" name="RelatedDocType" value="A" {{ section_properties|length > 0 and section_properties['RelatedDocType'] == 'A' ? 'checked' : '' }} class="hideShow" hide="selectedDocTypes" /> {% trans %}All{% endtrans %}</label>
+				<label><input type="radio" name="RelatedDocType" value="S" {{ section_properties|length > 0 and section_properties['RelatedDocType'] == 'S' ? 'checked' : '' }} class="hideShow" show="selectedDocTypes" /> {% trans %}Selected{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr class="selectedDocTypes{{ section_properties|length > 0 and section_properties['RelatedDocType'] == 'S' ? '' : ' hidden' }}">
+			<td class="firstRw"></td>
+			<td class="firstRw">
+				<select name="DocTypeKey[]" class="multiSelector" multiple="multiple">
+				{% if doctypes is defined %}
+					{% if section_properties|length > 0 and section_properties['DocTypeKey'] %}
+						{% set selected_doctypes = section_properties['DocTypeKey']|split(',') %}
+					{% else %}
+						{% set selected_doctypes = [] %}
+					{% endif %}
+					{% for type in doctypes %}
+					<option {{ selected_doctypes|length > 0 and type.getId in selected_doctypes ? 'selected="selected"' : '' }} value="{{ type.getId }}">{{ type.getDocName }}</option>
+	                {% endfor %}
+				{% endif %}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Visibility{% endtrans %}</td>
+            <td>
+				{% trans %}Hide Related Documents section when{% endtrans %}: 
+				<label><input type="checkbox" name="HideRelDocuments[]" value="R" {{ section_properties|length > 0 and section_properties['Interface']['HideOnReading'] == 1 ? 'checked' : '' }} /> {% trans %}Reading{% endtrans %}</label>
+				<label><input type="checkbox" name="HideRelDocuments[]" value="E" {{ section_properties|length > 0 and section_properties['Interface']['HideOnEditing'] == 1 ? 'checked' : '' }} /> {% trans %}Editing{% endtrans %}</label>
+			</td>
+		</tr>
+	</table>

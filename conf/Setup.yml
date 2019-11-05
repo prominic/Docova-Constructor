@@ -1,0 +1,192 @@
+##################################################################################
+##################################################################################
+##    Copyright (C) 2019-present Prominic.NET, Inc.                             ##
+##                                                                              ##
+##    This program is free software: you can redistribute it and/or modify      ##
+##    it under the terms of the Server Side Public License, version 1,          ##
+##    as published by MongoDB, Inc.                                             ##
+##                                                                              ##
+##    This program is distributed in the hope that it will be useful,           ##
+##    but WITHOUT ANY WARRANTY; without even the implied warranty of            ##
+##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             ##
+##    Server Side Public License for more details.                              ##
+##                                                                              ##
+##    You should have received a copy of the Server Side Public License         ##
+##    along with this program. If not, see:                                     ##
+##                                                                              ##
+##    http://www.mongodb.com/licensing/server-side-public-license               ##
+##                                                                              ##
+##    As a special exception, the copyright holders give permission to link the ##
+##    code of portions of this program with the OpenSSL library under certain   ##
+##    conditions as described in each individual source file and distribute     ##
+##    linked combinations including the program with the OpenSSL library. You   ##
+##    must comply with the Server Side Public License in all respects for       ##
+##    all of the code used other than as permitted herein. If you modify file(s)##
+##    with this exception, you may extend this exception to your version of the ##
+##    file(s), but you are not obligated to do so. If you do not wish to do so, ##
+##    delete this exception statement from your version. If you delete this     ##
+##    exception statement from all source files in the program, then also delete##
+##    it in the license file.                                                   ##
+##################################################################################
+##################################################################################
+--- 
+- 
+  become: true
+  gather_facts: true
+  hosts: all
+  pre_tasks:
+    - 
+      name: Installing Aptitude is installed.
+      apt:
+        name: aptitude
+        state: present
+        force_apt_get: yes
+  post_tasks:
+    - 
+      name: Installing Python3-pip
+      apt:
+        name: python3-pip
+        state: present
+    - 
+       name: Installing PyMySQL
+       pip:
+        name: PyMySQL
+    - 
+      name: Ensure Java is installed.
+      apt:
+        name: openjdk-8-jdk
+        state: present
+    - 
+      name: Adding Elasticsearch Repository Key for Version 2.1.2
+      apt_key:
+        url: https://packages.elastic.co/GPG-KEY-elasticsearch
+        state: present
+    - 
+      name: Adding Elasticsearch Repository for Version 2.1.2
+      apt_repository:
+        repo: deb https://packages.elastic.co/elasticsearch/2.x/debian stable main
+        state: present
+        filename: elasticsearch-2.x.list
+    - 
+      name: Installing Elasticsearch
+      apt:
+        name: elasticsearch=2.1.2
+      ignore_errors: True
+    - 
+      name: Enable and Start ElasitcSearch
+      service:
+        name: elasticsearch
+        enabled: yes 
+        state: started
+    -  
+      name: Disabling Elasitcsearch from Updating
+      dpkg_selections:
+        name: elasticsearch
+        selection: hold
+#    - 
+#      name: "Add repository for PHP 7.4"
+#      apt_repository: 
+#        repo="ppa:ondrej/php" 
+#        update_cache=yes
+#    - 
+#      name: Update all packages to the latest version
+#      apt:
+#        name:
+#          - php7.4-zip
+#          - php7.4-xsl
+#          - php7.4-xmlrpc
+#          - php7.4-xml
+#          - php7.4-tidy
+#          - php7.4-sybase
+#          - php7.4-soap
+#          - php7.4-readline
+#          - php7.4-pspell
+#          - php7.4-pgsql
+#          - php7.4-opcache
+#          - php7.4-odbc
+#          - php7.4-mysql
+#          - php7.4-ldap
+#          - php7.4-mbstring
+#          - php7.4-json
+#          - php7.4-intl
+#          - php7.4-imap
+#          - php7.4-gmp
+#          - php7.4-gd
+#          - php7.4-fpm
+#          - php7.4-dev
+#          - php7.4-dba
+#          - php7.4-curl
+#          - php7.4-common
+#          - php7.4-cli
+#          - php7.4-cgi
+#          - python3.6-dev
+#          - libmysqlclient-dev
+#          - php7.4-bz2
+#          - php7.4-bcmath
+#          - nginx
+#          - software-properties-common
+    - 
+      name: Get MariaDB Key
+      apt_key:
+        id: '{{ item }}'
+        keyserver: 'hkp://keyserver.ubuntu.com:80'
+        state: 'present'
+      with_items: '0xF1656F24C74CD1D8'
+    -
+      name: Adding MariaDB Repository for Version 10.4
+      apt_repository:
+        repo: deb  http://mirror.one.com/mariadb/repo/10.4/ubuntu bionic main
+        state: present
+        filename: MariaDB
+    -
+      name: Install MariaDB 10.4
+      apt:
+        name:
+          - mariadb-server
+          - mariadb-client
+          - php-fpm
+          - phpmyadmin
+    - name: Adds Python MySQL support on Debian/Ubuntu
+      apt: pkg="python-mysqldb" state=present
+      when: ansible_os_family == 'Debian'
+    
+    - name: Adds Python MySQL support on RedHat/CentOS
+      yum: name=MySQL-python state=present
+      when: ansible_os_family == 'RedHat'
+    
+    - name: Set the root password 
+      mysql_user: login_user=root login_password="" user=root password="Rawr4648@!"
+    
+    - name: Secure the root user for IPV6 localhost (::1)
+      mysql_user: login_user=root login_password="Rawr4648@!" user=root password="Rawr4648@!" host="::1"
+    
+    - name: Secure the root user for IPV4 localhost (127.0.0.1)
+      mysql_user: login_user=root login_password="Rawr4648@!" user=root password="Rawr4648@!" host="127.0.0.1"
+    
+    - name: Secure the root user for localhost domain
+      mysql_user: login_user=root login_password="Rawr4648@!" user=root password="Rawr4648@!" host="localhost"
+    
+    - name: Secure the root user for server_hostname domain
+      mysql_user: login_user=root login_password="Rawr4648@!" user=root password="Rawr4648@!" host="{{ id }}"
+    
+    - name: Deletes anonymous server user
+      mysql_user: login_user=root login_password="Rawr4648@!" user="" host_all=yes state=absent
+    
+    - name: Removes the test database
+      mysql_db: login_user=root login_password="" db=test state=absent
+    -
+      mysql_db:
+        login_password: Docova
+        login_user: root
+        name: docova_db_dev
+        state: present
+      name: "Creating Docova Database 'docova_db_dev'"
+    -
+      mysql_user:
+        login_password: Docova
+        login_user: root
+        name: docova_user
+        password: L1m1t3dd12
+        priv: "docova_db_dev.*:ALL,GRANT"
+        state: present
+      name: "Creating database user with name 'docova_user' and password 'Docova' with all database privileges for 'docova_user'"

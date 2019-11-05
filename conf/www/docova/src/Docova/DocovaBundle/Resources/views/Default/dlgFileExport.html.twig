@@ -1,0 +1,614 @@
+<!doctype html><html>
+<head>
+<title>{% trans %}Files Export{% endtrans %}</title>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}" ></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ user.getUserProfile.getDisplayName }}",
+  "UserRoles" : "$$WebClient;[Administration]",
+  "HTTP_Referer" : "",
+  "SystemKey" : "{{ settings.getSystemKey }}",
+  "Query_String" : "OpenForm&ParentUNID={{ folder.getId }}&folderid={{ folder.getId }}&currentonly=0",
+  "Query_String_Decoded" : "OpenForm&ParentUNID={{ folder.getId }}&folderid={{ folder.getId }}&currentonly=0",
+  "Path_Info_Decoded" : "{{ path('docova_fileexport') }}?ParentUNID={{ folder.getId }}&folderid={{ folder.getId }}&currentonly=0",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "FolderID" : "{% if app.request.query.get('folderid') %}{{ folder.getId }}{% endif %}",
+  "LibraryID" : "{% if not app.request.query.get('folderid') %}{{ folder.getId }}{% endif %}",
+  "LibraryKey" : "{{ not app.request.query.get('folderid') ? folder.getId : folder.getLibrary.getId }}",
+  "ShowCurrentOnly" : "false"
+};
+function getinfovar(){
+   return info;
+}		
+
+var dlgInputs = window.top.Docova.GlobalStorage["dialogFileExport"].dlginp;
+var srcWindow =dlgInputs[0]
+var viewObj = dlgInputs[1];
+window.returnValue=false;
+
+$(function() {
+	$('#tabs').tabs();
+	$('#btnBrowse').button().click(function() {
+		var folderpath = browseFolders('{% trans %}Select a destination folder{% endtrans %}:');
+	});
+});
+
+function objFolder(idparam, nameparam){
+	this.folderid = "";
+	this.foldername = "";
+	
+	if (idparam != null && nameparam != null){
+		this.folderid = idparam;
+		this.foldername = nameparam;
+	}
+}
+
+function exportFiles(){
+	
+	
+	var inputelem = document.getElementsByName("ExportType");
+	var ExportType = getCheckedValue(inputelem);
+
+	var inputelem = document.getElementById("ExportSubFolders");
+	var ExportSubFolders = inputelem.checked;
+	
+	var inputelem = document.getElementById("IncludeThumbnails");
+	var IncludeThumbnails = inputelem.checked;
+	
+	var inputelem = document.getElementsByName("IncludeExcludeType");
+	var IncludeExcludeType = getCheckedValue(inputelem);
+	
+	var inputelem = document.getElementById("ExtensionList");
+	var ExtensionList = inputelem.value;
+	
+	var includeext = (IncludeExcludeType == "1" ? ExtensionList : "");
+	var excludeext = (IncludeExcludeType == "2" ? ExtensionList : "");	
+	
+	var inputelem = document.getElementById("AppendVersionInfo");
+	var AppendVersionInfo = inputelem.checked;
+	
+	var inputelem = document.getElementById("OutputFolder");
+	var OutputFolder = inputelem.value;
+	if (OutputFolder.charAt(OutputFolder.length-1) != "\\"){
+		OutputFolder = OutputFolder + "\\";
+	}
+	
+	var IDList = new Array();
+	if (ExportType == "1"){
+		try{
+			IDList = viewObj.selectedEntries; 
+		}catch(e){
+			alert("{% trans %}No selected entries were found for the chosen folder.{% endtrans %}");
+			return false;
+		}; 
+	}
+	
+	window.top.Docova.Utils.showProgressMessage("{% trans %}Exporting files.  Please wait{% endtrans %}...");
+	if(docInfo.FolderID == "" && docInfo.LibraryID != ""){
+			//-- if exporting an entire library		
+			var folderlist = getSubFolders("");
+			for (f=0; f<folderlist.length; f++){
+				var newtargetpath = OutputFolder + fixFolderName(folderlist[f].foldername, " ") + "\\";
+	 			var result = exportFolder(folderlist[f].folderid, newtargetpath, ExportSubFolders, ExportType, null, AppendVersionInfo, IncludeThumbnails, includeext, excludeext);
+				if (! result) {
+				      alert("{% trans with {'%folder%' : '\'" + OutputFolder + "\''} %}Problems encountered exporting files.\n Some files could not be exported. Please open %folder% to view any exported files.{% endtrans %}");
+				      break;
+                    }	 		
+			}
+	}else{
+		//-- exporting just a folder and subfolders
+		var result = exportFolder(docInfo.FolderID, OutputFolder, ExportSubFolders, ExportType, IDList, AppendVersionInfo, IncludeThumbnails, includeext, excludeext);		
+	}
+	window.top.Docova.Utils.hideProgressMessage();
+	if (result){
+		 alert("{% trans with {'%folder%' : '\'" + OutputFolder + "\''} %}File Export Complete.\n Please open %folder% to view any exported files.{% endtrans %}");
+	}else{
+	      alert("{% trans with {'%folder%' : '\'" + OutputFolder + "\''} %}Problems encountered exporting files.\n Some files could not be exported. Please open  to view any exported %folder% files.{% endtrans %}");
+	}
+     window.close();
+}
+
+function exportFolder(folderid, targetrootpath, processsubfolders, exporttype, idlist, appendversioninfo, includethumbnails, includeextensions, excludeextensions){
+	if (! LocalFolderExists(targetrootpath, true)){
+		if (! CreateLocalFolder(targetrootpath, false)){
+			return false;  //quit early since destination folder cannot be found or created
+		}
+	}
+								
+     var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/DocumentServices?" + Math.random();
+     var request = "";
+           request += "<Request>";
+           request += "<Action>GETATTACHMENTS</Action>";
+           request += "<FolderID>" + folderid + "</FolderID>";
+           request += "<SelectionType>" + exporttype + "</SelectionType>";
+           request += "<SelectedDocs>";
+		if (exporttype == "1"){
+			for ( j=0; j < idlist.length; j ++ ) {
+					request += "<DocID>" + idlist[j] + "</DocID>";
+			}     	
+     	}
+           request += "</SelectedDocs>";
+           request += "<IncludeExtensions>" + includeextensions + "</IncludeExtensions>";
+           request += "<ExcludeExtensions>" + excludeextensions + "</ExcludeExtensions>";
+           request += "<IncludeThumbnails>" + (includethumbnails ? "1" : "") + "</IncludeThumbnails>";
+           request += "<AppendVersionInfo>" + (appendversioninfo ? "1" : "") + "</AppendVersionInfo>";
+           request += "</Request>";
+                 
+           var httpObj = new objHTTP();
+           httpObj.returnxml = true;
+           if (httpObj.PostData(request, url)) {
+              if (httpObj.status == "OK") {
+                  if(httpObj.results.length > 0){
+						var returneddata = httpObj.results[0];
+						httpObj = null;
+						var xmlstring = "";
+						if ( typeof returneddata == "object" )
+							xmlstring = returneddata.innerHTML;
+						else
+							xmlstring = returneddata;
+							
+						var xmldata = loadXMLString(xmlstring);
+						
+						var fileNodes = xmldata.getElementsByTagName('File');
+						for(var f = 0; f < fileNodes.length; f++){
+							var fileNode = fileNodes[f];
+							var fileName = fileNode.getElementsByTagName('FileName')[0].text || fileNode.getElementsByTagName('FileName')[0].textContent ;
+							var fileUrl = fileNode.getElementsByTagName('URL')[0].text ||  fileNode.getElementsByTagName('URL')[0].textContent;
+							if (fileName != ""){
+								var targetFilePath = GetFreeFileName(targetrootpath, fileName);
+								if (! targetFilePath) return false;
+								if (! DocovaExtensions.DownloadFileFromURL(fileUrl, targetFilePath, true)){
+ 									alert("{% trans with {'%filename%' : '" + fileName + "', '%filepath%' : '\'" + targetFilePath + "\'' } %}Error - Unable to download file %filename% to %filepath%. \n\nPlease check that the source file is present and undamaged. \n\n Source file URL: {% endtrans %}'" + fileUrl + "'");
+									 return false;
+								}
+							}															
+						}		
+					}      
+               }
+           }
+           httpObj = null;
+          
+          if (exporttype != "1" && processsubfolders){
+			var folderlist = getSubFolders(folderid);
+			for (f=0; f<folderlist.length; f++){
+				var newtargetpath = targetrootpath + fixFolderName(folderlist[f].foldername, " ") + "\\";
+	 			if (! exportFolder(folderlist[f].folderid, newtargetpath, processsubfolders, exporttype, null, appendversioninfo, includethumbnails, includeextensions, excludeextensions)){
+					return false;  //quit early since a problem was encountered exporting a sub folder
+				}
+	 		}
+	 	}
+	 	return true;
+}
+
+
+
+
+function getSubFolders(parentfolderid){
+
+	var folderlist = new Array();
+
+     var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/FolderServices?" + Math.random();
+     var request = "";
+     request += "<Request>";
+     request += "<Action>GETSUBFOLDERS</Action>";
+     request += "<FolderID>" + parentfolderid + "</FolderID>";
+     request += "<LibraryID>" + docInfo.LibraryKey + "</LibraryID>";
+     request += "</Request>";
+     
+     request = encodeURIComponent(request);
+                 
+     var httpObj = new objHTTP();
+     httpObj.returnxml = true;
+     if (httpObj.PostData(request, url)) {
+     	if (httpObj.status == "OK") {
+          	if(httpObj.results.length > 0){
+					var returneddata = httpObj.results[0];
+					var xmlstring = "";
+					if ( typeof returneddata == "object" )
+							xmlstring = returneddata.innerHTML;
+						else
+							xmlstring = returneddata;
+					httpObj = null;
+					var xmldata = loadXMLString(xmlstring);
+					var folderNodes = xmldata.getElementsByTagName('Folder');
+					for(var f = 0; f < folderNodes.length; f++){
+						var folderNode = folderNodes[f];
+						var nextFolderName = folderNode.getElementsByTagName('FolderName')[0].text || folderNode.getElementsByTagName('FolderName')[0].textContent;
+						var nextFolderID = folderNode.getElementsByTagName('FolderID')[0].text || folderNode.getElementsByTagName('FolderID')[0].textContent;
+						folderlist.push(new objFolder(nextFolderID, nextFolderName));
+					}
+			}      
+        }
+   }
+   httpObj = null;
+   return folderlist;
+}
+
+//------------------------------------------------------------------------------------------------
+// GetFreeFileName
+// Description: Checks to see if a directory contains a particular file
+//                        and returns either the existing file name or a new unique
+//                        file name
+// Inputs:  targetfoldername - string - local path of folder (must end with path delimiter)
+//               targetfilename - string - file name to look for 
+//-------------------------------------------------------------------------------------------------
+function GetFreeFileName(targetfoldername, targetfilename){
+	if (targetfoldername == "" || targetfilename ==""){return false;}
+	
+
+	var pos = targetfilename.lastIndexOf(".");
+	if (pos > -1){
+		var nameportion = targetfilename.slice(0, pos);
+		var extension = targetfilename.slice(pos);
+	}else{
+		var nameportion = targetfilename;
+		var extension = "";	
+	}
+	
+	var counter = 0;
+	var newfilename = "";
+	newfilename = targetfoldername + nameportion + extension;	
+	while (DocovaExtensions.LocalFileExists(newfilename)){
+		counter = counter + 1;
+		newfilename = targetfoldername + nameportion + " - Copy" + ((counter > 1)? "(" + counter.toString() + ")" : "")+ extension;
+	}
+	
+
+	return newfilename;	
+} 
+
+
+//------------------------------------------------------------------------------------------------
+// LocalFolderExists
+// Description: Determines if a specified folder exists locally
+// Inputs:  foldername - string - local path of folder
+//               hidemessages - boolean - true to hide any alert messages 
+//-------------------------------------------------------------------------------------------------
+function LocalFolderExists(foldername, hidemessages){
+	var folderfound = false;
+	if(foldername == ""){return false;}
+	
+	
+	folderfound = DocovaExtensions.LocalFolderExists(foldername);
+	fso = null;
+	return folderfound;
+}
+
+//------------------------------------------------------------------------------------------------
+// CreateLocalFolder
+// Description: Creates a specified folder locally if not already present
+// Inputs:  foldername - string - local path of folder
+//               hidemessages - boolean - true to hide any alert messages 
+//-------------------------------------------------------------------------------------------------
+function CreateLocalFolder(foldername, hidemessages){
+
+	mystr ='Type objType = Type.GetTypeFromProgID("Scripting.FileSystemObject");';
+     mystr += 'dynamic fso = Activator.CreateInstance(objType);';
+     mystr += 'string retstr = "";';
+     mystr += 'if ( fso.FolderExists(@"' + foldername + '")) { ';
+     mystr += '   retstr = "true"; ';
+     mystr += ' }else{';
+     mystr += '     try{ ';
+     mystr += '          fso.CreateFolder(@"' + foldername + '");';
+     mystr += '          retstr = "true"; ';
+     mystr += '     }catch( Exception e ) { retstr = "false"; }';
+     mystr += '}';
+     mystr += 'fso =null; return retstr;';
+
+	var foldercreated = false;
+	if(foldername == ''){return false;}
+
+	var retval = DocovaExtensions.executeCode(mystr, false, true);
+	if ( retval.status == "SUCCESS" ){
+			if ( retval.results == "true" )
+				foldercreated = true;
+			else{
+				alert ( "Error creating folder " + foldername + ". \r\n "  + retval.error );
+				foldercreated = false;
+				}
+	}else{
+			alert ( "Error creating folder " + foldername + ". \r\n "  + retval.error );
+		      foldercreated = false;
+	}
+	
+	
+	return foldercreated;
+}
+
+
+function closeMe(){
+window.returnValue = false;
+var statfield = srcWindow.document.all.attachStatus;
+
+if ( processed ) 
+	statfield.value = "processed";
+else
+	statfield.value = "cancelled";
+
+window.close();
+}
+
+function browseFolders(headermsg){
+	var folderpath = "";
+	/*
+	mystr ='Type objType = Type.GetTypeFromProgID("Shell.Application");'
+     mystr += 'dynamic shellobj = Activator.CreateInstance(objType);'
+     mystr += 'string retstr = "";'
+     mystr += ' dynamic folderobj = shellobj.BrowseForFolder(0, "' + headermsg + '", 3, 17); '
+     mystr += '      if ( folderobj != null ) { '
+     mystr += '          retstr = folderobj.Self.Path; '
+     mystr += '      }'
+     mystr += 'folderobj =null; shellobj = null; return retstr;'  
+	
+	var retval = DocovaExtensions.executeCode(mystr, false);
+	if ( retval.status == "SUCCESS" ){
+			folderpath = retval.results;
+	}
+	*/
+	
+	DocovaExtensions.SelectFolder({
+				title : headermsg,
+				onSuccess: function( foldername ){
+						var inputelem = document.getElementById("OutputFolder");
+						inputelem.value = foldername;
+				}
+	});
+	
+	return folderpath;
+	
+}
+
+
+function getCheckedValue(radioObj) {
+	if(!radioObj)
+		return "";
+	var radioLength = radioObj.length;
+	if(radioLength == undefined)
+		if(radioObj.checked)
+			return radioObj.value;
+		else
+			return "";
+	for(var i = 0; i < radioLength; i++) {
+		if(radioObj[i].checked) {
+			return radioObj[i].value;
+		}
+	}
+	return "";
+}
+
+
+function loadXMLString(txt) 
+{
+if (window.DOMParser)
+  {
+  parser=new DOMParser();
+  xmlDoc=parser.parseFromString(txt,"text/xml");
+  
+  }
+else // Internet Explorer
+  {
+  xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+  xmlDoc.async="false";
+  xmlDoc.loadXML(txt); 
+  }
+return xmlDoc;
+}
+
+
+function fixFolderName(strfoldername, repchar){
+	if(! repchar){repchar = ""};
+	
+	var myregexp = new RegExp('\\\\', "gi");
+	var res = strfoldername.replace(myregexp, repchar);
+	var myregexp = new RegExp('["\*/:<>\?\|]', "gi");
+	res = res.replace(myregexp, repchar);
+	
+	return res;
+}
+</script>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF" class="dlgBody" SCROLL="no" onload="// set default values
+InitVars(info);
+
+// set default export folder
+var inputelem = document.getElementById('OutputFolder');
+if( Sarissa ) {
+	$.ajaxSetup({
+	    xhr: function() {
+			if ( Sarissa.XMLHttpRequestNative )
+				return Sarissa.XMLHttpRequestNative;
+			else
+				return new XMLHttpRequest();
+	    }
+	}); 
+}
+
+inputelem.value = DocovaExtensions.MyDocumentsFolder();
+
+// disable export sub folders
+var inputelem = document.getElementById('ExportSubFolders');	
+inputelem.disabled = true;
+
+var inputelem = document.getElementById('ExtensionList');	
+inputelem.disabled = true;
+
+">
+
+	<div id="dlgContentNh" style="width:100%;">
+	<div class="txHeaderTitle">
+		<IMG SRC= "{% if app.request.query.get('folderid') %}{{ asset('bundles/docova/images/folder-open.gif') }}{% else %}{{ asset('bundles/docova/images/Book_angleHS.png') }}{% endif %}" border=0 align=top> 
+		<b>{{ app.request.query.get('folderid') ? folder.getFolderName : folder.getLibraryTitle }}</b>
+	</div>
+	{% trans %}Select the options to use for exporting the folder contents.{% endtrans %}</br></br>
+	<!----------------- Tabbed Table Headings ----------->
+	<div id="tabs">
+		<ul>
+			<li><a href="#basic" >{% trans %}Basic Options{% endtrans %}</a></li>
+			<li><a href="#advanced" >{% trans %}Advanced Options{% endtrans %}</a></li>
+		</ul>
+		<!-- ----------- Basic Options tab ----------- -->
+		<div id="basic">
+			<table class="DlgTable"  style="width: 100%;">
+				<tr><td class="txFldLabel"><b>{% trans %}Export files from the following documents{% endtrans %}:</b></td></tr>
+				<tr>
+					<td class="txFldCell" style="padding: 0px 0px 0px 20px;">
+					{% if app.request.query.get('folderid') %}
+						<label><input type="radio" name="ExportType" value="1"  onclick="var inputelem = document.getElementById('ExportSubFolders');
+var ExportType = getCheckedValue(this);
+if(ExportType == '1'){
+	//-- if export selected documents chosen disable sub folder export since not applicable
+	inputelem.checked = false;
+	inputelem.disabled = true;
+} else {
+	if(docInfo.FolderID == ''){
+		//-- if exporting an entire library disable export sub folder since needs to be enabled
+		inputelem.disabled = true;
+	}else{
+		//-- if exporting a folder allow user to select to export sub folders
+		inputelem.disabled = false;
+	}	
+}" id="ExportType" class="txFldRadio">{% trans %}Selected documents{% endtrans %}</label><br>
+					{% endif %}
+						<label><input type="radio" name="ExportType" value="2" {% if not app.request.query.get('folderid') %}checked{% endif %} onclick="var inputelem = document.getElementById('ExportSubFolders');
+var ExportType = getCheckedValue(this);
+if(ExportType == '1'){
+	//-- if export selected documents chosen disable sub folder export since not applicable
+	inputelem.checked = false;
+	inputelem.disabled = true;
+} else {
+	if(docInfo.FolderID == ''){
+		//-- if exporting an entire library disable export sub folder since needs to be enabled
+		inputelem.disabled = true;
+	}else{
+		//-- if exporting a folder allow user to select to export sub folders
+		inputelem.disabled = false;
+	}	
+}" id="ExportType" class="txFldRadio">{% trans %}Latest released versions (exclude drafts and prior versions){% endtrans %}</label><br>
+						<label><input type="radio" name="ExportType" value="3" onclick="var inputelem = document.getElementById('ExportSubFolders');
+var ExportType = getCheckedValue(this);
+if(ExportType == '1'){
+	//-- if export selected documents chosen disable sub folder export since not applicable
+	inputelem.checked = false;
+	inputelem.disabled = true;
+} else {
+	if(docInfo.FolderID == ''){
+		//-- if exporting an entire library disable export sub folder since needs to be enabled
+		inputelem.disabled = true;
+	}else{
+		//-- if exporting a folder allow user to select to export sub folders
+		inputelem.disabled = false;
+	}	
+}" id="ExportType" class="txFldRadio">{% trans %}All versions (exclude drafts){% endtrans %}</label><br>
+						<label><input type="radio" name="ExportType" value="4" onclick="var inputelem = document.getElementById('ExportSubFolders');
+var ExportType = getCheckedValue(this);
+if(ExportType == '1'){
+	//-- if export selected documents chosen disable sub folder export since not applicable
+	inputelem.checked = false;
+	inputelem.disabled = true;
+} else {
+	if(docInfo.FolderID == ''){
+		//-- if exporting an entire library disable export sub folder since needs to be enabled
+		inputelem.disabled = true;
+	}else{
+		//-- if exporting a folder allow user to select to export sub folders
+		inputelem.disabled = false;
+	}	
+}" id="ExportType" class="txFldRadio">{% trans %}All versions (including drafts){% endtrans %}</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="txFldCell">
+						<label><input type="checkbox" name="ExportSubFolders" {% if not app.request.query.get('folderid') %}checked{% endif %} value="1" id="ExportSubFolders">{% trans %}Export sub folders{% endtrans %}</label>
+					</td>
+				</tr>
+			</table>
+
+			<table class="DlgTable"  style="width: 100%;">
+				<tr>
+					<td class="txFldLabel"><b>{% trans %}Output Folder{% endtrans %}:</b></td>
+				</tr>
+				<tr>
+					<td class="txFldCell">
+						<input name="OutputFolder" value="" id="OutputFolder" class="txFldReadOnly" style="width: 295px; " readonly>&nbsp;
+						<input type="button" value="Browse" id="btnBrowse" class="txButton" name="Browse" style="width:70px">
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<!-- ----------- Advanced Options tab ----------- -->
+		<div id="advanced">
+			<table class="DlgTable"  style="width: 100%;">
+				<tr>
+					<td class="txFldCell">
+						<label><input type="checkbox" name="AppendVersionInfo" value="1" id="AppendVersionInfo">{% trans %}Append Version Information{% endtrans %}</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="txFldCell">
+						<label><input type="checkbox" name="IncludeThumbnails" value="1" id="IncludeThumbnails">{% trans %}Include Thumbnails{% endtrans %}</label>
+					</td>
+				</tr>
+				<tr>
+					<td class="txFldLabel"><b>{% trans %}Select whether to include/exclude files based on extension{% endtrans %}:</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="txFldCell">
+					<label><input type="radio" name="IncludeExcludeType" value="1" onclick="var inputelem = document.getElementById('ExtensionList');
+var IncludeExcludeType = getCheckedValue(this);
+if(IncludeExcludeType == ''){
+	inputelem.value = '';
+	inputelem.disabled = true;
+} else {
+	inputelem.disabled = false;
+}
+" id="IncludeExcludeType" class="txFldRadio">{% trans %}Include{% endtrans %}</label>
+					<label><input type="radio" name="IncludeExcludeType" value="2" onclick="var inputelem = document.getElementById('ExtensionList');
+var IncludeExcludeType = getCheckedValue(this);
+if(IncludeExcludeType == ''){
+	inputelem.value = '';
+	inputelem.disabled = true;
+} else {
+	inputelem.disabled = false;
+}
+" id="IncludeExcludeType" class="txFldRadio">{% trans %}Exclude{% endtrans %}</label> 
+					{% trans %}files with the following extensions{% endtrans %}:
+				</td>
+			</tr>
+			<tr>
+				<td class="txFldCell">
+					<input name="ExtensionList" value="" id="ExtensionList" style="width: 350px; ">
+				</td>
+			</tr>
+			<tr>
+				<td class="txFldLabel">{% trans %}(enter a list of extensions separated by comma. eg. doc,docx,docm){% endtrans %}</td>
+			</tr>
+		</table>
+	</div>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

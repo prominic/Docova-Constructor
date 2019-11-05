@@ -1,0 +1,103 @@
+<table>
+<tr>
+	<td valign="top" style="width:50%;padding: 0px 15px 15px 15px;">
+		<table>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="verdana twelve bold">{% trans %}Change this panel. Modify the options below and change the layout on the right.{% endtrans %}</span>
+			</td>
+		</tr>
+		</table>
+		<table>
+		<tr>
+			<td style="width:100px;"><span style="padding: 5px 5px 5px 5px;">{% trans %}Panel name{% endtrans %}:</span></td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<div><input id="PanelName" name="" value="" style="width: 250px;"></div>
+			</td>
+		</tr>
+		<tr>
+			<td><span style="padding: 5px 5px 5px 5px;">{% trans %}Description{% endtrans %}:</span></td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<div><textarea id="PanelDescription" name="PanelDescription" style="width:250px ; height:50px;"></textarea></div>
+			</td>
+		</tr>
+		<tr>
+			<td><span style="padding: 5px 5px 5px 5px;">{% trans %}Owner{% endtrans %}:</span></td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<div><input id="Username" name="Username" value="" style="width: 250px;" disabled="disabled"></div>
+			</td>
+		</tr>
+		</table>
+	</td>
+	<td>
+		<table>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="verdana twelve bold">{% trans %}Change the layout style{% endtrans %}:</span>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span>{% trans %}The currently selected widgets will remain intact if you change the layout.{% endtrans %}</span>
+			</td>
+		</tr>
+		</table>
+		<table>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px; width: 100px;">
+				<span class="txt04">1 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L1-1"><img src="{{ asset('bundles/docova/images/L1-1.jpg') }}">
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="txt04">2 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L2-1"><img src="{{ asset('bundles/docova/images/L2-1.jpg') }}">
+				<input type="radio" name="panellayout" value="L2-2"><img src="{{ asset('bundles/docova/images/L2-2.jpg') }}">
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="txt04">3 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L3-1"><img src="{{ asset('bundles/docova/images/L3-1.jpg') }}">
+				<input type="radio" name="panellayout" value="L3-2"><img src="{{ asset('bundles/docova/images/L3-2.jpg') }}">
+				<input type="radio" name="panellayout" value="L3-3"><img src="{{ asset('bundles/docova/images/L3-3.jpg') }}">
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="txt04">4 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L4-1" checked="checked"><img src="{{ asset('bundles/docova/images/L4-1.jpg') }}">
+				<input type="radio" name="panellayout" value="L4-2"><img src="{{ asset('bundles/docova/images/L4-2.jpg') }}">
+				<input type="radio" name="panellayout" value="L4-3"><img src="{{ asset('bundles/docova/images/L4-3.jpg') }}">
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="txt04">5 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L5-1"><img src="{{ asset('bundles/docova/images/L5-1.jpg') }}">
+				<input type="radio" name="panellayout" value="L5-2"><img src="{{ asset('bundles/docova/images/L5-2.jpg') }}">
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="txt04">6 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L6-1"><img src="{{ asset('bundles/docova/images/L6-1.jpg') }}">
+			</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>

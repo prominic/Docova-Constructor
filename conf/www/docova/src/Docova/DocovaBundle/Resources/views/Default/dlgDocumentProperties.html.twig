@@ -1,0 +1,142 @@
+<!doctype html><html>
+<head>
+<title>{% trans %}Document Properties{% endtrans %}</title>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var dlgForm = null; //declare global variable to represent current form
+var dlgDoc = null;
+var oPopup = null;
+var srcWindow = window.dialogArguments;
+var info = {
+	"DocID" : "{{ document.getId }}",
+	"DocKey" : "DK{{ document.getId }}",
+	"LibraryKey" : "{{ document.getFolder.getLibrary.getId }}",
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"UserRoles" : "$$WebClient;[User]",
+	"isSuperuser" : "",
+	"isEditMode" : "",
+	"HTTP_Referer" : "",
+	"Query_String" : "OpenForm&ParentUNID={{ document.getId }}&mode=R",
+	"Query_String_Decoded" : "OpenForm&ParentUNID={{ document.getId }}&mode=R",
+	"Path_Info_Decoded" : "{{ path('docova_documentproperties') }}?OpenForm&ParentUNID={{ document.getId }}&mode=R",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length-1] }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length-1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length-1] }}"
+};
+function getinfovar() {
+	return info;
+}
+
+$(document).ready(function(){
+    $("#tabs").tabs()
+})
+
+document.oncontextmenu=stopContextMenu;
+
+function stopContextMenu()
+{
+	return false;
+}
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no">
+	<div id="dlgContentNh" style="width:100%;">
+		<div id="tabs">
+			<ul>
+				<li><a href="#tabs-1">General</a></li>
+				<li><a href="#tabs-2">Security</a></li>
+				<li><a href="#tabs-3">Audit Log</a></li>
+			</ul>
+			<div id="tabs-1">
+				<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr valign="top">
+						<td class="frmLabel" width="1%">{% trans %}Title{% endtrans %}:</td>
+						<td class="frmText" width="100%">{{ document.getDocTitle }}</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmLabel" width="1%">{% trans %}Description{% endtrans %}:</td>
+						<td class="frmText" width="100%">{{ document.getDescription }}</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmLabel" width="1%">{% trans %}Status{% endtrans %}:</td>
+						<td class="frmText" width="100%">{{ document.getDocStatus }}</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmLabel" width="1%">{% trans %}Version{% endtrans %}:</td>
+						<td class="frmText" width="100%">{{ document.getDocVersion }}</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmLabel" width="1%">{% trans %}Author{% endtrans %}:</td>
+						<td class="frmText" width="100%">{{ document.getAuthor.getUserNameDnAbbreviated }}</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmLabel" width="1%">{% trans %}Created on{% endtrans %}:</td>
+						<td class="frmText" width="100%">{{ document.getDateCreated.format(date_format) }}</td>
+					</tr>
+				</table>
+  			</div>
+
+			<div id="tabs-2">
+				<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr valign="top">
+						<td class="frmLabel" width="1%">{% trans %}Editors{% endtrans %}:</td>
+						<td class="frmText" width="100%">{{ editors }}</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmLabel" width="1%">{% trans %}Readers{% endtrans %}:</td>
+						<td class="frmText" width="100%">{{ readers }}</td>
+					</tr>
+				</table>
+  			</div>
+
+			<div id="tabs-3">
+				<table  class="tblFields" style="border: 1px ridge; background-color:#efefff;" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th class="frmLabel" width="100">{% trans %}Date{% endtrans %}</td>
+						<th class="frmLabel" width="100">{% trans %}Time{% endtrans %}</td>
+						<th class="frmLabel" width="100">{% trans %}Who{% endtrans %}</td>
+						<th class="frmLabel">{% trans %}Details{% endtrans %}</td>
+					</tr>
+				</table>
+				<div style="width: 100%; height: 200px; overflow: auto;">
+					<table class="tblFields" id="tblAuditLogData" datasrc="#AuditLogData" width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td class="frmText" width="100"><span datafld="logdate"></span>&nbsp;</td>
+							<td class="frmText" width="100"><span datafld="logtime"></span>&nbsp;</td>
+							<td class="frmText" width="100"><span datafld="logauthor"></span>&nbsp;</td>
+							<td class="frmText"><span datafld="logdetails"></span>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+<script>
+	var AuditLogData= new xmlDataIsland();
+	AuditLogData.setSrc ( "{{ path('docova_documentlogs', {'document' : document.getId, 'filter' : '0'})}}?Open" );
+	AuditLogData.id = "AuditLogData";
+	AuditLogData.setTemplateName( "tblAuditLogData");
+	AuditLogData.ondatasetcomplete = function() { ""; }
+	AuditLogData.process();
+</script>
+			</div>
+		</div> <!-- end tabs --->
+	</div>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+	<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

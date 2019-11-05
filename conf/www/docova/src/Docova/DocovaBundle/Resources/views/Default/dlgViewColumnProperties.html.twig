@@ -1,0 +1,688 @@
+<!doctype html><html>
+<head>
+<title>{% trans %}>Column Properties{% endtrans %}</title>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}" ></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "UserRoles" : "$$WebClient;[User]",
+  "isEditor" : "",
+  "isReader" : "",
+  "IsApprover" : "",
+  "IsSuperuser" : "",
+  "HTTP_Referer" : "",
+  "Query_String" : "OpenForm&FolderID={{ app.request.query.get('FolderID') }}&LibraryID={{ app.request.query.get('LibraryID') }}",
+  "Query_String_Decoded" : "OpenForm&FolderID={{ app.request.query.get('FolderID') }}&LibraryID={{ app.request.query.get('LibraryID') }}",
+  "Path_Info_Decoded" : "{{ path('docova_columnproperties') }}?OpenForm&FolderID={{ app.request.query.get('FolderID') }}&LibraryID={{ app.request.query.get('LibraryID') }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length -1] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length -1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:] }}"
+};
+function getinfovar() {
+	return info;
+}
+var parentWin = window.top.Docova.GlobalStorage["divColPropertiesDlg"].sourcewindow;
+var srcColumn = null;
+var srcView = null;
+var dlgForm = null; //declare global variable to represent current form
+var dlgDoc = null;
+
+$(document).ready(function(){
+	$( "#tabs" ).tabs({ heightStyle: "auto" });
+	
+	//Color picker buttons
+	$( "#btn-FontColorPicker" )
+		.button({
+			text: false,
+			icons: {primary: "ui-icon-colorpicker"}
+		})
+		.click(function( event ) {
+			Docova.Utils.colorPicker(event, "FontColor");
+			event.preventDefault();
+	});	
+	$( "#btn-BackgroundColorPicker" )
+		.button({
+			text: false,
+			icons: {primary: "ui-icon-colorpicker"}
+		})
+		.click(function( event ) {
+			Docova.Utils.colorPicker(event, "BackgroundColor");
+			event.preventDefault();
+	});
+	$( "#btn-TFontColorPicker" )
+		.button({
+			text: false,
+			icons: {primary: "ui-icon-colorpicker"}
+		})
+		.click(function( event ) {
+			Docova.Utils.colorPicker(event, "TFontColor");
+			event.preventDefault();
+	});
+	$( "#btn-TBackgroundColorPicker" )
+		.button({
+			text: false,
+			icons: {primary: "ui-icon-colorpicker"}
+		})
+		.click(function( event ) {
+			Docova.Utils.colorPicker(event, "TBackgroundColor");
+			event.preventDefault();
+	});	
+	$( "#btn-HFontColorPicker" )
+		.button({
+			text: false,
+			icons: {primary: "ui-icon-colorpicker"}
+		})
+		.click(function( event ) {
+			Docova.Utils.colorPicker(event, "HFontColor");
+			event.preventDefault();
+	});
+	$( "#btn-HBackgroundColorPicker" )
+		.button({
+			text: false,
+			icons: {primary: "ui-icon-colorpicker"}
+		})
+		.click(function( event ) {
+			Docova.Utils.colorPicker(event, "HBackgroundColor");
+			event.preventDefault();
+	});	
+	
+	$( "button" ).button().click(function( event ) {
+		event.preventDefault();
+	});    
+});
+
+// For convenience
+
+function stopContextMenu()
+{
+return false;
+}
+
+function completeWizard()
+{
+	if(Docova.Utils.getField("XmlNode") == ""){
+		Docova.Utils.messageBox({ title: "{% trans %}No data column selected{% endtrans %}", prompt: "{% trans %}Please select a data column on the General tab.{% endtrans %}", icontype: 1, msgboxtype: 0, width:350 });
+		return;
+	}
+	if(Docova.Utils.getField("Width") < 20){
+		Docova.Utils.setField({ field: "Width", value: 20 });
+	}
+	if(writeColumnProperties()){
+		return true;
+	}
+}
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	srcColumn = parentWin.curColumnObj;	
+	srcView = srcColumn.parentObj;
+	
+	//Global variables for convenience
+	dlgForm = document.forms[0];
+	dlgDoc = document;
+	InitVars(info);
+
+	preloadColumnProperties();
+}
+
+//======== onchange event handler for the Field name selection box ======
+function ChangeField(objXmlNode)
+{
+	var optVal = $(objXmlNode).find('option:selected').val();
+	var optTitle = $(objXmlNode).find('option:selected').attr("coltitle");
+	var optWidth = $(objXmlNode).find('option:selected').attr("colwidth");
+	var optDataType = $(objXmlNode).find('option:selected').attr("coldatatype");
+	
+	if(optVal=="")
+	{
+		Docova.Utils.setField({ field: "ColumnTitle", value: "" });
+		Docova.Utils.setField({ field: "Width", value: "" });
+		Docova.Utils.setField({ field: "DataType", value: ""});
+	}
+	else
+	{
+		Docova.Utils.setField({ field: "ColumnTitle", value: optTitle });
+		Docova.Utils.setField({ field: "Width", value: optWidth });
+		Docova.Utils.setField({ field: "DataType", value: optDataType });
+	}
+
+}
+
+//===  helper function to set the sample color box background
+function setColorBox(fieldname, colorval)
+{
+	//the colorbox div id is named display + fieldname for the field it is associated with
+	$("#display" + fieldname).css("backgroundColor", colorval);
+}
+
+//======= Preloads the properties of the selected column ============
+function preloadColumnProperties()
+{
+	//---- general properties ----
+	Docova.Utils.setField({ field: "ColumnTitle", value: srcColumn.title });
+	Docova.Utils.setField({ field: "DataType", value: srcColumn.dataType });
+	$('#XmlNode').val(srcColumn.xmlNodeName);
+	//Docova.Utils.setField({ field: "XmlNode", value: srcColumn.xmlNodeName });
+	Docova.Utils.setField({ field: "Width", value: srcColumn.width });
+
+	//----- sort properties -------
+		if(srcColumn.isCategorized)
+		{
+			Docova.Utils.setField({ field: "SortType", value: "C" });
+			Docova.Utils.setField({ field: "SortOrder", value: srcColumn.sortOrder });
+		}
+		else if (srcColumn.sortOrder != "none")
+		{
+			Docova.Utils.setField({field: "SortType", value: "S" });
+			Docova.Utils.setField({field: "SortOrder", value: srcColumn.sortOrder });
+		}
+		else
+		{
+			Docova.Utils.setField({field: "SortType", value: "N" });
+		}
+		
+		if(srcColumn.hasCustomSort)
+		{
+			Docova.Utils.setField({ field: "HasCustomSort", value: "1" });
+		}
+
+	// ----- text/cell appearance --------
+	(srcColumn.align=="") ? Docova.Utils.setField({ field: "TextAlign", value: "left" }) : Docova.Utils.setField({ field: "TextAlign", value: srcColumn.align });
+	(srcColumn.fontSize=="") ? Docova.Utils.setField({ field: "FontSize", value: "11px" }) : Docova.Utils.setField({ field: "FontSize", value: srcColumn.fontSize });
+	(srcColumn.fontFamily=="") ? Docova.Utils.setField({ field: "Font", value: "Verdana" }) : Docova.Utils.setField({ field: "Font", value: srcColumn.fontFamily });
+	(srcColumn.color=="") ? Docova.Utils.setField({ field: "FontColor", value: "#000000" }) : Docova.Utils.setField({ field: "FontColor", value: srcColumn.color });
+	(srcColumn.backgroundColor=="") ? Docova.Utils.setField({ field: "BackgroundColor", value: "#ffffff" }) : Docova.Utils.setField({ field: "BackgroundColor", value: srcColumn.backgroundColor });
+	setColorBox("FontColor", Docova.Utils.getField("FontColor"));
+	setColorBox("BackgroundColor", Docova.Utils.getField("BackgroundColor"));	
+	Docova.Utils.setField({ field: "FontWeight", value: srcColumn.fontWeight });
+	Docova.Utils.setField({ field: "FontStyle", value: srcColumn.fontStyle });
+	Docova.Utils.setField({ field: "TextDecoration", value: srcColumn.textDecoration });
+
+	//----- total settings ---------------
+	Docova.Utils.setField({ field: "TotalType", value: srcColumn.totalType });
+
+	//---parse current number format ----
+	var posNeg =  srcColumn.numberFormat.split(";"); //split positive and negative format
+	var negativeFormat = (posNeg[1].indexOf("(") != -1)?  "1": ""; //check if parentheses around negative numbers
+	var percentage = (posNeg[0].indexOf("%") != -1)?  "1": ""; //is the number treated as percentage (value multiplied by 100 and % suffix added)
+	var thousandFormat = (posNeg[0].indexOf(",") != -1)?  "1": ""; //separate
+	var tmpPos = posNeg[0].indexOf("#");
+
+	var tmpEndStr = posNeg[0].split(".")[1]; //extract the end portion of the format string following the period
+	tmpEndStr = (percentage == "1") ? stripCharsInBag(tmpEndStr,"%") : tmpEndStr;
+
+	var decimalPlaces = (tmpEndStr.substring(0,1) =="#")? "A" : tmpEndStr.replace(srcColumn.numberSuffix, "").length ;
+
+	Docova.Utils.setField({ field: "DecimalPlaces", value: decimalPlaces + "" });
+	Docova.Utils.setField({ field: "NumberPrefix", value: srcColumn.numberPrefix });
+	Docova.Utils.setField({ field: "NumberSuffix", value: srcColumn.numberSuffix });
+	Docova.Utils.setField({ field: "Percentage", value: percentage });
+	Docova.Utils.setField({ field: "NegativeFormat", value: negativeFormat });
+	Docova.Utils.setField({ field: "ThousandFormat", value: thousandFormat });	
+	
+	//------- total cell appearance ---------
+	(srcColumn.alignT=="") ? Docova.Utils.setField({ field: "TTextAlign", value: "left" }) : Docova.Utils.setField({ field: "TTextAlign", value: srcColumn.alignT });
+	(srcColumn.fontSizeT=="") ? Docova.Utils.setField({ field: "TFontSize", value: "11px" }) : Docova.Utils.setField({ field: "TFontSize", value: srcColumn.fontSizeT });
+	(srcColumn.fontFamilyT=="") ? Docova.Utils.setField({ field: "TFont", value: "Verdana" }) : Docova.Utils.setField({ field: "TFont", value: srcColumn.fontFamilyT });
+	(srcColumn.colorT=="") ? Docova.Utils.setField({ field: "TFontColor", value: "#0000ff" }) : Docova.Utils.setField({ field: "TFontColor", value: srcColumn.colorT });
+	(srcColumn.backgroundColorT=="") ? Docova.Utils.setField({ field: "TBackgroundColor", value: "#ffffff" }) : Docova.Utils.setField({ field: "TBackgroundColor", value: srcColumn.backgroundColorT });
+	setColorBox("TFontColor", Docova.Utils.getField("TFontColor"));
+	setColorBox("TBackgroundColor", Docova.Utils.getField("TBackgroundColor"));
+	Docova.Utils.setField({ field: "TFontWeight", value: srcColumn.fontWeightT });
+	Docova.Utils.setField({ field: "TFontStyle", value: srcColumn.fontStyleT });
+	Docova.Utils.setField({ field: "TTextDecoration", value: srcColumn.textDecorationT });
+
+	//---------- header cell apparance ----------
+	(srcColumn.alignH=="") ? Docova.Utils.setField({ field: "HTextAlign", value: "left" }) : Docova.Utils.setField({ field: "HTextAlign", value: srcColumn.alignH });
+	(srcColumn.fontSizeH=="") ? Docova.Utils.setField({ field: "HFontSize", value: "11px" }) : Docova.Utils.setField({ field: "HFontSize", value: srcColumn.fontSizeH });
+	(srcColumn.fontFamilyH=="") ? Docova.Utils.setField({ field: "HFont", value: "Verdana" }) : Docova.Utils.setField({ field: "HFont", value: srcColumn.fontFamilyH });
+	(srcColumn.colorH=="") ? Docova.Utils.setField({ field: "HFontColor", value: "#000000" }) : Docova.Utils.setField({ field: "HFontColor", value: srcColumn.colorH });
+	(srcColumn.backgroundColorH=="") ? Docova.Utils.setField({ field: "HBackgroundColor", value: "#ece9d8" }) : Docova.Utils.setField({ field: "HBackgroundColor", value: srcColumn.backgroundColorH });
+	setColorBox("HFontColor", Docova.Utils.getField("HFontColor"));
+	setColorBox("HBackgroundColor", Docova.Utils.getField("HBackgroundColor"));
+	Docova.Utils.setField({ field: "HFontWeight", value: srcColumn.fontWeightH });
+	Docova.Utils.setField({ field: "HFontStyle", value: srcColumn.fontStyleH });
+	Docova.Utils.setField({ field: "HTextDecoration", value: srcColumn.textDecorationH });
+	
+}
+
+function writeColumnProperties()
+{
+	//---- general properties ----
+	srcColumn.title = Docova.Utils.getField("ColumnTitle");
+	srcColumn.dataType = Docova.Utils.getField("DataType");
+	srcColumn.xmlNodeName = Docova.Utils.getField("XmlNode" );
+
+	srcColumn.width = Docova.Utils.getField("Width");
+
+	//----- sort properties -------
+	tmpValue = Docova.Utils.getField("SortType");
+	//reset the original properties first
+	srcColumn.isCategorized=false;
+	srcColumn.sortOrder = "none";
+	srcColumn.hasCustomSort = false;
+	//set user selections
+	if(tmpValue == "C") 
+	{
+		srcColumn.isCategorized=true;
+		srcColumn.sortOrder = Docova.Utils.getField("SortOrder");
+	}
+	else if (tmpValue == "S")
+	{
+		srcColumn.sortOrder = Docova.Utils.getField("SortOrder");
+	}
+	if(Docova.Utils.getField("HasCustomSort") == "1")
+	{
+		srcColumn.hasCustomSort = true;
+	}
+
+	// ----- text cell appearance (default values are set to blank in column object)--------
+	(Docova.Utils.getField("TextAlign")=="left") ? srcColumn.align="" : srcColumn.align = Docova.Utils.getField("TextAlign");
+	(Docova.Utils.getField("FontSize") == "11px") ? srcColumn.fontSize="" : srcColumn.fontSize = Docova.Utils.getField("FontSize");
+	(Docova.Utils.getField("Font") == "Verdana") ? srcColumn.fontFamily="" : srcColumn.fontFamily = Docova.Utils.getField("Font");
+	(Docova.Utils.getField("FontColor") == "#000000") ? srcColumn.color = "" : srcColumn.color = Docova.Utils.getField("FontColor");
+	(Docova.Utils.getField("BackgroundColor") == "#ffffff") ? srcColumn.backgroundColor="" : srcColumn.backgroundColor = Docova.Utils.getField("BackgroundColor");
+	srcColumn.fontWeight = Docova.Utils.getField("FontWeight" );
+	srcColumn.fontStyle = Docova.Utils.getField("FontStyle");
+	srcColumn.textDecoration = Docova.Utils.getField("TextDecoration");
+
+	//----- total settings ---------------
+
+	//value sum and average totals apply only to numeric values, record count can be applied to any other
+	var totalType = Docova.Utils.getField("TotalType");
+	srcColumn.totalType = ((totalType != "0" && srcColumn.dataType == "number") || (totalType == "2")) ? totalType : "0"; 
+
+	//---- assemble a number format string ----
+	formatString = (Docova.Utils.getField("ThousandFormat") == "1") ? "#,###." : "###.";
+	tmpValue = Docova.Utils.getField("DecimalPlaces");
+	if(tmpValue == "A")
+	{
+	 	formatString += "##";
+	}
+	else
+	{
+		for(var i=0; i < parseInt(tmpValue); i++)
+		{
+			formatString += "0";
+		}
+	}
+	formatString += (Docova.Utils.getField("Percentage") == "1") ? "%" : "";
+	formatString += (Docova.Utils.getField("NegativeFormat") == "1") ? ";(" + formatString + ")" : ";-" + formatString;
+	srcColumn.numberFormat = formatString;
+	srcColumn.numberPrefix = Docova.Utils.getField("NumberPrefix" );
+	srcColumn.numberSuffix = Docova.Utils.getField("NumberSuffix" );
+	
+	// ----- total cell appearance (default values are set to blank in column object)--------
+	(Docova.Utils.getField("TTextAlign")=="left") ? srcColumn.alignT="" : srcColumn.alignT = Docova.Utils.getField("TTextAlign");
+	(Docova.Utils.getField("TFontSize") == "11px") ? srcColumn.fontSizeT="" : srcColumn.fontSizeT = Docova.Utils.getField("TFontSize");
+	(Docova.Utils.getField("TFont") == "Verdana") ? srcColumn.fontFamilyT="" : srcColumn.fontFamilyT = Docova.Utils.getField("TFont");
+	srcColumn.colorT = Docova.Utils.getField("TFontColor");
+	(Docova.Utils.getField("TBackgroundColor") == "#ffffff") ? srcColumn.backgroundColorT="" : srcColumn.backgroundColorT = Docova.Utils.getField("TBackgroundColor");
+	srcColumn.fontWeightT = Docova.Utils.getField("TFontWeight" );
+	srcColumn.fontStyleT = Docova.Utils.getField("TFontStyle");
+	srcColumn.textDecorationT = Docova.Utils.getField("TTextDecoration");
+
+
+	// -----  header cell appearance (default values are set to blank in column object)--------
+	(Docova.Utils.getField("HTextAlign")=="left") ? srcColumn.alignH="" : srcColumn.alignH = Docova.Utils.getField("HTextAlign");
+	(Docova.Utils.getField("HFontSize") == "11px") ? srcColumn.fontSizeH="" : srcColumn.fontSizeH = Docova.Utils.getField("HFontSize");
+	(Docova.Utils.getField("HFont") == "Verdana") ? srcColumn.fontFamilyH="" : srcColumn.fontFamilyH = Docova.Utils.getField("HFont");
+	(Docova.Utils.getField("HFontColor") == "#000000") ? srcColumn.colorH = "" : srcColumn.colorH = Docova.Utils.getField("HFontColor");
+	(Docova.Utils.getField("HBackgroundColor") == "#ece9d8") ? srcColumn.backgroundColorH ="" : srcColumn.backgroundColorH = Docova.Utils.getField("HBackgroundColor");
+	srcColumn.fontWeightH = Docova.Utils.getField("HFontWeight" );
+	srcColumn.fontStyleH = Docova.Utils.getField("HFontStyle");
+	srcColumn.textDecorationH = Docova.Utils.getField("HTextDecoration");
+	
+	return true;
+}
+</script>
+<style type="text/css">
+.tblFields TD { min-height: 30px; vertical-align: bottom; }
+SELECT { width: 124px; }
+</style>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onload="initDialog();">
+<div id="tabs">
+ 	<ul>
+		<li><a href="#tabs-1">{% trans %}General{% endtrans %}</a></li>
+		<li><a href="#tabs-2">{% trans %}Sort{% endtrans %}</a></li>
+		<li><a href="#tabs-3">{% trans %}Text{% endtrans %}</a></li>
+		<li><a href="#tabs-4">{% trans %}Number{% endtrans %}</a></li>
+		<li><a href="#tabs-5">{% trans %}Total{% endtrans %}</a></li>
+		<li><a href="#tabs-6">{% trans %}Header{% endtrans %}</a></li>
+	</ul>
+	<div id="tabs-1">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Title{% endtrans %}:</td>
+				<td width="100%">
+					<input name="ColumnTitle" value="" class="txFld" style="width: 200px;">
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Data column{% endtrans %}:</td>
+				<td width="100%">
+					<select name="XmlNode" id="XmlNode" class="txFld" style="width: 205px;" onchange="ChangeField(this)">
+						<optgroup label="{% trans %}General{% endtrans %}">
+						<option value=''>-{% trans %}Select{% endtrans %}-</option>
+						{% if viewcolumns|length %}
+							{% for column in viewcolumns if column.getColumnType %}
+							{% set datatype = '' %}
+							{% if column.getDataType == 1 %}{% set datatype = 'text' %}
+							{% elseif column.getDataType == 2 %}{% set datatype = 'date' %}
+							{% elseif column.getDataType == 3 %}{% set datatype = 'names' %}
+							{% elseif column.getDataType == 4 %}{% set datatype = 'html' %}
+							{% elseif column.getDataType == 5 %}{% set datatype = 'icon' %}
+							{% endif %}
+							<option coltitle='{{ column.getTitle }}' coldatatype='{{ datatype }}' colfieldname='{{ 'Attachments' in column.getTitle ? '' : column.getFieldName }}' colwidth='{{ column.getWidth }}' value='{{ column.getXMLName }}'>{{ column.getTitle }}</option>
+							{% endfor %}
+						{% endif %}
+						</optgroup>
+						<optgroup label="{% trans %}Custom{% endtrans %}">
+						{% if viewcolumns|length %}
+							{% for column in viewcolumns if not column.getColumnType %}
+							{% set datatype = '' %}
+							{% if column.getDataType == 1 %}{% set datatype = 'text' %}
+							{% elseif column.getDataType == 2 %}{% set datatype = 'date' %}
+							{% elseif column.getDataType == 3 %}{% set datatype = 'names' %}
+							{% elseif column.getDataType == 4 %}{% set datatype = 'html' %}
+							{% elseif column.getDataType == 5 %}{% set datatype = 'icon' %}
+							{% endif %}
+							<option coltitle='{{ column.getTitle }}' coldatatype='{{ datatype }}' colfieldname='{{ 'Attachments' in column.getTitle ? '' : column.getFieldName }}' colwidth='{{ column.getWidth }}' value='{{ column.getXMLName }}'>{{ column.getTitle }}</option>
+							{% endfor %}
+						{% endif %}
+						</optgroup>
+					</select>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Width{% endtrans %}:</td>
+				<td width="100%"><input name="Width" value="" class="txFld" style="width: 30px;" maxlength="3"></td>
+			</tr>
+		</table>
+		<input name="DataType" value="" id="DataType" type="hidden">
+	</div>
+ 	<div id="tabs-2">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Default sort{% endtrans %}:</td>
+				<td width="100%">
+					<label><input type="radio" name="SortType" value="N" class="txFldRadio">{% trans %}None{% endtrans %}</label>
+					<label><input type="radio" name="SortType" value="S" class="txFldRadio">{% trans %}Sorted{% endtrans %}</label>
+					<label><input type="radio" name="SortType" value="C" class="txFldRadio">{% trans %}Categorized{% endtrans %}</label>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Order{% endtrans %}:</td>
+				<td width="100%">
+					<label><input type="radio" name="SortOrder" value="ascending" class="txFldRadio">{% trans %}Ascending{% endtrans %}</label>
+					<label><input type="radio" name="SortOrder" value="descending" class="txFldRadio">{% trans %}Descending{% endtrans %}</label>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td width="25%" valign="middle"></td>
+				<td width="100%">
+					<label><input type="checkbox" name="HasCustomSort" value="1">{% trans %}Allow custom sort by clicking column heading{% endtrans %}</label>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="tabs-3">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Alignment{% endtrans %}:</td>
+				<td width="100%" valign="middle">
+					<label><input type="radio" name="TextAlign" value="left" class="txFldRadio">{% trans %}Left{% endtrans %}</label>
+					<label><input type="radio" name="TextAlign" value="center" class="txFldRadio">{% trans %}Center{% endtrans %}</label>
+					<label><input type="radio" name="TextAlign" value="right" class="txFldRadio">{% trans %}Right{% endtrans %}</label>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Font{% endtrans %}:</td>
+				<td width="100%">
+					<select name="Font" class="txFld">
+						<option value="Verdana">Verdana
+						<option value="Arial">Arial
+						<option value="Times New Roman">Times New Roman
+						<option value="Courier">Courier
+						<option value="icon">System
+						<option value="cursive">Cursive
+						<option value="Webdings">Webdings
+						<option value="Wingdings">Wingdings
+					</select>
+					 &nbsp;&nbsp;{% trans %}Size{% endtrans %}: 
+					<select name="FontSize" class="txFld">
+						<option>6pt
+						<option>7pt
+						<option>11px
+						<option>12px
+						<option>13px
+						<option>11pt
+						<option>12pt
+						<option>13pt
+						<option>14pt
+						<option>15pt
+						<option>16pt
+						<option>17pt
+						<option>111px
+						<option>112px
+						<option>20pt
+					</select>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Color{% endtrans %}:</td>
+				<td width="100%">
+					{% trans %}Text{% endtrans %}: 
+					<input name="FontColor" value="" id="FontColor" class="txFld" style="width:55px;">&nbsp;
+					<span id="displayFontColor" style="border:1px solid black; width:14px; line-height:9px;">&nbsp;&nbsp</span>&nbsp;
+					<button id="btn-FontColorPicker" class="btnColorPicker"></button>&nbsp;&nbsp;{% trans %}Background{% endtrans %}:
+					<input name="BackgroundColor" value="" id="BackgroundColor" class="txFld" style="width:55px;">&nbsp;
+					<span id="displayBackgroundColor" style="border:1px solid black; width:14px; line-height:9px;">&nbsp;&nbsp</span>&nbsp;
+					<button id="btn-BackgroundColorPicker" class="btnColorPicker"></button>&nbsp;&nbsp;
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Attributes{% endtrans %}:</td>
+				<td width="100%">
+					<label><input type="checkbox" name="FontWeight" value="bold">{% trans %}Bold{% endtrans %}</label>
+					<label><input type="checkbox" name="FontStyle" value="italic">{% trans %}Italic{% endtrans %}</label>
+					<label><input type="checkbox" name="TextDecoration" value="underline">{% trans %}Underline{% endtrans %}</label>
+				</td>
+			</tr>
+		</table>
+ 	</div>
+	<div id="tabs-4">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Decimal places{% endtrans %}:</td>
+				<td width="100%" valign="middle">
+					<select name="DecimalPlaces" class="txFld">
+					<option value="A">Auto
+					<option value="1">1
+					<option value="2">2
+					<option value="3">3
+					<option value="4">4
+					<option value="5">5
+					<option value="6">6</select>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Prefix{% endtrans %}:</td>
+				<td width="100%" valign="middle">
+					<input name="NumberPrefix" value="" class="txFld" style="width:60px;"> 
+					<span class="txFldInfo">({% trans %}Optional currency symbol etc{% endtrans %}.)</span>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Suffix{% endtrans %}:</td>
+				<td width="100%" valign="middle">
+					<input name="NumberSuffix" value="" class="txFld" style="width:60px;"> <span class="txFldInfo">({% trans %}Optional units etc.{% endtrans %})</span>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Options{% endtrans %}:</td>
+				<td width="100%">
+					<label><input type="checkbox" name="Percentage" value="1">{% trans %}Pecentage (value*100){% endtrans %}%</label><br>
+					<label><input type="checkbox" name="NegativeFormat" value="1">{% trans %}Parentheses on negative numbers{% endtrans %}</label><br>
+					<label><input type="checkbox" name="ThousandFormat" value="1">{% trans %}Punctuated at thousands{% endtrans %}</label><br>
+					<label><input type="checkbox" name="BlankFormat" value="1">{% trans %}Show blank entries as zeroes{% endtrans %}</label><br>
+				</td>
+			</tr>
+		</table>
+ 	</div>
+	<div id="tabs-5">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Type{% endtrans %}:</td>
+				<td width="100%">
+					<label><input type="radio" name="TotalType" value="0">None</label>
+					<label><input type="radio" name="TotalType" value="1">Value sum</label>
+					<label><input type="radio" name="TotalType" value="2">Record count</label>
+					<label><input type="radio" name="TotalType" value="3">Average</label>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Alignment{% endtrans %}:</td>
+				<td width="100%" valign="middle">
+					<label><input type="radio" name="TTextAlign" value="left" class="txFldRadio">Left</label>
+					<label><input type="radio" name="TTextAlign" value="center" class="txFldRadio">Center</label>
+					<label><input type="radio" name="TTextAlign" value="right" class="txFldRadio">Right</label>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Font{% endtrans %}:</td>
+				<td width="100%">
+					<select name="TFont" class="txFld">
+					<option value="Verdana">Verdana
+					<option value="Arial">Arial
+					<option value="Times New Roman">Times New Roman
+					<option value="Courier">Courier
+					<option value="icon">System
+					<option value="cursive">Cursive
+					</select>
+ 					&nbsp;&nbsp;{% trans %}Size{% endtrans %}: 
+					<select name="TFontSize" class="txFld">
+					<option>6pt
+					<option>7pt
+					<option>11px
+					<option>12px
+					<option>13px
+					<option>11pt
+					<option>12pt
+					<option>13pt
+					<option>14pt
+					<option>15pt
+					<option>16pt
+					<option>17pt
+					<option>111px
+					<option>112px
+					<option>20pt</select>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Color{% endtrans %}:</td>
+				<td width="100%">{% trans %}Text{% endtrans %}: 
+					<input name="TFontColor" value="" id="TFontColor" class="txFld" style="width:55px;">&nbsp;
+					<span id="displayTFontColor" style="border:1px solid black; width:14px; line-height:9px;">&nbsp;&nbsp</span>&nbsp;
+					<button id="btn-TFontColorPicker" class="btnColorPicker"></button>
+					&nbsp;&nbsp;{% trans %}Background{% endtrans %}:
+					<input name="TBackgroundColor" value="" id="TBackgroundColor" class="txFld" style="width:55px;">&nbsp;
+					<span id="displayTBackgroundColor" style="border:1px solid black; width:14px; line-height:9px;">&nbsp;&nbsp</span>&nbsp;
+					<button id="btn-TBackgroundColorPicker" class="btnColorPicker"></button>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Attributes{% endtrans %}:</td>
+				<td width="100%">
+					<label><input type="checkbox" name="TFontWeight" value="bold">{% trans %}Bold{% endtrans %}</label>
+					<label><input type="checkbox" name="TFontStyle" value="italic">{% trans %}Italic{% endtrans %}</label>
+					<label><input type="checkbox" name="TTextDecoration" value="underline">{% trans %}Underline{% endtrans %}</label>
+				</td>
+			</tr>
+		</table>
+ 	</div>
+	<div id="tabs-6">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Alignment{% endtrans %}:</td>
+				<td width="100%" valign="middle">
+					<label><input type="radio" name="HTextAlign" value="left" class="txFldRadio">Left</label>
+					<label><input type="radio" name="HTextAlign" value="center" class="txFldRadio">Center</label>
+					<label><input type="radio" name="HTextAlign" value="right" class="txFldRadio">Right</label>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Font{% endtrans %}:</td>
+				<td width="100%">
+					<select name="HFont" class="txFld">
+					<option value="Verdana">Verdana
+					<option value="Arial">Arial
+					<option value="Times New Roman">Times New Roman
+					<option value="Courier">Courier
+					<option value="icon">System
+					<option value="cursive">Cursive</select>
+					 &nbsp;&nbsp;{% trans %}Size{% endtrans %}: 
+					<select name="HFontSize" class="txFld">
+					<option>6pt
+					<option>7pt
+					<option>11px
+					<option>12px
+					<option>13px
+					<option>11pt
+					<option>12pt
+					<option>13pt
+					<option>14pt
+					<option>15pt
+					<option>16pt
+					<option>17pt
+					<option>111px
+					<option>112px
+					<option>20pt</select>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Color{% endtrans %}:</td>
+				<td width="100%">{% trans %}Text{% endtrans %}: 
+					<input name="HFontColor" value="" id="HFontColor" class="txFld" style="width:55px;">&nbsp;
+					<span id="displayHFontColor" style="border:1px solid black; width:14px; line-height:9px;">&nbsp;&nbsp;</span>&nbsp;
+					<button id="btn-HFontColorPicker" class="btnColorPicker"></button>
+					&nbsp;{% trans %}Background{% endtrans %}:
+					<input name="HBackgroundColor" value="" id="HBackgroundColor" class="txFld" style="width:55px;">&nbsp;
+					<span id="displayHBackgroundColor" style="border:1px solid black; width:14px; line-height:9px;">&nbsp;&nbsp</span>&nbsp;
+					<button id="btn-HBackgroundColorPicker" class="btnColorPicker"></button>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td class="frmLabel" width="25%" valign="middle">{% trans %}Attributes{% endtrans %}:</td>
+				<td width="100%">
+					<label><input type="checkbox" name="HFontWeight" value="bold">{% trans %}Bold{% endtrans %}</label>
+					<label><input type="checkbox" name="HFontStyle" value="italic">{% trans %}Italic{% endtrans %}</label>
+					<label><input type="checkbox" name="HTextDecoration" value="underline">{% trans %}Underline{% endtrans %}</label>
+				</td>
+			</tr>
+		</table>
+ 	</div>
+</div> <!-- end tabs div -->
+<!------------------ SUBFORM sfKillCache ------------>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

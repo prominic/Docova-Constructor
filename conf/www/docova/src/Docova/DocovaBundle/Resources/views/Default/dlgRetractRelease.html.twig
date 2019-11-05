@@ -1,0 +1,73 @@
+<!doctype html><html>
+<head>
+<title>{% trans %}Retract Release{% endtrans %}</title>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}" ></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script type="text/javascript" language="javascript" ">
+var params= window.dialogArguments;
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "UserRoles" : "{{ user.getRoles|join(';') }}",
+  "HTTP_Referer" : "",
+  "Query_String" : "",
+  "Query_String_Decoded" : "",
+  "Path_Info_Decoded" : "{{ path('docova_retractdialog') }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}"
+};
+function getinfovar() {
+	return info;
+}
+
+document.oncontextmenu=stopContextMenu;
+
+// For convenience
+function stopContextMenu()
+{
+return false;
+}
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	//Global variables for convenience
+	InitVars(info);
+}
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onload="initDialog();">
+	<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+			<td width="100%">
+				<div id="dlgContentNh" class="ui-widget" style="width:100%;">
+					<span class="frmText">
+						<strong id="FieldLabel"class="frmLabel">{% trans %}You are about to retract a released document.<br>Please select the retract options{% endtrans %}:</strong><br><br>
+						<span class="frmText"></span> 
+						<label><input type="radio" name="CurVersionAction" value="R" id="CurVersionAction" class="frmText">{% trans %}Return current document to draft state{% endtrans %}</label><br>
+						<label><input type="radio" name="CurVersionAction" value="O" id="CurVersionAction" class="frmText">{% trans %}Mark current document as an inactive version{% endtrans %}</label><br> 
+						<label><input type="checkbox" name="PrevVersionAction" value="C" id="PrevVersionAction" class="frmText">If previously released version exists set it as the current version</label>
+					</span>
+				</div>
+			</td>
+		</tr>
+	</table>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

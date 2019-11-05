@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{% trans %}Docova Navigation{% endtrans %}</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleAdminNav.css') }}" type="text/css" />
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var lastMenuItem = "menuitem2";
+
+$(document).ready(function(){
+    $( "#adminMenu" ).menu({
+      items: "> :not(.ui-widget-header)"
+    });
+    
+    $( 'li:not(.ui-widget-header)' ).on( 'click', function() {
+        $('li:not(.ui-widget-header)').removeClass('ui-state-active ui-state-hover');
+        $( this ).addClass( 'ui-state-active ui-state-hover' );
+      });
+      
+	$(" #menuitem2" ).click();  //Auto selects Libraries as default option when Admin opens
+});
+
+var lastCellClicked, lastCellClickedviewName, lastCellClickedViewTitle;
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "UserRoles" : "$$WebClient;{{ is_granted('ROLE_ADMIN') ? '[Administration]' : '' }}",
+  "HTTP_Referer" : "{{ app.request.server.get('HTTP_HOST') }}://{{ path('docova_admin') }}",
+  "Query_String" : "ReadForm",
+  "Query_String_Decoded" : "ReadForm",
+  "Path_Info_Decoded" : "{{ path('docova_admin_leftNav') }}?ReadForm",
+  "ServerName" : "{{ app.request.getscheme }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "ServerUrl"  :"{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "UserNameList" : "",
+  "RMEEnabled" : "",
+  "AppSettingsID" : "",
+  "DocovaEnvironment" : "Internal"
+};
+
+function getinfovar() {
+	return info;
+}
+
+function LoadView(viewname, viewtitle, translatedTitle, obj){
+    var baseurl = "wAdminContent?OpenForm";
+    if(viewtitle==undefined){
+       viewtitle = "";
+	}
+
+    var oktoload = true;
+	if(viewname == "wAdminUserProfiles" || viewname == "wAdminGroups" || viewname == "wAdminDeletedUsers" || viewname == "wAdminFileResources" || viewname == "wAdminDataSources" || viewname == "wAdminDataViews" || viewname == "wAdminCheckedOutFiles" || viewname == "wAdminSubscribedLibraries"){
+		if(info.UserRoles.split(";").indexOf("[Administration]") == -1){		
+			oktoload = false;
+		}
+	}    
+    
+	if(oktoload){
+	    var newurl = baseurl + "&viewname=" + viewname + "&viewtitle=" + viewtitle;
+	    lastCellClicked = obj;
+	    lastCellClickedviewName=viewname;
+	   	lastCellClickedViewTitle=translatedTitle;
+	   	$('body', window.parent.frames['fraAdminFixedTab'].document).hide();
+		LoadFrame(newurl);
+	}else{    
+		window.top.Docova.Utils.messageBox({
+			width: 400,
+			title: "Requires Global Administrator Access",
+			prompt: "Access to this area is restricted to Global Administrators only.",
+			msgIcon : 'ui-icon-close',
+			msgboxtype : 0
+   		});
+	}
+}
+// to load application settings document
+function loadAppSettings()
+{
+	if(info.UserRoles.split(";").indexOf("[Administration]") == -1){		
+		window.top.Docova.Utils.messageBox({
+			width: 400,
+			title: "Requires Global Administrator Access",
+			prompt: "Access to the Global Settings page is restricted to Global Administrators only.",
+			msgIcon : 'ui-icon-close',
+			msgboxtype : 0
+   		});		
+	}
+	else {
+		//var baseUrl = (info.DocovaEnvironment =="" || info.DocovaEnvironment =="Internal") ? "AdminProfile?OpenForm" : "AdminProfile?ReadForm";
+		var baseUrl = "AdminProfile?"; // FOR TESTING
+		
+		var queryParams = "&viewname=" + lastCellClickedviewName + "&ViewTitle=" + lastCellClickedViewTitle +"&TD=" + lastCellClicked;
+	 	var appSettingsUrl = baseUrl + queryParams;
+		LoadFrame(appSettingsUrl, true);
+	}
+}
+function closeAppSettings()
+{
+	if (lastCellClicked) {
+		$(lastCellClicked).click();
+	}
+	else { $('#menuitem2').click(); }
+	//linkClicked(lastCellClicked);
+	//LoadView(lastCellClickedviewName,lastCellClickedViewTitle, lastCellClickedViewTitle);
+}
+
+
+/* loads content in the right-hand content frame - used by other frames*/
+function LoadFrame(url, isAppSetting){
+	var obj = parent.frames["fraAdminContentTop"];
+	var fixContainer = parent.frames["fraAdminFixedTab"];
+	if (obj == null || fixContainer == null){
+		return;
+	}
+
+	if (isAppSetting == true) {
+		$('#tabs ul:first li:eq(0) a', window.parent.frames['fraAdminContentTop'].document).text('{% trans %}Global Settings{% endtrans %}');
+	}
+	else {
+		$('#tabs ul:first li:eq(0) a', window.parent.frames['fraAdminContentTop'].document).text(lastCellClickedViewTitle);
+	}
+
+	rows_str = '40,*';
+	for (var x = 2; x < parent.fsAdminContentFrameset.children.length; x++) {
+		rows_str += ',0';
+	}
+	parent.fsAdminContentFrameset.rows = rows_str;
+	//fixContainer.src = url;
+	fixContainer.location.href = url;
+	//var tabs = $('#tabs', window.parent.frames['fraAdminContentTop'].document);
+	//if (tabs && typeof tabs.tabs === "function") {
+	//	window.parent.frames['fraAdminContentTop'].activateFirstTab();
+	//}
+}
+
+</script>
+</head>
+<body SCROLL="no">
+<ul id="adminMenu">
+	<li class="ui-widget-header">{% trans %}Application Settings{% endtrans %}</li>
+	<li id="menuitem1" onclick="loadAppSettings();">{% trans %}Global Settings{% endtrans %}</li>
+	<li id="menuitem2" onclick="LoadView('wAdminLibraries', 'Libraries', '{% trans %}Libraries{% endtrans %}', this);">{% trans %}Libraries{% endtrans %}</li>
+	<li id="menuitem21" onclick="LoadView('wAdminApplications', 'Application', '{% trans %}Applications{% endtrans %}', this);">{% trans %}Applications{% endtrans %}</li>
+	<li id="menuitem3" onclick="LoadView('wAdminDocTypes', 'Document Types', '{% trans %}Document Types{% endtrans %}', this);">{% trans %}Document Types{% endtrans %}</li>
+	<li id="menuitem4" onclick="LoadView('wAdminWorkflow', 'Workflow Processes', '{% trans %}Workflow Processes{% endtrans %}', this);">{% trans %}Workflow Processes{% endtrans %}</li>
+	<!-- <li id="menuitem5" onclick="LoadView('wAdminAutoFileRules', 'Auto File Rules', this);">Auto File Rules</li> -->
+	<li id="menuitem5" onclick="LoadView('wAdminReviewPolicies', 'Review Policies', '{% trans %}Review Policies{% endtrans %}', this);">{% trans %}Review Policies{% endtrans %}</li>
+	<li id="menuitem6" onclick="LoadView('wAdminArchivePolicies', 'Archive Policies', '{% trans %}Archive Policies{% endtrans %}', this);">{% trans %}Archive Policies{% endtrans %}</li>
+	<li id="menuitem7" onclick="LoadView('wAdminFileTemplates', 'File Templates', '{% trans %}File Templates{% endtrans %}', this);">{% trans %}File Templates{% endtrans %}</li>
+        <li id="menuitem7b" onclick="LoadView('wAdminFileResources', 'File Resources', '{% trans %}File Resources{% endtrans %}', this);">{% trans %}File Resources{% endtrans %}</li>
+	<li id="menuitem8" onclick="LoadView('wAdminViewColumns', 'View Columns', '{% trans %}View Columns{% endtrans %}', this);">{% trans %}View Columns{% endtrans %}</li>
+	<li id="menuitem9" onclick="LoadView('wAdminCustomSearchFields', 'Custom Search Fields', '{% trans %}Custom Search Fields{% endtrans %}', this);">{% trans %}Custom Search Fields{% endtrans %}</li>
+	<li id="menuitem10" onclick="LoadView('wAdminSystemMessages', 'System Messages', '{% trans %}System Messages{% endtrans %}', this);">{% trans %}System Messages{% endtrans %}</li>
+	<li id="menuitem11" onclick="LoadView('wAdminHTMLResource', 'HTML Resources', '{% trans %}HTML Resources{% endtrans %}', this);">{% trans %}HTML Resources{% endtrans %}</li>
+	<li id="menuitem12" onclick="LoadView('wAdminActivities', 'Activities', '{% trans %}Activities{% endtrans %}', this);">{% trans %}Activities{% endtrans %}</li>
+	<li class="ui-widget-header">{% trans %}User Settings{% endtrans %}</li>
+	<li id="menuitem13" onclick="LoadView('wAdminUserProfiles', 'User Profiles', '{% trans %}User Profiles{% endtrans %}', this);">{% trans %}User Profiles{% endtrans %}</li>
+	{% if false %}
+	<li id="menuitem14" onclick="LoadView('wAdminUserSessions', 'User Sessions', '{% trans %}User Sessions{% endtrans %}', this);">{% trans %}User Sessions{% endtrans %}</li>
+	{% endif %}
+	<li id="menuitem15" onclick="LoadView('wAdminGroups', 'Groups', '{% trans %}Groups{% endtrans %}', this);">{% trans %}Groups{% endtrans %}</li>
+	<li id="menuitem16" onclick="LoadView('wAdminCheckedOutFiles', 'Checked Out Files', '{% trans %}Checked Out Files{% endtrans %}', this);">{% trans %}Checked Out Files{% endtrans %}</li>
+	<li id="menuitem17" onclick="LoadView('wAdminSubscribedLibraries', 'Subscribed Libraries', '{% trans %}Subscribed Libraries{% endtrans %}', this)">{% trans %}Subscribed Libraries{% endtrans %}</li>
+	<li id="menuitem18" onclick="LoadView('wAdminDeletedUsers', 'Deleted Users', '{% trans %}Deleted Users{% endtrans %}', this)">{% trans %}Deleted Users{% endtrans %}</li>
+	<li class="ui-widget-header">{% trans %}External Data{% endtrans %}</li>
+	<li id="menuitem19" onclick="LoadView('wAdminDataSources', 'Data Sources', '{% trans %}Data Sources{% endtrans %}');">{% trans %}Data Sources{% endtrans %}</li>
+	<li id="menuitem20" onclick="LoadView('wAdminDataViews', 'Data Views', '{% trans %}Data Views{% endtrans %}');">{% trans %}Data Views{% endtrans %}</li>
+</ul>
+<div id="DLITFolderView" CurrentFolderID=""></div>
+<!------------------ SUBFORM sfKillCache ------------>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</form>
+</body>
+</html>

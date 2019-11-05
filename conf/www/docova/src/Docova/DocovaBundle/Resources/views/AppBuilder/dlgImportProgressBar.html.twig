@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Importing Data</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script type="text/javascript">
+var synch = false,
+	acl = false,
+	doclinks = false,
+	isStart = false,
+	indexEnabled = false,
+	aclEnabled = false,
+	doclinkEnabled = false,
+	counter = 0,
+	views = ['{{ views|raw }}'];
+	
+$(function() {
+	$("#dataprogress").progressbar({
+		value: false,
+		change: function() {
+			$("#dataprogress").children('.progress-label').text( $("#dataprogress").progressbar("value") + "%" );
+		},
+		complete: function() {
+			$("#dataprogress").children('.progress-label').text("{% trans %}Complete!{% endtrans %}");
+			indexEnabled = true;
+//			$("#viewsprogress").parent().show();
+			$("#viewsprogress").progressbar('option', {disabled: false});
+		}
+	});
+
+	$("#viewsprogress").progressbar({
+		value: false,
+		disabled: true,
+		change: function() {
+			$("#viewsprogress").children('.progress-label').text( $("#viewsprogress").progressbar("value") + "%" );
+		},
+		complete: function() {
+			$("#viewsprogress").children('.progress-label').text("{% trans %}Complete!{% endtrans %}");
+			aclEnabled = true;
+//			$("#aclprogress").parent().show();
+			$("#aclprogress").progressbar('option', {disabled: false});
+		}
+	});
+
+	$("#aclprogress").progressbar({
+		value: false,
+		disabled: true,
+		change: function() {
+			$("#aclprogress").children('.progress-label').text( $("#aclprogress").progressbar("value") + "%" );
+		},
+		complete: function() {
+			doclinkEnabled = true;
+			$("#aclprogress").children('.progress-label').text("{% trans %}Complete!{% endtrans %}");
+		}
+	});
+
+	$('#builddoclinks').progressbar({
+		value: false,
+		disabled: true,
+		change: function() {
+			$("#builddoclinks").children('.progress-label').text( $("#builddoclinks").progressbar("value") + "%" );
+		},
+		complete: function() {
+			$("#builddoclinks").children('.progress-label').text("{% trans %}Complete!{% endtrans %}");
+		}
+	});
+
+	progress();
+	setTimeout(whoisnext, 1000);
+});
+
+function whoisnext()
+{
+	if (synch == false && indexEnabled === true) {
+		startViewSynch();
+		synch = true;
+	}
+
+	if (acl == false && aclEnabled === true) {
+		startAclImport();
+		acl = true;
+	}
+
+	if (doclinks == false && doclinkEnabled === true) {
+		buildDocLinks();
+		doclinks == true;
+	}
+
+	if (synch == false || acl == false) {
+		setTimeout(whoisnext, 1000);
+	}
+}
+function progress() {
+	var val = $("#dataprogress").progressbar( "value" ) || 0;
+	var statUrl = '{{ path('docova_importstatus') }}?job={{ jobid }}';
+	$.ajax({
+		url: statUrl,
+		type: 'GET',
+		async: true,
+		datatype: 'json'
+	})
+	.done(function(response) {
+		if (typeof response.total == typeof undefined || typeof response.count == typeof undefined || !response.total)
+		{
+			$("#dataprogress").children('.progress-label').css('left', '1%');
+			$("#dataprogress").children('.progress-label').text('{% trans %}Failed to import data{% endtrans %}');
+			return;
+		}
+		var total = parseInt(response.total);
+		var count = parseInt(response.count);
+		var percent = Math.round((count * 100)/total);
+		$("#dataprogress").progressbar("value", percent);
+		if (percent <= 99) {
+			setTimeout(progress, 5000);
+		}
+	})
+	.fail(function() {
+		$("#dataprogress").children('.progress-label').css('left', '1%');
+		$("#dataprogress").children('.progress-label').text('{% trans %}Failed to import data{% endtrans %}');
+		return;
+	});
+}
+
+function startViewSynch()
+{
+	var val = $("#viewsprogress").progressbar('value') || 0;
+	var msg = '';
+	if (views.length)
+	{
+		if (isStart === false) {
+			var result = httpProcess(counter);
+			if (result === true) {
+				var percent = Math.ceil(((counter + 1) * 100)/views.length);
+				$("#viewsprogress").progressbar( "value", percent );
+				counter++;
+				if (counter < views.length) {
+					setTimeout(startViewSynch, 200);
+				}
+			}
+			else {
+				isStart = false;
+				$("#viewsprogress").children('.progress-label').css('left', '1%');
+				$("#viewsprogress").children('.progress-label').text('{% trans %}Failed to index views{% endtrans %}');
+	    	}
+		}
+		else {
+			setTimeout(startViewSynch, 300);
+		}
+	}
+}
+
+function httpProcess(number)
+{
+	var result = false;
+	var syncUrl = '{{ path('docova_importviews', { 'appid' : app.request.query.get('AppId') }) }}';
+	isStart = true;
+	$.ajax({
+		url: syncUrl,
+		type: 'POST',
+		data: { viewid : views[number] },
+		async: false,
+		datatype: 'json',
+		success: function(response) {
+			if (!response || response.Status != 'OK') {
+				return false;
+			}
+			isStart = false;
+			result = true;
+		}
+	})
+	.fail(function() {
+		return false;
+	});
+
+	return result;
+}
+
+function startAclImport()
+{
+	var val = $("#aclprogress").progressbar('value') || 0;
+	var syncUrl = '{{ path('docova_importacl', { 'appid' : app.request.query.get('AppId') }) }}';
+	$.ajax({
+		url: syncUrl,
+		type: 'GET',
+		async: false,
+		datatype: 'json'
+	})
+	.done(function(response) {
+		if (!response || response.Status != 'OK') {
+			$("#aclprogress").children('.progress-label').css('left', '1%');
+			$("#aclprogress").children('.progress-label').text('{% trans %}Failed to import ACL{% endtrans %}');
+			return false;
+		}
+
+		$("#aclprogress").progressbar( "value", 100 );
+	})
+	.fail(function() {
+		$("#aclprogress").children('.progress-label').css('left', '1%');
+		$("#aclprogress").children('.progress-label').text('{% trans %}Failed to import ACL{% endtrans %}');
+		return false;
+	});
+}
+
+function buildDocLinks()
+{
+	var val = $("#builddoclinks").progressbar('value') || 0;
+	var buildUrl = '{{ path('docova_builddoclink', { 'appid' : app.request.query.get('AppId') }) }}';
+	$.ajax({
+		url: buildUrl,
+		type: 'GET',
+		async: false,
+		datatype: 'json'
+	})
+	.done(function(response) {
+		if (!response || response.Status != 'OK') {
+			$("#builddoclinks").children('.progress-label').css('left', '1%');
+			$("#builddoclinks").children('.progress-label').text('{% trans %}Failed to build DocLinks{% endtrans %}');
+			return false;
+		}
+
+		$("#builddoclinks").progressbar( "value", 100 );
+	})
+	.fail(function() {
+		$("#builddoclinks").children('.progress-label').css('left', '1%');
+		$("#builddoclinks").children('.progress-label').text('{% trans %}Failed to build DocLinks{% endtrans %}');
+		return false;
+	});
+}
+</script>
+<style type="text/css">
+.hidden { display: none; }
+.container { clear: both; margin: 7px auto; }
+.ui-progressbar { position: relative; }
+.progress-label { position: absolute; left: 48%; top: 5px; font-weight: bold; text-shadow: 1px 1px 0 #fff; }
+</style>
+</head>
+<body>
+	<div class="container">
+		<span>{% trans %}Importing Data{% endtrans %}</span>
+		<div id="dataprogress"><div class="progress-label">{% trans %}Importing Data{% endtrans %}...</div></div>
+	</div>
+	<div class="container">
+		<span>{% trans %}Indexing Views{% endtrans %}</span>
+		<div id="viewsprogress"><div class="progress-label">{% trans %}Indexing Views{% endtrans %}...</div></div>
+	</div>
+	<div class="container">
+		<span>{% trans %}Importing ACL{% endtrans %}</span>
+		<div id="aclprogress"><div class="progress-label">{% trans %}Importing ACL{% endtrans %}...</div></div>
+	</div>
+	<div class="container">
+		<span>{% trans %}Building DocLinks{% endtrans %}</span>
+		<div id="builddoclinks"><div class="progress-label">{% trans %}Building DocLinks{% endtrans %}...</div></div>
+	</div>
+</body>
+</html>

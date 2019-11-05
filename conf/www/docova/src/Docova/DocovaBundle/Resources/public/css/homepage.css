@@ -1,0 +1,54 @@
+.ButtonSectionStyle {
+	width: 100%;
+	height: 27px;
+	border-bottom: 1px groove;
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#F3F0E7', EndColorStr='#D9D2B6');
+}
+.HeadingTitle {
+	color: #0050d1;
+	font-size: 13px;
+	font-weight: bold;
+	margin: 3px auto auto 10px;
+}
+#divContent {
+	padding:10px;
+	height:100%;
+}
+#tblGridTable {
+	width:100%;
+	height:100%;
+	table-layout:fixed;
+	border-collapse:collapse;
+}
+.left_column {
+	padding: 5px 5px 5px 0px; 
+	width: 50%;
+	height: 50%;
+	overflow: hidden;
+	display: block;
+}
+.right_column {
+	padding: 5px 0px 5px 5px; 
+	width: 50%;
+	height: 50%;
+	overflow: hidden;
+	display: block;
+}
+.SubheadingTitle {
+	color: #0050d1;
+	margin: -3px 0px 0px 5px;
+	padding-left: 2px;
+	padding-bottom: 3px;
+	font-weight: bold;
+}
+#tblGridTable FIELDSET {
+	height: 100%;
+}
+.info_container {
+	border:1px solid #efefef;
+	margin: auto;
+	display: block;
+	overflow: auto;
+	height: 90%;
+	width: 98%;
+}

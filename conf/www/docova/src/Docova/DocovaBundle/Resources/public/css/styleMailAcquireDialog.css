@@ -1,0 +1,50 @@
+BODY {
+	margin: 0px;
+	font: normal 11px Verdana, Arial, sans-serif;
+	scroll: no;
+} /* Dialog box - main body*/
+.mailViewTable {
+	width: 100%;
+	table-layout: fixed;
+	background-color: #ffffff;
+	border: solid 1px #efefef;
+	border-collapse: collapse;
+}
+
+.mailViewTable TH {
+	position: relative;
+	top: expression(parentNode.parentNode.parentNode.parentNode.scrollTop-1);
+	left: expression(parentNode.parentNode.parentNode.parentNode.scrollLeft);
+	z-index: 100;
+	font: normal 11px verdana, arial;
+	padding: 2px;
+	background-color: #ECE9D8;
+	border-bottom: solid 1px #bbbbbb;
+	border-right: groove 2px;
+	white-space: nowrap;
+}
+
+.mailViewTable TD {
+	font: normal 11px verdana, arial;
+	border-bottom: solid 1px #efefef;
+	padding: 2px;
+}
+
+.mailTitle {
+	font: bold 12px Verdana, Arial, sans-serif;
+	padding: 0px 2px 5px 2px;
+}
+
+.fileList {
+	font: normal 11px Verdana, Arial, sans-serif;
+	height: 80px;
+	overflow-y: auto;
+}
+
+.viewHeader {
+	font: bold 11px verdana, arial;
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,
+		StartColorStr='#F3F0E7', EndColorStr='#D9D2B6');
+	color: #0050D1;
+	border-bottom: groove 2px;
+}

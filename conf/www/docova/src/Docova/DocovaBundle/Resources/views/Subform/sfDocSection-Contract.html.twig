@@ -1,0 +1,36 @@
+<input name="subforms[]" type="hidden" value="{{ data['CompanyName']['Field'].getSubform.getId }}" >
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr valign="top">
+		<td class="fieldLabelCell" width="22%">{% trans %}Company Name{% endtrans %}:</td>
+		<td class="fieldCell" width="78%"><input name="{{ data['CompanyName']['Field'].getFieldName }}" value="{{ data['CompanyName']['Value'] }}" style="width: 300px;">&nbsp;</td>
+	</tr>
+	<tr valign="top">
+		<td class="fieldLabelCell" width="22%">{% trans %}Contract Type{% endtrans %}:</td>
+		<td class="fieldCell" width="78%">
+			<select name="{{ data['ContractType']['Field'].getFieldName }}" style="width: 300px;">
+				<option>{% trans %}File does not exist{% endtrans %}</select>
+				{% if data['ContractType']['Options']|length > 0 %}
+					{% for option in data['ContractType']['Options'] %}
+					<option {% if data['ContractType']['Value'] == option['Opt_Value'] %}selected="selected"{% endif %} value="{{ option['Opt_Value'] }}">{{ option['Display_Option'] }}
+					{% endfor %}
+				{% endif %}
+		</td>
+	</tr>
+	<tr valign="top">
+		<td class="fieldLabelCell" width="22%">{% trans %}Renewal/Expiration Date{% endtrans %}:</td>
+		<td class="fieldCell" width="78%">
+			<input name="{{ data['ExpiryDate']['Field'].getFieldName }}" value="{{ data['ExpiryDate']['Value'] }}" class="txtFldReadOnly" style="width:80px;" CONTENTEDITABLE=false>
+			<IMG id='imgExpiryDate' SRC= "{{ asset('bundles/docova/images/datepicker.gif') }}" Border=0 align=top onclick="setYCalDate('ExpiryDate','imgExpiryDate')">
+		</td>
+	</tr>
+	<tr valign="top">
+		<td class="fieldLabelCell" width="22%">{% trans %}Renewal/Expiration Date{% endtrans %}:</td>
+		<td class="fieldCell" width="78%">
+			{% for radio_btn in data['ExpiryNotify']['Options'] %}
+			<input type="radio" name="{{ data['ExpiryNotify']['Field'].getFieldName }}" value="{{ radio_btn['Opt_Value'] }}" {% if data['ExpiryNotify']['Value'] == radio_btn['Opt_Value'] %}checked{% endif %} style="border:0px; background-color:transparent;">{{ radio_btn['Display_Option']|trans }}</label>
+			{% endfor %}<br />
+			<textarea class="txFldReadOnly" name="{{ data['ContractNotify']['Field'].getFieldName }}" cols="47" rows = "4" readonly=true>{{ data['ContractNotify']['Value'] }}</textarea>
+			<button style="width=20px; height: 18px; " onclick="SelectNames('ContractNotify', false)"><IMG SRC= "{{ asset('bundles/docova/images/icons/vwicn004.gif') }}'" Border=0 align=top></button>
+		</td>
+	</tr>
+</table>

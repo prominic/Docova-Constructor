@@ -1,0 +1,62 @@
+	{% set L_selected_section = '' %}
+	{% set E_selected_section = '' %}
+	{% set L_section_properties = '' %}
+	{% set E_section_properties = '' %}
+	{% if document is defined and ('REMAIL' in document.getContentSections or 'RLINK' in document.getContentSections) %}
+ 		{% for subform in document.getDocTypeSubform %}
+ 			{% if subform.getSubform.getFormName == 'Related Emails' %}
+ 				{% set E_selected_section = subform %}
+ 				{% set E_section_properties = subform.getPropertiesXML(true) %}
+ 			{% elseif subform.getSubform.getFormName == 'Related Links' %}
+ 				{% set L_selected_section = subform %}
+ 				{% set L_section_properties = subform.getPropertiesXML(true) %}
+ 			{% endif %}
+ 		{% endfor %}
+ 	{% endif %}
+ 	<table cellspacing="0" class="elmContainer{{ L_selected_section != '' or E_selected_section != '' ? '' : ' hidden' }}">
+ 		<tr class="REMAIL{{ E_selected_section != '' and E_selected_section.getSubform.getFormName == 'Related Emails' ? '' : ' hidden' }}">
+ 			<td colspan="2" class="hdr">{% trans %}Related Emails{% endtrans %}</td>
+ 		</tr>
+ 		<tr class="REMAIL{{ E_selected_section != '' and E_selected_section.getSubform.getFormName == 'Related Emails' ? '' : ' hidden' }}">
+ 			<td class="firstRw">{% trans %}Document Versioning{% endtrans %}:</td>
+ 			<td class="firstRw">
+				<span class="elNote">{% trans %}When a new version is created include all Related Email links?{% endtrans %}</span>
+				<label><input type="radio" name="IncludeEmailLinks" value="1" {{ E_section_properties|length > 0 and E_section_properties['IncludeEmailLinks'] is defined and E_section_properties['IncludeEmailLinks'] == 1 ? 'checked' : '' }} /> {% trans %}Yes{% endtrans %}</label>
+				<label><input type="radio" name="IncludeEmailLinks" value="0" {{ E_section_properties|length == 0 or E_section_properties['IncludeEmailLinks'] is not defined or not E_section_properties['IncludeEmailLinks'] ? 'checked' : '' }} /> {% trans %}No{% endtrans %}</label>
+ 			</td>
+ 		</tr>
+ 		<tr class="REMAIL{{ E_selected_section != '' and E_selected_section.getSubform.getFormName == 'Related Emails' ? '' : ' hidden' }}">
+ 			<td>{% trans %}Save Forward As{% endtrans %}:</td>
+ 			<td>
+				<label><input type="checkbox" name="ForwardSaveAs" value="1" {{ E_section_properties|length > 0 and E_section_properties['ForwardSaveAs'] is defined and E_section_properties['ForwardSaveAs'] == 1 ? 'checked' : '' }} id="ForwardSaveAs" /> {% trans %}Related Email{% endtrans %}</label>
+ 			</td>
+ 		</tr>
+ 		<tr class="REMAIL{{ E_selected_section != '' and E_selected_section.getSubform.getFormName == 'Related Emails' ? '' : ' hidden' }}">
+ 			<td>{% trans %}Visibility{% endtrans %}:</td>
+ 			<td>
+				{% trans %}Hide Related Emails section when{% endtrans %}: 
+				<label><input type="checkbox" name="HideRelEmails[]" value="R" {{ E_section_properties|length > 0 and E_section_properties['Interface']['HideOnReading'] == 1 ? 'checked' : '' }} /> {% trans %}Reading{% endtrans %}</label>
+				<label><input type="checkbox" name="HideRelEmails[]" value="E" {{ E_section_properties|length > 0 and E_section_properties['Interface']['HideOnEditing'] == 1 ? 'checked' : '' }} /> {% trans %}Editing{% endtrans %}</label>
+ 			</td>
+ 		</tr>
+{# ------------------ RELATED LINKS ------------------- #}
+ 		<tr class="RLINK{{ L_selected_section != '' and L_selected_section.getSubform.getFormName == 'Related Links' ? '' : ' hidden' }}">
+ 			<td colspan="2" class="hdr">{% trans %}Related Links{% endtrans %}</td>
+ 		</tr>
+ 		<tr class="RLINK{{ L_selected_section != '' and L_selected_section.getSubform.getFormName == 'Related Links' ? '' : ' hidden' }}">
+ 			<td class="firstRw">{% trans %}Document Versioning{% endtrans %}:</td>
+ 			<td class="firstRw">
+				<span class=elNote"">{% trans %}When a new version is created include all Related Links?{% endtrans %}</span>
+				<label><input type="radio" name="IncludeRelLinks" value="1" {{ L_section_properties|length > 0 and L_section_properties['IncludeRelLinks'] is defined and L_section_properties['IncludeRelLinks'] == 1 ? 'checked' : '' }} /> {% trans %}Yes{% endtrans %}</label>
+				<label><input type="radio" name="IncludeRelLinks" value="0" {{ L_section_properties|length == 0 or L_section_properties['IncludeRelLinks'] is not defined or not L_section_properties['IncludeRelLinks'] ? 'checked' : '' }} /> {% trans %}No{% endtrans %}</label>
+ 			</td>
+ 		</tr>
+ 		<tr class="RLINK{{ L_selected_section != '' and L_selected_section.getSubform.getFormName == 'Related Links' ? '' : ' hidden' }}">
+ 			<td>{% trans %}Visibility{% endtrans %}:</td>
+ 			<td>
+				{% trans %}Hide Related Links section when{% endtrans %}: 
+				<label><input type="checkbox" name="HideRelLinks[]" value="R" {{ L_section_properties|length > 0 and L_section_properties['Interface']['HideOnReading'] == 1 ? 'checked' : '' }} /> {% trans %}Reading{% endtrans %}</label>
+				<label><input type="checkbox" name="HideRelLinks[]" value="E" {{ L_section_properties|length > 0 and L_section_properties['Interface']['HideOnEditing'] == 1 ? 'checked' : '' }} /> {% trans %}Editing{% endtrans %}</label>
+ 			</td>
+ 		</tr>
+ 	</table>

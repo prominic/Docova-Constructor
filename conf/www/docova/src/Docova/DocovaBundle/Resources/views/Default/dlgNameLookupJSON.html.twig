@@ -1,0 +1,473 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>{% trans %}Name Lookup{% endtrans %}</title><META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<METE HTTP-EQUIV="X-UA-Compatible" content="IE=6">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<style type="text/css">
+/* Dialog box - main body*/ 
+.dlgBody {
+    margin: 0px;
+    scroll: no;
+    background-color: #dddddd;
+}
+
+BODY {
+    font: normal 11px verdana, arial, sans-serif;
+}
+
+.DlgTable {
+    border-width: 0px;
+    padding: 0px;
+}
+
+.DlgTitleCell {
+    padding: 3px 5px 3px 5px;
+    height: 20px;
+}
+
+.DlgButtonCell {
+    padding: 3px 5px 3px 5px;
+    height: 30px;
+    valign: middle;
+}
+
+#dlgContent {
+    height: expression(eval(document.body.clientHeight - 30));
+    padding: 3px 5px 3px 5px;
+    overflow: auto;
+    border-bottom: 2px groove #efefef;
+}
+
+.txHeaderTitle {
+    font: normal 12px verdana, arial, sans-serif;
+    color: #002000;
+}
+
+.txHeaderInfo {
+    font: normal 11px verdana, arial, sans-serif;
+    color: #002000;
+}
+
+.txButtonSubmit {
+    font: bold 11px verdana, arial, sans-serif;
+    width: 80px;
+    height: 20px;
+    color: #002000;
+}
+
+.txButton {
+    font: normal 11px verdana, arial, sans-serif;
+    width: 80px;
+    height: 20px;
+    color: #002000;
+}
+
+.txButtonGo {
+    font: normal 11px verdana, arial, sans-serif;
+    color: #002000;
+    height: 20px;
+}
+
+.txButtonNextPrev {
+    font: normal 11px verdana, arial, sans-serif;
+    width: 40px;
+    height: 20px;
+    color: #002000;
+}
+
+.txButtonAddRmv {
+    font: normal 11px verdana, arial, sans-serif;
+    width: 80px;
+    height: 20px;
+    color: #002000;
+}
+
+.txButtonCancel {
+    font: normal 11px verdana, arial, sans-serif;
+    width: 80px;
+    height: 20px;
+    color: #002000;
+}/* Dialog box - content */.DlgFieldCell {
+    background-color: #dddddd;
+}
+
+.txFldInfo {
+    font: normal 11px verdana, arial, sans-serif;
+    color: #002000;
+}
+
+.txFldLabel {
+    font: normal 11px verdana, arial, sans-serif;
+    color: #002000;
+}
+
+.txFld {
+    font: normal 11px verdana, arial, sans-serif;
+    color: black;
+    background-color: white;
+}
+
+SELECT, TEXTAREA {
+    font: normal 11px verdana, arial, sans-serif;
+    background-color: white;
+}
+
+#NameSelected {
+    font: normal 11px verdana, arial, sans-serif;
+    color: black;
+    background: white;
+    width: 230px;
+}
+
+#NameEntryList {
+    font: normal 11px verdana, arial, sans-serif;
+    color: black;
+    background: white;
+    width: 230px;
+}
+
+#currentNab {
+    font: normal 11px verdana, arial, sans-serif;
+    color: black;
+    background: white;
+    width: 230px;
+}
+
+#FindText {
+    font: normal 11px verdana, arial, sans-serif;
+    color: #0000ff;
+    background: #ffffff;
+    width: 150px;
+    margin: 2px 0px 2px 0px;
+}
+
+#loadingSpinner{
+	display:none;
+	width: 200px;
+	top: 50%;
+    left: 50%;
+    text-align:center;
+    margin-left: -50px;
+    margin-top: -100px;
+    z-index:5;
+    overflow:auto;
+	background: white;
+    color: blue;
+    position:absolute;
+}
+
+</style>
+
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+
+<script language="JavaScript" type="text/javascript">
+
+var doc = null;
+var docInfo=null;
+var searchTimer = null; //global timer object
+var startIndex=1;
+var lastIndex=0;
+var pageSize=20;
+var returnCount = 0;
+var sourceField = null;
+var sourceList = "";
+
+
+$(document).ajaxStart(function () {
+	//$("#loadingSpinner").show();
+	$("#loadingSpinner").fadeIn();
+	//console.log("ajax start ...")
+}).ajaxStop(function () {
+	//$("#loadingSpinner").hide();
+	$("#loadingSpinner").fadeOut();
+	console.log("ajax stop ...")
+});
+
+// global variable holds json data for address book
+var jsonDataNab = {{ NabEntriesJson | raw }};
+
+//init dialog code goes here
+function initDialog(){
+
+	getNabListJSON();
+}
+// generate left pane list from json data when document is loaded
+function getNabListJSON(){
+	
+
+	var $selectNameEntryList = $('#NameEntryList');
+	// clear the contents of both lists
+	//$selectNameEntryList.html(''); // clear the content for left pane list
+	$("#NameSelected").html(''); // clear the contents for right pane list
+	// populate the list from Json data
+	$.each(jsonDataNab, function(idx, obj) {
+		$selectNameEntryList.append("<option value='"+ obj.title + "'" + ">" + obj.title +"</option>");
+	});
+
+	//$("#divNameList").html($selectNameEntryList);
+	// empty list
+
+}
+
+//this is called on change dir
+function switchNabListJSON(type){
+	var dirType=$( "#CurrentNAB" ).val(); // check which address book was picked
+	console.log("dirType: " +dirType); 
+	// url for json data
+	var url ="{{ path('docova_usernamelookup_json') }}" + "?dataType=JSON&dirType="+dirType;
+	//url = url + "?dataType=JSON&dirType="+dirType;
+	
+	var $selectNameEntryList = $('#NameEntryList');
+	$selectNameEntryList.html('');
+
+	$.ajax({
+		  dataType: "json",
+		  url: url,
+		  type: "GET",
+		  success: function(data){
+			  $.each(data, function(idx, obj) {
+					$selectNameEntryList.append("<option value='"+ obj.title + "'" + ">" + obj.title +"</option>");
+					
+				});
+		  }
+		});
+	
+	//$("#divNameList").html($selectNameEntryList);
+
+}
+
+
+
+//----- add entry to the right pane -------
+function addName() { 
+	var $nameSelected=$("#NameSelected"); //right pane
+	var $nameEntrySelectedList=$('#NameEntryList option:selected'); //left pane
+	$nameEntrySelectedList.each(function(index, obj) {
+		//check if an entry already exists
+		if ( $nameSelected.find('option[value="'+ obj.value +'"]').length === 0 ) {
+			 $nameSelected.append("<option value='"+ obj.text + "'" + ">" + obj.text +"</option>");
+		}
+	});
+	//deselect entries
+	$nameEntrySelectedList.attr('selected', false);
+}
+
+//----- remove selected entry from right pane -------
+function removeName() { 
+	$("#NameSelected option:selected").remove();
+}
+
+
+//########################## register key events #############################
+// --------------- when document is ready register key events ------
+$( document ).ready(function() {
+    //console.log( "ready!" );
+    // dblclick for left pane list
+    $( "#NameEntryList" ).dblclick(function() {
+       // alert("NameEntryList");
+  		addName();
+  		
+  	});
+
+  	//------------ dblick for right pane list-----------------------------
+    $( "#NameSelected" ).dblclick(function() {
+    	//test.dblclick,(function() {	
+  		//alert("NameSelected: ");
+    		removeName();
+    		
+    	});
+
+    //---------- pressing delete on right pane list---------------
+    $( "#NameSelected" ).keydown(function() {
+    	//test.dblclick,(function() {	
+			if (event.keyCode === 46){
+				alert("key pressed: "+ event.keyCode);
+				removeName();
+			}
+    		
+    	});
+
+    //------------ for filtering on search text [start with ]-----------
+    $( "#FindText" ).keydown(function() {
+        var kc =event.keyCode;
+      //letters, punctuation or numbers - go to search box
+        if (kc <= "90" && kc >= "48") 
+		{
+    		var searchTxtVal=$( "#FindText" ).val() + String.fromCharCode(kc).toLowerCase();
+        	$("#FindText" ).val(searchTxtVal);
+			nameSearch();
+		}
+        // enter key
+        if (kc=="13" ) 
+        {
+        	stopSearchTimer();
+        	nameSearch();
+        	return;
+        }
+    		
+    });
+
+
+});
+
+
+//--------------------- called when the user types search string in the name search box --------------------
+function nameSearch()
+{
+	//stopSearchTimer();
+	if($("#FindText" ).val === "")
+	{
+		return;
+	}
+	// get the filtered list
+	retrieveNames(nabAction);
+}
+
+
+// filter names
+function retrieveNames(nabAction){
+	
+	var key="title";
+	var value="BE";
+	var idx=findIndexByKeyValue(jsonDataNab, key, value)
+	
+
+	//var filteredJSONData=jsonDataNab.slice(0,idx);
+	var filteredJSONData=jsonDataNab;
+	filteredJSONData=filteredJSONData.splice(idx);
+	var $selectNameEntryList = $('#NameEntryList');
+	$selectNameEntryList.html('');
+	alert("{% trans %}json  size{% endtrans %}: " + jsonDataNab.length);
+	alert("{% trans %}index of searched item{% endtrans %}: " + idx);
+	
+	// populate the list from Json data
+	$.each(filteredJSONData, function(idx, obj) {
+		$selectNameEntryList.append("<option value='"+ obj.title + "'" + ">" + obj.title +"</option>");
+	});
+
+	//$("#divNameList").html($selectNameEntryList);
+	
+}
+
+// find the index of json object
+function findIndexByKeyValue(obj, key, value)
+{
+    for (var i = 0; i < obj.length; i++) {
+        //if (obj[i][key] == value) {
+        if (obj[i][key].indexOf(value) > 0) {
+            return i;
+        }
+    }
+    return null;
+}	
+
+</script>
+
+
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onload="initDialog();" >
+<script type="text/javascript">
+var info = {
+	  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	  "HTTP_Referer" : "",
+	  "Query_String" : "",
+	  "Query_String_Decoded" : "",
+	  "Path_Info_Decoded" : "",
+	  "ServerName" : "",
+	  "ServerUrl" : "",
+	  "NsfName" : "{{ path('docova_homepage') }}",
+	  "ListSeparator" : ",",
+	  "DialogType" : "{{ dlg_type }}",
+	  "ReturnValue" : "N",
+	  "PageSize" : "20",
+	  "StartName" : ""
+};
+function getinfovar() {
+	return info;
+}
+</script>
+<!--  page loader -->
+<div id="loadingSpinner">{% trans %}Retrieving records. Please wait{% endtrans %}...</div>
+
+
+<form onsubmit="return false;" method="post" action="{{ path('docova_usernamelookup') }}?OpenForm&amp;Seq=1&amp;type={{ dlg_type }}" name="_dlgNameLookup">
+
+
+
+<table class="DlgTable" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr valign="top">
+		<td class="DlgContentCell" width="100%">
+			<div id="dlgContent">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr valign="top">
+					<td width="21%">
+						<select name="CurrentNAB" onchange="switchNabListJSON(this);" id="CurrentNAB">
+						
+								<option value="LDAP">{% trans %}Internal{% endtrans %} (LDAP)
+								<option value="DOCOVA">DOCOVA
+						</select>
+					</td>
+					{% if dlg_type == 'multi' %}
+					<td width="49%"><img width="1" height="1" src="{{ asset('bundles/docova/images/icons/ecblank.gif') }}" border="0" alt=""></td>
+					<td width="30%"><img width="1" height="1" src="{{ asset('bundles/docova/images/icons/ecblank.gif') }}" border="0" alt=""></td>
+					{% endif %}
+				</tr>
+				<tr valign="top">
+					<td width="21%" valign="middle">
+					<table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:5px 0px 5px 0px;;">
+						<tr>
+							<td valign="middle" class="txFldLabel">{% trans %}Starts with{% endtrans %}:</td>
+							<td width="152" align="right" valign="middle"> 
+								<input name="FindText" value="" id="FindText" TABINDEX=2>
+								&nbsp;&nbsp;&nbsp;<input type="button" onclick="retrieveNames('local'); " value="{% trans %}search test{% endtrans %}"  >
+							 </td>
+						</tr>
+					</table>
+					</td>
+					{% if dlg_type == 'multi' %}
+					<td width="49%" valign="middle"><img width="1" height="1" src="{{ asset('bundles/docova/images/icons/ecblank.gif') }}" border="0" alt=""></td>
+					<td width="30%" valign="bottom"><span class="txFldLabel">{% trans %}Selected Names{% endtrans %}</span></td>
+					{% endif %}
+				</tr>
+				
+				<!---------------------- left & right pane name list ---------------------------->
+				<tr valign="top">
+					<td width="21%">
+						<select id="NameEntryList" multiple="multiple" size="20" name="NameEntryList" ></select>
+				</td>
+					{% if dlg_type == 'multi' %}
+					<td style="vertical-align : middle; " width="49%">
+						<div align="center">
+							<input type="button" onclick="addName(); " value="{% trans %}Add{% endtrans %}>>" class="txButtonAddRmv" TABINDEX=-1><br/><br/>  
+							<input type="button" onclick="removeName(); " value="<<{% trans %}Remove{% endtrans %}" class="txButtonAddRmv" TABINDEX=-1>
+							
+						</div>
+					</td>
+					<td width="30%">
+						<select id="NameSelected" name="NameSelected" multiple SIZE="20"  >
+						</select>
+					</td>
+					{% endif %}
+				</tr>
+				<!-------------------------------------------------------------------------------------->
+			</table>
+			</div>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td id="buttonCell" class="DlgButtonCell" width="100%" valign="middle">
+			<div align="right">
+				<input type="button" onclick="handleOkClick();" value="{% trans %}OK{% endtrans %}" id="btnDone" class="txButtonSubmit" TABINDEX=5 name="ButtonSave">&nbsp;&nbsp;&nbsp;<font size="2"> </font>
+				<input type="button" onclick="handleCancelClick()" value="{% trans %}Cancel{% endtrans %}" id="btnCancel" class="txButtonCancel" TABINDEX=5>
+			</div>
+		</td>
+	</tr>
+</table>
+
+</body>
+</html>
+;

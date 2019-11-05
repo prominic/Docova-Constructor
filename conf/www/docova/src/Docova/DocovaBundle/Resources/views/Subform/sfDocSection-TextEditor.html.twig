@@ -1,0 +1,7 @@
+<input name="subforms[]" type="hidden" value="{{ data['editor_body']['Field'].getSubform.getId }}" >
+<div class="stdSection" style="width:99%">
+	<span class="frmLabel" style="margin: 4px 0px 4px 0px; font : normal 11px Verdana,  Arial, sans-serif;">{{ properties['EditorLabel']|trans }}:</SPAN> 
+	<div id="divRTContent" style="font : normal 11px Verdana,  Arial, sans-serif; width: 100%; HEIGHT:{{ properties['EditorHeightValue'] }}px;">
+		<TEXTAREA style="width: 100% ; border:1px solid #a6c9e2" cols=50 rows=7 id="Body" name={{ data['editor_body']['Field'].getFieldName }} {% if properties['EditorReadOnly'] == 1 %}Readonly="ReadOnly"{% endif %}>{{ data['editor_body']['Value'] }}</TEXTAREA>
+	</DIV>
+</DIV>

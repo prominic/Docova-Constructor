@@ -1,0 +1,477 @@
+{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+	'document' : workflow_item, 
+	'view_name' : 'wAdminWorkflow', 
+	'view_title' : 'Workflow Processes', 
+	'path_info' : path('docova_admin_readdocument', { 'view_name' : 'wAdminWorkflow', 'doc_id' : workflow_item.getId }) ~ '?OpenDocument&ParentUNID=&wfitem=true',
+	'mode' : '' 
+} %}
+<script type="text/javascript">
+$(function() {
+	$('#frmEmulator').height($(window).height() - 46);
+	$('#divFormContainer').accordion({
+		heightStyle: "content",
+		collapsible: true
+	});
+})
+</script>
+<style type="text/css">
+.topHdr {
+	border-bottom: 2px #FFF solid;
+}
+</style>
+</head>
+<body scroll="no">
+	<ul class="ui-widget-header actionBar hidetoload">
+		<a id="editBtn" href="{{ path('docova_admin_editdocument', { 'view_name' : 'wAdminWorkflow', 'doc_id' : workflow_item.getId }) }}?wfitem=true">{% trans %}Edit{% endtrans %}</a>
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+	</ul>
+	<div id="frmEmulator" class="hidetoload">
+		<h3 class="adjusted headings1">{% trans %}Workflow Step Settings{% endtrans %}</h3>
+		<div id="divFormContainer">
+			<h3>{% trans %}General Settings{% endtrans %}</h3>
+			<div>
+				<table class="elmContainer" cellspacing="0">
+					<tr>
+						<td class="firstRw">{% trans %}Step name{% endtrans %}:</td>
+						<td class="firstRw">{{ workflow_item.getStepName }}</td>
+					</tr>
+					<tr>
+						<td>{% trans %}Step type{% endtrans %}:</td>
+						<td>{{ workflow_item.getStepType(true)|trans }}</td>
+					</tr>
+					<tr>
+						<td>{% trans %}Step ID{% endtrans %}:</td>
+						<td>DK{{ workflow_item.getId }}</td>
+					</tr>
+				{% if workflow_item.getStepType > 1 %}
+					<tr>
+						<td class="innerTblContainer" colspan="2">
+							<table class="elmContainer" cellspacing="0">
+								<tr>
+									<td>{% trans %}Document Status{% endtrans %}:</td>
+									<td>{{ workflow_item.getDocStatus }}</td>
+								</tr>
+								<tr>
+									<td>{% trans %}Position{% endtrans %}:</td>
+									<td>{{ workflow_item.getPosition }} {% trans %}of{% endtrans %} {{ workflow_item.getWorkflow.getSteps.count - 1 }}</td>
+								</tr>
+								<tr>
+									<td>{% trans %}Distribution{% endtrans %}:</td>
+									<td>{{ workflow_item.getDistribution == 2 ? 'Parallel'|trans : 'Serial'|trans }}</td>
+								</tr>
+								<tr>
+									<td>{% trans %}Participants{% endtrans %}:</td>
+									<td>{% if workflow_item.getParticipants == 1 or workflow_item.getParticipants == 3 %}{% trans %}Document author{% endtrans %}{% endif %}</td>
+								</tr>
+								{% set participants = '' %}
+								{% if workflow_item.getOtherParticipantGroups|length > 0 %}
+									{% set participants = ',' ~ workflow_item.getOtherParticipantGroups|join(',') ~ participants %}
+								{% endif %}
+								{% if workflow_item.getOtherParticipant.count > 0 %}
+									{% for item in workflow_item.getOtherParticipant %}
+										{% set participants = ',' ~ item.getUserNameDnAbbreviated ~ participants %}
+									{% endfor %}
+								{% endif %}
+								{% set participants = participants|length > 0 ? participants[1:] : '' %}
+								{% if participants|length > 0 %}
+								<tr>
+									<td class="firstRw"></td>
+									<td class="firstRw">
+									{% if (not workflow_item.getDistribution or workflow_item.getDistribution == 1) and (workflow_item.getParticipants == 2 or workflow_item.getParticipants == 0) %}
+										{% trans %}or{% endtrans %}<br />
+										{{ participants }}
+									{% elseif (workflow_item.getDistribution > 1) %}
+										{% trans %}and/or{% endtrans %}:<br />
+										{{ participants }}
+									{% endif %}
+									</td>
+								</tr>
+								{% endif %}
+								{% if workflow_item.getParticipants > 1 %}
+								<tr>
+									<td class="firstRw"></td>
+									<td class="firstRw"> 
+										<label>{% trans %}Allow author to modify participant names{% endtrans %}</label>
+									</td>
+								</tr>
+								{% endif %}
+								{% if workflow_item.getDistribution == 2 %}
+								<tr>
+									<td>{% trans %}Completed when processed by{% endtrans %}:</td>
+									<td>
+										{% if workflow_item.getCompleteBy == 0 %}
+											{% trans %}All participants{% endtrans %}
+										{% elseif workflow_item.getCompleteBy == 1 %}
+											{% trans %}Any participants{% endtrans %}
+										{% endif %}
+									</td>
+								</tr>
+									{% if workflow_item.getCompleteBy > 1 %}
+								<tr>
+									<td class="firstRw"></td>
+									<td class="firstRw">
+										{{ '%completeamount% participant(s)'|trans({'%completeamount%' : (workflow_item.getCompleteBy - 2)}) }}
+									</td>
+								</tr>
+									{% endif %}
+								{% endif %}
+							</table>
+						</td>
+					</tr>
+					{% if workflow_item.getStepType == 3 %}
+					<tr>
+						<td>{% trans %}Allow approver to edit{% endtrans %}</td>
+						<td>{{ workflow_item.getApproverEdit == true ? 'Yes'|trans : 'No'|trans }}</td>
+					</tr>
+					{% endif %}
+					{% if workflow_item.getStepType in [2,3] %}
+					<tr>
+						<td>{% trans %}Optional Review/Approve comments?{% endtrans %}</td>
+						<td>
+							<label>{% if workflow_item.getOptionalComments %}{% trans %}Yes{% endtrans %}{% endif %}</label>
+						</td>
+					</tr>
+					{% endif %}
+					{% if workflow_item.getStepType == 2 %}
+					<tr>
+						<td>{% trans %}Complete Review button label{% endtrans %}:</td>
+						<td>
+							{% trans %}Custom button label{% endtrans %}:</br>
+							{{ workflow_item.getCustomReviewButtonLabel }}
+							<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Complete Review" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+						</td>
+					</tr>
+					{% endif %}
+					{% if workflow_item.getStepType == 3 %}
+					<tr>
+						<td>{% trans %}Approve button label{% endtrans %}:</td>
+						<td>
+							{% trans %}Custom button label{% endtrans %}:<br />
+							{{ workflow_item.getCustomApproveButtonLabel }}
+							<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Approve" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+						</td>
+					</tr>
+					{% endif %}
+					{% if workflow_item.getStepType in [3,4] %}
+					<tr>
+						<td>{% trans %}Decline button label{% endtrans %}:</td>
+						<td>{% trans %}Custom button label{% endtrans %}:</br>
+							{{ workflow_item.getCustomDeclineButtonLabel }}
+							<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Decline" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+						</td>
+					</tr>
+					{% endif %}
+					{% if workflow_item.getStepType == 4 %}
+					<tr>
+						<td>{% trans %}Release button label{% endtrans %}:</td>
+						<td>{% trans %}Custom button label{% endtrans %}:</br>
+							{{ workflow_item.getCustomReleaseButtonLabel }}
+							<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Release Document" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+						</td>
+					</tr>
+					{% endif %}
+					<tr>
+						<td>{% trans %}Workflow buttons visibility{% endtrans %}:</td>
+						<td>
+							{% trans %}Hide workflow buttons when{% endtrans %}: 
+							{% set hiding = '' %} 
+							{% if workflow_item.getHideReading == true %}{% set hiding = 'Reading'|trans ~ ', ' %}{% endif %}
+							{% if workflow_item.getHideEditing == true %}{% set hiding = hiding ~ 'Editing'|trans ~ ', ' %}{% endif %}
+							{% set hiding = hiding[:hiding|length - 2] %}
+							{{ hiding }}
+						</td>
+					</tr>
+				{% endif %}
+				</table>
+			</div>
+			
+			<h3>{% trans %}Actions{% endtrans %}</h3>
+			<div>
+				<table class="elmContainer" cellspacing="0">
+					<tr>
+						<td colspan="2" class="hdr topHdr">{% trans %}When the step is being{% endtrans %}...</td>
+					</tr>
+					{% if workflow_item.getStepType > 1 %}
+					<tr>
+						<td colspan="2" class="hdr">{% trans %}Activated{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw">
+							<label><input type="checkbox" disabled name="wfEnableActivateMsg" value="1" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSendMessage == true %}checked{% endif %}> {% trans %}Send{% endtrans %} </label>
+							<input type='text' disabled value='{% if step_actions['ACTIVATE'] is defined %}{% if step_actions['ACTIVATE'].getMessage.getMessageName == 'DEFAULT_ACTIVATE' %}{% trans %}Default{% endtrans %}{% else %}{{ step_actions['ACTIVATE'].getMessage.getMessageName }}{% endif %}{% else %}{% trans %}Default{% endtrans %}{% endif %}' class="text ui-widget-content ui-corner-all">  
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc"></td>
+						<td class="firstRw exc">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" value="P" {% if step_actions['ACTIVATE'] is defined and (step_actions['ACTIVATE'].getToOptions == 3 or step_actions['ACTIVATE'].getToOptions == 1) %}checked{% endif %} disabled> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" value="A" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getToOptions > 1 %}checked{% endif %} disabled> {% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc"></td>
+						<td class="firstRw exc">
+							{% trans %}and/or{% endtrans %}: </br>
+							{% set nameslist = '' %}
+							{% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['ACTIVATE'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSendTo.count > 0 %}
+								{% for item in step_actions['ACTIVATE'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% if nameslist|length > 0 %}{{ nameslist[1:] }}{% endif %}
+						</td>
+					</tr>
+					{% endif %}
+					<tr>
+						<td colspan="2" class="hdr">{% trans %}Completed{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="exc firstRw">{% trans %}Actions{% endtrans %}:</td>
+						<td class="exc firstRw">
+							<label> <input disabled type="checkbox" name="wfEnableCompleteMsg" value="1" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSendMessage == true %}checked{% endif %} > {% trans %}Send{% endtrans %} </label>
+							<input type='text' disabled value='{% if step_actions['COMPLETE'] is defined %}{% if step_actions['COMPLETE'].getMessage.getMessageName == 'DEFAULT_COMPLETE' %}{% trans %}Default{% endtrans %}{% else %}{{ step_actions['COMPLETE'].getMessage.getMessageName }}{% endif %}{% else %}{% trans %}Default{% endtrans %}{% endif %}' class="text ui-widget-content ui-corner-all"> 
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}:
+							<label><input type="checkbox" value="P" disabled {% if step_actions['COMPLETE'] is defined and (step_actions['COMPLETE'].getToOptions == 3 or step_actions['COMPLETE'].getToOptions == 1) %}checked="checked"{% endif %} > {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" value="A" disabled {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getToOptions > 1 %}checked="checked"{% endif %} > {% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: </br>
+							{% set nameslist = '' %}
+							{% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['COMPLETE'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSendTo.count > 0 %}
+								{% for item in step_actions['COMPLETE'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% if nameslist|length > 0 %}{{ nameslist[1:] }}{% endif %}
+						</td>
+					</tr>
+					{% if workflow_item.getStepType > 2 %}
+					<tr>
+						<td colspan="2" class="hdr">{% trans %}Declined{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw exc">
+							<table cellspacing="0" width="100%">
+								<tr>
+									<td class="firstRw">
+										<input type='text' disabled value='{% if step_actions['DECLINE'] is defined %}{% if step_actions['DECLINE'].getDeclineAction == 1 %}{% trans %}Stop workflow{% endtrans %}{% elseif step_actions['DECLINE'].getDeclineAction == 2 %}{% trans %}Return to selected step{% endtrans %}...{% elseif step_actions['DECLINE'].getDeclineAction == 3 %}{% trans %}Cancel workflow{% endtrans %}{% endif %}{% else %}{% trans %}Stop workflow{% endtrans %}{% endif %}' class="text ui-widget-content ui-corner-all mdCombo">
+									</td>
+									<td class="firstRw">
+										{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getDeclineAction == 2 %}
+											{% trans %}Step{% endtrans %}:
+											<input type='text' disabled value='({{ step_actions['DECLINE'].getBackTrackStep.getPosition }}) {{ step_actions['DECLINE'].getBackTrackStep.getStepName }}' class="text ui-widget-content ui-corner-all mdCombo"> 
+										{% endif %}
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw"> 
+							<label><input type="checkbox" name="wfEnableDeclineMsg" value="1" disabled {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendMessage == true %}checked{% endif %}> {% trans %}Send{% endtrans %}</label>
+							<input type='text' disabled value='{% if step_actions['DECLINE'] is defined %}{% if (step_actions['DECLINE'].getMessage is defined and step_actions['DECLINE'].getMessage.getMessageName is defined and  step_actions['DECLINE'].getMessage.getMessageName != 'DEFAULT_DECLINE') %}{{ step_actions['DECLINE'].getMessage.getMessageName }}{% else %}{% trans %}Default{% endtrans %}{% endif %}{% else %}{% trans %}Default{% endtrans %}{% endif %}' class="text ui-widget-content ui-corner-all"> 
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" value="P" disabled {% if step_actions['DECLINE'] is defined and (step_actions['DECLINE'].getToOptions == 3 or step_actions['DECLINE'].getToOptions == 1) %}checked{% endif %}> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" value="A" disabled {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getToOptions > 1 %}checked="checked"{% endif %}> {% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}:<br> 
+							{% set nameslist = '' %}
+							{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['DECLINE'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendTo.count > 0 %}
+								{% for item in step_actions['DECLINE'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% if nameslist|length > 0 %}{{ nameslist[1:] }}{% endif %}
+						</td>
+					</tr>
+					{% endif %}
+					{% if workflow_item.getStepType > 1 %}
+					<tr>
+						<td colspan="2" class="hdr">{% trans %}Paused{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="firstRw">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw">
+							<label><input type="checkbox" name="wfEnablePauseMsg" value="1" disabled {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getSendMessage == true %}checked="checked"{% endif %}> {% trans %}Send{% endtrans %} </label>
+							<input type='text' disabled value='{% if step_actions['PAUSE'] is defined %}{% if step_actions['PAUSE'].getMessage.getMessageName == 'DEFAULT_PAUSE' %}{% trans %}Default{% endtrans %}{% else %}{{ step_actions['PAUSE'].getMessage.getMessageName }}{% endif %}{% else %}{% trans %}Default{% endtrans %}{% endif %}' class="text ui-widget-content ui-corner-all"> 
+							{%trans%}message{%endtrans%}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{%trans%}to{%endtrans%}: 
+							<label><input type="checkbox" value="P" disabled {% if step_actions['PAUSE'] is defined and (step_actions['PAUSE'].getToOptions == 3 or step_actions['PAUSE'].getToOptions == 1) %}checked="checked"{% endif %}> {% trans %}participants{% endtrans %}</label>
+							<label><input type="checkbox" value="A" disabled {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getToOptions > 1 %}checked="checked"{% endif %}>{% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: <br>
+							{% set nameslist = '' %}
+							{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['DECLINE'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendTo.count > 0 %}
+								{% for item in step_actions['DECLINE'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% if nameslist|length > 0 %}{{ nameslist[1:] }}{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hdr">{% trans %}Cancelled{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="firstRw">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw">
+							<label><input type="checkbox" value="1" disabled {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSendMessage == true %}checked="checked"{% endif %}> {% trans %}Send{% endtrans %} </label>
+							<input type='text' disabled value='{% if step_actions['CANCEL'] is defined %}{% if step_actions['CANCEL'].getMessage.getMessageName == 'DEFAULT_CANCEL' %}{% trans %}Default{% endtrans %}{% else %}{{ step_actions['CANCEL'].getMessage.getMessageName }}{% endif %}{% else %}{% trans %}Default{% endtrans %}{% endif %}' class="text ui-widget-content ui-corner-all"> 
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" value="P" disabled {% if step_actions['CANCEL'] is defined and (step_actions['CANCEL'].getToOptions == 3 or step_actions['CANCEL'].getToOptions == 1) %}checked="checked"{% endif %}> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" value="A" disabled {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getToOptions > 1 %}checked="checked"{% endif %}> {% trans %}Author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: <br>
+							{% set nameslist = '' %}
+							{% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['CANCEL'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSendTo.count > 0 %}
+								{% for item in step_actions['CANCEL'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% if nameslist|length > 0 %}{{ nameslist[1:] }}{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hdr">{% trans %}Delayed{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="firstRw">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw"> 
+							{% trans %}If not completed within{% endtrans %}: {% if step_actions['DELAY'] is defined %}{{ step_actions['DELAY'].getDueDays }}{% endif %} {% trans %}day(s){% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							<label><input type="checkbox" disabled {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSendMessage == true and step_actions['DELAY'].getToOptions != 0 %}checked{% endif %}> {% trans %}send{% endtrans %} </label>
+							<input type='text' disabled value='{% if step_actions['DELAY'] is defined %}{% if step_actions['DELAY'].getMessage.getMessageName == 'DEFAULT_DELAY' %}{% trans %}Default{% endtrans %}{% else %}{{ step_actions['DELAY'].getMessage.getMessageName }}{% endif %}{% else %}{% trans %}Default{% endtrans %}{% endif %}' class="text ui-widget-content ui-corner-all"> 
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" disabled {% if step_actions['DELAY'] is defined and (step_actions['DELAY'].getToOptions == 3 or step_actions['DELAY'].getToOptions == 1) %}checked{% endif %}> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" disabled {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getToOptions > 1 %}checked{% endif %}> {% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: <br>
+							{% set nameslist = '' %}
+							{% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['DELAY'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSendTo.count > 0 %}
+								{% for item in step_actions['DELAY'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% if nameslist|length > 0 %}{{ nameslist[1:] }}{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>	
+							{% trans %}If not completed within further{% endtrans %}: {% if step_actions['DELAYESCL'] is defined %}{{ step_actions['DELAYESCL'].getDueDays }}{% endif %} {% trans %}day(s){% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							<label><input type="checkbox" disabled {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSendMessage == true and step_actions['DELAYESCL'].getToOptions != 0 %}checked="checked"{% endif %}> {% trans %}send{% endtrans %} </label>
+							<input type='text' disabled value='{% if step_actions['DELAYESCL'] is defined %}{% if step_actions['DELAYESCL'].getMessage.getMessageName == 'DEFAULT_DELAYESCL' %}{% trans %}Default{% endtrans %}{% else %}{{ step_actions['DELAYESCL'].getMessage.getMessageName }}{% endif %}{% else %}{% trans %}Default{% endtrans %}{% endif %}' class="text ui-widget-content ui-corner-all"> 
+							{% trans %}escalation message{% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" disabled {% if step_actions['DELAYESCL'] is defined and (step_actions['DELAYESCL'].getToOptions == 3 or step_actions['DELAYESCL'].getToOptions == 1) %}checked="checked"{% endif %}> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" disabled {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getToOptions > 1 %}checked="checked"{% endif %}>{% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: <br>
+							{% set nameslist = '' %}
+							{% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['DELAYESCL'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSendTo.count > 0 %}
+								{% for item in step_actions['DELAYESCL'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% if nameslist|length > 0 %}{{ nameslist[1:] }}{% endif %}
+						</td>
+					</tr>
+					{% endif %}					
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

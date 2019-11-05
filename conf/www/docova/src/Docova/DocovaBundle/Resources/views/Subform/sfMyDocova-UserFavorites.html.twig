@@ -1,0 +1,52 @@
+<script type="text/javascript" src="{{ asset('bundles/docova/js/custom/' ~ widget.getSubformName ~ '.js') }}"></script>
+<div class="portlet-header">
+	<span class="arial twelve bold">{{ widget.getWidgetName }}</span>
+	<button id="favRefresh" class="btn-Refresh" onclick="InitUserFavorites()" style="position:absolute; top: 2px; right: 85px; height: 20px; width: 20px;"></button>
+	<button class="btn-DeleteFavorite" style="position: absolute; top: 2px; right: 60px; height: 20px; width: 20px;"></button>
+	<button class="btn-RemoveWidget"></button>
+	<button class="btn-AddWidget"></button>
+</div>
+
+<div class="portlet-content">
+	<!--- Embedded view perspective----->
+	<script id="xmlUserFavorites" type="text/xml"><viewperspective><type>system</type><id>system_default_folder</id><Unid/><name>Built-in perspective</name><description/><createdby/><createddate/><modifiedby/><modifieddate/><autocollapse>0</autocollapse><viewsettings><viewproperties><showSelectionMargin>1</showSelectionMargin><allowCustomization>1</allowCustomization><extendLastColumn>1</extendLastColumn><isSummary/><isThumbnails/><categoryBorderStyle>border-bottom : solid 2px #aaccff;</categoryBorderStyle></viewproperties><columns><column><width>10</width><title></title><fontFamily>webdings</fontFamily><color>orange</color><xmlNodeName>typeicon</xmlNodeName></column><column><width>100</width><title>{% trans %}Title{% endtrans %}</title><xmlNodeName>title</xmlNodeName><sortOrder>ascending</sortOrder></column><column><width>100</width><title>{% trans %}Library{% endtrans %}</title><xmlNodeName>libraryname</xmlNodeName></column><column><width>50</width><title>{% trans %}Modified{% endtrans %}</title><xmlNodeName>lastmodifieddate</xmlNodeName></column></columns></viewsettings></viewperspective></script>
+	
+	<!--- BEGIN Embedded view event capture---->
+	<div id="divUserFavoritesCapture" class="capturediv">
+	
+		<!--- BEGIN Embedded view contents---->
+		<div id="divUserFavorites" style="display: none; background-color: white; width: 100%; padding: 0px; margin: 0px; overflow: auto; overflow-x: hidden;"></div>
+		<!--- END Embedded view contents----->
+	
+	<!--- END Embedded view event capture---->
+	</div>
+	
+	<!--- Empty Embedded view message----->
+	<div id="nodivUserFavorites" style="display: none; padding: 5px;">{% trans %}No entries found.{% endtrans %}</div>
+</div>
+
+<script language="javascript">InitUserFavorites();</script>
+<script>
+	var FavWatchlistUNID ="";
+	$( "#favRefresh" )
+		.button({
+			text:false,
+			label: "{% trans %}Refresh{% endtrans %}",
+			icons: {primary:  "ui-icon-refresh"}
+		})
+		.click(function( event ) {
+			userFavoritesView.objEmbView.Refresh(true,false,true); 
+			userFavoritesView.objEmbView.ResetHighlight();
+			userFavoritesView.EmbViewReload();
+	});
+	$( ".btn-DeleteFavorite" )
+		.button({
+			text:false,
+			label: "{% trans %}Delete selected favorite(s).{% endtrans %}",
+			icons: {primary:  "ui-icon-close"}
+		})
+		.click(function( event ) {
+			//event.preventDefault();
+			deleteFavorite();
+	});
+</script>

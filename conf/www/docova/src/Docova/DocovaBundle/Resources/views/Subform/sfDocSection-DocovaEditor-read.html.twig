@@ -1,0 +1,33 @@
+<style>
+.ToolBar {
+    background-color:#FFFFFF;
+    padding-top:2px;
+    padding-bottom:2px;
+    border: 1 solid silver;
+}
+.DropDown {
+    font-family:Verdana, Arial;
+	font-size:10pt;
+}
+pre {
+	word-wrap: break-word;
+}
+</style>
+
+<script language="Javascript">
+helpText = "<span style='font : bold 11px Verdana,  Arial, sans-serif;margin-left: 10px;'>Docova Rich Text Editor - {% trans %}Tips & Tricks{% endtrans %}</span><span><ul><li>{% trans %}When you press Enter, a new paragraph is started. Use Shift+Enter to enter a carriage return only.{% endtrans %}</li><li>{% trans %}To create a bulleted or numbered list, it's best to select the bullet or number list icon first{% endtrans %}</li><li>{% trans %}Standard windows shortcut keys work as well as the toolbar for the following{% endtrans %}:</li><ul><li>{% trans %}Ctrl+b for Bold{% endtrans %}</li><li>{% trans %}Ctrl+i for Italic{% endtrans %}</li><li>{% trans %}Ctrl+u for Underline{% endtrans %}</li><li>{% trans %}Ctrl+c for Copy{% endtrans %}</li><li>{% trans %}Ctrl+x for Cut{% endtrans %}</li><li>{% trans %}Ctrl+v for Paste{% endtrans %}</li><li>{% trans %}Ctrl+z for Undo{% endtrans %}</li></ul></ul></span>";
+loadDocovaEditor = false;
+docInfo.TextContentType = "HTML";  //required to allow Acquire from Email to work against this form
+</script>
+
+<div style="{% if properties['HideOnReading'] == true %}display:none{% endif %}">
+	<fieldset>
+		<span style="margin: 4px 0px 4px 0px; font : bold 11px Verdana,  Arial, sans-serif;">{{ properties['EditorLabel']|trans }}</span>
+		<span id="spanbody" style="border:1px solid #CCC; padding:5px; display:block">{{ data['body']['Value']|raw }}</span>
+	</fieldset>
+	<br>
+</div>
+<script language=Javascript>
+loadIcons(0);
+fixRelativeImagePaths();
+</script>

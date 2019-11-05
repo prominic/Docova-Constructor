@@ -1,0 +1,29 @@
+{# Constant array of values for 8 combo boxes #}
+{% set sub_list = {"CS1":"Embedded form 1", "CS2":"Embedded form 2", "CS3":"Embedded form 3", "DRTXT":"Docova Text Editor", "RTXT":"Rich Text Editor", "TXT":"Plain Text Editor", "ATT":"Attachments", "ATTI":"Attachments Intl", "RSS":"RSS newsfeed", "MEMO":"Mail header", "WEB":"Web bookmark", "REMAIL":"Related Emails", "RDOC":"Related Documents", "RLINK":"Related Links", "KEY":"Keyword", "COMM":"Comments"} %}
+
+	<table cellspacing="0" class="elmContainer">
+		<tr>
+			<td class="firstRw">{% trans %}Section order{% endtrans %}:</td>
+			<td class="firstRw">
+				<span class="elNote">{% trans %}Select "None" when re-ordering choices.{% endtrans %}</span>
+			</td>
+		</tr>
+		{% set sectionSelected = false %}
+		{% for section in document.getContentSections %}
+		<tr>
+			<td class="exc"></td>
+			<td>
+	        	{% if sub_list[section] is defined %}
+	        		{{ loop.index }} - {{ sub_list[section] }}<br />
+	        		{% set sectionSelected = true %}
+	        	{% else %}
+	        		{{ loop.index }} - {% trans %}None{% endtrans %}<br />
+	        	{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<div id="sectionsContainer" class="{{ sectionSelected == true ? '' : 'hidden' }}">
+		<!-- Custom subforms sections for drop down list -->
+		{% include 'DocovaBundle:Admin:sfAdminDocumentTypesContentSettingsSectionsRead.html.twig' %}	
+	</div>

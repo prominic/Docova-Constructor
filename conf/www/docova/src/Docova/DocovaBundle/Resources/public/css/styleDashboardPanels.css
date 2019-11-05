@@ -1,0 +1,184 @@
+html, body {
+	height: 98%;
+	font-family: verdana, arial;
+	font-size: 10pt;
+}
+
+table {
+	table-layout: fixed;
+}
+
+table.tblContent {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	table-layout: fixed;
+	height: 97%;
+	width: 100%;
+	font-size: 8.5pt;
+	background: #ececec;
+	/*border: 2px solid green;*/
+}
+button { border-radius: 0 !important; }
+
+DIV.portlet-header span { color: #555; }
+.tblContent td {
+	height: 97%;
+}
+
+#divContent {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+}
+
+#tblPanelLayout{
+	height:100%;
+	width:100%;
+	/*table-layout: fixed;*/
+}
+.tblPanelLayout TD {
+	padding: 1.5em 0 0.2em 0;
+}
+
+.verdana { font-family: Verdana; }
+.arial {font-family: Arial}
+
+.grey { font-color: grey; }
+.gray { font-color: gray; }
+
+.bold { font-weight: bold; }
+.italic { font-style: italic; }
+
+.eight { font-size: 8px; }
+.nine { font-size: 9px; }
+.ten { font-size: 10px; }
+.eleven { font-size: 11px; }
+.twelve { font-size: 12px; }
+.fourteen { font-size: 14px; }
+
+.ui-widget-overlay {
+	opacity: .50 !important; /* Make sure to change both of these, as IE only sees the second one */
+	filter: Alpha(Opacity=50) !important;
+}
+
+.ui-dialog {
+	font-family: Arial, Verdana;
+	font-size: 10pt;
+}
+
+.portlet {
+	height: 100%;
+	width: 95%;
+	margin: 0 auto;
+	padding: 0.5em;
+	overflow: hidden;
+	background: #FFF;
+	border: 1px #C0C0C0 solid;
+	box-shadow: 1px 2px 1px #C0C0C0;
+}
+
+.portlet-header {
+	padding: 0.2em 0.3em;
+	margin-bottom: 0.5em;
+	position: relative;
+	overflow: hidden;
+	display: block;
+	clear: both;
+	height:1.6em;
+}
+
+.portlet-content {
+	padding: 0.4em;
+	overflow: auto;
+	height: 85%;
+}
+
+:focus {
+	outline: 0;
+}
+
+.btn-AddWidget {
+	position:absolute;
+	top:2px;
+	right: 10px;
+	height: 20px;
+	width: 20px !important;
+}
+
+.btn-RemoveWidget {
+	position:absolute;
+	top:2px;
+	right: 35px;
+	height: 20px;
+	width: 20px !important;
+}
+
+.btn-Refresh {
+	position:absolute;
+	top:2px;
+	right: 60px;
+	height: 20px;
+	width: 20px !important;
+}
+
+.ui-dialog-buttonset button{
+	height: 2.4em !important;
+}
+
+/*------- Embedded views Table --------------------*/
+/*-- view table --*/
+TABLE.listtable
+{
+width: 100%;
+table-layout:fixed;
+margin-bottom: 10px;
+}
+
+TD.listcat
+{
+padding : 1px;
+border-bottom : solid 2px #aaccff;
+}
+TD.listcatfr
+{
+z-index:10;
+padding : 1px;
+border-bottom : solid 2px #aaccff;
+/*font : normal 11px Verdana,  Arial, sans-serif;*/
+/*background-color: white; */
+}
+ /*-- selection column header cell --*/
+TD.listselheader 
+{
+z-index:35;
+padding : 2px;
+white-space: nowrap;
+}
+
+/*-- header cell --*/
+TD.listheader
+{
+z-index:20;
+padding : 1px 1px 1px 3px;
+white-space: nowrap;
+}
+/*-- selection column cell --*/
+TD.listsel
+{
+z-index: 30;
+padding : 2px 3px 2px 3px;
+border-bottom : solid 1px #f0f0f0;
+}
+/*-- data cell --*/
+TD.listitem
+{
+z-index:20;
+padding : 1px 3px 1px 3px;
+border-bottom : solid 1px #f0f0f0;
+background-color: inherit; 
+overflow: hidden;
+}
+/*------- END Embedded views Table --------------------*/

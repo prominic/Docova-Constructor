@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv='expires' content='0'>
+<link rel="icon" href="{{ asset('bundles/docova/images/favicon.ico') }}" type="image/x-icon"/>
+<link rel="shortcut icon" href="{{ asset('bundles/docova/images/favicon.ico') }}" type="image/x-icon"/>
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/docova/css/login.css') }}">
+<script language="JavaScript" type="text/javascript">
+	//hide label when user enter anything in the box if cleared then show the label
+
+	function hideOnFocus(fld, lbl) {
+
+		lbl.style.display = "none";
+	}
+	// hide and show fields
+	function validateFields(fld, lbl) {
+		//alert("fld val => " + fld.value + "\n" + "lbl display: " + lbl.style.display  )
+		if (fld.value != '') {
+			lbl.style.display = "none";
+		} else {
+			lbl.style.display = "block";
+		}
+	}
+
+	function setFocus() {
+		document.getElementById('Username').focus();
+	}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" onload="validateFields(document.getElementById('Username'),document.getElementById('email-label') ); validateFields(document.getElementById('Password'),document.getElementById('password-label') ); setFocus();">
+	<div id="page-container">
+		<div id="page-logo-header">
+			<a href="http://www.docova.com"><img src="{{ asset('bundles/docova/images/DocovaLogo.png') }}" alt="Docova Home" /></a>
+			<div id="header-border-div"></div>
+		</div>
+		<div id="page-content">
+			<div id="login-and-register-container" class="">
+				<div id="login-container">
+					<div class="splash">
+						<img src="{{ asset('bundles/docova/images/login.png') }}" alt="START SMALL GO BIG!" />
+					</div>
+
+					<!-- login form starts here -->
+					<form action="{% if path(app.request.attributes.get('_route')) == path('docova_login') %}{{ path('docova_login_check') }}{% else %}{{ path('docova_mobile_login_check') }}{% endif %}" method="post">
+						<div class="title-text">Log in</div>
+						{% if messages %}
+						<div id="errMsg" style="padding-top: 7px; color: #FF0000; font-weight: bold; font-size: 12px;">(Invalid username or password)</div>
+						{% endif %}
+						<div id="login-section">
+							<div id="email-field" class="div-input">
+								<label id="email-label" for="Username">Username</label>
+								<input type="text" name="_username" id="Username" tabindex="1" value="{{ username }}" onfocus="hideOnFocus(this,document.getElementById('email-label'))" onblur="validateFields(this,document.getElementById('email-label'))" />
+							</div>
+							<div id="password-field" class="div-input">
+								<label id="password-label" for="Password">Password</label> 
+								<input type="password" name="_password" id="Password" tabindex="2" onfocus="hideOnFocus(this,document.getElementById('password-label'))" onblur="validateFields(this,document.getElementById('password-label'))" />
+								{% if homepage == true %}<input type="hidden" name="_target_path" value="docova_defaultpage" />
+								{% elseif path(app.request.attributes.get('_route')) != path('docova_login') %}
+								<input type="hidden" name="_target_path" value="docova_keepalive" />
+								{% endif %}
+							</div>
+							<div id="login-footer" class="clearfix">
+								<div align="center">
+									<br> <input type="submit" id="login_submit" name="login_submit" class="button-green" value="Log in" tabindex="3" />
+								</div>
+							</div>
+							<br class="clear" />
+						</div>
+                    	{% if sso_enabled %}
+                    	<div style="padding-top:12px; font-weight:bold; font-style:italic"><a href="{{ path('docova_oauth') }}" alt="Third Party Authentication (Azure)" title="Third Party Authentication (Azure)">Click here for Third Party Authentication (Azure)</a></div>
+                    	{% endif %}
+					</form>
+					<!-- login form ends here -->
+
+				</div>
+			</div>
+			<div style="width: 100%; height: 0; margin: 19px 0 0 0; border-top: 1px solid #DEE7F3;"></div>
+		</div>
+	</div>
+</body>
+</html>

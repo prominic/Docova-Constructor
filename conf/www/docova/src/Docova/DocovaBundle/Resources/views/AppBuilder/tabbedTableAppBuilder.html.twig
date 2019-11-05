@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/tabFunctions.js') }}" charset="UTF-8"></script>
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness-flat/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styletabbedtable.css') }}">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.scrollabletab.js') }}" charset="UTF-8"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#tabs").width(window.innerWidth-30)
+	window.onresize = function() {
+		$("#tabs").width(window.innerWidth-30)
+	}
+})
+function InitTabBar(){
+	objTabBar = new ObjTabBar();
+	objTabBar.Init();
+	objTabBar.tabs["appBuilderMain"] = {
+		"title" : "{% trans %}Home{% endtrans %}",
+		"frameID" : "appBuilderMain",
+		"contentType" : "F",
+		"url" : "about:blank"
+	}
+	jQuery("ul").css("border-bottom-left-radius", "0px");
+	jQuery("ul").css("border-bottom-right-radius", "0px");
+	jQuery("ul").css("border-top-left-radius", "0px");
+	jQuery("#tabs").css("margin-right", "0px");
+	jQuery("#tabs").css("border", "0px");
+	$("#FormHeader").css("background-color", "white");
+	$("#FormHeader").css("border", "0px");
+	$("#FormHeader").css("border-bottom", "1 px solid #BBBBBB");
+	$("#FormHeader").css("padding-top", "2px");
+	$("#FormHeader").css("padding-bottom", "2px");
+	$("#appBuilderMain").css("float", "left");
+}
+function closeAll() {
+
+	objTabBar.CloseAll();
+}
+//When X is hovered over
+$(".ui-icon-close").hover(function() {
+	$(this).removeClass("ui-icon-close").addClass("ui-icon-circle-close");
+}, function() {
+	$(this).removeClass("ui-icon-circle-close").addClass("ui-icon-close");
+});
+function closeProperties() {
+	var closebutton = $(".ui-state-active").find(".ui-icon-close")
+	closebutton.click()
+}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" Scroll="NO" onload="InitTabBar();" oncontextmenu="return false;">
+	<table style="width: 100%;">
+		<tr>
+			<td style="width: 0px;"><i class="scrolltableft fas fa-caret-left" style="margin: 0px 0px 0px 0px; cursor: pointer; font-size: 14px;"></i></td>
+			<td style="width: 100%;">
+				<div id="tabs" class="tabs tabs-that-dont-wrap">
+					<ul id="mainul">
+						<li id="appBuilderMain">
+							<a id="hrefappBuilderMain" href="#nodivappbuildermain" onclick="objTabBar.HandleEvent(event)">
+								<span id='ficon' class='ui-icon ui-icon-home ficon'></span>
+								<span id="appBuilderMaintitletext" style="padding-left: 2px">{% trans %}Home{% endtrans %}</span>
+							</a>
+						</li>
+					</ul>
+					<div id="#nodivappbuildermain" ></div>
+				</div>
+			</td>
+			<td style="width: 0px;">
+				<i class="scrolltabright fas fa-caret-right" style="margin: 0px 0px 0px 0px; cursor: pointer; font-size: 14px;"></i>
+			</td>
+		</tr>
+	</table>
+<script type="text/javascript">
+	$('.scrolltableft').click(function() {
+		$('#mainul').animate({
+			scrollLeft : '-=153'
+		}, 1000, 'easeOutQuad');
+	});
+	$('.scrolltabright').click(function() {
+		$('#mainul').animate({
+			scrollLeft : '+=153'
+		}, 1000, 'easeOutQuad');
+	});
+</script>
+</body>
+</html>

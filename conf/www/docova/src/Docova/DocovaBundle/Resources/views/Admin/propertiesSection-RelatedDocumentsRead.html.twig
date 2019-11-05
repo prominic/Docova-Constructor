@@ -1,0 +1,128 @@
+	{% set selected_section = '' %}
+	{% set section_properties = '' %}
+	{% for subform in document.getDocTypeSubform %}
+		{% if subform.getSubform.getFormName == 'Related Documents' %}
+			{% set selected_section = subform %}
+			{% set section_properties = subform.getPropertiesXML(true) %}
+		{% endif %}
+	{% endfor %}
+	{% if section_properties != '' %}
+	<table cellspacing="0" class="elmContainer">
+		<tr>
+			<td class="firstRw">{% trans %}Default Open mode{% endtrans %}:</td>
+			<td class="firstRw">
+				<span class="elNote">{% trans %}When related document has newer version{% endtrans %}...</span>
+				{% if section_properties['RelatedDocOpenMode'] == 1 %}{% trans %}Let user select which one to open{% endtrans %}
+				{% elseif section_properties['RelatedDocOpenMode'] == 2 %}{% trans %}Always open the latest version{% endtrans %}
+				{% elseif section_properties['RelatedDocOpenMode'] == 3 %}{% trans %}Always open the linked version{% endtrans %}
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Doc Specific Open Mode{% endtrans %}:</td>
+			<td>
+				<table cellspacing="0">
+					<tr>
+						<td class="firstRw exc">{% trans %}Open Mode{% endtrans %}</td>
+						<td class="firstRw">{% trans %}Applicable Document Types{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc">{% trans %}User selects version{% endtrans %}:</td>
+						<td class="firstRw">
+	                    {% if doctypes is defined %}
+	                    	{% set selected_doctypes = section_properties['OMUserSelectDocTypeKey']|split(';') %}
+	                    	{% for type in doctypes %}
+	                    	{{ type.getId in selected_doctypes ? (type.getDocName ~ '<br />')|raw : '' }}
+	                    	{% endfor %}
+	                    {% endif %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc">{% trans %}Open latest version{% endtrans %}:</td>
+						<td class="firstRw">
+						{% if doctypes is defined %}
+							{% set selected_doctypes = section_properties['OMLatestDocTypeKey']|split(';') %}
+							{% for type in doctypes %}
+							{{ type.getId in selected_doctypes ? (type.getDocName ~ '<br />')|raw : '' }}
+							{% endfor %}
+						{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw exc">{% trans %}Open linked version{% endtrans %}:</td>
+						<td class="firstRw">
+						{% if doctypes is defined %}
+							{% set selected_doctypes = section_properties['OMLinkedDocTypeKey']|split(';') %}
+							{% for type in doctypes %}
+							{{ type.getId in selected_doctypes ? (type.getDocName ~ '<br />')|raw : '' }}
+							{% endfor %}
+						{% endif %}
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Cross link{% endtrans %}:</td>
+            <td>
+            	{{ section_properties['EnableXLink'] == 1 ? 'Enable cross linking'|trans : '' }}
+				<span class="elNote">{% trans %}When linking to one or more documents, cross link automatically, creating links to the source document in the target document simultaneously{% endtrans %}.</span>
+            </td>
+		</tr>
+		<tr>
+			<td>{% trans %}Linked Files{% endtrans %}:</td>
+            <td>
+            	{{ section_properties['Interface']['EnableLinkedFiles'] == 1 ? 'Enable linked files'|trans : '' }}
+				<span class="elNote">{% trans %}When linking to one or more documents, linked files option allows the attachments in related documents to be launched when the main file is viewe/edited. Allows for the use of embedded/linked content within Office documents (eg. Excel, Word, Powerpoint).{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">
+				{{ section_properties['LaunchLinkedFiles'] == 1 ? 'Auto launch linked files'|trans : '' }}
+				<span class="elNote">{% trans %}Automatically open linked file attachments.{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Location{% endtrans %}:</td>
+            <td>
+				<a name="_RefreshKW_HideRelatedDocs"></a>
+				{{ section_properties['Interface']['DisplayInMore'] == 1 ? 'Display Related Documents in "More" section'|trans : '' }} 
+			</td>
+		</tr>
+		<tr>
+            <td>{% trans %}Document Versioning{% endtrans %}:</td>
+			<td>
+				<span class="elNote">{% trans %}When a new version is created, copy links for the following document types{% endtrans %}:</span>
+				{% if section_properties['RelatedDocType'] == 'N' %}{% trans %}None{% endtrans %}
+				{% elseif section_properties['RelatedDocType'] == 'A' %}{% trans %}All{% endtrans %}
+				{% elseif section_properties['RelatedDocType'] == 'S' %}{% trans %}Selected{% endtrans %}
+				{% endif %}
+			</td>
+		</tr>
+		{% if section_properties['RelatedDocType'] == 'S' %}
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">
+			{% set sdt = '' %}
+			{% if doctypes is defined %}
+				{% set selected_doctypes = section_properties['DocTypeKey']|split(',') %}
+				{% for type in doctypes %}
+					{% set sdt = sdt ~ (type.getId in selected_doctypes ? type.getDocName ~ ', ' : '') %}
+				{% endfor %}
+				{% set sdt = sdt|length > 0 ? sdt[:sdt|length - 2] : sdt %}
+			{% endif %}
+            {{ sdt }}
+			</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td>{% trans %}Visibility{% endtrans %}</td>
+            <td>
+				{% trans %}Hide Related Documents section when{% endtrans %}: 
+				{% if section_properties['Interface']['HideOnReading'] == 1 %}{% trans %}Reading{% endtrans %}{% endif %}
+				{% if section_properties['Interface']['HideOnEditing'] == 1 %}{% trans %}Editing{% endtrans %}{% endif %}
+			</td>
+		</tr>
+	</table>
+	{% endif %}

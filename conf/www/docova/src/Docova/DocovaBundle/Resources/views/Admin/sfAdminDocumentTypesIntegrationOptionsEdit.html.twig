@@ -1,0 +1,47 @@
+	<table class="elmContainer" cellspacing="0">
+		<tr>
+			<td class="firstRw">{%trans%}Options{%endtrans%}:</td>
+			<td class="firstRw">
+				<label class="intgOpt">
+					<input type="checkbox" value="1" name="DisableActivities" {{ document is defined and document.getDisableActivities ? "checked": "" }} /> 
+					{% trans %}Disable Activities{% endtrans %}
+				</label>
+        		<label class="intgOpt">
+        			<input type="checkbox" value="1" name="EnableForDLE" {% if document is not defined or document.getEnableForDle %}checked{% endif %} /> 
+        			{% trans %}Make available to DOCOVA Explorer{% endtrans %}
+        		</label>
+        		<label class="intgOpt">
+        			<input type="checkbox" value="1" name="HideDocsFromDOE" {% if document is defined and document.getHideDocsFromDoe %}checked{% endif %} /> 
+        			{% trans %}Hide documents in Docova Explorer{% endtrans %}
+        		</label>
+        		<label class="intgOpt">
+        			<input type="checkbox" value="1" name="HideDocsFromMobile" {% if document is defined and document.getHideDocsFromMobile %}checked{% endif %} /> 
+        			{% trans %}Hide documents in Mobile{% endtrans %}
+        		</label>
+				<label class="intgOpt">
+					<input type="checkbox" value="1" name="EnableMailAcquire" {% if document is not defined or document.getEnableMailAcquire %}checked{% endif %} /> 
+					{% trans %}Enable acquiring content from user's email{% endtrans %}
+				</label>
+				<label class="intgOpt">
+					<input type="checkbox" value="1" name="EnableDiscussion" {% if document is defined and document.getEnableDiscussion %}checked{% endif %} /> 
+					{% trans %}Allow to create discussion threads{% endtrans %}
+				</label>
+				<label class="intgOpt">
+					<input type="checkbox" value="1" name="PromptForMetadata" {% if document is defined and document.getPromptForMetadata %}checked{% endif %} /> 
+					{% trans %}Prompt for metadata on file drag/drop in DEO{% endtrans %}
+				</label>
+				<label class="intgOpt">
+					<input type="checkbox" value="1" name="EnableForwarding" {% if document is not defined or document.getAllowForwarding %}checked{% endif %} class="hideShow" show="saveForwards" /> 
+					{% trans %}Allow Forwarding{% endtrans %}
+				</label>
+			</td>
+		</tr>
+		<tr class="saveForwards{% if document is defined and not document.getAllowForwarding %} hidden{% endif %}">
+			<td class="firstRw exc">{% trans %}Save Forwards{% endtrans %}:</td>
+			<td class="firstRw exc">
+				<label><input id="ForwardSave" type="radio" value="0" name="ForwardSave" {{ document is not defined or document.getForwardSave == 0 ? 'checked' : '' }} /> {% trans %}Never{% endtrans %}</label>
+				<label><input id="ForwardSave" type="radio" value="1" name="ForwardSave" {{ document is defined and document.getForwardSave == 1 ? 'checked' : '' }} /> {% trans %}Always{% endtrans %}</label> 
+				<label><input id="ForwardSave" type="radio" value="2" name="ForwardSave" {{ document is defined and document.getForwardSave == 2 ? 'checked' : '' }} /> {% trans %}Prompt{% endtrans %}</label>
+			</td>
+		</tr>
+	</table>

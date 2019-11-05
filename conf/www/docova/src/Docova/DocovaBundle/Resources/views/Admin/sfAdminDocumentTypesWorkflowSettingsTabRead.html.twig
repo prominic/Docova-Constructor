@@ -1,0 +1,196 @@
+	<table class="elmContainer" cellspacing="0">
+		<tr>
+			<td class="firstRw exc" colspan="2">{{ document.getEnableLifeCycle ? 'Enable document lifecycle'|trans : '' }}</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="hdr">{% trans %}Document Status{% endtrans %}:</td>
+		</tr>
+		{% if document.getEnableLifeCycle %}
+		<tr>
+			<td class="exc">{% trans %}Draft{% endtrans %}: </td>
+			<td class="exc">{{ document.getInitialStatus }}<span class="elNote">({% trans %}Newly created documents.{% endtrans %})</span></td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td class="exc">{% trans %}Released{% endtrans %}: </td>
+			<td class="exc">{{ document.getFinalStatus }}<span class="elNote">({% trans %}Published documents.{% endtrans %})</span></td>
+		</tr>
+		{% if document.getEnableLifeCycle %}
+		<tr>
+			<td class="exc">{% trans %}Superseded{% endtrans %}: </td>
+			<td class="exc">
+				{{ document.getSupersededStatus }}
+				<span class="elNote">({% trans %}Previously published, replaced by another version.{% endtrans %})</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="exc">{% trans %}Discarded{% endtrans %}: </td>
+			<td class="exc">
+				{{ document.DiscardedStatus }} 
+				<span class="elNote">({% trans %}Discarded drafts that are kept in library.{% endtrans %})</span>
+			</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td class="exc">{% trans %}Archived{% endtrans %}: </td>
+			<td class="exc">
+				{{ document.getArchivedStatus }} 
+				<span class="elNote">({% trans %}Archived documents log status.{% endtrans %})</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="exc">{% trans %}Deleted{% endtrans %}: </td>
+			<td class="exc">
+				{{ document.getDeletedStatus }} 
+				<span class="elNote">({% trans %}Delete from archive log status.{% endtrans %})</span>
+			</td>
+		</tr>
+
+		{% if document.getEnableLifeCycle %}
+		<!--  versionin section  -->
+		<tr>
+			<td colspan="2" class="hdr">{% trans %}Versioning{% endtrans %}:</td>
+		</tr>
+		<tr>
+			<td class="firstRw exc">{{ document.getEnableLifeCycle and document.getEnableVersions ? 'Enable document versioning'|trans : '' }}</td>
+			<td class="firstRw">
+				{{ document.getEnableLifeCycle and document.getEnableVersions and document.getRestrictLiveDrafts ? 'RestrictLive Drafts'|trans : '' }}
+				<span class="elNote">({% trans %}Only allow 1 live Draft at a time in non-Strict mode{% endtrans %})</span>
+			</td>
+		</tr>
+			{% if document.getEnableVersions %}
+		<tr>
+			<td class="exc">{% trans %}Versioning options{% endtrans %}:</td>
+			<td class="exc">
+				{{ document.getStrictVersioning ? 'StrictVersioning': '' }}
+                <span class="elNote">{% trans %}Maintain only one live Draft at a time. Drafts can originate from Released documents or other Draft documents.{% endtrans %}</span>
+				<span class="elNote">{% trans %}Previous Drafts become "Discarded". Release numbers are always the next Major version number.{% endtrans %}</elNote>
+			</td>
+		</tr>
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">
+				{{ document.getAllowRetract ? 'Allow Retract'|trans : '' }}
+                <span class="elNote">{% trans %}Allow retractions of Released documents under Strict Version control.{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">
+				{{ document.getRestrictDrafts ? 'RestrictDrafts'|trans : '' }}
+                <span class="elNote">{% trans %}New Drafts can only originate from Released documents.{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">
+				{{ document.getUpdateBookmarks ? 'Update Bookmarks to Latest Version'|trans : '' }}
+				<span class="elNote">{% trans %}Bookmark documents will be updated to the latest released version of a document.{% endtrans %}</span>
+			</td>
+		</tr>
+			{% endif %}
+		
+			{% if document.getEnableWorkflow %}
+		<!--  Workflow Section  -->
+		<tr>
+			<td colspan="2" class="hdr">{% trans %}Workflow{% endtrans %}:</td>
+		</tr>
+		<tr>
+			<td class="firstRw exc" colspan="2">{{ document.getEnableLifeCycle and document.getEnableWorkflow ? 'Enable document workflow'|trans : '' }}</td>
+		</tr>
+		<tr>
+            <td class="exc">{% trans %}Applicable workflows{% endtrans %}:</td>
+            <td>
+			<!-- workflow list  -->
+			{% if document.getDocTypeWorkflow.count > 0 %}
+				{% for selWfType in document.getDocTypeWorkflow %}
+						{{ selWfType.getWorkflowName }}<br>
+				{% endfor %}
+			{% endif %}
+				<span class="elNote">{% trans %}Default workflows will apply if none selected{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">{{ document.getHideWorkflow ? 'Display workflow actions list in "More" section'|trans : '' }}</td>
+		</tr>
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">{{ document.getDisableDeleteInWorkflow ? 'Document cannot be deleted once workflow starts'|trans : '' }}</td>
+		</tr>
+		<tr>
+			<td class="exc">{% trans %}Start Workflow button{% endtrans %}:</td>
+			<td>
+				{% trans %}Custom button label{% endtrans %}:<br />
+				{{ document.getCustomStartButtonLabel|nl2br }}
+				<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Start Workflow" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="firstRw exc">{% trans %}Custom JS function on Start Workflow button click{% endtrans %}:</td>
+			<td class="firstRw">{{ document.getCustomJSWFStart|nl2br }}</td>
+		</tr>
+		<tr>
+			<td class="exc">{% trans %}Complete Review button{% endtrans %}:</td>
+            <td>
+            	{% trans %}Custom JS function on button click{% endtrans %}:<br /><br />
+            	{{ document.getCustomJSWFComplete|nl2br }}
+			</td>
+		</tr>
+		<tr>
+			<td class="exc">{% trans %}Approve button{% endtrans %}:</td>
+			<td>
+				{% trans %}Custom JS function on button click{% endtrans %}:<br /><br />
+				{{ document.getCustomJSWFApprove|nl2br }}
+			</td>
+		</tr>
+		<tr>
+			<td class="exc">{% trans %}Deny button{% endtrans %}:</td>
+            <td>
+            	{% trans %}Custom JS function on button click{% endtrans %}:<br /><br />
+            	{{ document.getCustomJSWFDeny|nl2br }}
+			</td>
+		</tr>
+		<tr>
+			<td class="exc">{% trans %}Release Document button{% endtrans %}:</td>
+			<td>
+				{% trans %}Custom button label{% endtrans %}:<br /><br />
+				{{ document.getCustomReleaseButtonLabel|nl2br }}
+				<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Release Document" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+			</td>
+		</tr>
+			{% endif %}
+		{% endif %}
+		<tr>
+			<td class="exc">{% trans %}Button visibility{% endtrans %}:</td>
+			<td>
+				{% trans %}Hide when{% endtrans %}: 
+				<label>{{ 'R' in (document.getHideButtons|split(',')) ? 'Reading'|trans : '' }}</label> 
+				<label>{{ 'E' in (document.getHideButtons|split(',')) ? 'Editing'|trans : '' }}</label> 
+				<label>{{ 'C' in (document.getHideButtons|split(',')) ? 'Custom'|trans : '' }}</label>
+				{% if 'C' in (document.getHideButtons|split(',')) %}
+				<div>
+					{% trans %}Custom hide when PHP script{% endtrans %}:<br />
+					{{ document.getEnableLifeCycle and 'C' in (document.getHideButtons|split(',')) ? document.getCustomButtonsHideWhen|nl2br : '' }}
+					<span class="elNote">{% trans %}PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a true (hide) or false (show). Available objects are $docova and $user.{% endtrans %}
+					{% trans %}e.g.{% endtrans %} <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="purple">true</span> : <span class="purple">false</span>; <span class="red">?&gt;</span></span>
+            	</div>
+            	{% endif %}
+			</td>       
+        </tr>
+		<tr>
+			<td class="exc">{% trans %}Applicable Review Policies{% endtrans %}:</td>
+			<td>
+			{% if review_policies|length > 0 %}
+				{% for rp in review_policies %}
+					{{ rp.getPolicyName }}
+					{% if not loop.last %},{% endif %}
+				{% endfor %}
+			{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<td class="exc">{% trans %}Review button label{% endtrans %}:</td>
+			<td>{{ document.getCustomReviewButtonLabel }}</td>
+		</tr>
+	</table>

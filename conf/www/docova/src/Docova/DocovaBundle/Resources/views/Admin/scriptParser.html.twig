@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<title>Script Parser</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/multiselect.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/multiselect.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/admin/sfWorkspaceCommonJsHeader.js') }}" ></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/DesignImportFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/beautify/beautify.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/admin/appBuilderJS.js') }}"></script>
+<script language="JavaScript" type="text/javascript">
+
+
+
+function convertcode() {
+  var fcode = jQuery("#ScriptCode").val();
+  
+  var convertTo = $("#convertTo").val();
+  
+  if ( convertTo == "TWIG"){
+    var LexerObj = new Lexer();
+    LexerObj.setCurrentFieldName ( "MynewField");
+    var newcode = LexerObj.convertCode(fcode, "TWIG");
+    jQuery("#JSCode").val( newcode);
+    return;
+  }
+  var LexerObj = new LexerPHP(); 
+  var newcode = LexerObj.convertCode(fcode, "PHP");
+ 
+  var phpCleaner = new nowClean.php(newcode);
+  var cleanedCode = phpCleaner.clean();
+  var tmp =  btoaEx(cleanedCode);
+  //var newcode = beautify(newcode);
+  jQuery("#JSCode").val( cleanedCode);
+  return;
+
+}
+
+function cleancode(){
+    var fcode = jQuery("#ScriptCode").val();
+    var phpCleaner = new nowClean.php(fcode);
+    var cleanedCode = phpCleaner.clean();
+    jQuery("#JSCode").val( cleanedCode);
+    return;
+    
+}
+
+function runCode(txtCode){
+
+    var finalreturnvalue = null;
+    
+    //txtCode = "try{\r" + txtCode + "\r}catch(e){if(e instanceof _HandleReturnValue){finalreturnvalue = _lastreturnvalue;}else{throw e}}";
+    eval(txtCode);
+    alert(finalreturnvalue);  
+}
+
+
+
+
+</script>
+
+
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<form method="post" action="/Docova/Dev/sj/appbuilder/docovahome.nsf/scriptparserPHP?OpenForm&amp;Seq=1" name="_ScriptParserPHP" autocomplete="off">
+
+
+<br>
+<input name="%%Surrogate_convertTo" type="hidden" value="1">
+<select name="convertTo" id="convertTo">
+<option>JS
+<option>TWIG
+<option selected>PHP</select>
+<br>
+Script: <br>
+
+<textarea name="ScriptCode" id="ScriptCode" cols=170; rows=20 rows="7" cols="50"></textarea>
+<br>
+<br>
+
+<input type="button" onclick="convertcode();" value="Convert"> 
+<input type="button" onclick="cleancode();" value="Clean"> <br>
+<br>
+JavaScript:<br>
+
+<textarea name="JSCode" id="JSCode" cols=170; rows=20 rows="7" cols="50"></textarea>
+</form>
+</body>
+</html>

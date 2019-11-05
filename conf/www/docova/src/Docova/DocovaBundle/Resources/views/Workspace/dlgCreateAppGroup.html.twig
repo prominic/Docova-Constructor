@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% trans %}Create App Group{% endtrans %}</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}"	type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript">
+var info = {
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"ServiceAgent" : "LibraryServices",
+	"UserRoles" : "$$WebClient;[Administration]",
+	"HTTP_Referer" : "",
+	"Query_String" : "OpenForm",
+	"Query_String_Decoded" : "OpenForm",
+	"Path_Info_Decoded" : "{{ path('docova_dlgaddapp') }}?OpenForm",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage') }}",
+	"SecureUrl" : "{{ app.request.getscheme == 'https' ? 'ON' : 'OFF' }}"
+};
+function getinfovar() {
+	return info;
+}
+InitVars(info);
+
+$(function() {
+	$('button').hover(
+		function() { $(this).addClass('ui-state-hover'); },
+		function() { $(this).removeClass('ui-state-hover'); }
+	);
+
+	$('LI').on('click', function() {
+		$(this).toggleClass('selected');
+	});
+
+	$('#myAppGroups').on('change', function() {
+		var unid = $(this).val();
+		$('#selectedApps li').remove();
+		if ($.trim(unid)) {
+			var request = '<Request><Action>GETAPPGROUPINFO</Action><UserName><![CDATA[' + docInfo.UserNameAB + ']]></UserName>';
+			request += '<AppGroupUnid>'+ unid +'</AppGroupUnid>';
+			request += '</Request>';
+			var resulttext = SubmitRequest(request, 'WorkspaceServices');
+			if(resulttext != "FAILED")
+			{
+				$('#AppGroupName').val($('#myAppGroups option:selected').text());
+				var apps_list = resulttext.split(';');
+				for (var x = 0; x < apps_list.length; x++) {
+					$('#availableApps li').each(function() {
+						if ($(this).attr('dockey') == apps_list[x]) {
+							$(this).clone(true).appendTo('#selectedApps');
+							return false;
+						}
+					});
+				}
+			}			
+		}
+	});
+
+	$('#AddApp').on('click', function() {
+		if (!$('#availableApps li.selected').length) {
+			alert('{% trans %}Please select at least one app from left side.{% endtrans %}');
+			return false;
+		}
+
+		$('#availableApps li.selected').each(function(){
+			var dockey = $(this).attr('dockey');
+			var found = false;
+			$('#selectedApps li').each(function() {
+				if ($(this).attr('dockey') == dockey) {
+					found = true;
+					return false;
+				}
+			});
+
+			if (found === false) {
+				$(this).removeClass('selected');
+				$(this).clone(true).appendTo('#selectedApps');
+			}
+		});
+	});
+
+	$('#RemoveApp').on('click', function() {
+		if (!$('#selectedApps li.selected').length) {
+			alert('{% trans %}Please select at least one app from right side.{% endtrans %}');
+			return false;
+		}
+
+		$('#selectedApps li.selected').each(function(){
+			$(this).remove();
+		});
+	});
+});
+
+function SubmitRequest(request, agentName){
+	//send the request to server
+	var processUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" + agentName  + "?OpenAgent"
+	var result;
+	var resulttext;
+	$.ajax({
+		type: "POST",
+		url: processUrl,
+		data: request,
+		cache: false,
+		async: false,
+		dataType: "xml",
+		success: function(xml){
+			result = true;
+			var xmlobj = $(xml);
+			var statustext = xmlobj.find("Result").first().text();
+			if(statustext == "OK"){
+				resulttext = xmlobj.find("Result[ID=Ret1]").text();
+			}
+			else {
+				result = false;
+				resulttext = "FAILED";
+			}
+		},
+		error: function(){
+			result = false
+			resulttext = "FAILED";
+			//provide an error message
+		}
+	});
+	return resulttext;
+}
+</script>
+<style type="text/css">
+TABLE {	width: 100%; }
+SELECT:not(.single) {
+	width: 210px;
+	height: 330px;
+	overflow: hidden;
+	overflow-y: auto;
+}
+BUTTON {
+	width: 27px;
+	float: left;
+	margin-top: 3px;
+}
+UL {
+	margin: 0;
+	padding: 1px;
+	width: 205px;
+	height: 330px;
+	overflow: hidden;
+	overflow-y: auto;
+	list-style: none;
+	border: 1px #CCC solid;
+}
+LI {
+	display: block;
+	font-size: 1.1em;
+	padding: 5px 0 5px 5px;
+	border-bottom: 1px #CCC dashed;
+}
+LI.selected { background-color: #B5C9DF; }
+LI SPAN {
+	float: right;
+	color: #D2B48C;
+	margin-right: 3px;
+}
+LI A { width: 14px; }
+</style>
+</head>
+<body>
+	<table class="tblFields" border="0" cellspacing="0" cellpadding="0">
+		{% if is_edit is defined and is_edit %}
+		<tr valign="top">
+			<td>{% trans %}Select your app-group to edit{% endtrans %}:</td>
+			<td colspan="2">
+				<select class="single" id="myAppGroups">
+					<option value="">- {% trans %}Select{% endtrans %} -</option>
+				{% if user_appgroups|length %}
+					{% for item in user_appgroups %}
+					<option value="{{ item['id'] }}">{{ item['groupName'] }}</option>
+					{% endfor %}
+				{% endif %}
+				</select>
+			</td>
+		</tr>
+		{% endif %}
+		<tr valign="top">
+			<td>{% trans %}App Group Name{% endtrans %}: </td>
+			<td colspan="2">
+				<input type="text" name="AppGroupName" id="AppGroupName" value="" >
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">{% trans %}Choose applications to be presented inside panel.{% endtrans %}</td>
+		</tr>
+		<tr>
+			<td>
+				<ul id="availableApps">
+				{% if allapps|length %}
+					{% for application in allapps %}
+					<li dockey="{{ application.getId }}" type="{{ application.isApp ? 'A' : 'L' }}">
+						<a class="{{ application.getAppIcon ? application.getAppIcon : 'fa-database' }}" style="color:{{ application.getAppIconColor ? application.getAppIconColor : 'orange' }}"></a>
+						{{ application.getLibraryTitle }}{% if not application.getIsApp %}<span class="far fa-database" title="Library"></span>{% endif %}
+					</li>
+					{% endfor %}
+				{% endif %}
+				{% if libgroups|length %}
+					{% for group in libgroups %}
+					<li dockey="{{ group.getId }}" type="LG">
+						<a class="{{ group.getGroupIcon }}" style="color:{{ group.getGroupIconColor ? group.getGroupIconColor : 'orange' }}"></a>
+						{{ group.getGroupTitle }}<span class="far fa-object-group" title="Library Group"></span>
+					</li>					
+					{% endfor %}
+				{% endif %}
+				</ul>
+			</td>
+			<td width="15%">
+				<button title="{% trans %}Add{% endtrans %}" class="ui-button ui-widget ui-state-default ui-corner-all far fa-2x fa-angle-double-right" id="AddApp"></button>
+				<button title="{% trans %}Remove{% endtrans %}" class="ui-button ui-widget ui-state-default ui-corner-all far fa-2x fa-angle-double-left" id="RemoveApp"></button>
+			</td>
+			<td>
+				<ul id="selectedApps">
+				</ul>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -1,0 +1,219 @@
+    		<div class="categories">
+    			<h4 class="activated">{% trans %}My Recently Used Apps{% endtrans %}<i class="far fa-angle-up expand-cat"></i></h4>
+            	<ul class="app_list_container" style="display:block;">
+            	{% if recentapps %}
+            		{% for item in recentapps %}
+            			{% set apl = item['app'] %}
+            			{% set acl = item['access'] %}
+                        {% set apptype = item['apptype'] %}
+                        {% set appid =  apl.getId %}
+                        {% set appicon = (apptype=='L' ? 'fas fa-university' : (apptype == 'A' ? (apl.getAppIcon ? apl.getAppIcon : 'far fa-cogs') : (apptype == "LG" ? apl.getGroupIcon : ''))) %}
+                        {% set appiconcolor = (apptype == 'LG' ? apl.getGroupIconColor : (apl.getAppIconColor ? apl.getAppIconColor : 'orange')) %}
+                        {% set apptitle = (apptype == 'LG' ? apl.getGroupTitle : apl.getLibraryTitle) %}
+                        {% set appdesc = (apptype == 'LG' ? apl.getGroupDescription : apl.getDescription) %}                      
+            		<li class="recentapp openapp" id="{{ appid }}" 
+            			apptype="{{ apptype }}" 
+            			apptitle="{{ apptitle }}" 
+            			appdesc="{{ appdesc }}" 
+            			dockey="{{ appid }}" 
+            			appicon="{{ appicon }}" 
+            			appiconcolor="{{ appiconcolor }}">
+            			<i class="{{ appicon }} fa-4x" style="color:{{ appiconcolor }};"></i>
+            			<div class="rel">
+            				<a class="app_title" href="#">{{ apptitle }}</a>
+            				<p>{{ appdesc }}</p>
+            				<span class="hinky">...</span>
+            			</div>
+        				<ul class="action_btns hidden">
+        					<li class="ui-menu-item"><a class="wrksp open-app">{% trans %}Open{% endtrans %}</a></li>
+        					<li class="{{ item['isApp'] and apl.getIsApp and acl >= 5 ? 'openappbuilder' : 'noaccess' }} ui-menu-item"><a class="wrksp app-builder {{ item['isApp'] and apl.getIsApp and acl >= 5 ? '' : 'disabled' }}">{% trans %}Open in App-Builder{% endtrans %}</a></li>
+        					<li class="separator"></li>
+        					<li class="{{ item['isApp'] and apl.getIsApp and acl >= 5 ? 'copyapp' : 'noaccess' }} ui-menu-item"><a class="wrksp copy-app {{ item['isApp'] and apl.getIsApp and acl >= 5 ? '' : 'disabled' }}">{% trans %}Make Copy{% endtrans %}</a></li>
+        					<li class="{{ not item['isApp'] and item['access'] >= 5 ? 'managelibraries' : 'noaccess' }} ui-menu-item"><a class="wrksp copy-app {{ not item['isApp'] and item['access'] >= 5 ? '' : 'disabled' }}">{% trans %}Manage Libraries{% endtrans %}</a></li>
+        					<li class="{{ item['isApp'] and apl.getIsApp and acl >= 5 ? 'updatedesign' : 'noaccess' }} ui-menu-item"><a class="wrksp update-design {{ item['isApp'] and apl.getIsApp and acl >= 5 ? '' : 'disabled' }}">{% trans %}Update Design{% endtrans %}</a></li>
+        					<li class="{{ (item['isApp'] and apl.getIsApp and acl >= 5) or (not item['isApp'] and item['access'] >= 5) ? 'deleteapp' : 'noaccess' }} ui-menu-item"><a class="wrksp delete-app {{ (item['isApp'] and apl.getIsApp and acl >= 5) or (not item['isApp'] and item['access'] >= 5) ? '' : 'disabled' }}">{% trans %}Delete Application{% endtrans %}</a></li>
+        					<li class="separator"></li>
+        					<li class="appproperties ui-menu-item"><a class="wrksp app-property">{% trans %}Properties{% endtrans %}</a></li>
+        				</ul>
+            		</li>
+            		{% endfor %}
+            	{% endif %}
+            	</ul>
+    		</div>
+    		{% if appgroups %}
+    			{% for group in appgroups %}
+    		<div class="categories">
+    			<h4>{{ group['groupName'] }} <i class="far fa-angle-down expand-cat"></i></h4>
+        		<ul class="app_list_container" style="display:none;">
+        		{% if group['appslist']|length %}
+        			{% for item in group['appslist'] %}
+	        			{% set apptype = item['isApp'] ? (item['Is_Template'] ? 'T' : 'A' ) : (item['LibGroupId'] ? 'LG' : 'L') %}
+	        			{% set appid = (apptype == 'LG' ? item['LibGroupId'] : item['AppId']) %}
+    	                {% set appicon = (apptype=='L' ? 'fas fa-university' : (apptype == 'A' ? (item['appIcon'] ? item['appIcon'] : 'far fa-cogs') : (apptype == "LG" ? item['groupIcon'] : ''))) %}
+        	            {% set appiconcolor = (apptype == 'LG' ?  item['groupIconColor'] : (item['appIconColor'] ? item['appIconColor'] : 'orange')) %}
+            	        {% set apptitle = (apptype == 'LG' ? item['groupTitle'] : item['Library_Title']) %}
+                	    {% set appdesc = (apptype == 'LG' ? item['groupDescription'] : item['Description']) %}        			
+            		<li id="{{ appid }}" class="openapp" 
+            			apptype="{{ apptype }}" 
+            			apptitle="{{ apptitle }}" 
+            			appdesc="{{ appdesc }}" 
+            			dockey="{{ appid }}" 
+            			appicon="{{ appicon }}" 
+            			appiconcolor="{{ appiconcolor }}">
+            			<i title="{{ apptitle }}" class="{{ appicon }} fa-4x" style="color:{{ appiconcolor }};"></i>
+            			<div class="rel">
+            				<a class="app_title" href="#">{{ apptitle }}</a>
+            				<p>{{ appdesc }}</p>
+            				<span class="hinky">...</span>
+            			</div>
+        				<ul class="action_btns hidden">
+        					<li class="ui-menu-item"><a class="wrksp open-app">{% trans %}Open{% endtrans %}</a></li>
+        					<li class="{{ item['isApp'] and item['access'] >= 5 ? 'openappbuilder' : 'noaccess' }} ui-menu-item"><a class="wrksp app-builder {{ item['isApp'] and item['access'] >= 5 ? '' : 'disabled' }}">{% trans %}Open in App-Builder{% endtrans %}</a></li>
+        					<li class="separator"></li>
+        					<li class="{{ item['isApp'] and item['access'] >= 5 ? 'copyapp' : 'noaccess' }} ui-menu-item"><a class="wrksp copy-app {{ item['isApp'] and item['access'] >= 5 ? '' : 'disabled' }}">{% trans %}Make Copy{% endtrans %}</a></li>
+        					<li class="{{ item['LibGroupId'] and item['access'] >= 5 ? 'managelibraries' : 'noaccess' }} ui-menu-item"><a class="wrksp copy-app {{ item['LibGroupId'] and item['access'] >= 5 ? '' : 'disabled' }}">{% trans %}Manage Libraries{% endtrans %}</a></li>
+        					<li class="{{ item['isApp'] and item['access'] >= 5 ? 'updatedesign' : 'noaccess' }} ui-menu-item"><a class="wrksp update-design {{ item['isApp'] and item['access'] >= 5 ? '' : 'disabled' }}">{% trans %}Update Design{% endtrans %}</a></li>
+        					<li class="{{ item['access'] >= 5 ? 'deleteapp' : 'noaccess' }} ui-menu-item"><a class="wrksp delete-app {{ item['access'] >= 5 ? '' : 'disabled' }}">{% trans %}Delete Application{% endtrans %}</a></li>
+        					<li class="separator"></li>
+        					<li class="appproperties ui-menu-item"><a class="wrksp app-property">{% trans %}Properties{% endtrans %}</a></li>
+        				</ul>
+            		</li>
+        			{% endfor %}
+        		{% endif %}
+    			</ul>
+    		</div>
+    			{% endfor %}
+    		{% endif %}
+    		<div class="categories" id="all_apps">
+    			<h4>{% trans %}All Apps{% endtrans %} <i class="far fa-angle-down expand-cat"></i></h4>
+        		<ul class="app_list_container" style="display:none;">
+            {% if applications %}
+            	{% for item in applications %}
+            		{% set apl = item['app'] %}
+            		{% set acl = item['access'] %}
+                    {% set apptype = item['apptype'] %}
+                    {% set appid = apl['id'] %}
+                    {% set appicon = (apptype=='L' ? 'fas fa-university' : (apl['icon'] ? apl['icon'] : 'far fa-cogs')) %}
+                    {% set appiconcolor = (apl['iconcolor'] ? apl['iconcolor'] : 'orange') %}
+                    {% set apptitle = apl['title'] %}
+                    {% set appdesc = apl['dscp'] %}            		
+            		
+            		<li id="{{ appid }}" class="openapp" apptype="{{ apptype }}" apptitle="{{ apptitle }}" appdesc="{{ appdesc }}" dockey="{{ appid }}" appicon="{{ appicon }}" appiconcolor="{{ appiconcolor }}">
+            			<i title="{{ apptitle }}" class="{{ appicon }} fa-4x" style="color:{{ appiconcolor }};"></i>
+            			<div class="rel">
+            				<a class="app_title" href="#">{{ apptitle }}</a>
+            				<p>{{ appdesc }}</p>
+            				<span class="hinky">...</span>
+            			</div>
+        				<ul class="action_btns hidden">
+        					<li class="ui-menu-item"><a class="wrksp open-app">{% trans %}Open{% endtrans %}</a></li>
+        					<li class="{{ apl['isapp'] and acl >= 5 ? 'openappbuilder' : 'noaccess' }} ui-menu-item"><a class="wrksp app-builder {{ apl['isapp'] and acl >= 5 ? '' : 'disabled' }}">{% trans %}Open in App-Builder{% endtrans %}</a></li>
+        					<li class="separator"></li>
+        					<li class="{{ apl['isapp'] and acl >= 5 ? 'copyapp' : 'noaccess' }} ui-menu-item"><a class="wrksp copy-app {{ apl['isapp'] and acl >= 5 ? '' : 'disabled' }}">{% trans %}Make Copy{% endtrans %}</a></li>
+        					<li class="{{ not apl['isapp'] and apl['creator'] and acl >= 5 ? 'managelibraries' : 'noaccess' }} ui-menu-item"><a class="wrksp copy-app {{ not apl['isapp'] and apl['creator'] and acl >= 5 ? '' : 'disabled' }}">{% trans %}Manage Libraries{% endtrans %}</a></li>
+        					<li class="{{ apl['isapp'] and acl >= 5 ? 'updatedesign' : 'noaccess' }} ui-menu-item"><a class="wrksp update-design {{ apl['isapp'] and acl >= 5 ? '' : 'disabled' }}">{% trans %}Update Design{% endtrans %}</a></li>
+        					<li class="{{ (apl['isapp'] and acl >= 5) or (not apl['isapp'] and acl >= 5) ? 'deleteapp' : 'noaccess' }} ui-menu-item"><a class="wrksp delete-app {{ (apl['isapp'] and acl >= 5) or (not apl['isapp'] and acl >= 5) ? '' : 'disabled' }}">{% trans %}Delete Application{% endtrans %}</a></li>
+        					<li class="separator"></li>
+        					<li class="appproperties ui-menu-item"><a class="wrksp app-property">{% trans %}Properties{% endtrans %}</a></li>
+        				</ul>
+            		</li>
+            	{% endfor %}
+            {% endif %}
+        		</ul>    		
+	    		<div id="loadmore" class="hidden"></div>
+    		</div>
+    		<div class="categories">
+    			<h4>{% trans %}Templates{% endtrans %} <i class="far fa-angle-down expand-cat"></i></h4>
+        		<ul class="app_list_container" style="display:none;">
+        		{% if templates %}
+        		    {% for item in templates %}
+           			    {% set apl = item['app'] %}
+            			{% set acl = item['access'] %}
+                        {% set apptype = 'T' %}
+                        {% set appid =  apl.getId %}
+                        {% set appicon = (apl.getAppIcon ? apl.getAppIcon : 'far fa-cogs') %}
+                        {% set appiconcolor = (apl.getAppIconColor ? apl.getAppIconColor : 'orange') %}
+                        {% set apptitle = apl.getLibraryTitle %}
+                        {% set appdesc = apl.getDescription %}            		        
+        			<li id="{{ appid }}" class="openapp" apptype="T" apptitle="{{ apptitle }}" appdesc="{{ appdesc }}" dockey="{{ appid }}" appicon="{{ appicon }}" appiconcolor="{{ appiconcolor }}">
+        				<i class="{{ appicon }} fa-4x" style="color:{{ appiconcolor }};"></i>
+        				<div class="rel">
+            				<a class="app_title" href="#">{{ apptitle }}</a>
+            				<p>{{ appdesc }}</p>
+            				<span class="hinky">...</span>
+            			</div>
+        				<ul class="action_btns hidden">
+        					<li class="ui-menu-item"><a class="wrksp open-app">{% trans %}Open{% endtrans %}</a></li>
+        					<li class="{{ acl >= 5 ? 'openappbuilder' : 'noaccess' }} ui-menu-item"><a class="wrksp app-builder {{ acl >= 5 ? '' : 'disabled' }}">{% trans %}Open in App-Builder{% endtrans %}</a></li>
+        					<li class="separator"></li>
+        					<li class="{{ acl >= 5 ? 'copyapp' : 'noaccess' }} ui-menu-item"><a class="wrksp copy-app {{ acl >= 5 ? '' : 'disabled' }}">{% trans %}Make Copy{% endtrans %}</a></li>
+        					<li class="noaccess ui-menu-item"><a class="wrksp copy-app disabled">{% trans %}Manage Libraries{% endtrans %}</a></li>
+        					<li class="{{ acl >= 5 ? 'updatedesign' : 'noaccess' }} ui-menu-item"><a class="wrksp update-design {{ acl >= 5 ? '' : 'disabled' }}">{% trans %}Update Design{% endtrans %}</a></li>
+        					<li class="{{ acl >= 5 ? 'deleteapp' : 'noaccess' }} ui-menu-item"><a class="wrksp delete-app {{ acl >= 5 ? '' : 'disabled' }}">{% trans %}Delete Application{% endtrans %}</a></li>
+        					<li class="separator"></li>
+        					<li class="appproperties ui-menu-item"><a class="wrksp app-property">{% trans %}Properties{% endtrans %}</a></li>
+        				</ul>
+        			</li>
+        			{% endfor %}
+        		{% endif %}
+        		</ul>
+    		</div>
+    		<div class="categories">
+    			<h4>{% trans %}System{% endtrans %} <i class="far fa-angle-down expand-cat"></i></h4>
+        		<ul class="app_list_container" id="system_apps" style="display:none;">
+        		{% if is_granted('ROLE_ADMIN') or isLibAdmin %}
+        			<li id="Admin" class="openapp" apptype="SA" apptitle="{% trans %}Admin{% endtrans %}" appdesc="{% trans %}DOCOVA Administration{% endtrans %}">
+        				<i class="far fa-street-view fa-4x"></i>
+        				<div>
+            				<a class="app_title" href="#">{% trans %}Admin{% endtrans %}</a>
+            				<p>DOCOVA {% trans %}Administration{% endtrans %}</p>
+            			</div>
+        			</li>
+        			<li id="AppBuilder" class="openapp" apptype="SA" apptitle="{% trans %}App-Builder{% endtrans %}" appdesc="{% trans %}DOCOVA Application Builder{% endtrans %}">
+        				<i class="far fa-cog fa-4x"></i>
+        				<div>
+            				<a class="app_title" href="#">{% trans %}App-Builder{% endtrans %}</a>
+            				<p>{% trans %}DOCOVA Application Builder{% endtrans %}</p>
+            			</div>
+        			</li>
+        		{% elseif user.getUserProfile.getCanCreateApp %}
+        			<li id="AppBuilder" class="openapp" apptype="SA" apptitle="{% trans %}App-Builder{% endtrans %}" appdesc="{% trans %}DOCOVA Application Builder{% endtrans %}">
+        				<i class="far fa-cog fa-5x"></i>
+        				<div>
+            				<a class="app_title" href="#">{% trans %}App-Builder{% endtrans %}</a>
+            				<p>{% trans %}DOCOVA Application Builder{% endtrans %}</p>
+            			</div>
+        			</li>
+        		{% endif %}
+        			<li id="Dashboard" class="openapp" apptype="SA" apptitle="{% trans %}Dashboard{% endtrans %}" appdesc="{% trans %}DOCOVA User Dashboard{% endtrans %}">
+        				<i class="far fa-chart-area fa-4x"></i>
+        				<div>
+            				<a class="app_title" href="#">{% trans %}Dashboard{% endtrans %}</a>
+            				<p>{% trans %}DOCOVA User Dashboard{% endtrans %}</p>
+            			</div>
+        			</li>
+        		{% if is_granted('ROLE_ADMIN') or isLibAdmin %}
+        			<li id="Designer" class="openapp" apptype="SA" apptitle="{% trans %}Designer{% endtrans %}" appdesc="{% trans %}DOCOVA Form Designer{% endtrans %}">
+        				<i class="far fa-cog fa-4x"></i>
+        				<div>
+            				<a class="app_title" href="#">{% trans %}Designer{% endtrans %}</a>
+            				<p>{% trans %}DOCOVA Form Designer{% endtrans %}</p>
+            			</div>
+        			</li>
+        		{% endif %}
+        			<li id="Libraries" class="openapp" apptype="SA" apptitle="{% trans %}Libraries{% endtrans %}" appdesc="{% trans %}DOCOVA Libraries Repository{% endtrans %}">
+        				<i class="fas fa-university fa-4x"></i>
+        				<div>
+            				<a class="app_title" href="#">{% trans %}Libraries{% endtrans %}</a>
+            				<p>{% trans %}DOCOVA Libraries Repository{% endtrans %}</p>
+            			</div>
+        			</li>
+        			<li id="Search" class="openapp" apptype="SA" apptitle="{% trans %}Search{% endtrans %}" appdesc="{% trans %}DOCOVA Federated Search{% endtrans %}">
+        				<i class="far fa-search fa-4x"></i>
+        				<div>
+            				<a class="app_title" href="#">{% trans %}Search{% endtrans %}</a>
+            				<p>{% trans %}DOCOVA Federated Search{% endtrans %}</p>
+            			</div>
+        			</li>
+        		</ul>
+			</div>    		

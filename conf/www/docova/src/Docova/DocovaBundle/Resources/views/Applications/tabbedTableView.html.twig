@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/tabFunctions.js') }}" charset="UTF-8"></script>
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styletabbedtable.css') }}">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.scrollabletab.js') }}" charset="UTF-8"></script>
+<script>
+function InitTabBar(){
+	objTabBar = new ObjTabBar();
+	objTabBar.Init();
+	objTabBar.tabs["appViewMain"] = {
+        "title": "{{ app.request.query.get('title') }}",
+        "frameID": "appVIewMain",
+        "contentType": "F",
+        "url": "about:blank"
+	};
+	jQuery("ul").css("border-bottom-left-radius", "0px");
+	jQuery("ul").css("border-bottom-right-radius", "0px");
+	jQuery("ul").css("border-top-left-radius", "0px");
+	jQuery("#tabs").css("margin-right", "2px");
+	jQuery("#tabs").css("border", "0px");
+}
+function closeAll(){
+	objTabBar.CloseAll();
+}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" Scroll="NO"  onload="InitTabBar();" oncontextmenu="return false;">
+	<div id="tabs" class="tabs">
+		<ul id="mainul">
+			<li id="appViewMain">
+				<a id="hrefappViewMain" href="#nodivappviewmain" onclick="objTabBar.HandleEvent(event)">
+					<span id='ficon' class='ui-icon ui-icon-folder-open ficon'></span>
+					<span id="appViewMaintitletext" style="padding-left:8px">{{ app.request.query.get('title') }}</span>
+				</a>
+			</li>
+		</ul>
+		<div id="#nodivappviewmain"/>
+	</div>
+</body>
+</html>

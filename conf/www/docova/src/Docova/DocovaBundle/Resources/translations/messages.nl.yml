@@ -1,0 +1,1546 @@
+"'More' section label": "'Meer' sectie label"
+"e.g. &quot;D.Doc_Title = 'my_value' AND (CU.userNameDnAbbreviated = 'DLI Tools/DOCOVA' OR AU.userNameDnAbbreviated = 'DLI Tools/DOCOVA')&quot;" : "bijv. &quot;D.Doc_Title = 'my_value' AND (CU.userNameDnAbbreviated = 'DLI Gereedschap/DOCOVA' OR AU.userNameDnAbbreviated = 'DLI Tools/DOCOVA')&quot;"
+"eg: Server/ABC (use Abbreviated format)" : "bijvoorbeeld: Server/ABC (gebruik Verkort schema)"
+"Error, no names found for instant messaging." : "Fout, geen namen gevonden voor instant messaging."
+"Error: InitVars - info parameter is undefined" : "Fout: InitVars - info parameter is undefined"
+"Error: No attachments section found or attachment section not initialized properly." : "Fout: Geen bijlagen sectie gevonden of sectie bijlage niet juist geïnitialiseerd."
+"Error: Printer %printername% could not be selected as the default printer." : "Fout: Printer% printername% kon niet worden geselecteerd als de standaard printer."
+"Error: Printer" : "Fout: Printer"
+"Error: Unable to launch folder browse window." : "Fout: Kan map browse venster te openen."
+"Error: Unable to set default printer. No printer specified." : "Fout: Kan geen standaard printer instellen. Geen printer opgegeven."
+"For example: authenticate your internal users with LDAP/AD and external users with DOCOVA." : "Bijvoorbeeld: authenticeren uw interne gebruikers met LDAP/AD en externe gebruikers met DOCOVA."
+"In all cases, PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns true (allowed) or false (not allowed). Default is true. Available objects are $docova and $user." : "In alle gevallen, PHP-script omsloten door \"<span class =\"red\">&lt;? ?&Gt;</ span>\" dat de ware (toegestaan) of onwaar retourneert (niet toegestaan) Standaard geldt Beschikbare objecten zijn $ docova en $user"
+"Incorrect credential!" : "Onjuiste referentie!"
+"Note: The profile picture must be 180x180 pixels." : "Opmerking: Het profiel foto moet 180x180 pixels."
+"Note: When checked the user credentials will be emailed to the user along with a link to DOCOVA." : "Opmerking: Wanneer controleerde de gebruikersgegevens zullen worden gemaild naar de gebruiker, samen met een link naar DOCOVA."
+"Operation did not succeed successfully!" : "De operatie is niet succesvol verlopen!"
+"Password Do Not Match!" : "Wachtwoord komt niet overeen!"
+"Password Match!" : "Wachtwoord match!"
+"PDF Conversion Failed!" : "PDF-conversie mislukt!"
+"Percentage (value*100)" : "Percentage (waarde * 100)"
+"PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a true (disable) or false (enabled). Default is false. Available objects are $docova and $user." : "PHP-script omsloten door \"<span class=\"red\">&lt;? ?&gt;</span>\". Dat geeft een echte (uitschakelen) of onwaar (ingeschakeld) Standaard vals Beschikbare objecten zijn $docova en $user."
+"PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a true (hide) or false (show). Combined with the built-in hide criteria. Available objects are $docova and $user." : "PHP-script omsloten door \"<span class =\"red\">&lt;? ?&gt;</span>\" dat een ware (verberg) geeft of onwaar (toon) in combinatie met de ingebouwde hide criteria Beschikbare objecten zijn $docova en $gebruiker."
+"Please select a folder from the left hand side to navigate to your documents!" : "Selecteer een map in de linkerkant om te navigeren om uw documenten!"
+"Search for: ( Use AND, OR, and wildcards like *, ? To search for exact phrase use &quot; )" : "Zoeken naar: ( Gebruik AND, OR, en wildcards zoals *, ? te zoeken voor de exacte aanduiding gebruiken &quot;)"
+"Selected page is out of range!" : "Geselecteerde pagina is buiten bereik!"
+"Separate values with carriage return. If required, include value aliases separated by &quot;|&quot; character (Example: Choice Text|Field Value)." : "Afzonderlijke waarden met harde return. Indien nodig, onder meer waarde aliassen gescheiden door &quot;|&quot; karakter (Voorbeeld: Keuze tekst|Veld Waarde)."
+"String value or PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a text string; available objects are $docova and $user.<br>e.g. <span class=\"red\">&lt;?</span> <span class=\"purple\">return</span> $docova->isNew() ? <span class=\"blue\">'Enter Subject'</span> : <span class=\"blue\">''</span>; <span class=\"red\">?&gt;</span>" : "String waarde of PHP-script omsloten door \"<span class=\"red\">&lt;? ?&gt;</span>\" dat een tekenreeks retourneert; Beschikbare objecten zijn $docova en $user.<br>bijvoorbeeld <span class=\"red\">&lt;?</ Span> <span class=\"purple\">Terug</ span>$docova->isNew() ?<span class=\"blue\">'Enter onderwerp'</ span>"
+"Tasks: document review items, escalation email notifications." : "Taken: document review artikelen, escalatie e-mailberichten."
+"Tasks: library archiver." : "Taken: bibliotheek archiver."
+"Tasks: trash deletion, expired log deletion, expired archive deletion." : "Taken: afval verwijderen, verlopen log verwijderen, verlopen archief verwijderen."
+"The Server Web Path should not have any forward '/' slashes nor 'http://' in it." : "De Server Web Pad mag geen vooruit '/' slashes hebben noch 'http'"
+"Warning: An existing draft or pending version of this document,\ncreated by %hasdraft%, was found.\n\nIf you continue it will be discarded.\n\nContinue?" : "Waarschuwing: Een bestaand ontwerp of hangende versie van dit document, \ncreated door% hasdraft%, werd gevonden \n\nAls u verder zal worden verwijderd \n\nDoorgaa?"
+"When Adding Subscribers, only pick individual's names, not groups" : "Bij het toevoegen van abonnees, alleen individuele namen, niet groepen halen"
+'A log file was found, indicating you have recoverable attachments,\rhowever the corresponding files could not be found on your local PC.' : 'Een logbestand werd gevonden, met vermelding van je realiseerbare bijlagen \rhowever de bijbehorende bestanden konden niet worden gevonden op uw lokale PC.'
+'Could not initialize %currentObject% object.\rError' : 'Kan niet initialiseren% currentObject% object. \rError'
+'Could not locate user''s manager profile. Check to see if the manager''s profile exists and the manager field : under the work tab for this user is populated.' : 'De manager van het profiel ''Kan gebruiker niet vinden. Controleer of de beheerder het profiel bestaat en het veld manager onder het tabblad werk voor deze gebruiker wordt bevolkt.'
+'Could not open the template file: ''%filename%'' it may be already opened.' : 'Kan de template bestand niet openen: ''%filename%'' kan nu al worden geopend.'
+'Email Address %emailaddress% already exists. Please choose a different email address.' : 'E-mailadres% emailadres% bestaat al. Kies een ander e-mailadres. '
+'File %filename% is currently checked out by %person%. Please see document log for more details' : 'Bestand% filename% wordt momenteel gecontroleerd door% persoon%. Zie document log voor meer informatie '
+'No documents with a subject starting with %subject% were found' : 'Geen documenten met een onderwerp te beginnen met %onderwerp% werden gevonden'
+'Only files with %allowedextension% extensions are allowed.' : 'Alleen bestanden met% allowedextension% extensies zijn toegestaan.'
+'Operation did not complete.\rError: No data received from server.' : 'Operation niet voltooid.\rFout: geen gegevens ontvangen van server.'
+'The %simplefile% file is currently open in %assocapp%.  Please save and close that file before trying to Save this document.' : 'The% simplefile% file is geopend in% assocapp%. Gelieve te slaan en te sluiten dat bestand voordat u dit document opslaan.'
+'The file %filename% has been checked out by %person% on %checkoutdate% .\rYou can replace this file once it is checked in.' : 'Het bestand% filename% naar buiten is gecontroleerd door% persoon% on% checkoutdate%. \rJe kunt dit bestand te vervangen als het eenmaal is ingecheckt.'
+'The file %filename% has been checked out by %person% on %checkoutdate%.\rYou can only download this file and edit it locally. Once the file is checked in you will be able to edit it in-place.' : 'Het bestand% filename% naar buiten is gecontroleerd door% persoon% on% checkoutdate%. \rU kunt dit bestand downloaden en bewerken lokaal. Zodra het bestand is ingecheckt bent u in staat om het te bewerken in-place.'
+'The log file will be removed.\r\rFile(s) not found' : 'Het logbestand wordt verwijderd. \r\ VBESTAND (s) niet gevonden'
+'This document type can contain only %maxfiles% attachment(s).' : 'Dit document type kan slechts% MaxFiles% bijlage (n) bevatten.'
+'User ID %username% already exists. Please choose a different user ID.' : 'User ID% username% bestaat al. Kies een andere gebruikersnaam. '
+(enter a list of extensions separated by comma. Eg. doc,docx,docm : (Voer een lijst met extensies van elkaar gescheiden door een komma. Bijv. Doc, docx, docm
+0 for unlimited : 0 voor een onbeperkt aantal
+A copy of the file : Een kopie van het bestand
+A target field for the returned date has not been provided. : Een doelstelling veld voor het teruggekeerde datum niet is verstrekt.
+Account Type : account type
+Acknowledge Required : erken Verplicht
+Acknowledged : Erkend
+Acquire : Verkrijgen
+Acquire from email : Verwerven van e-mail
+Acquire from scanner : Over te nemen van de scanner
+Acquire Mail Content : Verwerven Mail Content
+Action 1 : actie 1
+Action 2 : actie 2
+Action 3 : actie 3
+Action default instruction : Actie standaard instructie
+Action option : actie optie
+Actions - 'Send' selected but no recipients defined : Acties - 'Verstuur' geselecteerd, maar geen ontvangers gedefinieerd
+Actions : acties
+Activate discarded : activeren weggegooid
+Activate version? : versie activeren?
+Active : Actief
+Activities : activiteiten
+Activities created. : Activiteiten gemaakt.
+Activities were created for all Recipients. : Activiteiten werden gemaakt voor alle ontvangers.
+Activity Action : activiteit Actie
+Activity Complete. : Activiteit Compleet.
+Activity Definition : activiteit Definitie
+Activity Instruction : activiteit Instructie
+Activity was successfully completed. : De activiteit werd met succes afgerond.
+Add a Panel : Voeg een Panel
+Add an available panel. : Voeg een beschikbare panel.
+Add Archive Policy : Voeg Archief Beleid
+Add Comment : Voeg commentaar toe
+Add Document Type : Voeg Document Type
+Add Files : Bestanden toevoegen
+Add Files : Bestanden toevoegen
+Add Group : Groep toevoegen
+Add Library : Voeg Bibliotheek
+Add New Activity : Nieuwe activiteit toevoegen
+Add New Column : Add New Column
+Add New Field : Nieuw veld toevoegen
+Add New HTML Resource : Nieuwe toevoegen HTML Resource
+Add New System Message : Add New System Message
+Add New Template : Add New Template
+Add Panel : Voeg Panel
+Add Review Policy : Voeg Review Beleid
+Add Selected Names : Toevoegen Geselecteerde Namen
+Add to favorites : Toevoegen aan favorieten
+Add to Favorites : Toevoegen aan favorieten
+Add User : Voeg gebruiker toe
+Add users/groups here to restrict who can delete documents in this folder. : Voeg gebruikers / groepen hier om te beperken wie documenten in deze map kunt verwijderen.
+Add Workflow : Voeg Workflow
+Add Workflow Step : Voeg Workflow Stap
+Adding Files : bestanden toevoegen
+Additional Editors : extra Editors
+Additional Editors entered on the document : Extra Editors getreden op het document
+Additional style CSS text : Extra stijl CSS text
+Address Bar : Adresbalk
+Address Book Override : Adresboek Override
+Admin : Administratie
+Administration : Administratie
+Administrator : Beheerder
+Advanced : vergevorderd
+Advanced Options : Geavanceerde mogelijkheden
+Advanced Search : geavanceerd zoeken
+After being deleted, this perspective will no longer be available in related folders.\rDo you want to continue? : Na te zijn verwijderd, wordt dit perspectief niet meer beschikbaar in verwante mappen. \rWilt u wilt doorgaan?
+Alignment : opstelling
+All : Alle
+All Apps : Alle apps
+All Authors can delete by default (blank). : Alle auteurs kunnen verwijderen door standaard (blanco).
+All Document Types contain a reserved field called ActivityRecipients, a text field that can accept a comma delimited list of User Names and/or Groups which will be used as the default Recipient list in a new Activity. : Alle Document Types bevat een gereserveerd veld genaamd ActivityRecipients, een tekstveld dat een door komma's gescheiden lijst met gebruikersnamen en / of groepen die zal worden gebruikt als de standaard lijst met ontvangers in een nieuwe activiteit kan accepteren.
+All LDAP/AD : Alle LDAP / AD
+All on start up : Alle bij het opstarten
+All Tags : alle tags
+All versions (exclude drafts) : Alle versies (exclusief tocht)
+All versions (include drafts) : Alle versies (inclusief dammen)
+All versions (including drafts) : Alle versies (inclusief ontwerpen)
+All versions : alle versies
+Allow approver to edit? : Laat approver te bewerken?
+Allow author to modify participant names : Auteur toestaan ​​namen van de deelnemers te wijzigen
+Allow authors to create revisions of documents they have not authored : Toestaan ​​dat auteurs om herzieningen van documenten die zij hebben niet geschreven te creëren
+Allow custom sort by clicking column heading : Laat aangepaste sorteren door te klikken op kolomkop
+Allow document author to customize this process : Laat document auteur om dit proces aan te passen
+Allow Forwarding : laat Forwarding
+Allow Retract : laat Retract
+Allow retractions of Released documents under Strict Version control. : Laat intrekkingen van de vrijgegeven documenten onder strikte Versiebeheer.
+Allow to create discussion threads : Laat discussiethreads creëren
+Allow to release bypassing workflow : Laat overbrugging workflow vrij
+Allowed Document Types : Toegestaan ​​Document Types
+Allowed file extensions : Toegestane bestandsextensies
+Always : Altijd
+Always open the latest version : Open altijd de laatste versie
+Always open the linked version : Open altijd de gekoppelde versie
+An empty list means share with everybody. : Een lege lijst betekent met iedereen delen.
+An error has been encountered : Er is een fout opgetreden
+An error has occurred in the copyFileToTempLocation function. : Er is een fout opgetreden in de copyFileToTempLocation functie.
+An error occured while subscribing new users columns, check event logs for error. : Er is een fout opgetreden bij het inschrijven van nieuwe gebruikers columns, controleer gebeurtenislogboeken voor fouten.
+An error occurred retrieving data from the server. : Er is een fout opgetreden het ophalen van gegevens van de server.
+and : en
+and satisfy the following custom formula : en voldoen aan de volgende aangepaste formule
+and/or : en/of
+Answer/Response : Antwoord/Response
+App-Builder : Applicatiebouwer
+App Builder : Applicatiebouwer
+App Properties : App-eigenschappen
+Appearance : Uiterlijk
+Append : toevoegen
+Append column : voegt kolom
+Append Version Information : Voegt Versie-informatie
+Applicable Custom Perspectives : Toepasselijk Custom Perspectives
+Applicable Document Types : Toepasselijk Document Types
+Applicable document types : Toepasselijk documenttypes
+Applicable in multi server environment : Toepasselijk in multi server omgeving
+Applicable Libraries : Toepasselijk bibliotheken
+Applicable Review Policies : Toepasselijk Beoordeling Beleid
+Applicable workflows : Toepasselijk workflows
+Application Builder : Applicatiebouwer
+Application Integration : Application Integration
+Application Settings : Applicatie instellingen
+Application title : Application titel
+Application Workspace : Application Workspace
+Application Logo : ApplicationLogo
+Applications : toepassingen
+Apply Changes : Wijzigingen toepassen
+Approve : Goedkeuren
+Approve button : knop goedkeuren
+Approve button label : Goedkeuren knop label
+Apps & Libraries : Toepassingen en bibliotheken
+Apr : april
+Archive document : archief document
+Archive on : archiveren
+Archive Policies : archief beleid
+Archive retention : archief retentie
+Archive Selected : archief Geselecteerde
+Archive Selected Documents : Archiveer geselecteerde documenten
+Archived : gearchiveerd
+Archived documents log status. : Gearchiveerde documenten log-status.
+Archiving : Archiveren
+Archiving document? : Archiving document?
+Archiving documents? : Archiveren van documenten?
+Archiving policies : archiveringsbeleid
+Are you sure to delete this subform? : Weet u zeker dat dit subform verwijderen?
+Are you sure to replace with current element? : Weet je zeker dat te vervangen door de huidige element?
+Are you sure you want to delete the %currentfolder% folder? : Weet u zeker dat u de map%% CurrentFolder verwijderen?
+Are you sure? : Weet je het zeker?
+Area : Gebied
+As per applicable policy : Per toepassing beleid
+Ascending : oplopend
+Associated template files : Bijbehorende template bestanden
+At least 1 file is still open in an application. : Tenminste 1 bestand is nog open in een toepassing.
+Attach Profile Picture : Bevestig profiel Picture
+Attachment Handling : Attachment Handling
+attachments(s). : attachments (s).
+Attribute : Attribuut
+Attributes : attributen
+Audit Log : audit Log
+Audit log when Users download files : Audit log wanneer gebruikers bestanden te downloaden
+Audit log when Users view files : Audit log wanneer gebruikers bestanden bekijken
+Aug : augustus
+Author : Auteur
+author : auteur
+Authors : auteurs
+Authors can edit each others draft documents : Auteurs kunnen elkaars ontwerp-documenten bewerken
+Authors can not create folders : Auteurs kunt geen mappen aanmaken
+Authors can not create sub-folders : Auteurs kunnen niet sub-mappen
+Authors have been restricted from creating sub-folders in this folder. : Auteurs zijn beperkt in sub-mappen te maken in deze map.
+Auto : Auto
+Auto attach template on document creation :  Auto attach template op documentcreatie
+Auto launch linked files : Auto lancering gekoppelde bestanden
+Automatic : automatisch
+Automatically install components : onderdelen automatisch installeren
+Automatically open linked file attachments. : Automatisch geopend gekoppelde bestand bijlagen.
+Available Libraries : beschikbare bibliotheken
+Average : Gemiddelde
+Background : Achtergrond
+Background color : Achtergrond kleur
+Background Processing : Achtergrondverwerking
+Basic Options : Basic Opties
+Basics : Basics
+Before you can complete this workflow step you must check in any files you have checked out : Voordat u deze werkstroom stap kan voltooien dient u in te checken alle bestanden die u hebt uitgecheckt
+Before you can complete your Approval step you must check in any files you have checked out : Voordat u uw goedkeuring stap te voltooien moet u in te checken alle bestanden die u hebt uitgecheckt
+Before you can complete your workflow step you must check in any files you have checked out : Voordat u uw workflow stap te voltooien moet u in te checken alle bestanden die u hebt uitgecheckt
+Before you can release this document you must check in any files you have checked out : Voordat u dit document kan loslaten moet u in te checken alle bestanden die u hebt uitgecheckt
+Before you can start the workflow you must check in any files you have checked out : Voordat u de workflow moet u in ieder bestanden te controleren kan beginnen u hebt uitgecheckt
+Before you decline this workflow step you must check in any files you have checked out : Voordat u deze werkstroom stap moet u in ieder bestanden te controleren leidt u hebt uitgecheckt
+blank for any : blanco voor elke
+Body : Lichaam
+Body content : body inhoud
+Bold : Stoutmoedig
+Bookmark created in selected folder. : Bookmark aangemaakt in de geselecteerde map.
+Bookmark documents will be updated to the latest released version of a document. : Bookmark documenten worden bijgewerkt naar de nieuwste officiële versie van een document.
+Bookmark successfully created in chosen folder. : Bookmark met succes in de gekozen map.
+Bottom Banner : bottom Banner
+Browse : Blader
+Browser layout : browser layout
+Building view. Please wait : Het bouwen van uitzicht. Even geduld aub
+Built In : gebouwd in
+built-in field validation : ingebouwd veld validatie
+Button visibility : button zichtbaarheid
+By : Door
+By default the label will be "Comments" : Standaard is het label zal worden "Commentaar"
+By default, notify : Standaard wordt de hoogte
+Cancel : Annuleer
+Cancel : Annuleer
+Case sensitive, separate entries with carriage return : Hoofdlettergevoelig aparte ingangen met een harde return
+Categorize : categorizeren
+Categorized : gecategoriseerd
+Cell Properties : Celeigenschappen
+Cells : Cellen
+Center : Centrum
+Central Locking : Centrale vergrendeling
+Change a Panel : Wijzigen van een Panel
+Change Additional Editors : Uitwisseling Bijkomende Editors
+Change current panel. : Verander de huidige panel.
+Change Doc Type : Change Doc Type
+Change Doc Type : Change Doc Type
+Change document author : Change document auteur
+Change Document Type : Wijzig Document Type
+Change Owner : Change Owner
+Change Panel : Change Panel
+Change panel denied. : Change panel geweigerd.
+Change Restrict read access to : Change beperken leestoegang tot
+Change the layout style : Verander de lay-out stijl
+Change this panel. Modify the options below and change the layout on the right. : Verander dit paneel. Wijzig de onderstaande opties en verander de lay-out aan de rechterkant.
+Change widget denied. : Verander widget geweigerd.
+Change widget : Verander widget.
+Change Widgets Layout : Wijzig de layout van widgets
+Check in files : Check in dossiers
+Check out files : Check out bestanden
+Check to disable : Controleer om te schakelen
+Check to hide : Controleer om te verbergen
+Checkbox : checkbox
+Checkbox Properties : checkbox Eigenschappen
+Checked Out Files : Uitgecheckt Files
+Checkout failed : Afrekenen is mislukt
+Checkout Files : Afrekenen Files
+Choose 'Yes' if User must acknowledge that they have completed the action of this Activity. : Kies 'Ja' als gebruiker moet erkennen dat zij de actie van deze activiteit hebben voltooid.
+Choose 'Yes' if User should provide a response for the Activity like answering a question. : Kies 'Ja' als gebruiker een antwoord voor de activiteit, zoals het beantwoorden van een vraag moet bieden.
+Clear : Duidelijk
+Click + button above : Klik op + knop hierboven
+Click the + button above to add a widget. : Klik boven de + knop om een ​​widget toe te voegen.
+Close : Dichtbij
+Close All Tabs : Sluit alle tabbladen
+Close review : Sluiten beoordeling
+Closing Document : Het sluiten van Document
+Cloud : Wolk
+Collapse all : Alles inklappen
+Collapse All : Alles inklappen
+Collapse when first opened : Instorten toen voor het eerst geopend
+Collecting file information from selected documents : Het verzamelen van bestandsinformatie van geselecteerde documenten
+Color : Kleur
+Column : Kolom
+Column Status : Column Status
+Column Title : Column Titel
+Column Type : Column Type
+Columns : columns
+Combo box : combo box
+Comma separated list of acceptable file extensions, blank for any. : Komma's gescheiden lijst van aanvaardbare bestandsextensies, blanco voor elke.
+Commentaries : commentaren
+Comments : Comments
+Community : Gemeenschap
+Compare Documents : Vergelijk Documenten
+Comparing documents : Het vergelijken van documenten
+Comparison results will be displayed in Word and printing will not be controlled. : Vergelijking resultaten worden weergegeven in Word en het afdrukken niet worden gecontroleerd.
+Complete Review button : Compleet Review-knop
+Complete Review button label : Compleet Review-knop label
+Completed : Voltooid
+Component installer package : Component installatiepakket
+Contact the owner (%paneleditor%) to request changes. : Neem contact op met de eigenaar (% paneleditor%) om wijzigingen aan te vragen.
+contains : bevat
+Content : Inhoud
+Content Paging : Content Paging
+Content Settings : Inhoudsinstellingen
+Converting comparison results to PDF : Het omzetten vergelijking resultaten naar PDF
+Converting to PDF : Het omzetten naar PDF
+Copy : Kopiëren
+Copy App : App kopiëren
+Copy Folder : map kopiëren
+Copy Folder Link : Map kopiëren Link
+Copy Link : Kopieer link
+Copy Selected : Geselecteerde kopiëren
+could not be deleted. Please check that the file is not currently open or locked by some other process. : kon niet worden verwijderd. Controleer of het bestand is momenteel niet geopend of vergrendeld door een ander proces.
+could not be selected as the default printer. : kon niet worden geselecteerd als de standaard printer.
+Could not complete adding user to the group. Contact Admin for details. : Kon niet compleet het toevoegen van gebruikersaccounts aan de groep. Neem contact op met Admin voor meer informatie.
+Could not complete deleting selected user(s). Contact Admin for details. : Kon niet volledig te verwijderen geselecteerde gebruiker (s). Neem contact op met Admin voor meer informatie.
+Could not complete importing group; contact admin for details. : Kon niet voltooien importeren groep; contactgegevens admin voor meer informatie.
+Could not complete the request; due to the following error : Kan het verzoek niet voltooien; als gevolg van de volgende fout
+Could not convert file to html.\rError : Kan bestand niet converteren naar html. \rError
+Could not create filter : Kan filter niet maken
+Could not delete the selected subform. Contact Admin for details. : Kan de geselecteerde subformulier niet verwijderen. Neem contact op met Admin voor meer informatie.
+Could not launch MS Excel : Kon niet starten MS Excel
+Could not locate the source library for selected entry. : Kon het niet vinden van de bron bibliotheek voor geselecteerde vermelding.
+Could not locate the source library for this document. : Kon het niet vinden van de bron bibliotheek voor dit document.
+Could not located requested User Name. : Kon niet gelegen gevraagde gebruikersnaam.
+Could not log that file was downloaded. Exiting. : Kon niet inloggen, dat bestand is gedownload. Verlaten.
+Could not log that file was viewed. Exiting. : Kon niet inloggen, dat bestand is bekeken. Verlaten.
+Could not open the file : Kon het bestand niet openen
+Could not process spreadsheet data. Error : spreadsheet gegevens konden niet verwerken. Fout
+Could not save subform because of the following issues : Kon subformulier niet opslaan vanwege het volgende kwesties
+Could not save the file.\rError : Kon het bestand niet opslaan. \rError
+Create a dynamic panel layout. Complete the options below and select a layout on the right. : Maak een dynamische panel lay-out. Vul het onderstaande opties en kies een lay-out aan de rechterkant.
+Create a Panel : Maak een Panel
+Create actions : Maak acties
+Create an Activity : Maak een activiteit
+Create and assign a review action item to : Maak en een beoordeling actie-item toewijzen aan
+Create Application : Applicatie maken
+Create Bookmark : Maak Bookmark
+Create Bookmark? : Maak Bookmark?
+Create Document : Maak Document
+Create Library : Maak Bibliotheek
+Create new folder in folder : Maak een nieuwe map in de map
+Create new panel. : Maak een nieuw paneel.
+Create Panel : Maak Panel
+Create Shortcut : Snelkoppeling
+created : aangemaakt
+Created By : Gemaakt door
+Created Date : Gemaakt Date
+Creating New Document : Het creëren van nieuw document
+Creation of documents is limited/restricted in this edition of DOCOVA. : Creatie van documenten is beperkt / beperkt in deze editie van DOCOVA.
+Cross link : Cross koppeling
+Current Subscribers : huidige abonnees
+Current versions : De huidige versies
+Currently, you have no checked out items. : U heeft nog geen uitgecheckt items.
+custom : gewoonte
+Custom : gewoonte
+Custom agent to run : Custom-agent uit te voeren
+Custom button label : label knop Aangepaste
+Custom edit function could not be executed due to the following error : Custom bewerken functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Custom hide when PHP script : Custom verbergen wanneer PHP-script
+Custom JavaScript code(s) to be run before release. : Aangepaste JavaScript-code (s) worden uitgevoerd voor de release.
+Custom JavaScript code(s) to be run. Default function will run if left blank. : Aangepaste JavaScript-code (s) worden uitgevoerd. Standaard functie zal lopen indien leeg gelaten.
+Custom JavaScript codes to be run on load. : Aangepaste JavaScript-codes die moeten worden uitgevoerd op belasting.
+Custom JavaScript codes to be run on unload. : Aangepaste JavaScript-codes die moeten worden uitgevoerd op te lossen.
+custom JavaScript function : aangepaste JavaScript-functie
+Custom JS function on button click : Custom JS functie druk op de knop
+Custom JS function to run : Aangepaste JS functie uit te voeren
+Custom onLoad function could not be executed due to the following error : Custom onLoad functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Custom onUnLoad function could not be executed due to the following error : Custom onunload functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Custom print function could not be executed due to the following error : Custom printfunctie kan niet worden uitgevoerd als gevolg van de volgende fout
+Custom save function could not be executed due to the following error : Custom save-functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Custom Scan JS function : Aangepaste scan JS functie
+Custom Search Fields : Custom Search Fields
+Custom selection criteria : Aangepaste selectie criteria
+Cut : Besnoeiing
+Cut Folder : Cut Folder
+D = day(s); W = week(s); M = month(s); Y = year(s) : D = dag (en); W = week (weken); M = maand (s); Y = jaar (jaren)
+Dashboard : Dashboard
+Data column : gegevens kolom
+Data could not be retrieved from the server. : De gegevens kunnen niet worden opgehaald van de server.
+Data could not be returned from the server when attempting to get Author's ability to create sub-folders flag.\n In function : De gegevens kunnen niet worden geretourneerd van de server bij een poging om het vermogen van de auteur om submappen vlag te maken krijgen. \n In functie
+Data entry error : Data entry fout
+Data Query : gegevens Query
+Data Sources : Data Bronnen
+Data Type : data Type
+Data Views : Gegevensweergaven
+Date : Datum
+date : datum
+Date field : date veld
+Date Field Properties : Date Field Properties
+Date Modified : gewijzigd
+Date/Time/Who : Datum/Tijd/Who
+day(s) : dag (en)
+day(s) after the document is permanently deleted. : dag(en) nadat het document permanent worden verwijderd.
+day(s) ago. : dagen geleden.
+day(s) ahead of due date : dag(en) vóór vervaldag
+day(s) of document release. : dag(en) van het document release.
+Dec : december
+Decimal places : decimalen
+Decline button label : Afwijzen knop label
+Default : Standaard
+Default Column Title : Standaard Column Titel
+Default document type : Standaard documenttype
+Default List Type : Standaard Lijst Type
+Default new documents to include Authors as additional editors : Standaard nieuwe documenten aan auteurs als extra editors bevatten
+Default Open mode : Standaard Open mode
+Default Perspective : standaard Perspectief
+Default scan function called if left blank. : Standaard scan-functie ingeschakeld wanneer leeg gelaten.
+Default sender for system messages : Standaard afzender systeemberichten
+Default sort : Default sort
+Default style : standaard stijl
+Default value : Standaardwaarde
+Default Width : standaard Breedte
+Default workflows will apply if none selected : Standaard workflows van toepassing zal zijn als er geen geselecteerd
+Defaults to "Subject/Title". : Defaults om "Onderwerp/Titel".
+Delayed Actions (Escalation) - 'Send' selected but no recipients defined : Vertraagde Acties (Escalation) - 'Verzenden' geselecteerd, maar geen ontvangers gedefinieerd
+Delayed Actions - 'Send' selected but no recipients defined : Vertraagde Acties - 'Verstuur' geselecteerd, maar geen ontvangers gedefinieerd
+Delayed actions : vertraagde acties
+Delete : Verwijder
+Delete App : App verwijderen
+Delete column : Verwijder kolom
+Delete Dashboard Panel? : Verwijder Dashboard Panel?
+Delete Element : Verwijder Element
+Delete files locally after successful upload to DOCOVA : Bestanden verwijderen lokaal na het succesvol uploaden naar DOCOVA
+Delete from archive log status. : Verwijderen uit archief log-status.
+Delete options : Verwijder opties
+Delete Panel : Verwijder Panel
+Delete Perspective : Verwijder Perspectief
+Delete Perspective? : Perspectief verwijderen?
+Delete Rights : Verwijder rechten
+Delete Saved Search : Verwijder Saved Search
+Delete Selected : Verwijder geselecteerde
+Deleted : verwijderde
+Deleted Users : Verwijderde gebruikers
+Deny button : Weigeren knop
+Department : afdeling
+Descending : Aflopend
+Description : Beschrijving
+Deselect All : Deselecteer alles
+Deselect all : Deselecteer alles
+Design Elements : Design Elements
+Designer : Ontwerper
+Details : Details
+Detecting records managed documents. Please wait : Detecteren verslagen beheerde documenten. Even geduld aub
+Directories : directories
+Directory Integration : directory-integratie
+Directory name presented to users : Directory naam gepresenteerd aan gebruikers
+Disable Activities : uitschakelen Activiteiten
+Disable Cut/Copy/Paste : Uitschakelen Cut/Copy/Paste
+Disable Toolbar - Create Bookmark : Uitschakelen Toolbar - Creëer Bookmark
+Disabled : invalide
+Discarded : afgedankte
+Discarded drafts that are kept in library. : Afgedankte concepten die in de bibliotheek worden gehouden.
+Discuss : Bespreken
+Display Embedded Form 1 in "More" section : Weergave Embedded formulier 1 in de sectie "Meer"
+Display Name : Weergavenaam
+Display Related Documents in "More" section : Vertoning Related Documents in de sectie "Meer"
+Display Subject and Status in "More" section : Weergave Onderwerp en Status in de sectie "Meer"
+Display Title : weergave Titel
+Display workflow actions list in "More" section : Weergave werkstroomacties lijst in het hoofdstuk "Meer"
+Distribution : Distributie
+Do not add "background-color" attribute. : Niet toevoegen "background-color" attribuut.
+Do not Archive : Niet Archief
+Do not archive active draft documents : Heeft actieve ontwerp documenten niet archiveren
+Do not archive documents with active workflow : Plaats geen documenten met actieve workflow archiveren
+Do you want to leave the page without saving changes? : Wil je de pagina verlaten zonder wijzigingen op te slaan?
+Doc compare file source : Doc vergelijk bestand bron
+Doc Specific Open Mode : Doc Specifieke Open Mode
+DOCOVA Application Settings : DOCOVA Applicatie-instellingen
+DOCOVA base DN : DOCOVA base DN
+DOCOVA base dn e.g. "/DOCOVA" : DOCOVA basis dn bijv. "/DOCOVA"
+Docova Component setup files : Docova Component installatiebestanden
+DOCOVA Environment : DOCOVA Milieu
+DOCOVA Home Database : Database DOCOVA Huis
+Docova Home Tabs : Docova Huis Tabs
+Docova Install : Docova installeren
+DOCOVA(Internal) : DOCOVA (intern)
+Document : Document
+Document Activities : document Activiteiten
+Document added to favorites. : Document toegevoegd aan favorieten.
+Document archived from : Document gearchiveerd
+document author / all reviewers named above : document auteur / alle reviewers bovengenoemde
+Document author : document auteur
+document author and/or : document auteur en / of
+Document cannot be deleted once workflow starts : Document kan niet eens worden verwijderd workflow start
+Document Cannot Be Opened : Document kan niet worden geopend
+Document Date : document Date
+Document Deleted : document Deleted
+Document Details : document details
+Document Details Tab : Document Details Tab
+Document has been deleted : Document is verwijderd
+Document is not available. : Document is niet beschikbaar.
+Document Log retention : Document Log retentie
+Document not yet saved. : Document nog niet gered.
+Document save was cancelled, Removing any linked documents. : Document opslaan werd geannuleerd, geen gekoppelde documenten verwijderen.
+Document shortcut was added to your desktop. : Document snelkoppeling is op uw bureaublad toegevoegd.
+Document Status : document Status
+Document Type : type document
+Document type determines the fields and content sections available within the document. : documenttype bepaalt de velden en de inhoud delen binnen het document.
+Document type determines the fields and content sections available within the document. : documenttype bepaalt de velden en de inhoud delen binnen het document.
+Document Type Settings : Document Type Settings
+Document Types : document Types
+Document Url cannot be located. : Document URL kan niet worden gevonden.
+Document Versioning : document Versioning
+Document Workflow : document Workflow
+document(s). Are you sure? : document (s). Weet je het zeker?
+Documents 0 to 0 of 0 : Documenten 0 tot 0 van 0
+Documents : documenten
+Documents that were : Documenten die waren
+does not contain : bevat geen
+Does not require review : Heeft beoordeling niet nodig
+Done : Gedaan
+Draft : Ontwerp
+Draft/Not Released : Concept / niet vrijgegeven
+Dropdown : Laten vallen
+Dropdown Properties : dropdown Properties
+Duplicate Panel. : Dupliceren Panel.
+Duplicate widget. : Dupliceren widget.
+During workflow all user prompted comments will also be tracked in this section. : Tijdens workflow alle gebruiker gevraagd opmerkingen zullen ook worden bijgehouden in deze sectie.
+Dutch : Nederlands
+e.g. : bijv.
+Earlier, unreleased drafts superseded by this version will be discarded. : Eerder zal unreleased wissels vervangen door deze versie worden weggegooid.
+Edit : Bewerk
+Edit Document button : Bewerken knop Document
+Edit in New Window : Bewerken in nieuw venster
+Edit/Save Perspective : Bewerken / Save Perspective
+Editable field : bewerkbaar veld
+Editable with selection : Bewerkbaar met selectie
+Edited Attachment Recovery : Bewerkt Attachment Recovery
+Editing : editing
+Editors : editors
+Element ID : element ID
+Element Name : element Naam
+Email Address : E-mailadres
+Email event to Administrators : E-mail evenement Administrators
+Email Notification : E-mail notificatie
+Empty Recycle Bin : Lege prullenbak
+Empty Widget : lege Widget
+Enable access to local scanner : In staat toegang tot de lokale scanner
+Enable acquiring content from user's email : Inschakelen verwerven van content van e-gebruiker
+Enable centralized document locking : Enable gecentraliseerde document vergrendeling
+Enable Content Paging : Enable Content Paging
+Enable cross linking : Inschakelen verknoping
+Enable document lifecycle : Inschakelen document lifecycle
+Enable document versioning : Inschakelen document versioning
+Enable document workflow : Inschakelen document workflow
+Enable file check in and out tracking : Enable-bestand in- en uitchecken volgen
+Enable File Sync : Enable File Sync
+Enable Filtering : Enable Filtering
+Enable filtering will allow users to click on the column headers of this folder/view to filter content. : Enable filtering stelt gebruikers in staat om te klikken op de kolomkoppen van deze map/view content filteren.
+Enable Folder Filtering : Inschakelen Folder Filtering
+Enable linked files : Inschakelen gekoppelde bestanden
+Enable Records Manager Express Integration : Enable Records Manager Express Integratie
+Enabled : Ingeschakeld
+End : Einde
+ends with : eindigt met
+English : Engels
+Enter a field name for Review Period - custom frequency : Voer een veldnaam voor verslagperiode - aangepaste frequentie
+Enter a field name for Review Period - custom starting date : Voer een veldnaam voor verslagperiode - aangepaste begindatum
+enter a list of extensions separated by comma. eg. doc,docx, docm : voert u een lijst met extensies gescheiden door een komma. bijv. doc, docx, docm
+enter file path for exact match, or file path followed by * to match the path and any sub folder : voer pad voor de exacte match, of het bestand pad gevolgd door * om het pad te passen en eventuele submap
+Enter new folder name : Voer de nieuwe naam van de map
+Enter the name of a field on the document that will determine the frequency of the review period. : Voer de naam van een veld op het document dat de frequentie van de verslagperiode zal bepalen.
+Enter users participating in the file sync. : Voer gebruikers die deelnemen aan de file sync.
+Enter your comments below : Vul hieronder uw commentaar
+Error - Unable to download file %filename% to %filepath%. \n\nPlease check that the source file is present and undamaged. \n\n Source file URL : Fout - Kan downloaden bestand% filename% tot% filepath%. \n\nControleer dat het bronbestand aanwezig en onbeschadigd is. \ URL n \n Bronbestand
+Error - Unable to print file %filename%. \n\nPlease check that the source file is present and undamaged. \n\n Source file URL : Fout - Kan afdrukken bestand% filename%. \n\nControleer dat het bronbestand aanwezig en onbeschadigd is. \ URL n \n Bronbestand
+Error - Unable to print file : Fout - Kan bestand af te drukken
+Error : Fout
+Error Adding Files : Fout bij het toevoegen van bestanden
+Error clearing view data : Fout clearing view data
+Error deleting temporary files. : Fout bij het verwijderen van tijdelijke bestanden.
+Error in search dialog code. Field with node id %fieldId% could not be located. : Fout op zoek naar dialoog code. Veld met knooppunt id% fieldid% kon niet worden gevonden.
+Error loading view settings : Fout bij het laden weergave-instellingen
+Error populating bookmarks in Word document.  Aborting. : Fout bevolken bladwijzers in Word-document. Aborteren.
+Error processing pasted data : Fout bij het verwerken geplakte gegevens
+Error writing selected names. Parent document might be closed. : Fout bij het schrijven van de geselecteerde namen. Parent document zou kunnen worden gesloten.
+escalation message : escalatie bericht
+Event log retention : Event log retentie
+Event logging : event logging
+Events : Evenementen
+Exclude files with the following extensions : Uitsluiten bestanden met de volgende extensies
+Exemptions : vrijstellingen
+Expand All : Alles uitvouwen
+Expand all : alles uitvouwen
+Expertise (skills) : Expertise (vaardigheden)
+Export : Exporteren
+Export Files : export Files
+Export files from the following documents : Export bestanden van de volgende documenten
+Export sub folders : Export submappen
+Export to Excel : Exporteren naar Excel
+Exporting data. Please wait : Gegevens exporteren. Even geduld aub
+Exporting files.  Please wait : Exporteren van bestanden. Even geduld aub
+External : extern
+External Data : Externe gegevens
+External setup information URL : Externe setup informatie URL
+External URL : externe URL
+Facet Maps : Kaarten facet
+Facet Maps Options : Kaarten Facet Opties
+Favorites : favorieten
+Feb : februari
+Federated Search : Federatieve zoekopdracht
+Field Description : veld Beschrijving
+Field list is either empty or its length does not match the bookmark list. : Field lijst is leeg of de lengte niet overeenkomt met de lijst met favorieten.
+Field Name : Veldnaam
+field on the document containing names to assign the review action to : veld op het document met de namen van de herziening actie toewijzen
+field on the document containing names to send the review action to : veld op het document met de namen van de herziening actie te sturen
+Field or Formula : Field of formule
+Field validation : Veldbevestiging
+File attachments : bestandsbijlagen
+File document : file document
+File edits and check in/out are automatically logged. : File bewerkingen en check in / out worden automatisch gelogd.
+File Export Complete.\n Please open %folder% to view any exported files. : File Export Compleet. \n Open% map% aan een geëxporteerde bestanden te bekijken.
+File Import : file Import
+File Name : Bestandsnaam
+File Resources : Bestandsbronnen
+File Sync : File Sync
+File Templates : Bestandssjablonen
+File Type : Bestandstype
+File types to view using local applications (rather than browser) : Bestandstypen om te bekijken met behulp van lokale toepassingen (in plaats van de browser)
+Filenames can not contain semi-colons. : Bestandsnamen kunnen geen puntkomma bevatten.
+Files : bestanden
+Files could not be checked out properly. Please try again or contact system administrator. : Bestanden konden niet goed worden gecontroleerd. Probeer het opnieuw of neem contact op met de systeembeheerder.
+Files Export : files Export
+Files Path : files Path
+Files to import (a document for be create for each file) : Bestanden importeren (een document te creëren voor elk bestand)
+Files to import (a document will be created for each file) : Bestanden importeren (een document wordt aangemaakt voor elk bestand)
+Filter by : Filteren op
+Filter error : filter error
+Filter field : veld filter
+Finish : Afwerking
+First Name : Voornaam
+First page : Eerste pagina
+First position index of 0, not 1. : Eerste positie index van 0, niet 1.
+Folder : Map
+Folder Archive : archiefmap
+Folder Control : folder Controle
+Folder icon : folder icon
+Folder Information : Mapinformatie
+Folder Meta-Data Subform : Folder Meta-Data Subform
+Folder Name : Naam van de map
+Folder name is required. : mapnaam is vereist.
+Folder path : folder pad
+Folder Properties : Eigenschappen folder
+Folder shortcut was added to your desktop. : Mapsnelkoppeling werd aan uw bureaublad toegevoegd.
+Folders : folders
+Folders and views : Mappen en views
+Font : doopvont
+Font size : Lettertypegrootte
+For more information please contact DOCOVA sales team at (866) 331-1354. : Voor meer informatie kunt u contact opnemen DOCOVA sales team op (866) 331-1354.
+Form 1 : Form 1
+Form alias : vorm alias
+Form Designer : Formulierontwerper
+Form Elements : vormelementen
+Form Name : Naam
+Forms : formulieren
+Forward Document : forward Document
+French : Frans
+Full Screen : Volledig scherm
+Fully qualified domain name : Volledig gekwalificeerde domeinnaam
+General : Algemeen
+General Information : Algemene informatie
+General Settings : Algemene instellingen
+General type : algemene type
+Generate Thumbnail : Genereer Thumbnail
+German : Duitse
+Global Settings : Algemene instellingen
+Group Definition : Group Definition
+Group Members : Groepsleden
+Group Name : Groepsnaam
+Groups : groepen
+has already been downloaded and cannot be updated. Please check that the file is not already opened for editing/viewing. : al is gedownload en kan niet worden bijgewerkt. Controleer of het bestand niet al te bewerken / bekijken is geopend.
+has already been downloaded and cannot be updated. Please close the file if already open for editing/viewing. : al is gedownload en kan niet worden bijgewerkt. Sluit het bestand als al geopend voor het bewerken / bekijken.
+has already been downloaded and cannot be updated. Please close the file if it is open already for editing/viewing. : al is gedownload en kan niet worden bijgewerkt. Sluit het bestand als het al geopend is voor het bewerken / bekijken.
+Has multiple attachment sections : Heeft meerdere secties attachment
+Header : hoofd
+Header Access Control : Header Access Control
+Height : Hoogte
+Hide attachment section buttons : Hide sectie bevestiging knoppen
+Hide attachment section when : Hide sectie attachment bij
+Hide Comments section when : Hide Reacties sectie wanneer
+Hide entire document header when : Hide volledige document header wanneer
+Hide Logout Link : Hide Afmelden Link
+Hide Related Documents section when : Hide Related Documents sectie wanneer
+Hide Related Emails section when : Hide Related Emails sectie wanneer
+Hide Related Links section when : Hide Related Links sectie wanneer
+Hide Text area when : Tekst verbergen gebied bij
+Hide Web bookmark section when : Hide Web bookmark sectie wanneer
+Hide when : verbergen wanneer
+Hide workflow buttons when : Hide workflow knoppen wanneer
+High : hoog
+Home Page : Startpagina
+html : html
+HTML Code : HTML Code
+HTML Head : HTML Head
+HTML Resource : HTML Resource
+HTML Resources : HTML Resources
+HTML String(s) to include extra header tags like external javascript/css files. : HTML String (s) om extra header tags zoals externe javascript / css-bestanden bevatten.
+HTTP Host Name : HTTP hostnaam
+Http Port : http Port
+Icon : Icoon
+Icons : Icons
+If "Enable Filtering" is enabled above, you can select filter fields below to define the default filtering for this folder/view. Any filters selected below that are defined in a User's Profile will provide a customized content experience for them based on their settings. : Als "Enable Filtering" hierboven is ingeschakeld, kunt u filter onderstaande velden selecteren om de standaard filtering definiëren voor deze map / view. Elke filters hieronder geselecteerde die zijn gedefinieerd in het profiel van een gebruiker zal een afgestemde tevredenheid ervaring voor hen op basis van hun instellingen te bieden.
+If not completed within : Als niet binnen voltooid
+If previously released version exists set it as the current version : Als eerder uitgebrachte versie het bestaat ingesteld als de huidige versie
+If using multiple uploaders and want to limit the files collected by the Compare Documents process, enter the field specified by the AttachmentNames param of the Uploader to be used. Leave blank to collect all files. : Bij gebruik van meerdere uploaders en willen de door de Compare Documents proces verzamelde bestanden te beperken, voert het veld door de AttachmentNames param van de Uploader te gebruiken. Laat leeg om alle bestanden te verzamelen.
+Import as document type : Importeren als documenttype
+Import as document type : Importeren als documenttype
+Import Email Messages : Import e-mailberichten
+Import Files : bestanden importeren
+Import Folder : map importeren
+Import LDAP Group : Import LDAP Group
+Import Messages : Berichten importeren
+Import Messages is not available for your current mail configuration. : Berichten importeren is niet beschikbaar voor uw huidige e-configuratie.
+Import Messages Not Available : Berichten importeren niet beschikbaar
+Import was completed successfully. : Import is succesvol afgerond.
+In case the date field specified above has no value, the process will pick the first non-empty date in the following order : Indien het datumgebied bovenvermelde geen waarde, zal het proces het eerste niet-lege datum als volgt orderpick-
+In order to use this  feature please upgrade your DOCOVA license subscription to either Company or Enterprise Edition. : Om deze functie te gebruiken kunt u een upgrade van uw DOCOVA licentie abonnement om ofwel Company of Enterprise Edition.
+Inactive : Inactief
+Include : omvatten
+Include archives : onder meer archieven
+Include in the "Add Panel" list : Onder meer in de lijst "Add Panel"
+Include subfolders : Inclusief submappen
+Include Thumbnails : omvatten Thumbnails
+Initial cursor focus field : veld initial cursor nadruk
+Input field : invoerveld
+Input Field Properties : Input Field Properties
+Insert : invoegen
+Insert column : kolom invoegen
+Internal : intern
+Invalid entry : ongeldige invoer
+is : is
+is a newly added file. Please save this document before making any edits or revisions to it. : is een nieuw toegevoegde bestand. Gelieve dit document opslaan voordat u wijzigingen en herzieningen dienaangaande.
+it may already be opened. : kan reeds geopend.
+Italic : Cursief
+Jan : jan
+Japanese : Japans
+JavaScript : JavaScript
+JavaScript code(s) as Print event. : JavaScript-code (s) als Print evenement.
+JS function to call when element gets focus. : JS functie om te bellen als element aandacht krijgt.
+JS function to call when element is clicked. : JS functie om te bellen als element wordt geklikt.
+JS function to call when element loses focus. : JS functie om te bellen als element de focus verliest.
+JS function to call when element value changes. : JS functie om te bellen als element waarde verandert.
+Jul : juli
+Jump 200 records : Jump 200 dossiers
+Jun : juni
+Keep drafts private : Houd tocht private
+Keep latest : Houd laatste
+Keywords : trefwoorden
+label : etiket
+Label Properties : Label Properties
+Label value : Label waarde
+Last Access : Last Access
+last modified : laatst gewijzigd
+Last Name : Achternaam
+Last page : Laatste pagina
+last review date : laatste recensie date
+Latest released version (exclude drafts and prior versions) : Nieuwste uitgebrachte versie (exclusief tocht en eerdere versies)
+Latest released versions (exclude drafts and prior versions) : Nieuwste uitgebrachte versies (exclusief tocht en eerdere versies)
+Layout : lay-out
+LDAP base DN : LDAP base DN
+LDAP base dn e.g. "O=DLI" : LDAP base dn bijv. "O=DLI"
+LDAP directory path : LDAP-directory pad
+Leave blank for all : Leeg laten voor alle
+Leave blank if a different mail server is used. No http:// or https:// is required. Default port is 993, concatenate the port to the url by ":" if different. : Laat leeg als een andere e-mailserver wordt gebruikt. Geen http:// of https:// is vereist. Standaard poort is 993, samenvoegen de haven naar de url door ":" als anders
+Leave blank if using 80 for non-SSL or 443 for SSL. : Laat leeg als u 80 voor niet-SSL of 443 voor SSL.
+Left : Links
+Let user select which one to open : Laat de gebruiker kiezen welke te openen
+Libraries : bibliotheken
+Libraries and Applications : Bibliotheken en toepassingen
+Libraries Repository : Bibliotheken repository
+Libraries to search : Bibliotheken om te zoeken
+Libraries update failed. : Bibliotheken update is mislukt.
+Library : Bibliotheek
+Library Key : bibliotheek Key
+Library Name : bibliotheek Naam
+Library Settings : bibliotheek Instellingen
+Library Statistics : bibliotheek Statistieken
+Library Subscriptions : bibliotheek Abonnementen
+Library update failed.\nServer return code : Bibliotheek-update is mislukt. \nServer return code
+License Code : Licentiecode
+Licensed component : Licensed component
+Lifecycle settings : Lifecycle instellingen
+Link Comments : Link Comments
+Link to document(s) : Link naar het document (s)
+List : Lijst
+Load Library Folders : Laad Bibliotheek Mappen
+Local file delete exclusion list : Lokaal bestand delete exclusion list
+Local host code (optional) : Lokale gastheer code (optioneel)
+Location : plaats
+Log all events : Alle gebeurtenissen
+Log only critical errors : Log alleen kritieke fouten
+Logging comment. Please wait : Logging commentaar. Even geduld aub
+Logout : Uitloggen
+Logout Link : Afmelden Link
+Low : Laag
+Mail for : mail for
+Mail memo : mail memo
+Mail Server Port : Mail Server Port
+Mail Server Url : Mail Server Url
+Maintain only one live Draft at a time. Drafts can originate from Released documents or other Draft documents. : Handhaaf slechts één live-Draft tegelijk. Concepten kunnen afkomstig zijn uit vrijgegeven documenten of andere Draft documenten.
+Make available in all folders in this library : Maak beschikbaar in alle mappen in deze bibliotheek
+Make available to DOCOVA Explorer : Ter beschikking te stellen DOCOVA Explorer
+Manage App Groups : Beheer App-groepen
+Manager : Manager
+Manual : handboek
+Mar : bederven
+Mark current document as an inactive version : Mark huidige document als een inactieve versie
+Max results : Max resultaten
+Maximum number of files : Maximaal aantal bestanden
+May : mei
+Med : Med
+Menu Bar : Menubalk
+Merge Cells : Cellen samenvoegen
+Merge Right : Recht van de fusie
+message : bericht
+Message : Bericht
+Message link : berichtverbinding
+Message Link : Message Link
+Message Name : bericht Naam
+Message was forwarded. : Boodschap werd doorgestuurd.
+Message was sent. : Bericht is verzonden.
+Message/Question : Bericht/Vraag
+Meta-Data : Meta-Data
+Missing Activity Message/Instruction. : Ontbrekende Activiteit Message/instructie.
+Mobile Phone : Mobiele telefoon
+Modified By : Aangepast door
+month(s) : maanden)
+More : Meer
+more than : meer dan
+Most mail servers are set to 993 as default. : De meeste mailservers worden ingesteld op 993 als standaard.
+Moving documents. Please wait : Verplaats documenten. Even geduld aub
+Moving folder. Please wait : Moving map. Even geduld aub
+Multiple : meervoudig
+My mail system : Mijn mailsysteem
+My Managed : mijn Managed
+My Recently Used Apps : Mijn recent gebruikte apps
+Name : Naam
+Name Lookup : naamraadpleging
+Name of the html field to place the cursor in when document is opened for editing. : Naam van het veld html om de cursor in wanneer het document wordt geopend voor het bewerken te plaatsen.
+Name Selection : naam Selection
+Names field : namen veld
+Names Field Properties : Veldnamen Properties
+Names of fields to validate : Namen van velden te valideren
+never : nooit
+Never : Nooit
+New : nieuwe
+New Activity : Nieuwe activiteit
+New App Group : Nieuwe App Group
+New Archive Policy : Nieuw archief Beleid
+New Document : nieuw document
+New Document Type : Nieuw Document Type
+New Drafts can only originate from Released documents. : Nieuwe Concepten kan alleen voortkomen uit vrijgegeven documenten.
+New File Template : New Template File
+New Folder : nieuwe map
+New Group : Nieuwe groep
+New HTML Resource : Nieuwe HTML Resource
+New major version : Nieuwe grote versie
+New minor version : Nieuwe kleine versie
+New Password did not match with Confirm password.Please correct your password : Nieuw wachtwoord komt niet overeen met Bevestig password.Please correctie van uw wachtwoord
+New Review Policy : Nieuwe beoordeling Beleid
+New revision : nieuwe revisie
+New Search Field : Nieuwe Search Field
+New Subform : nieuwe Subform
+New System Message : New System Message
+New User Profile : Nieuw gebruikersprofiel
+New View Column : Nieuwe weergave Column
+Newly created documents. : Nieuw gemaakte documenten.
+Next 200 records : Volgende 200 dossiers
+Next page : Volgende bladzijde
+Next page group : Volgende pagina groep
+No : Nee
+No Action selected. : Geen actie geselecteerd.
+No Activity Subject provided. : Geen Activiteit Onderwerp verstrekt.
+No Document Type selected. Please select a Document Type : Geen document geselecteerd. Selecteer een document
+No Document Type selected. Please select a Document Type to create. : Geen document geselecteerd. Selecteer een document te creëren.
+No Documents Found : Geen documenten gevonden
+No documents found. : Geen documenten gevonden.
+No entries found. : Geen data gevonden.
+No File(s) Selected : No File (s) Geselecteerd
+No folder meta-data have been configured currently. Folder meta-data fields can be enabled in the Library Profile for this library in the Application Settings area. : Geen map meta-data zijn geconfigureerd. Folder meta-data velden kan worden ingeschakeld in de bibliotheek profiel van deze bibliotheek in het gebied Toepassingsinstellingen.
+No folder selected. : Geen map geselecteerd.
+No http:// or https:// is required. : geen http:// of https:// is vereist
+No logging : geen logging
+No panel selected. : Geen panel geselecteerd.
+No pending review items found. : Geen afwachting van de herziening items gevonden.
+No pending workflow items found. : Geen afwachting workflow items gevonden.
+No Recipients selected. : Geen ontvangers geselecteerd.
+No selected entries were found for the chosen folder. : Geen geselecteerde items gevonden voor de geselecteerde map.
+No Server Web Path value. : Geen Server Web Path waarde.
+No workflow actions are defined in this document : Geen workflow-acties worden in dit document gedefinieerd
+No Workflow Defined : Geen Workflow Defined
+No workflow items found. : Geen workflow items gevonden.
+No working folder is currently in use. Please edit a document first. : Geen werkende folder is momenteel in gebruik. Gelieve een document te bewerken eerste.
+non : niet
+None : Geen
+Not Authorized : niet toegestaan
+NOTE : NOTITIE
+Notes mail server URL (if applicable) : Notes mailserver URL (indien van toepassing)
+Notification message sent. : Melding verzonden.
+Notify the following that a review is now pending : Houd de volgende die een beoordeling is nu in afwachting van
+Notify user : Houd gebruiker
+Nov : november
+number : aantal
+Number : Aantal
+Number : Aantal
+Oct : oktober
+Office Phone : Kantoor telefoon
+OK : OK
+Ok : OK
+On all events : Op alle evenementen
+On Blur : op Blur
+On Change : op Change
+On Click : Bij klikken
+On critical errors only : Op kritieke fouten alleen
+On Focus : op Focus
+On Logout : op Afmelden
+on server : op de server
+OnBeforeRelease Javascript event : OnBeforeRelease Javascript event
+One moment. : Een moment.
+One or more 'Records Managed' documents were found under this folder \n or one of its subfolders.  It can NOT be deleted. : Eén of meer 'Records Managed' documenten werden gevonden in het kader van deze map \n of een van de submappen. Het kan niet worden verwijderd.
+One or more selected documents can not be deleted because they are records managed. : Een of meer geselecteerde documenten kan niet worden verwijderd, omdat ze verslagen beheerd.
+One or more selected documents can not be deleted because they are Released and strict version controlled. : Een of meer geselecteerde documenten kan niet worden verwijderd omdat ze worden vrijgelaten en strikte versie gecontroleerd.
+One or more selected documents can not be deleted because they are Released and version controlled. Use Retract instead. : Een of meer geselecteerde documenten kan niet worden verwijderd omdat ze worden vrijgelaten en versiebeheer. Gebruik in plaats daarvan intrekken.
+One or more selected documents can not be deleted because workflow has started and deletion during workflow has been disabled. : Een of meer geselecteerde documenten kan niet worden verwijderd omdat workflow is gestart en verwijdering tijdens workflow is uitgeschakeld.
+OnLoad JavaScript event : OnLoad JavaScript-event
+Only allow 1 live Draft at a time in non-Strict mode : Laat alleen 1 live-Draft op een moment in de niet-Strict mode
+Only one file can be converted to html and displayed in the current document.\rPlease delete one of the existing files before adding a new one. : Slechts één bestand kan worden omgezet naar HTML en wordt weergegeven in het huidige document. \rMaak je bericht te verwijderen één van de bestaande bestanden voordat u een nieuwe.
+Only the following users can subscribe to this library (blank allows all) : Alleen de volgende gebruikers kunnen zich abonneren op deze bibliotheek (blank kunnen alle)
+only when commentor chooses : alleen wanneer commentor kiest
+OnUnLoad JavaScript event : Onunload JavaScript-event
+Open : Open
+Open document only : alleen open document
+Open Folder Archive : Open archiefmap
+Open in App-Builder : Openen in App-Builder
+Open in New Tab : Openen in nieuw tabblad
+Open in New Window : Openen in een nieuw venster
+Open latest version : Open nieuwste versie
+Open linked version : Open gekoppeld versie
+Open Mode : Open Mode
+Open whole application : Open hele applicatie
+Opening the document : Het openen van het document
+Operation Canceled : operatie geannuleerd
+Operation did not complete. Please contact system administrator. : Operatie niet voltooid. Neem dan contact op met de systeembeheerder.
+Operation did not complete.\rStatus code : Operatie niet voltooid. \rStatus code
+Operation was not complete, due to : Operatie was niet volledig, door
+Operation was not complete. : Operatie was niet compleet.
+Optional currency symbol etc. : Optioneel valutasymbool etc.
+Optional Doctrine DQL where clause for a select from document table. "D" refers to Document; "CU" refers to Creator; "AU" refers to Authors. : Optioneel Doctrine DQL where voor een select van glasplaat. "D" verwijst naar Document; "CU" verwijst naar Schepper; "AU" verwijst naar auteurs.
+Optional Review/Approve comments? : Optioneel beoordelen / goedkeuren opmerkingen?
+Optional units etc. : Optionele eenheden etc.
+Optional, friendly field labels to be included in error message (field name will be user if blank). : Optioneel, vriendelijke veldlabels te worden opgenomen in foutmelding (veldnaam zal gebruiker zijn als blanco).
+Optional, matching data types ("text", "number" or "date"). blank enties are treated as text. : Optioneel, bijpassende data types ("tekst", "nummer" of "date"). blanco enties worden behandeld als tekst.
+Options : opties
+or : of
+Order : Bestellen
+Other : anders
+Output Folder : Output Folder
+Owner : Bezitter
+Panel : Paneel
+Panel description is blank.  Please provide a description for this panel. : Panel beschrijving is leeg. Geef een beschrijving van dit panel.
+Panel list type : lijst Panel soort
+Panel name : naam panel
+Panel name is blank.  Please provide a panel name. : naam paneel is leeg. Geef een naam panel.
+Paper color : kleur van het papier
+Parallel : Parallel
+Parentheses on negative numbers : Haakjes op negatieve getallen
+Participants : Deelnemers
+Password : Wachtwoord
+Paste : Plakken
+Paste Folder : paste Folder
+Pasting documents. Please wait : Plakken documenten. Even geduld aub
+Pasting folder. Please wait : Plakken map. Even geduld aub
+Path : Pad
+PDF Creator not installed : PDF Creator niet geïnstalleerd
+PDF Creator not required for document comparison : PDF Creator niet vereist voor document vergelijking
+Pending releases : In afwachting van releases
+People : Mensen
+Percentage (value*100) : Percentage (waarde*100)
+Percentage (value*100)% : Percentage (waarde * 100)%
+Permanently delete from library : Permanent te verwijderen uit de bibliotheek
+Perspective : Perspectief
+Perspective name : perspectief naam
+Plain : vlakte
+Please check that the source file is present and undamaged. : Controleer of het bronbestand aanwezig en onbeschadigd is.
+Please complete the following fields : Vul de volgende velden
+Please complete/correct the invalid entries. : Vul / corrigeer de ongeldige inzendingen.
+Please contact Administrator. : Neem contact op met beheerder.
+Please describe changes to be included in the revision sheet : Beschrijf wijzigingen die moeten worden opgenomen in de herziening vel
+Please described the changes to be included in this version. : Zoom beschreven wijzigingen op te nemen in deze versie.
+Please enter description. : Vul beschrijving.
+Please enter Mail Server Url. : Vul Mail Server Url.
+Please enter New/Confirmed Password. : Vul Nieuw / Bevestigd wachtwoord.
+Please enter the name of the folder you would like to create. : Vul de naam van de map die u wilt maken.
+Please enter the perspective name. : Vul de naam van perspectief.
+Please enter the release comments (optional) : Vul de release opmerkingen (optioneel)
+Please enter the search query. : Vul de zoekopdracht.
+Please enter the search query. : Vul de zoekopdracht.
+Please enter the Tag Cloud name. : Vul de Tag Cloud naam.
+Please enter User Email Address. : Vul gebruiker e-mailadres.
+Please enter User First Name. : Vul Voornaam gebruiker.
+Please enter User Last Name. : Vul User Laatste Name.
+Please fill in the Activity Subject. : Gelieve in de Activity Subject vullen.
+Please fill out all the required fields. To start designing you need to go to "Layout" tab. : Vul alle verplichte velden. Om te beginnen met het ontwerpen moet je naar het tabblad "Lay-out".
+Please highlight a document to create a bookmark for. : Gelieve te markeren een document naar een bladwijzer voor te maken.
+Please highlight a document to create a bookmark for. : Gelieve te markeren een document naar een bladwijzer voor te maken.
+Please make this panel Shared before trying to add it to the Add List. : Zorg ervoor dit paneel Gedeeld voordat je probeert toe te voegen aan de lijst toe te voegen.
+Please make this panel Shared before trying to add names. : Zorg ervoor dit paneel Gedeeld voordat je probeert om namen toe te voegen.
+Please provide an Activity Message/Instruction. : Gelieve een activiteit Message / instructie.
+Please save this document before creating an Activity. : Gelieve dit document opslaan voordat het creëren van een activiteit.
+Please select a document from the Version History tab to compare this document to. : Selecteer een document uit het tabblad Versie Geschiedenis om dit document te vergelijken met.
+Please select a group. : Selecteer een groep.
+Please select a new widget. A description of your selection will appear here. : Selecteer een nieuwe widget. Een beschrijving van uw keuze worden hier weergegeven.
+Please select a panel. A description of your selection will appear here. : Selecteer een panel. Een beschrijving van uw keuze worden hier weergegeven.
+Please select at least one document for archiving. : Selecteer ten minste één document voor archivering.
+Please select at least one document for changing the doc type. : Selecteer ten minste één document voor het veranderen van de doc type.
+Please select at least one document type. : Selecteer ten minste één document type.
+Please select at least one document. : Selecteer ten minste één document.
+Please select at least one library to search. : Selecteer ten minste één bibliotheek te zoeken.
+Please select documents to print. : Selecteer de documenten af ​​te drukken.
+Please select libraries to update. : Selecteer bibliotheken te werken.
+Please select name(s) from right pane to remove. : Kies een naam (s) vanaf rechterpaneel te verwijderen.
+Please select name(s) to add. : Kies een naam (en) toe te voegen.
+Please select only one document to compare to the current document : Selecteer slechts één document te vergelijken met het huidige document
+Please select the applicable workflow. : Selecteer de toepasselijke workflow.
+Please select the data column. : Selecteer de kolom gegevens.
+Please select the delete action. : Selecteer de delete actie.
+Please select the document type. : Kies het type document.
+Please select the file(s) you would like to check out. : Selecteer de file (s) die u wenst uit te checken.
+Please select the files to import. : Selecteer de bestanden die u wilt importeren.
+Please select the save action. : Selecteer de redding actie.
+Please select two documents to compare. : Selecteer twee documenten te vergelijken.
+Please select two documents to compare. : Selecteer twee documenten te vergelijken.
+Please Select User Mail System. : Selecteer gebruiker Mail Systeem.
+Please specify field 1. : Gelieve veld 1 te specificeren.
+Please specify search criteria. : Gelieve te specificeren zoekcriteria.
+Please wait until the other user releases document lock and latest changes are available to you. : Wacht tot de andere gebruiker releases document achter slot en laatste wijzigingen voor u beschikbaar zijn.
+Policy Name : beleid Naam
+Port : Haven
+Position : Positie
+Prefix : Voorvoegsel
+Preparing Excel for export. Please wait : Het voorbereiden van Excel voor de export. Even geduld aub
+Preview Height : Voorbeschouwing Hoogte
+Previous 20 records : Vorige 20 verslagen
+Previous Drafts become "Discarded". Release numbers are always the next Major version number. : Vorige Drafts worden "Verworpen". Vrijgeven nummers zijn altijd de volgende grote versie nummer.
+Previous page : Vorige bladzijde
+Previous page group : Vorige paginagroep
+Previously published, replaced by another version. : Eerder verschenen, vervangen door een andere versie.
+Primary lock server : Primaire lock server
+Print : Afdrukken
+Print Attachments : Print Bijlagen
+Print Cancelled : Afdrukken geannuleerd
+Print cancelled : Print geannuleerd
+Print Document : Print Document
+Print event : Print event
+Priority : Prioriteit
+Private : privaat
+Problems encountered exporting files.\n Some files could not be exported. Please open  to view any exported %folder% files. : Problemen exporteren van bestanden. \n Sommige bestanden konden niet worden geëxporteerd. Open elke uitgevoerde% map% bestanden te bekijken.
+Problems encountered exporting files.\n Some files could not be exported. Please open %folder% to view any exported files. : Problemen exporteren van bestanden. \n Sommige bestanden konden niet worden geëxporteerd. Open% map% aan een geëxporteerde bestanden te bekijken.
+Process id : proces-id
+Processing request. Please wait : Processing aanvraag. Even geduld aub
+Promote release : bevorderen vrijlating
+Prompt : prompt
+Properties : eigenschappen
+Properties : eigenschappen
+Public Panels : openbare panels
+Published documents. : Gepubliceerde documenten.
+Punctuated at thousands : Doorspekt op duizenden
+Purpose/Description : Doel / Omschrijving
+Radio button : Radio knop
+Radio Button Properties : Radio Button Properties
+Read Only : Alleen lezen
+Read/Edit Access : Lees / bewerken Access
+Read/Edit Access Tab : Lees / bewerken Access Tab
+Readers : lezers
+Readers Can See Drafts : Lezers kunnen zien Concepten
+Reading : Lezing
+Reading spreadsheet data. Please wait : Het lezen van spreadsheet data. Even geduld aub
+Realm : Rijk
+Recipient : Ontvanger
+Recipients : ontvangers
+Record count : count Record
+Records Manager Express Integration : Records Manager Express Integratie
+Records Manager(s) : Records Manager (s)
+Recycle Bin retentions : Prullenbak inhoudingen
+Redirect : redirect
+Reference periods to : Referentieperioden
+Refresh : verversen
+Refresh view : Vernieuwen view
+Related Document Types : Verwante Document Types
+Related Documents : Gerelateerde documenten
+Related Email & Links : Zie ook E-mail & Links
+Related Email : Zie ook E-mail
+Related Links : Gerelateerde Links
+Release as version : Vrijkomen als versie
+Release button label : Ontgrendelknop label
+Release Document : Document vrijgeven
+Release Document(s) : Document (en) vrijgeven
+Release Document button : Vrijgeven knop Document
+Released : Vrijgelaten
+Released Date : vrijgegeven Date
+releases in the version stream (discarded drafts are not counted) : releases in de versie stroom (weggegooid tocht worden niet meegeteld)
+Remove : Verwijderen
+Remove Adminstrator Role? : Verwijder Adminstrator Role?
+Remove Files : bestanden verwijderen
+Remove from current folder : Verwijderen uit huidige map
+Remove Selected Names : Verwijder Geselecteerde Namen
+Remove sharing information? : Verwijder het delen van informatie?
+Remove Subscribers : Verwijder Abonnees
+Remove widget denied. : Verwijder widget geweigerd.
+Remove widget. : Verwijder widget.
+Remove Widget? : Verwijder Widget?
+Remove/Delete Panel : Verwijder / Delete Panel
+Rename : andere naam geven
+Renaming of this folder has been disabled in the folder properties. : Hernoemen van deze map is uitgeschakeld in de map eigenschappen.
+Repeat every : Herhaal elke
+Request acknowledgement : ontvangstbevestiging aanvragen
+Request response : Aanvraag antwoord
+Require PDF Creator to be installed for document comparison : Vereisen PDF Creator te worden geïnstalleerd voor document vergelijking
+Response Requested : response Gevraagde
+Resrict who can see this folder and its subfolders. Folder Authors and Editors listed above always have access. : Resrict die deze map en de submappen kunnen zien. Folder auteurs en redacteurs hierboven vermelde altijd toegang.
+Restict read access to : Restict lezen toegang tot
+Restore : Herstellen
+Restore Selected : Restore Selected
+Restore Selected Documents : Restore Selected Documents
+Restoring view state. Please wait : Het herstellen zicht staat. Even geduld aub
+Restric Draft : beperkende Draft
+Restrict document types : Beperken document types
+Restrict Printing : beperken Printing
+Restrict readers to authors list : Beperk de lezers aan auteurs lijst
+Restrict Readers to Authors list above : Lezers beperken tot Auteurs bovenstaande lijst
+Restrict who can create documents in this folder. Folder Editors listed above can always create documents. : Beperken wie documenten in deze map kunt maken. Folder Editors bovenstaande kunnen altijd documenten te maken.
+Restrict who can delete documents : Beperken wie documenten kan schrappen
+Restrict who can delete documents in this folder. : Beperken wie documenten in deze map kunt verwijderen.
+Restriction limiting access to draft documents to document editors : Beperking beperken van de toegang tot de documenten voor de redactie document op te stellen
+RestrictLive Drafts : RestrictLive Concepten
+Results perspective : resultaten perspectief
+Retract release : Terugtrekken vrijlating
+Retract Release : Trek release
+Retract version? : Intrekken versie?
+Retrieving data from the server. Please wait : Het ophalen van gegevens van de server. Even geduld aub
+Retrieving records. Please wait : Het ophalen van gegevens. Even geduld aub
+Retrieving XML. Please wait : Het ophalen van XML. Even geduld aub
+Return current document to draft state : Terug huidige document aan de staat te stellen
+Retype password : Geef nogmaals het wachtwoord
+Review : recensie
+Review button label : button label beoordeling
+Review Cycle : beoordeling Cycle
+Review cycle : beoordelingscyclus
+Review every : Geef je mening over elke
+Review Period - 'Repeat every' value : Verslagperiode - 'Herhaal elke' waarde
+Review period : periode beoordeling
+Review Policies : beoordeling beleid
+Review Policy : beoordeling beleid
+Reviewers : recensenten
+Right : Rechts
+Right for authors to create revisions of documents they have not authored : Recht voor auteurs om herzieningen van documenten te maken hebben zij niet de auteur
+Rows : rijen
+Run archiving tasks at : Run archivering taken op
+Run cleanup tasks at : Run opruimen taken op
+Run lifecycle and notification tasks at : Run lifecycle en aanmelding taken op
+Save : Save
+Save and Close : Opslaan en afsluiten
+Save and Close button : Opslaan en sluiten knop
+Save as new perspective : Opslaan als nieuw perspectief
+Save Forward As : Opslaan Doorsturen als
+Save Forwards : Save Forwards
+Save Perspective : Save Perspectief
+Saving the document : het document op te slaan
+Scheduled processes : geplande processen
+Search : Zoeken
+Search Bar : Zoekbalk
+Search Deleted : Zoek Verwijderde
+Search Field : Search Field
+Search for : Zoeken
+Search for : Zoeken
+Search in : Zoek in
+Search Results : Zoekresultaten
+Search Saved : zoeken Opgeslagen
+Search Trail : zoeken Trail
+search value must be a number. : search waarde moet een getal zijn.
+search value must be a valid date. Please use date selection buton next to the field. : search waarde moet een geldige datum zijn. Gebruik date selectie buton naast het veld.
+Secondary lock server : Secundaire vergrendeling server
+Section label : inzetlabel
+Section Label : Section Label
+Section order : sectie volgorde
+Section style : sectie stijl
+Security : veiligheid
+Select "None" when re-ordering choices. : Selecteer "Geen" bij het opnieuw bestellen keuzes.
+Select : kiezen
+Select a built-in embedded form or type the name of your custom embedded form. : Selecteer een ingebouwde ingesloten vorm of typ de naam van uw aangepaste ingebedde vorm.
+Select a layout style : Kies een lay-out stijl
+Select a Widget : Selecteer een Widget
+Select all : Selecteer alles
+Select All : Selecteer alles
+select criteria : selecteer criteria
+Select Document Type : Selecteer Document Type
+Select font : Kies een lettertype
+Select Names : Selecteer Namen
+Select people and/or groups. : Kies personen en / of groepen.
+Select search criteria : Selecteer type zoekopdracht
+Select the Applicable Document Types : Selecteer de Toepasselijke Document Types
+Select the Applicable Libraries : Selecteer de Toepasselijke Bibliotheken
+Select the document type above to see its description. : Selecteer boven het type document te zien zijn beschrijving.
+Select the options to use for exporting the folder contents. : Selecteer de opties te gebruiken voor het exporteren van de inhoud van de map.
+Select values : Selecteer waarden
+Select whether to include/exclude files based on extension : Geef aan of include / exclude bestanden op basis van extensie
+Selected : Gekozen
+Selected document types : Geselecteerde documenttypes
+Selected documents : geselecteerde documenten
+Selection criteria : Selectiecriteria
+Selection Type : selectie Type
+Send : sturen
+Send Email Notification : E-mail verzenden Notification
+Sender : Afzender
+Sep : september
+Separate entries with comma or semicolon. : Aparte items met komma of een puntkomma.
+Serial : serie-
+Server : Server
+Server and File Paths : Server en File Paths
+Server Web Path is incorrect. : Server Web Path is onjuist.
+Set as default for current folder : Ingesteld als standaard voor de huidige map
+Set as default in this library : Instellen als standaard in deze bibliotheek
+Set Status : set Status
+Settings : instellingen
+Setup Files and License Keys : Setup Files en License Keys
+Setup information page : Setup informatiepagina
+Share current panel. : Deel huidige panel.
+Share Panel : Share Panel
+Share panel denied. : Share panel geweigerd.
+Share this Panel : Delen Panel
+Share with : Delen met
+Shared : gedeelde
+Show : Tonen
+Show blank entries as zeroes : Laat lege vermeldingen als nullen
+Show Details Description : Show details Beschrijving
+Show User help : Show gebruiker help
+Since parent folder has read restrictions, you cannot completely remove read restrictions from the current folder. : Sinds bovenliggende map beperkingen heeft gelezen, kun je niet volledig te lezen beperkingen van de huidige map te verwijderen.
+Single : single
+Size : Grootte
+Skip first review if it falls within : Sla de eerste beoordeling als het binnen valt
+Sorry, no names were found to turn into SameTime links. : Sorry, geen namen werden gevonden om te zetten in SameTime koppelingen.
+Sorry, that panel is already on your Dashboard.  Please select a different panel. : Sorry, dat panel is al op uw Dashboard. Selecteer een ander paneel.
+Sorry, You do not have access to change this panel. : Sorry, je hebt geen toegang tot dit paneel te wijzigen.
+Sort : Soort
+Sort ascending : Sorteer oplopend
+Sort descending : aflopend
+Sorted : gesorteerd
+Source file URL : Source file URL
+Specify who can modify folder properties in addition to editors of any folders above in the hierarchy. Click here to see the names of inherited editors. : Geef die mapeigenschappen naast kunt wijzigen voor de redactie van alle mappen boven in de hiërarchie. Klik hier om de namen van erfelijke editors zien.
+Standard document : Standard document
+Start : Begin
+Start type in search box. : Start soort in zoekvak.
+Start typing application name : Begin met het typen van de applicatie naam
+Start workflow button : Start workflow-knop
+Starting from : Beginnend vanaf
+starts with : begint met
+Startup page : startpagina
+Starup page : Starup pagina
+Status : toestand
+Status Bar : Status balk
+Step ID : stap ID
+Step name : stap naam
+Step type : Type Step
+Strict Versioning : strikte Versiebeheer
+String of PHP files to be included before opening document (COMING SOON). : String of PHP-bestanden op te nemen voor het openen van documenten (binnenkort).
+String of PHP files to be included before save section (COMING SOON). : String of PHP bestanden moeten worden opgenomen voordat besparen sectie (binnenkort).
+String value or PHP script enclosed in "<? ?>" that returns a string. "Release Document" will be used if left blank. Available objects are $docova and $user. : String waarde of PHP-script ingesloten in "<? ?>", Die een string retourneert. "Laat Document" zal worden gebruikt indien leeg gelaten. Beschikbare objecten zijn $ docova en $ user.
+String value or PHP script enclosed in "<? ?>" that returns a text string; available objects are $docova and $user. : String waarde of PHP-script ingesloten in "<? ?>" Dat een tekenreeks retourneert; beschikbare objecten zijn $ docova en $ user.
+Subform saved. : Subform opgeslagen.
+Subforms : subforms
+Subject : Onderwerpen
+Subject default label text : Onderwerp standaard labeltekst
+Subject default value : Onderwerp standaardwaarde
+Subject input translation : Onderwerp ingang vertaling
+Subject line : Onderwerpregel
+Subject/Title : Onderwerp/Titel
+Submit for review? : Ter beoordeling?
+Subscribe : abonneren
+Subscribed Libraries : geabonneerd bibliotheken
+Subscriber Name : abonnee Naam
+Subscription Restrictions : Inschrijving Beperkingen
+Subscriptions : abonnementen
+Suffix : Achtervoegsel
+SuperCookie Error : supercookie Error
+Superseded : vervangen
+Switch Style : switch Style
+Sync Subfolders : Sync submappen
+System : Systeem
+System Mail Message Template : System Message Template Mail
+System message sender name will be used if empty. : System afzender van het bericht naam wordt gebruikt als het leeg is.
+System Messages : systeemberichten
+System Tag Search Cloud columns can not be modified. For more info please contact system administrator : System Search Tag Cloud kolommen kunnen niet worden gewijzigd. Voor meer informatie kunt u contact opnemen met de systeembeheerder
+Tab name : Tabnaam
+Table : Tafel
+Table Properties : Tabeleigenschappen
+Tag Cloud : tag Cloud
+Tags : Tags
+Tasks : taken
+Template File : Template File
+Template file attachment : Sjabloon bestandsbijlage
+Template file type : Template type bestand
+Template key : sjabloon key
+Template name : sjabloon naam
+Template Name : Template Name
+Template type : Template type
+Template Version : sjabloon Version
+Templates : templates
+text : tekst
+Text : Tekst
+Text entry type : Tekstinvoer soort
+Text label : tekstlabel
+Textarea : Textarea
+Textarea Properties : Textarea Properties
+The : De
+The currently selected widgets will remain intact if you change the layout. : De momenteel geselecteerde widgets zal intact blijven als u de lay-out te veranderen.
+The document has been locked for editing by %user% on %lockdate% : Het document is vergrendeld voor bewerking door% user% on% lockdate%
+The document has been locked on %lockdate% by %locker% on server %server% . : Het document is vergrendeld% lockdate% door% locker% op de server% server%.
+The document updates done on %modifydate% by %modifier% on server %server% have not yet replicated to your server. : Het document updates gedaan% ModifyDate% door% modifier% op de server% server% zijn nog niet gerepliceerd naar uw server.
+The field must contain a value that corresponds to the following list : Het veld moet een waarde die overeenkomt met de volgende lijst bevatten
+The following editors of higher level folders can manage this folder : De volgende redactie van hogere mappen-niveau kan deze map beheren
+The following fields did not pass the validation : De volgende velden niet de validatie niet voorbij
+The information provided cannot be resolved as a Notes doclink or Web URL : De verstrekte informatie kan niet worden opgelost als Notes doclink of Web URL
+The number of cells does not match the number of fields. : Het aantal cellen dat niet overeenkomt met het aantal velden.
+The selected document could not be accessed.\nIt has most likely been deleted. : Het geselecteerde document kan niet worden geopend. \nHet is het meest waarschijnlijk is verwijderd.
+The selected related document has been Deleted. : De geselecteerde gerelateerd document is verwijderd.
+The selected widget is already on this panel.  Please select a different widget. : De geselecteerde widget is al op dit paneel. Selecteer een andere widget.
+The Server Web Path on the Server and File Paths tab is blank.  Please provide a value. : De Server Web Pad op het tabblad Server en File Paths is leeg. Geef een waarde.
+The temporary working folder could not be deleted. Please check that all related documents have been closed and select Retry. : De tijdelijke werkmap kan niet worden verwijderd. Controleer of alle gerelateerde documenten zijn gesloten en selecteer Opnieuw.
+There are no documents to filter. : Er zijn geen documenten te filteren.
+There are no documents to filter. : Er zijn geen documenten te filteren.
+There are no steps that can be deleted. : Er zijn geen stappen die kunnen worden verwijderd.
+There are no workflow processess available for this document. : Er zijn geen workflow processess beschikbaar voor dit document.
+There is no mail in your inbox. : Er is geen e-mail in uw inbox.
+thingFactory : thingFactory
+This document has version control and its workflow has completed. \nYou can not check-out files.  Please create a new version if required. : Dit document heeft versiebeheer en de workflow is voltooid. \nU kunt niet uitchecken bestanden. Maak een nieuwe versie indien nodig.
+This is a root level folders hence it does not inherit any editors. : Dit is een root-niveau mappen dus het heeft geen redacteuren erven.
+This panel is : Dit paneel is
+This process might take several minutes to finish so please be patient while this operation is in progress. : Dit proces kan enkele minuten duren om dit te voltooien wees geduldig terwijl deze operatie wordt uitgevoerd.
+This process might take several minutes to finish so please be patient while this operation is in progress.\n\nWould you like to continue? : Dit proces kan enkele minuten duren om dit te voltooien wees geduldig terwijl deze operatie wordt uitgevoerd. \n\nWilt u doorgaan?
+Thumbnail Height : Thumbnail Hoogte
+Thumbnail Width : Thumbnail Breedte
+Time : Tijd
+Title : Titel
+to : naar
+To : naar
+Tool Bar : Tool Bar
+Tools : Gereedschap
+Top Banner : Top Banner
+Total : Totaal
+Type : Type
+Type Key : Type Key
+Unable to acces template file. : Kan geen sjabloonbestand acces.
+Unable to access Excel object. : Geen toegang tot Excel-object.
+Unable to access file system object. : Geen toegang tot het bestandssysteem object.
+Unable to access Internet Explorer object. : Geen toegang tot Internet Explorer object.
+Unable to access Power Point object. : Geen toegang tot Power Point object.
+Unable to access shell object. : Geen toegang tot shell object.
+Unable to access template file. : Geen toegang tot template-bestand.
+Unable to access the local Word Application. : Geen toegang tot de lokale Woord Application.
+Unable to access windows script network object. : Geen toegang tot Windows-script netwerk object.
+Unable to access windows script network object. : Geen toegang tot Windows-script netwerk object.
+Unable to access windows script shell object. : Geen toegang tot Windows-shell script object.
+Unable to access windows script shell object. : Geen toegang tot Windows-shell script object.
+Unable to create bookmark in the same folder as the source document. Please choose an alternate folder. : Kan geen bladwijzer te maken in dezelfde map als het brondocument. Kies een alternatieve map.
+Unable to create bookmark in the same folder as the source document. Please choose an alternate folder. : Kan geen bladwijzer te maken in dezelfde map als het brondocument. Kies een alternatieve map.
+Unable to create Excel objects. : Kan geen Excel objecten te maken.
+Unable to create folder : Kan geen map maken
+Unable to create temporary folder.  Print cancelled : Kan geen tijdelijke map te maken. Print geannuleerd
+Unable to create temporary folder. Print cancelled. : Kan geen tijdelijke map te maken. Print geannuleerd.
+Unable to delete folder : Kan map niet verwijderen
+Unable to launch Microsoft Word object. : Kan geen Microsoft Word-object te lanceren.
+Unable to locate file : Kan bestand niet vinden
+Unable to open folder. The requested folder could not be opened. : Kan geen map te openen. De gevraagde map kon niet worden geopend.
+Unable to run document comparison.  PDF Creator is not installed. : Kan geen document vergelijking uit te voeren. PDF Creator is niet geïnstalleerd.
+Unable to run document comparison. PDF Creator is not installed. : Kan geen document vergelijking uit te voeren. PDF Creator is niet geïnstalleerd.
+Unable to update SuperCookie (%cookie%)\n Please contact Administrator. : Kan geen supercookie (% cookies%) bij te werken \n Neem contact op met beheerder.
+Unable to update SuperCookie : Niet in staat om te werken supercookie
+Underline : Onderstrepen
+Unlock : ontsluiten
+Unselected : Unselected
+Unsubscribe : Afmelden
+Update : Bijwerken
+Update Bookmarks to Latest Version : Bijwerken Bladwijzers om de nieuwste versie
+Update current perspective : Werk huidige perspectief
+Update Design : Update ontwerp
+Update full text index when file import is completed : Werk full text index wanneer bestanden te importeren is voltooid
+Update Library Design : Bibliotheek bijwerken Ontwerp
+Update View Columns. : Werk View Columns.
+Updating checked out file list from the server. Please wait : Updaten uitgecheckt lijst met bestanden van de server. Even geduld aub
+Updating checked out file list on the server. Please wait : Updaten uitgecheckt lijst met bestanden op de server. Even geduld aub
+Updating folder and document properties. Please wait : Het bijwerken van de map en het document eigenschappen. Even geduld aub
+Updating full text search index. Please wait : Updaten van full text search-index. Even geduld aub
+Updating library design. Please wait : Het bijwerken van de bibliotheek ontwerp. Even geduld aub
+Uploader Pro : Uploader Pro
+Use : Gebruiken
+Use as default document workflow if none specified : Gebruik als standaard document workflow als er geen gespecificeerde
+Use DOCOVA for user authentication : Gebruik DOCOVA voor gebruikersauthenticatie
+Use jQuery onDomReady : Gebruik jQuery onDomReady
+Use LDAP/AD for user authentication : Gebruik LDAP / AD voor gebruikersauthenticatie
+Use Widget : gebruik Widget
+User : Gebruiker
+User Comment : gebruiker Opmerking
+User Dashboard : Gebruikersdashboard
+User Experience : Gebruikerservaring
+User Experience Attributes : User Experience attributen
+User ID : gebruikersnaam
+User Profile : Gebruikersprofiel
+User Profile Creation : User Profile Creation
+User Profiles : Gebruikersprofielen
+User Role : gebruiker Role
+User selects version : De gebruiker selecteert versie
+User Settings : Gebruikersinstellingen
+User Theme : gebruiker Theme
+Username : Gebruikersnaam
+Users should not be accessing the libraries while this operation is in progress. : Gebruikers moeten niet gebruikmaakt bibliotheken tijdens deze bewerking wordt uitgevoerd.
+Uses SSL? : Maakt gebruik van SSL?
+Validation function could not be executed due to the following error : Validatie-functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Value : Waarde
+Value sum : Value sum
+Version : Versie
+Version History : versie Geschiedenis
+Versioning : versiebeheer
+Versioning options : versiebeheer opties
+View : Uitzicht
+View Column Settings : Bekijk Kolominstellingen
+View Columns : Bekijk Columns
+View Manager Hierarchy : View Manager Hierarchy
+View Options Bar : Bekijk opties Bar
+Viewing the document : Het bekijken van het document
+Visibility : Zichtbaarheid
+Web Bookmark : web Bookmark
+Web components and desktop client : Web componenten en desktop client
+Web components only : Alleen webcomponenten
+Web Path : web Path
+WebQueryOpen event : WebQueryOpen event
+WebQuerySave event : WebQuerySave event
+week(s) : weken
+When a new version is created include all Related Email links? : Wanneer er een nieuwe versie gemaakt zijn inclusief alle gerelateerde e-mail links?
+When a new version is created include all Related Links? : Wanneer er een nieuwe versie gemaakt inclusief alle Related Links?
+When a new version is created, copy links for the following document types : Wanneer er een nieuwe versie gemaakt, kopieert u links voor de volgende documentsoorten
+When applying changes, copy the following settings to all subfolders of the current folder : Bij het aanbrengen van wijzigingen, de volgende instellingen te kopiëren naar alle submappen van de huidige map
+When library selected : Als de bibliotheek geselecteerd
+When linking to one or more documents, cross link automatically, creating links to the source document in the target document simultaneously . : Bij het linken naar een of meer documenten, kruis koppeling automatisch, het creëren van links naar de bron document in het doel document tegelijk.
+When linking to one or more documents, linked files option allows the attachments in related documents to be launched when the main file is viewe/edited. Allows for the use of embedded/linked content within Office documents (eg. Excel, Word, Powerpoint). : Bij het linken naar een of meer documenten, optie gekoppelde bestanden kan de bijlagen in de bijbehorende documenten worden gelanceerd als de belangrijkste bestand is viewe / bewerkt. Staat het gebruik van embedded / gekoppelde inhoud binnen Office-documenten (bijv. Excel, Word, Powerpoint).
+When related document has newer version : Wanneer gerelateerde document nieuwere versie
+whenever a comment is entered :  wanneer een reactie wordt ingevoerd
+Who : Wie
+Who can create folders at the library root level? : Wie kan mappen in de bibliotheek root-niveau te creëren?
+Width : Breedte
+Workflow : workflow
+Workflow buttons visibility : Workflow knoppen zichtbaarheid
+Workflow Cancelled : workflow Geannuleerde
+Workflow on after release function could not be executed due to the following error : Workflow op na de release functie niet kon worden uitgevoerd als gevolg van de volgende fout
+Workflow on approve function could not be executed due to the following error : Workflow op goedkeuren functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Workflow on before release function could not be executed due to the following error : Workflow op vrijlating functie voordat kan niet worden uitgevoerd als gevolg van de volgende fout
+Workflow on complete function could not be executed due to the following error : Workflow op volledige functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Workflow on deny  function could not be executed due to the following error : Workflow op ontkennen functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Workflow on start function could not be executed due to the following error : Workflow op start-functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Workflow Process Settings : Workflow Process Instellingen
+Workflow Processes : workflowprocessen
+Workflow Start : workflow Start
+Workflow Step Complete : Workflow stap te voltooien
+Workflow Step Paused : Workflow Stap Onderbroken
+Workflow Step Settings : Workflow Stap Instellingen
+Workflow validation function could not be executed due to the following error : Workflow validatie-functie kan niet worden uitgevoerd als gevolg van de volgende fout
+Working Folder Busy : Werkmap Busy
+Workspace : Workspace
+Would you like to close your browser window? : Wilt u uw browservenster te sluiten?
+Would you like to continue? : Wilt u doorgaan?
+Would you like to create a Bookmark entry for the current document? : Wilt u een Bookmark vermelding voor het huidige document te maken?
+Would you like to create a Bookmark entry for the highlighted document? : Wilt u een Bookmark vermelding voor het geselecteerde document te maken?
+Would you like to create a Bookmark entry for the highlighted document? : Wilt u een Bookmark vermelding voor het geselecteerde document te maken?
+Would you like to save the changes to this document? : Wilt u de wijzigingen in dit document op te slaan?
+XML Node cannot be empty. : XML Node mag niet leeg zijn.
+XML NodeName : XML NodeName
+xmlNode : XMLNode
+year(s) : jaar(jaren)
+Yes : Ja
+You and the folder managers can always edit this document. : U en de folder managers kunnen altijd dit document bewerken.
+You are about to archive %entries% document(s).  Are you sure? : U staat op het punt om% data% document (s) archiveren. Weet je het zeker?
+You are about to archive : U staat op het punt om te archiveren
+You are about to archive current document.  Are you sure? : U staat op het huidige document te archiveren. Weet je het zeker?
+You are about to backtrack the workflow.  Are you sure? : U staat op het punt om de workflow backtrack. Weet je het zeker?
+You are about to cancel the workflow. This action will delete the current workflow and return this document to Draft state.\r\rDo you want to continue? : U staat op het punt om de workflow te annuleren. Deze actie zal de huidige workflow te verwijderen en dit document staat het ontwerp van terug te keren. \r\rWilt u wilt doorgaan?
+You are about to Check-out the following files : Je gaat check-out de volgende bestanden
+You are about to delete the current Saved Search named %searchname%.  Are you sure? : U staat op het punt om de huidige Saved Search naam% searchname% verwijderen. Weet je het zeker?
+You are about to deny the approval.  Are you sure? : U staat op het punt om de goedkeuring te weigeren. Weet je het zeker?
+You are about to pause the workflow. This action will stop past due reminders.\r\rAre you sure? : U staat op het punt om de workflow te onderbreken. Deze actie zal stoppen met het verleden te wijten herinneringen. \r\ zeldzame je het zeker?
+You are about to reactivate discarded draft document.\rAre you sure? : Je gaat weggegooid ontwerp-document te activeren. \ Zeldzaam je het zeker?
+You are about to remove a widget from this panel.  Are you sure? : U staat op het punt om een ​​widget van dit paneel te verwijderen. Weet je het zeker?
+You are about to remove Administrator Access for yourself.  Are you sure? : Je gaat Administrator Access te verwijderen voor jezelf. Weet je het zeker?
+You are about to retract a published document.\rAre you sure? : U staat op het punt om een ​​gepubliceerde document te trekken. \ Zeldzaam je het zeker?
+You are about to retract a released document.  Please select retract options : U staat op het punt om een ​​vrijgegeven document terug te trekken. Selecteer intrekken opties
+You are about to start workflow process for this document.  Are you sure? : U staat op het punt om de workflow proces te starten voor dit document. Weet je het zeker?
+You are changing this panel to be Private. Any sharing options will be cleared. Are you sure? : U verandert dit paneel privé te zijn. Alle opties delen worden gewist. Weet je het zeker?
+You are not authorized to access this document. : U bent niet bevoegd om toegang tot dit document.
+You are not authorized to edit this document. : U bent niet gemachtigd om dit document te bewerken.
+You are not authorized to open this document, or the document could not be found : U bent niet gemachtigd om dit document te openen, of het document kon niet worden gevonden
+You are not permitted to print this document : U bent niet toegestaan ​​om dit document af te drukken
+You are requesting to delete the panel named %paneltitle% from your Dashboard. Are you sure? : U wordt verzocht om het paneel met de naam% paneltitle% van uw dashboard te verwijderen. Weet je het zeker?
+You can change the layout style of a panel at any time. : U kunt de lay-out stijl van een panel op elk moment wijzigen.
+You can use either your own internal LDAP/AD directory to authenticate the users, or you can use DOCOVA to authenticate the users, or you can use both. : U kunt ofwel uw eigen interne LDAP/AD directory gebruiken om de gebruikers te verifiëren, of u kunt DOCOVA gebruiken om de gebruikers te verifiëren, of kunt u beide gebruiken.
+You cannot modify LDAP directory members. : Je kunt niet LDAP-directory-leden aan te passen.
+You cannot modify the current document until the latest changes are available to you. Please try again in few minutes. : U kunt het huidige document niet wijzigen totdat de laatste wijzigingen voor u beschikbaar zijn. Probeer het opnieuw in een paar minuten.
+You cannot select the current folder. : U kunt de huidige map niet selecteren.
+You currently have no pending Activities to display. : U heeft momenteel geen afwachting van activiteiten om te laten zien.
+You do not have sufficient rights to create documents in the selected folder. Please choose an alternate folder. : Je hoeft niet voldoende rechten om documenten in de geselecteerde map te maken. Kies een alternatieve map.
+You do not have sufficient rights to create documents in the selected folder. Please choose an alternate folder. : Je hoeft niet voldoende rechten om documenten in de geselecteerde map te maken. Kies een alternatieve map.
+You have error : Je hebt fout
+You have insufficient access to create a root folder. : U heeft onvoldoende toegang tot een root-map te maken.
+You have insufficient access to cut this folder. : U heeft onvoldoende toegang tot deze map te snijden.
+You have insufficient access to delete this folder. : U heeft onvoldoende toegang tot deze map te verwijderen.
+You have insufficient access to paste into this folder. : U heeft onvoldoende toegang tot plakken in deze map.
+You have no checked out files associated with this document. : Je hebt geen uitgecheckt bestanden in verband met dit document.
+You have reached the maximum number of Document Types allowed for this edition of DOCOVA. : Je hebt het maximum aantal documenttypen toegestaan ​​voor deze editie van DOCOVA bereikt.
+You must assign this Action to the Document Owner or select one or more people for the Recipient List. : U moet deze actie aan de Document eigenaar toewijzen of selecteer een of meer mensen voor de lijst met ontvangers.
+You must choose an Action : U moet een actie kiezen
+You must enter the numeric values fo major and minor version number. : U moet de numerieke waarden fo grote en kleine versie nummer in te voeren.
+You must have at least one facet map field. : U moet ten minste één facet kaart veld hebben.
+You must have at least one facet map field. : U moet ten minste één facet kaart veld hebben.
+You must select participant names for all steps of the document workflow. : U moet namen van de deelnemers te selecteren voor alle stappen van het document workflow.
+You must select the major or minor version increment. : U moet de grote of kleine versie increment te selecteren.
+You selected the current document.  Please select a different version. : U het huidige document geselecteerd. Selecteer een andere versie.
+You, folder managers and Additional Editors can always read this document. : U, de map managers en extra Editors kunt altijd dit document te lezen.
+Your Libraries : uw bibliotheken
+Your search was deleted. : Uw zoekopdracht is verwijderd.
+Your search was saved. : Uw zoekopdracht is opgeslagen.
+Your session has timed out.  Please press F5 to login again. : Uw sessie is verlopen. Drukt u op F5 om opnieuw in te loggen.

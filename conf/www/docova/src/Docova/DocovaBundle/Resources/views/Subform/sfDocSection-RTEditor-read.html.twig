@@ -1,0 +1,19 @@
+<style type="text/css">
+pre {
+	word-wrap: break-word;
+}
+</style>
+<div style="{% if properties['HideOnReading'] == true %}display:none;{% endif %} %}">
+	<span style="margin: 4px 0px 4px 0px; font : normal 11px Verdana,  Arial, sans-serif;">{{ properties['EditorLabel']|trans }}:</span>
+	<div id="divRTContent" style="font : normal 11px Verdana,  Arial, sans-serif; width: 100%; height:{{ properties['EditorHeightValue'] }}px; overflow:auto;">
+	{% if data['body']['Value'] != data['body']['Value']|striptags %}{{ data['body']['Value']|raw }}{% else %}{{ data['body']['Value']|nl2br|raw }}{% endif %}
+	</div>
+</div>
+<!-- JS Function to hide Domino attachments -->
+<script language="JavaScript">
+fixRelativeImagePaths();
+initEditor();
+HideAttachmentTables();
+ExpandHTMLIframes();
+convertRTtoHTML("Body", "Body");
+</script>

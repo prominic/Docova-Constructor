@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Attachments</title>
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript">
+var parentWin = window.top.Docova.GlobalStorage["divDlgSelectAttachments"].sourcewindow;
+var parentDoc = window.top.Docova.GlobalStorage["divDlgSelectAttachments"].sourcedocument;
+var attInfo = parentWin.dlgParams;
+var info = {
+  "UserName" : "",
+  "UserNameAB" : "",
+  "UserNameCN" : "",
+  "UserRoles" : "",
+  "isSuperuser" : "",
+  "HTTP_Referer" : "",
+  "Query_String" : "?OpenForm",
+  "Query_String_Decoded" : "?OpenForm",
+  "Path_Info_Decoded" : "{{ path('docova_selectattachments') }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}"
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+
+$(function() {
+	initDialog();
+});
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	//some initial work
+	var attArr = attInfo[0].split("*");
+	try{
+		var obj1 = $('#Attachments');
+		for(x=0; x < attArr.length; x++) {
+			var html = obj1.html();
+			html += "<div style='padding:5px 2px;'><input type='checkbox' name='FileAttach' value='" + attArr[x] + "'> " + attArr[x] + "</div>";
+			obj1.html(html);
+			html = '';		
+		}
+	}
+	catch(e){
+		alert("Error."+e);
+		window.returnValue=false;
+		window.close()
+	}
+
+}
+</script>
+</head>
+<body>
+	<div id="dlgContentNh" class="ui-widget">
+		<div id="divCurrentList" style="padding: 4px;height:235px; overflow:hidden;">
+			<div style="padding-bottom:5px" class="frmText">Select attachments that you want to <span style="font-weight: bold;">REMOVE</span> from the new version:</div>
+			<table style="background-color:#efefff; padding:5px;" width="100%" cellspacing="0" cellpadding="0">
+				<thead>
+     				<td class="txFldCell" width="15">&nbsp;</td>
+     				<td class="frmLabel" width="260"><b>Attachment Name(s)</b></td>
+				</thead>
+			</table>
+			<div style="width: 99%; height:125px; overflow-y:auto; overflow-x:hidden;border:1px solid #CCC;">
+			<table style="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr bgcolor="#ffffff">
+     				<td valign=top class="txFldCell" style="width:260px;">
+     					<div id="Attachments"></div>
+     				</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+<title>{% trans %}Save Search{% endtrans %}</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleViewDialogBase.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript">
+//var parentDoc = window.parent;
+var parentWin = window.top.Docova.GlobalStorage["divDlgSaveSrch"].sourcewindow;
+var parentDoc = window.top.Docova.GlobalStorage["divDlgSaveSrch"].sourcedocument;
+var params = parentWin.dlgParams;
+
+document.oncontextmenu = stopContextMenu();
+function stopContextMenu() { return false; }
+
+function completeWizard() {
+
+	if(Docova.Utils.getField("SaveSearchName") == ""){
+		window.top.Docova.Utils.messageBox({ prompt: "{% trans %}You must provide a Search Name.{% endtrans %}", icontype: 1, title: "{% trans %}No Search Name provided.{% endtrans %}", width: 300 })
+		return false;
+	}
+
+	//var retValues = new Array();
+	parentWin.retValues[0] = Docova.Utils.getField("SaveSearchName");
+	parentWin.retValues[1] = document.getElementById("UpdateSearch").checked;
+	parentWin.retValues[2] = document.getElementById("IncludeLibraryList").checked;
+	//parentDoc.SaveSearch(retValues);
+	parentWin.SaveSearch();
+}
+
+function SwitchUpdate(btnObj){
+	if (btnObj.checked == true){
+		parent.$( "#btnSaveUpdate" ).button( "option", "label", "{% trans %}Update Search{% endtrans %}" );
+	}else{
+		parent.$( "#btnSaveUpdate" ).button( "option", "label", "{% trans %}Save as New Search{% endtrans %}" );
+	}
+}
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	//----- If this is a Save Search from the global search tab then show the Include Library List-----
+	var searchcontext = parentDoc.location.href;
+	if(searchcontext.indexOf("wSearch") != -1){
+		if (!parentDoc.all.SearchUnsubscribed.checked) {
+			document.getElementById("spanIncludeLibraryList").style.display = "";
+			//----If there is a list of libraries, then initially check the IncludeLibraryList checkbox because it would have been checked to get the library list-----
+		}
+	}
+	
+	if(params[0] != ""){
+		Docova.Utils.setField({ field: "SaveSearchName", value: params[0] }); 
+		document.getElementById("UpdateSearch").checked = true
+		parent.$( "#btnSaveUpdate" ).button( "option", "label", "{% trans %}Update Search{% endtrans %}" );
+	}else{
+		document.getElementById("spanUpdateSearch").style.color = "gray";
+		document.getElementById("UpdateSearch").disabled = true;
+	}
+	document.getElementById("SaveSearchName").focus();
+}
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onload="initDialog();">
+	<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+			<td width="100%" valign="middle">
+				<span id="FieldLabel"><br>
+					<span class="frmLabel">{% trans %}Search Name{% endtrans %}:</span><br>
+					<span class="frmText">
+					<input name="SaveSearchName" value="" id="SaveSearchName" class="frmText" style="width:400px;margin-bottom:5px;padding:2px;"></span><br/><br/>
+					<span id="spanUpdateSearch">
+						<label><input type="checkbox" name="UpdateSearch" value="Update Search" onclick="SwitchUpdate(this)" id="UpdateSearch" class="frmText">{% trans %}Update Search{% endtrans %}</label>
+					</span><br/>
+					<span id="spanIncludeLibraryList" style="display:none;">
+						<label><input type="checkbox" name="IncludeLibraryList" value="Include Currently Selected Libraries" checked id="IncludeLibraryList">{% trans %}Include Currently Selected Libraries{% endtrans %}</label>
+					</span>
+				</span>
+			</td>
+		</tr>
+	</table>
+	
+	<!------------------ SUBFORM sfKillCache ------------>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

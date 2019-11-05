@@ -1,0 +1,290 @@
+<!Doctype html>
+<html>
+<head>
+<title>{% trans %}Docova Workspace{% endtrans %}</title>
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDocovaWorkspace.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDashboardPanels.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/counterbox.css') }}">
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" language="Javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script type="text/javascript" language="Javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/viewObjects.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/embeddedViewObjects.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/wDocovaWorkspace.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/sfDashboardCommonJavascript.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-counterbox.js') }}"></script>
+<script type="text/javascript">
+var isipad = false;
+var typingTimer;                //timer identifier
+var dlgParams = new Array();  //params array that gets used by dialogs
+var retValues = new Array(); //ret params array that can be used by dialogs
+var start = {{ applications|length >= 20 ? 20 : -1 }};
+var stop = false;
+var AvailableLibraries;
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "UserNamesList" : "",
+  "HTTP_Referer" : "",
+  "Query_String" : "",
+  "Query_String_Decoded" : "",
+  "Path_Info_Decoded" : "",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "HomePageWeb" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "SSLState" : "",
+  "PanelKey" : "{{ panel.getId }}",
+  "PanelEditors" : "{{ panel.getCreator.getUserNameDnAbbreviated }}",
+  "PanelLayoutID" : "{{ panel.getLayoutName }}"
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+
+function searchApp()
+{
+	var search_for = $('#app_search').val();
+	var req_url = docInfo.PortalWebPath + '/searchapp';
+	if ($.trim(search_for))
+	{
+		$('#app_search').css({
+			'background': "#FFF url('{{ asset('bundles/docova/images/load.gif') }}')",
+			'background-position': 'right center',
+			'background-repeat': 'no-repeat'
+		});
+		$('#apps UL.app_list_container').first().html('');
+
+		var extraresults = [];
+		//-- check for system application match
+		if(("{% trans %}Admin{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0 || ("{% trans %}DOCOVA Administration{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0){
+			var $foundapp = jQuery("li[id=Admin]");
+			if($foundapp.length > 0){
+				extraresults.push($foundapp.get(0));
+			}
+		}
+		if(("{% trans %}App-Builder{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0 || ("{% trans %}DOCOVA Application Builder{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0){
+			var $foundapp = jQuery("li[id=AppBuilder]");
+			if($foundapp.length > 0){
+				extraresults.push($foundapp.get(0));
+			}
+		}		
+		if(("{% trans %}Dashboard{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0 || ("{% trans %}DOCOVA User Dashboard{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0){
+			var $foundapp = jQuery("li[id=Dashboard]");
+			if($foundapp.length > 0){
+				extraresults.push($foundapp.get(0));
+			}
+		}		
+		if(("{% trans %}Designer{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0 || ("{% trans %}DOCOVA Form Designer{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0){
+			var $foundapp = jQuery("li[id=Designer]");
+			if($foundapp.length > 0){
+				extraresults.push($foundapp.get(0));
+			}
+		}	
+		if(("{% trans %}Libraries{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0 || ("{% trans %}DOCOVA Libraries Repository{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0){
+			var $foundapp = jQuery("li[id=Libraries]");
+			if($foundapp.length > 0){
+				extraresults.push($foundapp.get(0));
+			}
+		}							
+		if(("{% trans %}Search{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0 || ("{% trans %}DOCOVA Federated Search{% endtrans %}").toLowerCase().indexOf(search_for.toLowerCase()) == 0){
+			var $foundapp = jQuery("li[id=Search]");
+			if($foundapp.length > 0){
+				extraresults.push($foundapp.get(0));
+			}
+		}		
+
+		var _renderResponse = function(response){
+			if ($.trim(response) || extraresults) {
+				$('#panels_container').css('height', '55vh');
+				$('#search_result').css('height', '33vh');				
+
+				$container = $('#apps UL.app_list_container').first();
+				if($.trim(response)){
+					$container.append(response);
+				}
+				if(extraresults){
+					for(var i=0; i<extraresults.length; i++){
+						jQuery(extraresults[i]).clone().addClass("invisible").appendTo($container);
+					}	
+				}
+				$('#apps LI.invisible').each(function() {
+					$(this).fadeIn('fast');
+					$(this).css('margin-top', '0');
+				});
+			}
+			else {
+				$('#panels_container').css('height', '75vh');
+				$('#search_result').css('height', '13vh');				
+				
+				$('#apps UL.app_list_container').first().append('<span>{% trans %}No result found.{% endtrans %}</span>');
+			}
+			$('#app_search').css({'background': '#FFF'});			
+		}		
+		
+		
+		$.ajax({
+			type: 'POST',
+			url: req_url,
+			data: { 'searchtxt' : encodeURIComponent(search_for) },
+			success: function(responsedata) {
+				_renderResponse(responsedata);
+			},
+			error: function() {
+				_renderResponse();
+			}
+		});
+	
+	}
+}
+
+function dlgChangeLayout(){
+	//---Check access control to edit panel values---
+	if( docInfo.PanelEditors != docInfo.UserNameAB){
+		var dlgHTML = '<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{% trans %}Sorry, You do not have access to change this panel.{% endtrans %}\n\r';
+		dlgHTML += '{% trans with {'%paneleditor%' : '\' + docInfo.PanelEditors + \''} %}Contact the owner (%paneleditor%) to request changes.{% endtrans %}</p>';
+		var dlgNoChangePanel = window.top.Docova.Utils.createDialog({
+			id: "divDlgNoChangePanel",
+			dlghtml: dlgHTML,
+			title: "{% trans %}Change panel layout denied.{% endtrans %}",
+			height: 200,
+			width: 500,
+			sourcewindow: window,
+			sourcedocument: document,
+			buttons: {
+				"{% trans %}OK{% endtrans %}": function() {
+					dlgNoChangePanel.closeDialog();
+				}
+			}
+		});
+		return false;
+	}
+
+	dlgParams[0] = docInfo.UserNameAB;
+	dlgParams[1] = docInfo.PanelLayoutID;
+	var dlgUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/dlgChangeLayout?OpenPage";
+	var dlgChangeLayout = window.top.Docova.Utils.createDialog({
+		id: "divDlgChangeLayout",
+		url: dlgUrl,
+		title: "{% trans %}Change Workspace Layout{% endtrans %}",
+		height: 450,
+		width: 500,
+		useiframe: true,
+		sourcewindow: window,
+		sourcedocument: document,
+		buttons: {
+			"{% trans %}Change Layout{% endtrans %}": function(){
+				var dlgDoc = window.top.$("#divDlgChangeLayoutIFrame")[0].contentWindow.document;
+				var PanelKey = docInfo.PanelKey;
+				var PanelLayout = window.top.$('input[name=panellayout]:checked', dlgDoc).val();
+				var agentName = "DashboardServices";
+
+				var request = "<Request><Action>CHANGEPANEL</Action>";
+				request += "<Document>";
+				request += "<Username><![CDATA[" + docInfo.UserNameAB + "]]></Username>";
+				request += "<PanelKey>" + PanelKey + "</PanelKey>";
+				request += "<PanelLayout>" + PanelLayout + "</PanelLayout>";
+				request += "</Document>";
+				request += "</Request>";
+
+				var result = SubmitRequest(request, agentName);
+				document.location.reload();
+				dlgChangeLayout.closeDialog();
+			},
+			"{% trans %}Cancel{% endtrans %}": function(){
+				dlgChangeLayout.closeDialog();
+			}
+		}
+	});
+	return;
+}
+
+AvailableLibraries= new xmlDataIsland();
+AvailableLibraries.id = "AvailableLibraries";
+$(document).ready(function() {
+	$.ajax({
+		type : 'POST',
+		url : '{{ path('docova_subscriptionlist', {output : 'xml'}) }}',
+		async : true
+	})
+	.done(function(response) {
+		if(response)
+		{
+			AvailableLibraries.setXML('<?xml version="1.0" encoding="UTF-8"?>' + response);
+		}
+	});
+
+	
+	$("#manage_widgets").on('click', function(e) {
+		e.preventDefault();
+		dlgChangeLayout();  //Calls the Change Panel dialog
+	});
+
+	//enable counter box
+	$('div.docova-counterbox').each(function() {
+		var $this = $(this);
+		$this.counterBox({
+			dir: $this.attr('cdir') ? $this.attr('cdir') : 'up',
+			value: $.trim($this.attr('cval')),
+			color: $this.attr('ctextcolor') ? $this.attr('ctextcolor') : '',
+			size: $this.attr('cfontsize') ? $this.attr('cfontsize') : '',
+			title: $this.attr('ctitle') ? $.trim($this.attr('ctitle')) : '',
+			icon: $this.attr('cicon') ? $this.attr('cicon') : null,
+			iconpos: $this.attr('cicon') && $this.attr('ciconpos') ? $this.attr('ciconpos') : null,
+			iconsize: $this.attr('cicon') && $this.attr('ciconsize') ? $this.attr('ciconsize') : null,
+			starton: $this.attr('cstarton') ? $this.attr('cstarton') : 'topview',
+			unit: $this.attr('cunit') ? $this.attr('cunit') : '',
+			unitpos: $this.attr('cunitpos') ? $this.attr('cunitpos') : 'prefix',
+			enablebox: $this.hasClass('counterbox-borders-on') ? true : false,
+			speed: $this.attr('cspeed') ? parseInt($this.attr('cspeed')) : 2000
+		});
+	});
+});
+</script>
+</head>
+<body>
+<div id="left_nav">
+	<div class="tab_container" id="apps">
+		<div>
+		{% if is_granted('ROLE_ADMIN') or user.getUserProfile.getCanCreateApp %}
+    		<a class="lib_actions" id="create_app" title="{% trans %}Create Application{% endtrans %}"><i class="far fa-tablet" style="font-size:1.3em;"></i></a>
+		{% endif %}
+    		<a class="lib_actions" id="add_cat" title="{% trans %}New App Group{% endtrans %}"><i class="far fa-plus"></i></a>
+    		<a class="lib_actions" id="manage_appgroup" title="{% trans %}Manage App Groups{% endtrans %}"><i class="far fa-magic"></i></a>
+    		<a class="lib_actions flr" id="manage_widgets" title="{% trans %}Change Widgets Layout{% endtrans %}"><i class="far fa-sign-out"></i></a>
+		</div>
+		<input type="text" id="app_search" placeholder="{% trans %}Start typing application name{% endtrans %}" value="">
+		<div id="search_result" class="containerized" style="height:3vh;">
+    		<ul class="app_list_container">
+    		</ul>
+    	</div>
+    	<div class="containerized" id="panels_container" style="height:85vh">
+		{% include('DocovaBundle:Workspace:workspaceLeftNavSection.html.twig') %}
+    	</div>
+	</div>
+</div>
+<div id="right_panel" class="ui-widget">
+	<!----Load Panel Layout----->
+	<table id="tblContent" class="tblContent" style="display:none;">
+		<tr>
+			<td>
+				<table id="tblPanelLayout" class="tblPanelLayout">
+					{% include 'DocovaBundle:Default:' ~ panel.getLayoutName ~ '.html.twig' with { 'panel' : panel } %}
+				</table>
+			</td>
+		</tr>
+	</table>
+	<div id="dialogBox" title="{% trans %}Standard Dialog Box{% endtrans %}" style="display: none;"></div>
+	<div id="subdialogBox" title="{% trans %}Standard Sub Dialog Box{% endtrans %}" style="display: none;"></div>
+</div>
+</body>
+</html>

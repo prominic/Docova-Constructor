@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<title>{% trans %}Document Type{% endtrans %}</title>
+<!--  common javascript & CSS header -->
+{% include 'DocovaBundle:Admin:sfWebAdminCommonScriptHeader.html.twig'%}
+<script type="text/javascript" src="{{ asset('bundles/docova/js/admin/wAdminDocTypes.js') }}"></script>
+{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+	'document' : document, 
+	'view_name' : 'wAdminDocTypes', 
+	'view_title' : 'Document Types', 
+	'path_info' : path('docova_admin_readdocument', { 'view_name' : 'wAdminDocTypes', 'doc_id' : document.getId }),
+	'mode' : mode,
+} %}
+
+<style type="text/css">
+#tabs-docType-container {
+	margin-bottom: 22px !important;
+}
+#appearance_container li, #advance_container li, #sectionsContainer li {
+	list-style-type:none;
+	list-style: none !important;
+}
+.colorCode {
+	display: inline-flex;
+	width: 10px;
+	height: 16px;
+	border: 1px silver solid;
+	margin-bottom: -3px;
+}
+.intgOpt {
+	display: block;
+	margin-top: 7px;
+}
+.customHide { padding-top: 7px; }
+.ui-icon-group {
+	background-image: url('{{ asset('bundles/docova/images/icons/vwicn004.gif') }}') !important;
+	background-position: center;
+}
+.ui-icon-colorpicker {
+	background-image: url('{{ asset('bundles/docova/images/colorpicker.gif') }}') !important;
+	background-position: center;
+}
+</style>
+</head>
+<body scroll="no">
+	<ul class="ui-widget-header actionBar hidetoload">
+		<a id="editBtn" href="{{ path('docova_admin_editdocument', { 'view_name' : 'wAdminDocTypes', 'doc_id' : document.getId }) }}">{% trans %}Edit{% endtrans %}</a>
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+	</ul>
+	<div id="frmEmulator" class="hidetoload">
+		<h3 class="adjusted headings1">{% trans %}Document Type Settings{% endtrans %}</h3>
+		<div id="divFormContainer">
+	        <h3>{% trans %}General Settings{% endtrans %}</h3>
+	        <div>
+	        {% include 'DocovaBundle:Admin:sfAdminDocumentTypesGeneralSettingsTabRead.html.twig' %}
+	        </div>
+	        <h3>{% trans %}Content Settings{% endtrans %}</h3>
+	        <div>
+	        {% include 'DocovaBundle:Admin:sfAdminDocumentTypesContentSettingsTabRead.html.twig' %}
+	        </div>
+	        <h3>{% trans %}Workflow/Lifecycle Settings{% endtrans %}</h3>
+	        <div>
+	        {% include 'DocovaBundle:Admin:sfAdminDocumentTypesWorkflowSettingsTabRead.html.twig' %}
+	        </div>
+	        <h3>{% trans %}Appearance{% endtrans %}</h3>
+	        <div>
+	        {% include 'DocovaBundle:Admin:sfAdminDocumentTypesAppearanceRead.html.twig' %}
+	        </div>
+	        <h3>{% trans %}Integration Options{% endtrans %}</h3>
+	        <div>
+     	    {% include 'DocovaBundle:Admin:sfAdminDocumentTypesIntegrationOptionsRead.html.twig' %}
+	        </div>
+	        <h3>{% trans %}Advanced Settings{% endtrans %}</h3>
+	        <div>
+	        {% include 'DocovaBundle:Admin:sfAdminDocumentTypesAdvancedSettingsTabRead.html.twig' %}
+	        </div>
+		</div>
+	</div>
+ </body>
+</html>

@@ -1,0 +1,103 @@
+HTML, BODY, #divOutline{ height: 100% }
+#divOutline{ overflow:auto; }
+BODY {
+	font-family: Verdana, Arial, Sans Serif;
+	font-size: 12px;
+	background-color: transparent;
+	overflow:hidden;
+	padding: 0;
+	margin: 0;
+}
+
+#divOutlineBuilder {
+	border: 1px solid green;
+	margin: auto;
+	width:300px;
+	height:50vh;
+	padding-right:20px;
+	z-index:999;
+	overflow:hidden;
+}
+
+#divOutlineActionBar {
+	border: 1px solid green;
+	margin: auto;
+}
+
+#divOutlineBuildArea {
+	border: 1px solid red;
+	margin: auto;
+	width:100vw;
+	height:55vh;
+	padding-top:2em;
+	padding-left: 2em;
+}
+
+#divOutlineProperties {
+	border: 1px solid green;
+	margin: auto;
+}
+
+.btn-Standard {
+	height: 2.4em !important;
+}
+
+
+
+#sortable { list-style-type: none; margin-left: 20px; padding: 0; width: 60%; }
+#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; }
+#sortable li span { position: absolute; margin-left: -1.3em; }
+
+ul { list-style-type: none;  padding: 0; }
+ul li { padding: 0.4em;  transition: 0.5s}
+ul li span {   display: inline-block;}
+ul li div {display: inline; }
+
+.d-ui-widget-header{
+	border: 0px;
+	color:black;
+	backgorund-color:#fff;
+	cursor: pointer;
+}
+
+.d-ui-state-default{
+	
+	color:black;
+	backgorund-color:#fff;
+	
+}
+
+ul.d-ui-state-default > [emenuitemtype="M"] {
+    border-bottom:1px solid lightgray;
+}
+
+ .itemlabel {
+   
+    padding-left:0.5em;
+}
+
+#divOutline > ul.OutlineItems {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.d-ui-state-hover {
+	color: white !important;
+	background: rgb(92, 156, 204) !important;
+}
+
+.expandable { height:100%; vertical-align: middle }
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background-color: #eaeaea;
+    border-left: 1px solid #ccc;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #8f9096;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #939394;
+}

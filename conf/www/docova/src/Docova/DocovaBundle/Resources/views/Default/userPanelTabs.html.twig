@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDashboardTabs.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+//var docInfo = document.all.info
+$(document).ready(function(){
+//	var docInfo = document.all.info
+	var tabs = $( "#tabs" ).tabs({ active: 1});
+	tabs.find( ".ui-tabs-nav" ).sortable({
+		axis: "x",
+		stop: function() {
+			var taborderlist = "";
+			$('#tabs li span').each(function(){
+				if(taborderlist == ""){
+					taborderlist = $(this).attr('panelId');
+				}else{
+					taborderlist += ";" + $(this).attr('panelId');
+				}
+			});
+			parent.frames['fraDashboardPanels'].ReorderPanels(taborderlist);
+		}
+	});
+
+	$("span.ui-icon-close").click(function( event ) {
+		event.preventDefault();
+		var paneltitle = $(this).attr("paneltitle");
+		var panelId = $(this).attr("panelId");
+		var panelsharetype = $(this).attr("panelsharetype");
+		var panelparentUNID = $(this).attr("panelparentUNID");
+		parent.frames['fraDashboardPanels'].dlgRemovePanel(paneltitle, panelId, panelsharetype, panelparentUNID);
+	});
+		
+	$( "#btn-ChangePanel" )
+		.button({
+			text:false,
+			label: "{% trans %}Change current panel.{% endtrans %}",
+			icons: {primary:  "ui-icon-gear"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			parent.frames['fraDashboardPanels'].dlgChangePanel();  //Calls the Change Panel dialog
+	});	
+	
+	$( "#btn-CreatePanel" )
+		.button({
+			text:false,
+			label: "{% trans %}Create new panel.{% endtrans %}",
+			icons: {primary: "ui-icon-copy"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			parent.frames['fraDashboardPanels'].dlgCreatePanel();  //Calls the Create Panel dialog
+	});
+	
+	$( "#btn-AddPanel" )
+		.button({
+			text:false,
+			label: "{% trans %}Add an available panel.{% endtrans %}",
+			icons: {primary: "ui-icon-plusthick"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			parent.frames['fraDashboardPanels'].dlgAddPanel();
+	});			
+
+	$( "#btn-SharePanel" )
+		.button({
+			text: false,
+			label: "{% trans %}Share current panel.{% endtrans %}",
+			icons: {primary: "ui-icon-extlink"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			parent.frames['fraDashboardPanels'].dlgSharePanel();  //Calls the Share Panel dialog
+	});	
+
+	var index = docInfo.SetTab;
+	$("#tabs").tabs("option", "active", index);
+});
+
+function LoadPanel(layoutname, panelkey){
+	window.parent.fraDashboardPanels.location.href = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" +  "MyDocova?ReadForm" +  "&layoutpanel=" + layoutname + "&panelkey=" + panelkey;	
+}
+</script>
+<style type="text/css">
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor { padding-left: 0.5em; padding-right: 0.1em; }
+</style>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" SCROLL="no">
+<script type="text/javascript">
+var info = {
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "SetTab" : "{{ app.request.query.get('settab') }}"
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+</script>
+	<div id="PanelButtons" style="position: absolute; right: 20px; top: 5px; font: 11px Verdana, Arial; z-index: 1;">
+		<button id="btn-CreatePanel" class="btn-PanelTabs ui-widget-header ui-corner-all"></button>
+		<button id="btn-AddPanel" class="btn-PanelTabs ui-widget-header ui-corner-all"></button>
+		<button id="btn-ChangePanel" class="btn-PanelTabs ui-widget-header ui-corner-all"></button>
+		<button id="btn-SharePanel" class="btn-PanelTabs ui-widget-header ui-corner-all"></button>
+	</div>
+	<div id="tabContainer">
+		<div id="tabs">
+			<ul>
+			{% for panel in userpanels %}
+				<li>
+					<a href="#tabs-{{ panel.getLayoutOrder }}" onclick="LoadPanel('{{ panel.getLayoutName }}','{{ panel.getId }}')">{{ panel.getTitle }}</a>&nbsp; 
+					<span class='ui-icon ui-icon-close' role='presentation' panelId="{{ panel.getId }}" paneltitle="{{ panel.getTitle }}" panelsharetype="{{ panel.getParentPanel ? panel.getParentPanel.getShareType : panel.getShareType }}" panelparentUNID="{{ panel.getParentPanel ? panel.getParentPanel.getId : '' }}" >{% trans %}Remove Tab{% endtrans %}</span>
+				</li>
+			{% endfor %}
+			</ul>
+			<div id="tabs-1"></div>
+			<div id="tabs-2"></div>
+			<div id="tabs-3"></div>
+			<div id="tabs-4"></div>
+			<div id="tabs-5"></div>
+			<div id="tabs-6"></div>
+			<div id="tabs-7"></div>
+			<div id="tabs-8"></div>
+			<div id="tabs-9"></div>
+			<div id="tabs-10"></div>
+			<div id="tabs-11"></div>
+			<div id="tabs-12"></div>
+		</div>
+	</div>
+</body>
+</html>

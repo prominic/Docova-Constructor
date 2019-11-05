@@ -1,0 +1,67 @@
+{% if libraries %}
+	<ul id="tblLibraryData">
+	{% for key, item in libraries %}
+		{% if key and key == 'community' %}
+			{% for ckey, community in item %}
+		<li class="nopad">
+			<img src="{{ asset('bundles/docova/images/plus.gif') }}" class="tree" onclick="collapseExpand(this);" alt="+" title="expand" expcol="sub{{ type == 'available' ? 'av' : 'sb' }}_{{ ckey|replace({' ':'_', '.':'_', '&':'_'}) }}" />
+			<img src="{{ asset('bundles/docova/images/file248.bmp') }}" alt="community" title="community" />
+			<label><input type="checkbox" onclick="autoSelectCats(this);" name="selsub" value="cm_{{ ckey|replace({' ':'_', '.':'_', '&':'_'}) }}" /> {{ ckey }}</label>
+			<ul id="sub{{ type == 'available' ? 'av' : 'sb' }}_{{ ckey|replace({' ':'_', '.':'_', '&':'_'}) }}" style="display:none;">
+				{% for rkey, realms in community %}
+				{% if rkey and rkey == 'realm' %}
+					{% for lkey, realm in realms %}
+				<li>
+					<img src="{{ asset('bundles/docova/images/plus.gif') }}" class="tree" onclick="collapseExpand(this);" alt="+" title="expand" expcol="sub{{ type == 'available' ? 'av' : 'sb' }}_{{ lkey|replace({' ':'_', '.':'_', '&':'_'}) }}" />
+					<img src="{{ asset('bundles/docova/images/file249.bmp') }}" alt="realm" title="realm" />
+					<label><input type="checkbox" onclick="autoSelectCats(this);" name="selsub" value="cm_{{ lkey|replace({' ':'_', '.':'_', '&':'_'}) }}" /> {{ lkey }}</label>
+					<ul id="sub{{ type == 'available' ? 'av' : 'sb' }}_{{ lkey|replace({' ':'_', '.':'_', '&':'_'}) }}" style="display:none">
+						{% for libs in realm %}
+						<li>
+							<img src="{{ asset('bundles/docova/images/file23.bmp') }}" alt="lib" />
+							<label><input type="checkbox" name="selected{{ type }}" value="{{ libs['id'] }}"> {{ libs['Library_Title'] }}</label></li>
+						{% endfor %}
+					</ul>
+				</li>
+					{% endfor %}
+				{% else %}
+				<li>
+					<img src="{{ asset('bundles/docova/images/file23.bmp') }}" alt="lib" />
+					<label><input type="checkbox" name="selected{{ type }}" value="{{ realms['id'] }}"> {{ realms['Library_Title'] }}</label>
+				</li>
+				{% endif %}
+				{% endfor %}
+			</ul>
+		</li>
+			{% endfor %}
+		{% elseif key and key == 'realm' %}
+			{% for lkey, realm in item %}
+		<li class="nopad">
+			<img src="{{ asset('bundles/docova/images/plus.gif') }}" class="tree" onclick="collapseExpand(this);" alt="+" title="expand" />
+			<img src="{{ asset('bundles/docova/images/file249.bmp') }}" alt="libs" title="libraries" expcol="sub{{ type == 'available' ? 'av' : 'sb' }}_{{ lkey|replace({' ':'_', '.':'_', '&':'_'}) }}" />
+			<label><input type="checkbox" onclick="autoSelectCats(this);" name="selsub" value="cm_{{ lkey|replace({' ':'_', '.':'_', '&':'_'}) }}" /> {{ lkey }}</label>
+			<ul id="sub{{ type == 'available' ? 'av' : 'sb' }}_{{ lkey|replace({' ':'_', '.':'_', '&':'_'}) }}">
+				{% for libs in realm %}
+				<li>
+					<img src="{{ asset('bundles/docova/images/file23.bmp') }}" alt="lib" />
+					<label><input type="checkbox" name="selected{{ type }}" value="{{ libs['id'] }}"> {{ libs['Library_Title'] }}</label>
+				</li>
+				{% endfor %}
+			</ul>
+		</li>
+			{% endfor %}
+		{% else %}
+		<li class="nopad">
+			<img src="{{ asset('bundles/docova/images/file23.bmp') }}" alt="lib" />
+			<label><input type="checkbox" name="selected{{ type }}" value="{{ item['id'] }}"> {{ item['Library_Title'] }}</label>
+		</li>
+		{% endif %}
+	{% endfor %}
+	</ul>
+{% else %}
+	{% if type == 'available' %}
+	<div id="NoLibAvailableMsg" style="margin:4px; font: 12px Verdana,Arial; ">{% trans %}There are no libraries available to you for subscription.{% endtrans %}</div>
+	{% else %}
+	<div id="NoLibMsg" style="padding:4px; font: bold 12px Verdana,Arial; ">{% trans %}You are currently not subscribed to any libraries. Please select one or more libraries above then click "Subscribe" button.{% endtrans %}</div>
+	{% endif %}
+{% endif %}

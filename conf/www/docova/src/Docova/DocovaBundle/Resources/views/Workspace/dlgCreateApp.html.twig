@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% trans %}Applications{% endtrans %}</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<style type="text/css">
+table {
+	display: block; 
+	width: 100%; 
+	overflow-y: auto; 
+	table-layout:fixed;
+	border-collapse: collapse;
+}
+
+fieldset {
+	padding: 2;
+}
+#tblAvailableTemplateData {
+	display: block; 
+	height: 150px; 
+	width: 100%; 
+	overflow-y: auto; 
+	table-layout:fixed;
+	border: 1px solid silver; 
+	border-collapse: collapse;
+}
+td {
+	border-bottom: 1px solid #C0C0C0;
+}
+td.libname {
+    width: 300px;
+    color: #000080;
+}
+td.libdesc {
+    width: 300px;
+}
+td.header {
+    background-color: #ECE9D8;
+    font-weight: bold;
+    color: #000000;
+}
+
+.iconpicker-item{
+	float:left;
+	width:14px;
+	height:14px;
+	padding:12px;
+	margin:0 12px 12px 0;
+	text-align:center;
+	cursor:pointer;
+	border-radius:3px;
+	font-size:14px;
+	box-shadow:0 0 0 1px #ddd;
+	color:inherit
+}
+
+.iconpicker {
+	width:225px;
+	height:150px;
+	border: 1px solid black;
+	overflow: auto;
+}
+
+.iconpicker-selected{
+	background-color: #C0C0C0;
+}
+</style>
+<script language="JavaScript" type="text/javascript">
+var appfname = "";
+var newstring = "";
+var srch = "";
+var srchArray;
+var iconhtml = "";
+var alliconhtml = "";
+{% include 'DocovaBundle:AppBuilder:FontAwesomeIcons.html.twig' %}
+var info = {
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ user.username }}",
+	"ServiceAgent" : "LibraryServices",
+	"UserRoles" : "$$WebClient;",
+	"HTTP_Referer" : "",
+	"Query_String" : "",
+	"Query_String_Decoded" : "",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"HomePageWeb" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"Path_Info_Decoded" : "",
+	"SecureUrl" : ""
+};
+function getinfovar() {
+	return info;
+}
+InitVars(info);
+
+$(document).ready(function() {
+	$( "#tabs" ).tabs();
+	
+	//---Get app name
+	$("#Title").bind("keyup", function(event){
+		newstring = $(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/\s/g, '') //Filename will only be alpha numeric and no spaces
+		newstring = newstring.substr(0,20);
+	});
+
+	//---Generate and store html for all icons
+	for (var x = 0; x < fa_items.length; x++) {
+		iconhtml += "<a title='" + fa_items[x] + "' role='button' href='#' class='iconpicker-item'><i class='" + fa_items[x] + "'></i></a>";
+	}
+	alliconhtml = iconhtml;
+
+	//---Set delay on icon picker search field
+	var delayMilliseconds = 750; // i.e. = 1 second
+	var timeoutId;
+	$("#IconSearch").on('keyup', function() {
+		if (timeoutId) {
+			clearTimeout(timeoutId);
+		}
+		timeoutId = setTimeout(geticons, delayMilliseconds);
+	});
+
+	geticons();
+
+	$("#color-picker").change(function() {
+		$("#AppIconColor").val($(this).val());
+		$("#showIcon").css("color", $(this).val())
+	});
+});
+
+function geticons() {
+	srch = $("#IconSearch").val();
+	if (srch == "") {
+		$("#iconpicker").html(alliconhtml)
+	} else {
+		iconhtml = ""
+		for (var x = 0; x < fa_items.length; x++) {
+			if (fa_items[x].indexOf(srch) > -1) {
+				iconhtml += "<a title='" + fa_items[x] + "' role='button' href='#' class='iconpicker-item'><i class='" + fa_items[x] + "'></i></a>"
+				$("#iconpicker").html(iconhtml)
+			}
+		}
+	}
+	//set click on returned icons
+	$(".iconpicker-item").click(function() {
+		$(".iconpicker-selected").removeClass("iconpicker-selected");
+		$(this).addClass("iconpicker-selected");
+		$("#showIcon").prop("class", $(this).find("i").prop("class")).addClass("fa-5x");
+		$("#AppIcon").val($(this).prop("title"))
+	});
+	return;
+}
+
+function TemplatesLoaded(){
+
+	var xobj = AvailableTemplateData.XMLDocument;
+	var nodes = xobj.selectSingleNode("Apps/App");
+	
+	if (nodes == null){
+		document.getElementById("AvailableTemplateData").style.display = "none";
+		document.getElementById("NoAvailableTemplateDataMsg").style.display = "";
+	}else{
+		document.getElementById("AvailableTemplateData").style.display = "";
+		document.getElementById("NoAvailableTemplateDataMsg").style.display = "none";
+	}
+
+	//Use the first row of the retrieved template recordset to set the defaults
+	var rowIndex = 0;
+	var rs = AvailableTemplateData.recordset;
+	rs.AbsolutePosition(rowIndex);
+	var appTitle = rs.Fields("Title").getValue();
+	var appDesc = rs.Fields("Description").getValue();
+	var appType = rs.Fields("Title").getValue();
+	var isApp = rs.Fields("IsApp").getValue();
+	var appIcon = rs.Fields("AppIcon").getValue();
+	var appIconColor = rs.Fields("AppIconColor").getValue();
+	var appTemplatePath = rs.Fields("DocKey").getValue();
+	rowIndex = rowIndex + 1;
+
+	$("#AppType").val(appType);
+	$("#AppTemplatePath").val(appTemplatePath);
+	$("#IsApp").val(isApp);
+	if(appIcon != ""){
+		$("#AppIcon").val(appIcon);
+		$("#AppIconColor").val(appIconColor);
+		$("#color-picker").val(appIconColor);
+		$("#showIcon").css("color", appIconColor);
+		$("#showIcon").prop("class", "far " + appIcon + " fa-5x");
+	}
+		
+	$('#otblAvailableTemplateData tr').first().css('background-color', '#d8d8d8');
+	
+	$("#otblAvailableTemplateData tr").mouseover(function(){
+		$(this).css('background-color', '#d8d8d8');
+	}).mouseout(function(){
+		if(rowIndex != $(this).index()+1){
+			$(this).css('background-color', 'white');
+		}
+	}).click(function(){
+		rowIndex = $(this).index() +1;
+		tablerowIndex = $(this).index();
+		$("#otblAvailableTemplateData tr").each(function(){
+			$(this).css("background-color", "white");
+		})
+		$(this).css('background-color', "#d8d8d8");
+		
+		rs.AbsolutePosition(rowIndex-1);
+		appType = rs.Fields("Title").getValue(); //Using title to determine the app type
+		appTitle = rs.Fields("Title").getValue();
+		isApp = rs.Fields("IsApp").getValue();
+		appDesc = rs.Fields("Description").getValue();
+		appUnid = rs.Fields("Unid").getValue();
+		appDocKey = rs.Fields("DocKey").getValue();
+		appTemplatePath = rs.Fields("DocKey").getValue();
+		appIcon = rs.Fields("AppIcon").getValue();
+		appIconColor = rs.Fields("AppIconColor").getValue();	
+		
+		//if appIcon and appIconColor are blank, which they can be for Libraries created via Admin then set some defaults
+		if(appIcon == ""){ appIcon = "fa-database"; }
+		if(appIconColor == ""){ appIconColor = "#ff6600"; }
+
+		$("#AppType").val(appType);
+		$("#AppTemplatePath").val(appTemplatePath);
+		$("#IsApp").val(isApp);
+		if(appIcon != ""){
+			$("#AppIcon").val(appIcon);
+			$("#AppIconColor").val(appIconColor);
+			$("#color-picker").val(appIconColor);
+			$("#showIcon").css("color", appIconColor);
+			$("#showIcon").prop("class", "far " + appIcon + " fa-5x");
+		}
+	})
+}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+	<form method="post" name="_dlgCreateApp">
+        <div id="tabs">
+          <ul>
+            <li><a href="#tabs-1">{% trans %}General{% endtrans %}</a></li>
+            <li><a href="#tabs-2">{% trans %}Use Template{% endtrans %}</a></li>
+          </ul>
+        <div id="tabs-1">
+			<div style="display:none">
+				<select name="Type" id="Type" class="frmField" style="width:300px;">
+					<option value="A">{% trans %}Application{% endtrans %}
+					<option value="LG">{% trans %}Library Group{% endtrans %}
+				</select>
+			</div>
+    		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+    			<tr valign="top">
+    				<td width="31%">{% trans %}Title{% endtrans %}:</td>
+    				<td width="69%"><input name="Title" value="" id="Title" class="frmField" style="width: 300px;" maxlength="40"></td>
+    			</tr>
+    			<tr valign="top">
+    				<td width="31%">{% trans %}Description{% endtrans %}:</td>
+    				<td width="69%"><input name="Description" value="" id="Description" style="width: 300px;" title="maxlength=&quot;50&quot;"></td>
+    			</tr>
+    		</table>
+    		<br>
+    		<table style="width: 100%; table-layout: fixed; display: table;">
+    			<tr>
+    				<td><span>{% trans %}Select an Icon{% endtrans %}:</span> <input name="IconSearch" value="" id="IconSearch" placeholder="{% trans %}Type words here to search{% endtrans %}"></td>
+    				<td><span>{% trans %}Select a color{% endtrans %}:&nbsp&nbsp</span><input id="color-picker" style="width: 60px;" value="#0080ff" type="color">
+    				</td>
+    			</tr>
+    			<tr>
+    				<td style="vertical-align: top;">
+    					<div id="iconpicker" class="iconpicker"></div>
+    				</td>
+    				<td>
+    					<div id="AppIconHTML" style="vertical-align: middle; text-align: center;">
+    						<i id="showIcon" class="far fa-500px fa-5x" style="color: #0080ff;"></i>
+    					</div>
+    				</td>
+    			</tr>
+    		</table>
+    		<div style="display: none;">
+    			{% trans %}Application Icon{% endtrans %}: <input type="text" name="AppIcon" value="fa-500px" id="AppIcon">
+    			{% trans %}Application Icon Color{% endtrans %}: <input type="text" name="AppIconColor" value="#0080ff" id="AppIconColor">
+    			{% trans %}Web domain server{% endtrans %}:<input type="text" name="Server" value="{{ app.request.server.get('HTTP_HOST') }}" id="Server">
+    			{% trans %}Web path{% endtrans %}: <input type="text" name="WebAppPath" value="{{ path('docova_homepage') }}" id="WebAppPath">
+    		</div>
+        </div>
+        <div id="tabs-2">
+			<fieldset>
+				<legend>{% trans %}Select a template to use{% endtrans %}&nbsp;</legend>
+				<!------------------------------------------------------------>
+				<div id="NoAvailableTemplateDataMsg" style="display: none;">{% trans %}There are currently no Templates available to you.{% endtrans %}</div>
+				<div id="AvailableTemplateData" style="display:none;border:1px solid gray;">
+					<!---------- available Templates table header ------>
+					<table id="tblAvailableTemplateData" datasrc="#AvailableTemplateData">
+                        <thead>
+                        	<tr>
+                        		<td  class="libname header">{% trans %}Name{% endtrans %}</td>
+                        		<td  class="libdesc header">{% trans %}Description{% endtrans %}</td>
+                        	</tr>
+                        </thead>
+						<tbody id="otblAvailableTemplateData">
+						<!---------- available Template table content ------>
+							<tr>
+								<td  class="libname"><span id="Title" datafld="Title"></span></td>
+								<td class="libdesc"><span id="Description" datafld="Description"></span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				</br>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr valign="top">
+						<td style="width:250px;padding-top:10px;padding-bottom:5px;" width="29%">{% trans %}Specify what to copy{% endtrans %}:</td>
+						<td style="padding-top:10px;padding-bottom:5px;" width="71%">
+							<label><input type="radio" disabled="disabled" name="CopyOption" value="DD" id="CopyOption"> {% trans %}Design and documents{% endtrans %}</label><br>
+							<label><input type="radio" disabled="disabled" name="CopyOption" checked value="DO" id="CopyOption"> {% trans %}Design only{% endtrans %}</label></br></br>
+						</td>
+					</tr>
+					<tr valign="top">
+						<td style="padding-top:5px;padding-bottom:5px;" width="29%">{% trans %}Design changes{% endtrans %}:</td>
+						<td style="padding-top:5px;padding-bottom:5px;" width="71%">
+							<label><input type="checkbox" name="InheritOption" value="I" id="InheritOption">{% trans %}Inherit future template changes{% endtrans %}</label>
+						</td>
+					</tr>
+				</table>
+				</br>
+			</fieldset>
+        </div>
+        <script>
+        	var AvailableTemplateData = new xmlDataIsland();
+        	AvailableTemplateData.setSrc ( "{{ path('docova_templatedata') }}" ) ;
+        	AvailableTemplateData.id = "AvailableTemplateData";
+        	AvailableTemplateData.setTemplateName( "otblAvailableTemplateData");
+        	AvailableTemplateData.ondatasetcomplete = function() { TemplatesLoaded() }
+        </script>
+		<div style="display:none;">
+			{% trans %}Application type{% endtrans %}:<input name="AppType" value="-Custom-" id="AppType">
+			{% trans %}Application template path{% endtrans %}: <input name="AppTemplatePath" value="" id="AppTemplatePath">
+			{% trans %}Application Icon{% endtrans %}: <input name="AppIcon" value="fa-500px" id="AppIcon">
+			{% trans %}Application Icon Color{% endtrans %}: <input name="AppIconColor" value="#0080ff" id="AppIconColor">
+			{% trans %}Web domain server{% endtrans %}: <input name="Server" value="{{ app.request.server.get('HTTP_HOST') }}" id="Server">
+			{% trans %}Web path{% endtrans %}: <input name="WebAppPath" value="{{ path('docova_homepage') }}" id="WebAppPath">
+			{% trans %}Is App?{% endtrans %} <input name="IsApp" value="" id="IsApp">
+		</div>
+	</form>
+</body>
+</html>

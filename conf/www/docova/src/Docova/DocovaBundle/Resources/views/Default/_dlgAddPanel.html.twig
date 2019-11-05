@@ -1,0 +1,30 @@
+<table>
+	<tr>
+		<td style="width: 125px;">{% trans %}Panel list type{% endtrans %}:</td>
+		<td>
+			<input type="radio" name="PanelListType" value="Public" checked=true onclick="Docova.GlobalStorage['divDlgAddPanel'].sourcewindow.GetPanelList('Public')">{% trans %}Public Panels{% endtrans %}</input>
+			<input type="radio" name="PanelListType" value="Managed" onclick="Docova.GlobalStorage['divDlgAddPanel'].sourcewindow.GetPanelList('Managed')" >{% trans %}My Managed{% endtrans %}</input>
+		</td>
+	</tr>
+	<tr>
+		<td>{% trans %}Panel{% endtrans %}:</td>
+		<td>
+			<select name="PanelList" id="PanelList" onchange="Docova.GlobalStorage['divDlgAddPanel'].sourcewindow.GetPanelDescription(this)" style="width:300px;">
+				<option value="0">-{% trans %}Select{% endtrans %}-</option>
+				{% for item in panelsList %}
+				<option value="{{ item.getId }}">{{ item.getTitle }}</option>
+				{% endfor %}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>{% trans %}Description{% endtrans %}:</td>
+		<td>
+			<textarea id="PanelDescription" name="PanelDescription" class="txFld" style="width:300px ; height:100px;" disabled="disabled">{% trans %}Please select a panel. A description of your selection will appear here.{% endtrans %}</textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>{% trans %}Owner{% endtrans %}:</td>
+		<td><input id="PanelOwner" name="PanelOwner" class="txFld" style="width:300px;" disabled="disabled"></td>
+	</tr>
+</table>

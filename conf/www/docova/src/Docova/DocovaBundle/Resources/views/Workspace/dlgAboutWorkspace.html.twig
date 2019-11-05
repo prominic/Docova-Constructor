@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<title>{% trans %}About Workspace{% endtrans %}</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleAdministration.css') }}"	type="text/css" />
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onload="initDialog();">
+	<div id="divWSContentSection" class="ui-widget" style="position: absolute; overflow: auto; top: 0px; bottom: 0px; left: 10px; right: 10px; padding: 15px 25px 40px 25px;">
+		<table class="tblFields" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td width="427"><img style="width: 200px;" src="{{ asset('bundles/docova/images/login.jpg') }}"><br></td>
+				<td width="427">
+					<div>
+						<span class="frmText" style="font-size: 30px;">{% trans %}Welcome to your Workspace{% endtrans %}</span><br> 
+						<span class="frmLabel"><a href="http://www.docova.com" target="_blank">www.docova.com</a></span>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td width="100%">
+    				<span class="verdana fourteen bold">{% trans %}Getting Started with the DOCOVA Workspace!{% endtrans %}</span><br> <br>
+    				<span class="verdana twelve">{% trans %}The DOCOVA Workspace is where you can add and organize your DOCOVA Applications. You can add as many slider Panels as you want and add Applications to those Panels. If you have the right access control, you can also create applications here quickly and easily{% endtrans %}.</span><br>
+    				<span class="verdana twelve">{% trans %}To get you started, the <b>"DOCOVA Dashboard", "DOCOVA Library Repository"</b> and <b>"DOCOVA Federated Search"</b>have been automatically added to your Workspace.{% endtrans %}</span><br>
+    				<span class="verdana twelve">{% trans %}To add more Applications and Panels click on the "Options" button provided at the top right of your Workspace.{% endtrans %}</span><br>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

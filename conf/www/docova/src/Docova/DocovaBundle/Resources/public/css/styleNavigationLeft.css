@@ -1,0 +1,6 @@
+FONT { font-size: 12px; font-family: Verdana,Arial,Sans-Serif; }
+A:hover { COLOR: #FF0000 }
+BODY { background-color: #ECE9D8; margin: 0px 0px 0px 0px;} 
+
+.NavNotificationsContainer {position:absolute; top: expression(document.body.clientHeight - 20); left: 0px; z-index:1001; height: 310px; width:100%; overflow-y: auto; filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#C8DFFB', EndColorStr='#7DA5E0'); border: 2px groove; } 
+.NavNotificationsPopup {position:absolute; top: expression(document.body.clientHeight); left: 1px; height: 135px; width:248px; z-index:1011; filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#C8DFFB', EndColorStr='#7DA5E0'); border: 2px ridge; } 

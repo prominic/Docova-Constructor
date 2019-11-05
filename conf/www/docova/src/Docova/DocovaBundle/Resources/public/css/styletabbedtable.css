@@ -1,0 +1,64 @@
+BODY {
+	background-color: #EFEFEF;
+	margin: 0px 0px 0px 0px;
+	padding: 0px;
+	font : normal 11px Verdana, Arial, sans-serif;
+	overflow-y: hidden;
+	overflow-x:hidden;
+}
+
+.tabs {
+	padding-bottom:0px;
+	height:35px;
+}
+
+#mainul {
+	height: 32px !important;
+	border-bottom: 1px solid white;
+}
+
+.ui-tabs .ui-tabs-nav li a { 
+	max-width:120px; 
+   	/*white-space:nowrap;*/
+   	overflow: hidden;
+   	text-overflow: ellipsis;
+	/*padding: .55em 1em !important;*/
+ }  
+
+ul.ui-tabs-nav {
+	position:relative;
+	overflow:hidden;
+}
+			
+.ficon {
+	position:absolute;
+	top:5px;
+	left:0px;
+}
+
+.ui-tabs .ui-tabs-nav LI.ui-tabs-active{
+	 padding-bottom: 2px;
+}
+			
+.closeall {
+	position : absolute;
+	top : 0px;
+	right: 1px;
+	z-index:999;
+	width:17px !important;
+	height:14px !important;
+}
+
+.ui-tabs .ui-tabs-nav {
+	padding: 0px 0px 0px 0px !important;
+}
+
+.tabs-that-dont-wrap .ui-tabs-nav {
+    white-space: nowrap;
+    overflow: hidden;
+}
+.tabs-that-dont-wrap .ui-tabs-nav li {
+    display: inline-block;
+    float: none;
+    /*vertical-align: bottom;*/
+}

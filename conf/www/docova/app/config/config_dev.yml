@@ -1,0 +1,50 @@
+imports:
+    - { resource: config.yml }
+
+framework:
+    router:
+        resource: '%kernel.project_dir%/app/config/routing_dev.yml'
+        strict_requirements: true
+    profiler: { enabled: true }
+
+web_profiler:
+    toolbar: false
+    intercept_redirects: false
+
+monolog:
+    channels: ['docova']
+    handlers:
+        docova:
+            # log all messages (since debug is the lowest level)
+            level: error
+            type: stream
+            path: '%kernel.logs_dir%/docova.log'
+            channels: [docova]
+        main:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            level: error
+        console:
+            type: console
+            process_psr_3_messages: false
+            #channels: ['!event', '!doctrine', '!console']
+        # To follow logs in real time, execute the following command:
+        # `bin/console server:log -vv`
+        server_log:
+            type: server_log
+            process_psr_3_messages: false
+            host: 127.0.0.1:9911
+        # uncomment to get logging in your browser
+        # you may have to allow bigger header sizes in your Web server configuration
+        #firephp:
+        #    type: firephp
+        #    level: info
+        #chromephp:
+        #    type: chromephp
+        #    level: info
+
+#assetic:
+#    use_controller: true
+
+#swiftmailer:
+#    delivery_addresses: ['me@example.com']

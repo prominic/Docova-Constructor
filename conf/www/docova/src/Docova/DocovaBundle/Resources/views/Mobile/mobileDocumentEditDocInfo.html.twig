@@ -1,0 +1,169 @@
+{% set date_format = settings.getDefaultDateFormat|replace({'MM' : 'm', 'DD' : 'd', 'YYYY' : 'Y'}) %}
+<script type="text/javascript">
+   var docInfo = {
+     "DocID":"{% if document_detail %}{{ document_detail.getId }}{% endif %}",
+     "DocKey":"{% if document_detail %}{{ document_detail.getId }}{% endif %}",
+     "DocumentNumber":"",
+     "ThreadKey":"",
+     "DocumentTypeKey":"{{ document_type.getId }}",
+     "DocTitle":"{% if document_detail|length > 0 %}{{ document_detail.getDocTitle }}{% endif %}",
+     "DocumentType":"{{ document_type.getDocName }}",
+     "LibraryKey":"{{ folder_info.getLibrary.getId }}",
+     "LibraryTitle":"{{ folder_info.getLibrary.getLibraryTitle }}",
+     "SystemKey":"",
+     "UserName":"{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+     "UserNameAB":"{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+     "UserNameCN":"{{ user.username }}",
+     "TodayDate":"{{ 'now'|date(date_format) }}",
+     "isNewDoc":"{% if not document_detail %}true{% endif %}",
+     "isDocBeingEdited":"true",
+     "CursorFocusField":"{{ document_type.getCursorFocusField }}",
+     "DocAccessLevel":"6",
+     "CanDeleteDocuments":"true",
+     "DocAccessRole":"Manager",
+     "DbAccessLevel":"3",
+     "CanCreateRevisions":"true",
+     "Mode":"{{ app.request.query.get("mode") ? app.request.query.get("mode") : '' }}",
+     "LoadAction":"{{ app.request.query.get("loadaction") ? app.request.query.get("loadaction") : '' }}",
+     "DataDocUrl":"{{ url('docova_allbydockey', {'key': folder_info.getId}) }}",
+     "HTTP_Referer":"{{ url('docova_mobile') }}",
+     "Query_String":"{% if document_detail %}EditDocument&Mobile=true&device={% else %}OpenForm&ParentUNID={{ folder_info.getId }}&folderid={{ folder_info.getId }}&typekey={{ document_type.getId }}&mode=&device={% endif %}",
+     "Query_String_Decoded":"{% if document_detail %}EditDocument&Mobile=true&device={% else %}OpenDocument&ParentUNID={{ folder_info.getId }}&folderid={{ folder_info.getId }}&typekey={{ document_type.getId }}&mode=&device={% endif %}",
+     "Path_Info_Decoded":"{% if document_detail %}{{ path('docova_editdocument', { 'doc_id' : document_detail.getId }) }}?EditDocument&Mobile=true&device={% else %}{{ path('docova_documentpage', { 'mobile' : 'mDocument'}) }}?OpenDocument&ParentUNID={{ folder_info.getId }}&folderid={{ folder_info.getId }}&typekey={{ document_type.getId }}&mode=&device={% endif %}",
+     "SSLState":"{{ app.request.getscheme == 'https' ? 'ON' : 'OFF' }}",
+     "ServerName":"{{ app.request.server.get('HTTP_HOST') }}",
+     "ServerUrl":"{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+     "NsfName":"{{ path('docova_mobile')[1:path('docova_homepage')|length - 2] }}",
+     "LogNsfName":"{{ path('docova_mobile')[:path('docova_mobile')|length] }}",
+     "ImagesPath":"{{ asset('') }}",
+     "ArchiveNsfName":"",
+     "PortalWebPath":"{{ path('docova_mobile')[:path('docova_homepage')|length - 1] }}",
+     "PortalNsfName":"{{ path('docova_mobile')[1:path('docova_mobile')|length - 1] }}",
+     "KeywordsNsfName":"",
+     "KeywordsWebName":"",
+     "FolderID":"{{ folder_info.getId }}",
+     "FolderName":"{{ folder_info.getFolderName }}",
+     {% set ancestors = '' %}
+     {% macro getAncestors(folder) %}
+     	{% if folder.getParentFolder %}
+     		{% set ancestors = _self.getAncestors(folder.getParentFolder) ~ ancestors %}
+     	{% else %}
+     		{% set ancestors = folder.getFolderName ~ ',' %}
+     	{% endif %}
+     {% endmacro %}
+     {% import _self as gdoc %}
+     {% if document_detail and folder_info.getParentFolder %}
+     	{% set ancestors = gdoc.getAncestors(folder_info.getParentFolder) %}
+     {% endif %}
+     "FolderAncestors":"{{ ancestors }}",
+     "FolderPath":"{{ folder_info.getFolderPath }}",
+     "CreatedBy":"{% if document_detail %}{{ document_detail.getCreator.getUserNameDnAbbreviated }}{% else %}{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}{% endif %}",
+     "CreatedDate":"{% if document_detail %}{{ document_detail.getDateCreated|date(date_format) }}{% else %}{{ 'now'|date(date_format) }}{% endif %}",
+     "Managers":"{{ managers|join(', ') }}",
+     "Authors":"{{ managers|join(', ') }}{% if document_detail|length == 0 and user.getUserNameDnAbbreviated not in managers %}, {{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}{% endif %}",
+     "Readers":"{{ managers|join(', ') }}{% if document_detail|length == 0 and user.getUserNameDnAbbreviated not in managers %}, {{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}{% endif %}",
+     "FolderAuthors":"{{ folder_authors|join(', ') }}",
+     "FolderReaders":"{{ folder_readers|join(', ') }}",
+     {% set fdoctypes = '' %}
+     {% if folder_info.getApplicableDocType.count > 0 %}
+     	{% for type in folder_info.getApplicableDocType %}
+     		{% set fdoctypes = fdoctypes ~ type.getDocName ~ ', ' %}
+     	{% endfor %}
+     	{% set fdoctypes = fdoctypes[:fdoctypes|length - 2] %}
+     {% endif %}
+     "FolderDocTypes":"{{ fdoctypes }}",
+     "LastModifiedBy":"{% if (document_detail and document_detail.getModifier) %}{{ document_detail.getModifier.getUserNameDnAbbreviated }}{% else %}{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}{% endif %}",
+     "LastModifiedDate":"{% if (document_detail and document_detail.getDateModified) %}{{ document_detail.getDateModified|date('m/d/Y h:i:s A') }}{% else %}{{ 'now'|date('m/d/Y h:i:s A') }}{% endif %}",
+     "LastModifiedServer":"",
+     "LockEditor":"{% if document_detail %}{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}{% endif %}",
+     "LockDate":"{% if document_detail %}{{ 'now'|date('m/d/Y h:i:s A') }}{% endif %}",
+     "LockServer":"{% if document_detail %}{{ app.request.server.get('HTTP_HOST') }}{% endif %}",
+     "LockStatus":"{% if document_detail %}1{% else %}0{% endif %}",
+     "isLockEditor":"{% if document_detail %}true{% endif %}",
+     "isLocked":"{% if document_detail %}true{% endif %}",
+     "isEditable":"true",
+     "isFileCIAOEnabled":"{{ attachment_settings['EnableFileCIAO'] is defined and attachment_settings['EnableFileCIAO'] == 1 ? 'true' : '' }}",
+     "isFileViewLoggingOn":"{{ attachment_settings['EnableFileViewLogging'] is defined and attachment_settings['EnableFileViewLogging'] == 1 ? 'true' : '' }}",
+     "isFileDownloadLoggingOn":"{{ attachment_settings['EnableFileDownloadLogging'] is defined and attachment_settings['EnableFileDownloadLogging'] == 1 ? 'true' : '' }}",
+     "MaxFiles":"{{ attachment_settings['MaxFiles'] is defined ? attachment_settings['MaxFiles'] : 0 }}",
+     "AllowedFileExtensions":"{{ attachment_settings['AllowedFileExtensions'] is defined ? attachment_settings['AllowedFileExtensions'] : '' }}",
+     "AttachmentsReadOnly":"{{ attachment_settings['AttachmentReadOnly'] is defined and attachment_settings['AttachmentReadOnly'] == 1 ? 'true' : '' }}",
+     "AttachmentsHidden":"{{ attachment_settings['HideOnEditing'] is defined and attachment_settings['HideOnEditing'] == 1 ? 'true' : '' }}",
+     "EnableDiscussion":"{{ document_type.getEnableDiscussion == 1 ? 'true' : '' }}",
+     "EnableLocalScan":"{{ attachment_settings['EnableLocalScan'] is defined and attachment_settings['EnableLocalScan'] == 1 ? 'true' : '' }}",
+     "EnableMailAcquire":"{{ document_type.getEnableMailAcquire ? 'true' : '' }}",
+     "EnableDropboxAcquire":"",
+     "EnableLinkedFiles":"{{ rel_doc_settings['EnableLinkedFiles'] is defined and rel_doc_settings['EnableLinkedFiles'] == 1 ? 'true' : '' }}",
+     "LaunchLinkedFiles":"{{ rel_doc_settings['LaunchLinkedFiles'] is defined and rel_doc_settings['LaunchLinkedFiles'] == 1 ? 'true' : '' }}",
+     "RestrictPrinting":"{{ document_type.getCustomRestrictPrinting(true) ? 'true' : '' }}",
+     "RequirePDFCreator":"{{ folder_info.getLibrary.getPDFCreatorRequired ? 'true' : '' }}",
+     "TemplateList":"{{ templates['Template_List'] is defined ? templates['Template_List'] : '' }}",
+     "TemplateNameList":"{{ templates['Template_Name_List'] is defined ? templates['Template_Name_List'] : '' }}",
+     "TemplateFileList":"{{ templates['Template_File_List'] is defined ? templates['Template_File_List'] : '' }}",
+     "TemplateVersionList":"{{ templates['Template_Version_list'] is defined ? templates['Template_Version_list'] : '' }}",
+     "TemplateType":"{{ templates['Template_Type'] is defined ? templates['Template_Type'] : 'None' }}",
+     "TemplateAutoAttach":"{{ templates['Template_Auto_Attach'] is defined ? templates['Template_Auto_Attach'] : '' }}",
+     "HasWorkflow":"{{ document_type.getEnableLifecycle and document_type.getEnableWorkflow ? 'true' : '' }}",
+     "HasLifecycle":"{{ document_type.getEnableLifecycle ? 'true' : '' }}",
+     {% if workflow_options|length > 0 %}
+     "isWorkflowCreated":"{% if workflow_options.isCreated == true %}true{% endif %}",
+     "isWorkflowCompleted":"{% if workflow_options.isCompleted == true %}true{% endif %}",
+     "CreateWorkflowInDraft":"{% if workflow_options.createInDraft == true %}true{% endif %}",
+     {% else %}
+     "isWorkflowCreated":"",
+     "isWorkflowCompleted":"",
+     "CreateWorkflowInDraft":"",
+     {% endif %}
+     "EnableVersions":"{{ document_type.getEnableLifecycle and document_type.getEnableVersions ? 'true' : '' }}",
+     "isXLinkEnabled":"{{ rel_doc_settings['EnableXLink'] is defined and rel_doc_settings['EnableXLink'] == 1 ? 'true' : '' }}",
+     "Version":"{% if document_type.getEnableLifecycle and document_type.getEnableVersions %}{% if document_detail %}{{ document_detail.getDocVersion }}{% else %}0.0{% endif %}{% endif %}",
+     "FullVersion":"{% if document_type.getEnableLifecycle and document_type.getEnableVersions %}{% if document_detail %}{{ document_detail.getDocVersion }}.{{ document_detail.getRevision ? document_detail.getRevision : '0' }}{% else %}0.0.0{% endif %}{% endif %}",
+     "PreviousFullVersion":"",
+     "NextFullVersion":"",
+     "AvailableVersionList":"{{ document_detail and available_versions|length > 0 ? available_versions|join(',') : '1.0.0,0.1.0,0.0.1' }}",
+     "isInitialVersion":"{{ document_detail ? is_initial_version : '' }}",
+     "isSupersededVersion":"{{ document_type.getEnableLifecycle and document_type.getEnableVersions and document_detail|length > 0 and document_detail.getDocStatus == document_type.getSupersededStatus ? 'true' : '' }}",
+     "isDiscardedVersion":"{{ document_type.getEnableLifecycle and document_type.getEnableVersions and document_detail|length > 0 and document_detail.getDocStatus == document_type.getDiscardedStatus ? 'true' : '' }}",
+      "isCurrentVersion":"{{ document_type.getEnableLifecycle and document_detail|length > 0 and document_detail.getDocStatus == document_type.getInitialStatus ? 'true' : '' }}",
+      "isNewVersion":"{{ document_type.getEnableLifecycle and document_type.getEnableVersions and document_detail|length == 0 ? 'true' : '' }}",
+      "StrictVersioning":"{{ document_type.getEnableLifecycle and document_type.getEnableVersions and document_type.getStrictVersioning ? 'true' : '' }}",
+      "AllowRetract":"{{ document_type.getEnableLifecycle and document_type.getEnableVersions and document_type.getStrictVersioning and document_type.getAllowRetract ? 'true' : '' }}",
+      "RestrictDrafts":"{{ document_type.getEnableLifecycle and document_type.getEnableVersions and document_type.getStrictVersioning and document_type.getRestrictDrafts ? 'true' : '' }}",
+      "RestrictLiveDrafts":"{{ document_type.getEnableLifecycle and document_type.getEnableVersions and document_type.getRestrictLiveDrafts ? 'true' : '' }}",
+      "HasAttachmentsSection":"{{ has_attachment }}",
+      "HasMultiAttachmentSections":"{{ attachment_settings['HasMultiAttachmentSection'] is defined and attachment_settings['HasMultiAttachmentSection'] == 1 ? 'true' : '' }}",
+      "TextContentType":"{{ text_content_type }}",
+      "MailAcquireDialogUrl":"{{ path('docova_mailacquire') }}",
+      "RelatedDocOpenMode":"{{ rel_doc_settings['RelatedDocOpenMode'] is defined and rel_doc_settings['RelatedDocOpenMode'] == 1 ? 'true' : '' }}",
+      "OMUserSelectDocTypeKey":"{{ rel_doc_settings['OMUserSelectDocTypeKey'] is defined ? rel_doc_settings['OMUserSelectDocTypeKey'] : '' }}",
+      "OMLatestDocTypeKey":"{{ rel_doc_settings['OMLatestDocTypeKey'] is defined ? rel_doc_settings['OMLatestDocTypeKey'] : '' }}",
+      "OMLinkedDocTypeKey":"{{ rel_doc_settings['OMLinkedDocTypeKey'] is defined ? rel_doc_settings['OMLinkedDocTypeKey'] : '' }}",
+      "MailAcquireMessagesDialogUrl":"{% if user.getUserProfile.getUserMailSystem == 'N' %}{{ path('docova_mailacquiremessages') }}{% elseif user.getUserProfile.getUserMailSystem == 'O' %}{{ path('docova_outlookacquiremessages') }}{% endif %}",
+      "UserMailSystem":"{{ user.getUserProfile.getUserMailSystem }}",
+      "UserMailImport":"",
+      {% set attachments = '' %}
+      {% set outlook_file_size = '' %}
+      {% if document_detail|length > 0 and document_detail.getAttachments.count > 0 %}
+      	{% for attach in document_detail.getAttachments %}
+      		{% set attachments = attachments ~ '*' ~ attach.getFileName %}
+      		{% set outlook_file_size = outlook_file_size ~ ',' ~ attach.getFileName ~ '*' ~ ((attach.getFileSize / 1024)|number_format) ~ ' KB' %}
+      	{% endfor %}
+      	{% set attachments = attachments[1:] %}
+      	{% set outlook_file_size = outlook_file_size[1:] %}
+      {% endif %}
+      "OutlookAttachmentsSize":"{{ outlook_file_size }}",
+      "DocAttachmentNames":"{{ attachments }}",
+      "SessionDateFormat":"mm/dd/yyyy",
+      "isLinkComments":"{{ link_comments == 1 ? 'true' : '' }}",
+      "hasDrafts":"{% if document_detail %}{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}{% endif %}",
+      "isBookmark":"",
+      "BookmarkParentDocKey":"",
+      "DisableBookmarks":"",
+      "DocIsDeleted":"",
+      "MBThemeTitleBar": "a",
+      "MBThemeFolders": "c",
+      "MBThemeDocuments": "c",
+      "isMobileWorkflowSave": "{{ app.request.query.get('type') == 'workflow' ? '1': '0' }}",
+     "MobileAppDevice":""
+    };
+</script>

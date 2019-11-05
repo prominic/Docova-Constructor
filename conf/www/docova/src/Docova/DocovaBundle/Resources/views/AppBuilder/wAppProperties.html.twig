@@ -1,0 +1,1152 @@
+<!doctype html>
+<html>
+<head>
+<title>{% trans %}Application Settings{% endtrans %}</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness-flat/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/adminBaseForms.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/multiselect.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/multiselect.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/admin/sfWorkspaceCommonJsHeader.js') }}" ></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/DesignImportFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/beautify/beautify.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/admin/appBuilderJS.js') }}"></script>
+<style type="text/css">
+.aclBtn { height: 24px !important; }
+.hoverborder-1 {
+	border: 1px dashed black !important;
+}
+.selectedbg-1 {
+	background-color: #D0D0D0 !important;
+}
+</style>
+{% set date_format = settings.getDefaultDateFormat|replace({'MM' : 'm', 'DD' : 'd', 'YYYY' : 'Y'}) %}
+<script language="JavaScript" type="text/javascript">
+var MembersView = null; //embedded view object
+var dlgParams = new Array();  //params array that gets used by dialogs
+var retValues = new Array(); //ret params array that can be used by dialogs
+var currEntry;
+var tcolor; //used to get a default theme color for styling
+var entryiconclass = [];
+entryiconclass[0] = "fa-angle-right";
+entryiconclass[1] = "fa-user";
+entryiconclass[2] = "fa-server"; 
+entryiconclass[3] = "fa-share-alt";
+entryiconclass[4] = "fa-users";
+entryiconclass[5] = "fa-sitemap";
+var info = {
+    "DocID" : "{{ application.getId }}",
+    "DocKey" : "{{ application.getId }}",
+    "DocumentNumber" : "",
+    "SystemKey" : "{{ settings.getSystemKey }}",
+    "ThreadKey" : "{{ application.getId }}",
+    "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+    "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+    "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+    "UserNamesList" : "",
+    "TodayDate" : "{{ 'now'|date(date_format) }}",
+    "isNewDoc" : "",
+    "imgPath" : "{{ asset('bundles/docova/js/') }}",
+    "isDocBeingEdited" : "true",
+    "Mode" : "{{ app.request.query.get('mode') }}",
+    "AppID" : "{{ application.getId }}",
+    "LoadAction" : "",
+    "HTTP_Referer" : "",
+    "Query_String" : "editDocument",
+    "Query_String_Decoded" : "editDocument",
+    "Path_Info_Decoded" : "{{ path('docova_appproperties', {'appid' : application.getId} ) }}?editDocument",
+    "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+    "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+    "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+    "PortalWebPath" : "{{ url('docova_homepage') }}",
+    "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+    "SSLState" : "{{ 'https' in app.request.getscheme|lower ? 'ON' : 'OFF' }}",
+    "CreatedBy" : "",
+    "CreatedDate" : "{{ application.getDateCreated.format('m/d/Y') }}",
+    "Managers" : "",
+    "Authors" : "Administration,",
+    "Readers" : "",
+    "LastModifiedBy" : "",
+    "LastModifiedDate" : "",
+    "LastModifiedServer" : "",
+    "SessionDateFormat" : "{{ settings.getDefaultDateFormat|lower }}",
+    "DocAccessLevel" : "7",
+    "CanDeleteDocuments" : "true",
+    "DocAccessRole" : "Manager",
+    "DbAccessLevel" : "7",
+    "AllowedFileExtensions" : "",
+    "MaxFiles" : "0",
+    "isEditable" : "true",
+    "DocovaEnvironment" : "Internal",
+    "isAppSettings" : "",
+    "isUserUpdate" : "No",
+    "userProfileRetUrl" : "{{ path('docova_admin_readdocument', {'view_name' : 'wAdminUserProfile', 'doc_id' : application.getId }) }}?uType=user",
+    "formName" : "Library",
+    "initUserRole" : "",
+    "isUIDoc" : true,
+    "source" : "{{ app.request.query.get('source') == 'admin' ? 'admin' : '' }}"
+};
+function getinfovar(){
+	return info;
+}
+InitVars(info);
+
+$(document).ready(function(){
+	//Disable context menu
+	$(document).on("contextmenu", function(e){ e.preventDefault(); e.stopPropagation();});
+	
+	//$("#formSections").accordion({ collapsible: true });
+	$("#divFormContainer").accordion({ collapsible: true, heightStyle: "content" });
+	tcolor = $(".ui-state-default").css("color"); //if the theme default color is white...change it to black
+	if(tcolor == "rgb(255, 255, 255)"){
+		tcolor = "rgb(0, 0, 0)";
+	}
+	var isHidden = true;
+	if(docInfo.isDocBeingEdited && Docova.Utils.getField("DocumentTypeOption") == "S") { isHidden = false; }
+	$("#DocumentType").multiselect({
+		initHidden: isHidden,
+		position: { my: 'left top', at: 'left bottom', of: '#DocumentTypebtn'},  //required due to content scroll workaround
+		selectedList: 4,
+		minWidth: 500,
+		appendTo: "#MultiSelectWrapper"   //move the multiselect into the main content area so it will scroll with the content
+	});
+
+	$( "#btn-AddACLEntry" )
+		.button({
+			text: true,
+			label: "{% trans %}Add{% endtrans %}",		
+			icons: {primary:  "ui-icon-plus"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			AddACLEntry();
+	});	
+	$( "#btn-RemoveACLEntry" )
+		.button({
+			text: true,
+			label: "{% trans %}Remove{% endtrans %}",				
+			icons: {primary:  "ui-icon-minus"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			RemoveACLEntry();
+	});	
+	$( "#btn-CopyACL" )
+		.button({
+			text: true,
+			label: "{% trans %}Copy{% endtrans %}",		
+			icons: {primary:  "ui-icon-copy"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			CopyACL();
+	});		
+	
+	$( "#btn-AddACLRole" )
+		.button({
+			text: true,
+			label: "{% trans %}Add{% endtrans %}",		
+			icons: {primary:  "ui-icon-plus"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			AddACLRole();
+	});
+	$( "#btn-RemoveACLRole" )
+		.button({
+			text: true,
+			label: "{% trans %}Remove{% endtrans %}",				
+			icons: {primary:  "ui-icon-minus"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			RemoveACLRole();
+	});
+	
+	$( "#btn-InheritDesignFrom" )
+		.button({
+			text: false,
+			label: "{% trans %}Inherit Design From{% endtrans %}",				
+			icons: {primary:  "ui-icon-wrench"}
+		})
+		.click(function( event ) {
+			event.preventDefault();
+			SelectInheritApp();
+	});
+
+	$('#btn_deploy').button({
+		text: true,
+		label: "Deploy",
+		icons: {primary: 'ui-icon-extlink'}
+	})
+	.click(function(e){
+		e.preventDefault();
+		PushApp();
+		return false;
+	});
+
+//	InitMembers(); //Initialize membership data island
+	InitACLList();
+});
+
+ 
+// validate user profile fields before submitting
+function validateDocumentFields()
+{
+    //toggleActionButton("Save and Close"); // disable button
+	return true;
+}
+
+function AppSubmitRequest(request, agentName){
+	//send the request to the Application
+	//The SubmitRequest function only called to the home db to call service agents
+	//This function calls agents in the app
+	var processUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" + agentName  + "?OpenAgent";
+	//ShowProgressMessage("Saving Form.  One moment....");
+	var httpObj = new objHTTP();
+	if(!httpObj.PostData(request, processUrl) || httpObj.status=="FAILED"){
+		HideProgressMessage();
+		return false;
+	}
+//	HideProgressMessage();
+	return (httpObj.results.length)? httpObj.results[0] : true;
+}
+
+function InitACLList(entryname){
+	var agentName = "AccessServices";
+	var request = "<Request><Action>GETACLLIST</Action>";
+	request += "<Document>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Application>" + docInfo.DocKey + "</Application>";
+	request += "</Document>";
+	request += "</Request>";
+
+	var result = AppSubmitRequest(request, agentName)
+	var ACLResultArray = result.split(";")
+	
+	//-----Populate the People/Groups list-----
+	var ACLListArray = multiSplit(ACLResultArray[0], ":"); //list of people/groups
+	ACLListArray.sort();
+	var ACLListArrayParts = [];
+	var entrytypenum;
+	var ACLListHTML = "<ul id='ACLUserList' style='list-style-type:none;margin:0px;padding:0px;'>"
+	for(var x=0; x < ACLListArray.length; x++){
+		ACLListArrayParts = multiSplit(ACLListArray[x], "~");
+		entrytypenum = parseInt(ACLListArrayParts[1], 10);
+		var ACLListProperties = ACLListArrayParts[0].split('|');
+		ACLListHTML += "<li class='aclentry' style='border:1px solid white; border-bottom:1px solid gray; margin:0px 0px 0px 0px; padding:0.4em; padding-left:1.0em; text-align:left;' actual_value='"+ ACLListProperties[1].replace(/'/g, "&#39;") +"'>" + ACLListProperties[0] 
+		ACLListHTML += "<span class='far " + entryiconclass[entrytypenum] + "' style='float:left; margin-left:-0.5em;margin-right:0.5em;color:" + tcolor +";'></span></li>"
+	}
+	ACLListHTML += "</ul>"
+	$("#ACLList").html(ACLListHTML)
+	
+	//-----Populate the Roles list-----
+	$("[name=RolesList]").empty();
+	if (ACLResultArray.length > 1)
+	{
+    	var ACLRoleListArray = multiSplit(ACLResultArray[1], ":");
+    	ACLRoleListArray.sort();
+    	var roleHTML = "<table style='width:100%;'><tr><td style='border-bottom:0px !important;'>";
+    	for(var y=0;y<ACLRoleListArray.length;y++){
+    		var ACLRoleListProp = ACLRoleListArray[y].split('|');
+    		roleHTML += "<input type='checkbox' value='" + ACLRoleListProp[1] + "' name='RolesList' style='display:table-cell; vertical-align:bottom;'><span style='padding:0 0 0 5px;'>" + ACLRoleListProp[0] + "</span><br>"
+    	}
+    	roleHTML += "</td></tr></table>";
+    	$("#divRolesList").html(roleHTML);
+	}
+	else { $("#divRolesList").html(''); }
+	
+	$(".aclentry").hover(function(){
+		$(this).addClass("hoverborder-1")
+	}, function(){
+		$(this).removeClass("hoverborder-1");
+	}); 
+	
+	setPropertyTriggers();
+	
+	//if the entryname param is passed in then select that entry...otherwise select default
+	if(entryname == "undefined" || entryname == null){
+		$(".aclentry:first").click(); //gets the first ACL name entry and its properties
+	}else{
+		$('.aclentry:contains(' + entryname + ')').click();
+	}
+	
+}
+
+function setPropertyTriggers(){
+
+	//---ACL names list on click
+	$(".aclentry").click(function(){
+		$(".selectedbg-1").removeClass("selectedbg-1")
+		$(this).addClass("selectedbg-1")
+		currEntry = $(this)
+		getACLEntryProperties();
+	});
+	
+	//---UserType on change selection field
+	$("#UserType").on("change", function(){
+		setACLEntryProperties();
+		//Change current entry icon
+		$(currEntry).find("span").removeClass();
+		$(currEntry).find("span").addClass("fa");
+		$(currEntry).find("span").addClass(entryiconclass[$("#UserType").val()])
+	});
+	
+	//---AccessType on change
+	$("#AccessType").on("change", function(){
+		var atype = $("#AccessType").val()
+		if( atype == "0"){
+			//if access type is no access then clear options and roles
+			Docova.Utils.setField({ field: "AccessOptions", value: "" })
+			Docova.Utils.setField({ field: "RolesList", value: "" })
+			jQuery("input[name=AccessOptions]").prop("disabled", true);
+		}else if(atype == "2"){
+			//if access type is reader then clear options
+			Docova.Utils.setField({ field: "AccessOptions", value: "" })
+			jQuery("input[name=AccessOptions]").prop("disabled", true);	
+		}else{
+			jQuery("input[name=AccessOptions]").prop("disabled", false);
+		}
+		setACLEntryProperties();
+	});
+	
+	//---AccessOptions checkbox on change
+	$("[name=AccessOptions]").on("change", function(){
+		setACLEntryProperties();
+	});
+	
+	//---RolesList checkbox on change
+	$("[name=RolesList]").on("change", function(){
+		setACLEntryProperties();
+	});
+
+	//-- Mobile Launch settings on change
+	$("#MobileLaunchType").change ( function() {
+		UpdateOptions($(this).val());
+	});
+
+	return;
+}
+
+function UpdateOptions (selectedOption){
+	var currProtocol = location.protocol;
+	var optionlist = "";
+	var elementList = $("#MobileLaunchId");
+	
+	var secureflag = "OFF";
+	if(currProtocol == "http:"){
+		secureflag = "OFF";
+	}else{
+		secureflag = "ON";
+	}
+	
+	if(selectedOption == "-Select-"){
+		optionlist = "";
+	}
+	
+	if(selectedOption == "Outline" || selectedOption == "Menu"){
+		optionlist = Docova.Utils.dbColumn({
+			servername: "",
+			nsfname: docInfo.NsfName,
+			viewname: "luApplication",
+			urlsuffix: ["Outlines"],
+			viewiscategorized: true,
+			key: docInfo.AppID,
+			column: "7",
+			secure: secureflag
+		});
+	}
+
+	if(selectedOption == "View"){
+		optionlist = Docova.Utils.dbColumn({
+			servername: "",
+			nsfname: docInfo.NsfName,
+			viewname: "luApplication",
+			urlsuffix: ["Views"],
+			viewiscategorized: true,
+			key: docInfo.AppID,
+			column: "8",
+			secure: secureflag
+		});
+	}
+	
+	if(selectedOption == "Page"){
+		optionlist = Docova.Utils.dbColumn({
+			servername: "",
+			nsfname: docInfo.NsfName,
+			viewname: "luApplication",
+			urlsuffix: ["Pages"],
+			viewiscategorized: true,
+			key: docInfo.AppID,
+			column: "7",
+			secure: secureflag
+		});
+	}
+
+	if(selectedOption == "Form"){
+		optionlist = Docova.Utils.dbColumn({
+			servername: "",
+			nsfname: docInfo.NsfName,
+			viewname: "luApplication",
+			urlsuffix: ["Forms"],
+			viewiscategorized: true,
+			key: docInfo.AppID,
+			column: "7",
+			secure: secureflag
+		});
+	}
+	
+	if(selectedOption == "Layout"){
+		optionlist = Docova.Utils.dbColumn({
+			servername: "",
+			nsfname: docInfo.NsfName,
+			viewname: "luApplication",
+			urlsuffix: ["Layouts"],
+			viewiscategorized: true,
+			key: docInfo.AppID,
+			column: "7",
+			secure: secureflag
+		});
+	}
+
+	elementList.empty();
+	var optionlistarray = optionlist.split(";");
+
+	elementList.append($("<option></option>").attr("value", "").text("-Select-"));
+	for(x=0;x<optionlistarray.length;x++){
+		var txtarry = optionlistarray[x].split("|");
+		var opttxt = "";
+		var optval = ""; 
+		if ( txtarry.length > 1 ){
+			optval = txtarry[1];
+		}
+		opttxt = txtarry[0];
+		if ( optval == "" ){
+			optval = opttxt;
+		}
+			
+		elementList.append($("<option></option>").attr("value", optval).text(opttxt));
+	}	
+}
+
+
+function getACLEntryProperties(){
+	var entryname = $(currEntry).attr('actual_value').replace(/&#39;/g, "'");
+	var agentName = "AccessServices"
+	
+	var request = "<Request><Action>GETACLENTRYPROPERTIES</Action>"
+	request += "<Document>"
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>"
+	request += '<AppID><![CDATA['+ docInfo.DocKey +']]></AppID>'; 
+	request += "<EntryName><![CDATA[" + entryname + "]]></EntryName>"
+	request += "<EntryType><![CDATA[" + ($(currEntry).has('span.fa-users').length || $(currEntry).has('span.fa-angle-right').length ? 'group' : 'person') + "]]></EntryType>";	
+	request += "</Document>"
+	request += "</Request>"
+
+	var result = AppSubmitRequest(request, agentName)
+	var accessoptionsarray = [];
+	var ACLEntryPropertiesArray = result.split(";")
+	var usertype = ACLEntryPropertiesArray[0] //EntryUserType
+	var accesstype = ACLEntryPropertiesArray[1] //EntryLevel
+	if(accesstype != "0" && accesstype != "2"){
+		if(ACLEntryPropertiesArray[2] == "True"){ accessoptionsarray.push("Create documents");}
+		if(ACLEntryPropertiesArray[3] == "True"){ accessoptionsarray.push("Delete documents");}			
+		jQuery("input[name=AccessOptions]").prop("disabled", false);
+	}else{
+		jQuery("input[name=AccessOptions]").prop("disabled", true);
+	}
+	var rolelist = typeof ACLEntryPropertiesArray[4] != typeof undefined ? ACLEntryPropertiesArray[4] : '';
+	if (rolelist)
+	{
+		rolelist = rolelist.split(',');
+		for (var x = 0; x < rolelist.length; x++)
+		{
+			var tmp = rolelist[x].split('|');
+			rolelist[x] = tmp[1];
+		}
+		rolelist = rolelist.join(',');
+	}
+
+	var accessoptions = "";
+	for(var x=0; x<accessoptionsarray.length; x++){
+		if(accessoptions == ""){
+			accessoptions = accessoptionsarray[x];
+		}else{
+			accessoptions += "," + accessoptionsarray[x];
+		}
+	}
+	Docova.Utils.setField({ field: "UserType", value: usertype });
+	Docova.Utils.setField({ field: "AccessType", value: accesstype });
+	Docova.Utils.setField({ field: "AccessOptions", value: accessoptions, separator: "," });
+	if (rolelist.length) {
+		Docova.Utils.setField({ field: "RolesList", value: rolelist, separator: "," })
+	}
+	else {
+		Docova.Utils.setField({ field: "RolesList", value: null, separator: "," });
+	}
+
+	return;	
+}
+
+function setACLEntryProperties(){
+	var agentName = "AccessServices"
+	
+	var entryname = $(currEntry).attr('actual_value').replace(/&#39;/g, "'");
+	if(entryname == ""){ return false }
+	
+	var usertype = Docova.Utils.getField({ field: "UserType" })
+	var accesstype = Docova.Utils.getField({ field: "AccessType" })
+	var accessoptions = Docova.Utils.getField({ field: "AccessOptions" })
+	var roleslist = Docova.Utils.getField({ field: "RolesList" })
+	
+	var request = "<Request><Action>SETACLENTRYPROPERTIES</Action>"
+	request += "<Application><![CDATA[" + docInfo.DocKey + "]]></Application>";
+	request += "<Document>"
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>"
+	request += "<EntryName><![CDATA[" + entryname + "]]></EntryName>"	
+	request += "<UserType>" + usertype + "</UserType>"	
+	request += "<AccessType>" + accesstype + "</AccessType>"
+	request += "<AccessOptions><![CDATA[" + accessoptions + "]]></AccessOptions>"
+	request += "<RolesList><![CDATA[" + roleslist + "]]></RolesList>"
+	request += "</Document>"
+	request += "</Request>"
+	
+	var result = AppSubmitRequest(request, agentName)
+
+	return;
+}
+
+function AddACLEntry(){
+	var agentName = "AccessServices"
+
+	var entryname = ""
+	var entryexists = false;
+	
+	var uidoc = Docova.getUIDocument();
+	var dlgEntry = uidoc.openDialog({
+ 		formname: "dlgACLAddEntry",
+		title: "{% trans %}New Entry{% endtrans %}",
+		height: 185,
+		width: 500,
+		buttons: {
+			"{% trans %}Add Entry{% endtrans %}": function(){
+				//Get entered person,group
+				var dlgDoc = uidoc.getDialogDocument({formname: "dlgACLAddEntry"});
+				entryname = $("#ACLEntryName", dlgDoc).val();
+				//Check to ensure the new entry is not blank
+				if($.trim(entryname) == ""){
+					alert("{% trans %}The entry is blank.  Please enter a name or Cancel.{% endtrans %}")
+					return;
+				}
+				//Check to ensure the new person, group does not already exist
+				$(".aclentry").each(function(){
+					if($(this).attr('actual_value').replace(/&#39;/g, "'") == entryname){
+						entryexists = true;
+					}
+				})
+				if(entryexists == true){ //if entry exists, msgbox and return
+					window.top.Docova.Utils.messageBox({
+						icontype: 1,
+						msgboxtype: 0,
+						prompt: "{% trans %}This entry already exists.{% endtrans %}",
+						width: 350,
+						title: "{% trans %}Cannot Add Entry.{% endtrans %}"
+					})
+					dlgEntry.closeDialog();
+					return;
+				}else{ //if entry is new, add it
+					//---Use the currently selected entry as the options to set for the new entry
+					var usertype = $('#ACLEntryType', dlgDoc).val() == 'group' ? 2 : 1;
+					var accesstype = Docova.Utils.getField({ field: "AccessType" })
+					var accessoptions = Docova.Utils.getField({ field: "AccessOptions" })
+					var roleslist = Docova.Utils.getField({ field: "RolesList" })
+	
+					var request = "<Request><Action>ADDACLENTRY</Action>"
+					request += '<Application>' + docInfo.DocKey + '</Application>';
+					request += "<Document>"
+					request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>"
+					request += "<EntryName><![CDATA[" + entryname + "]]></EntryName>"	
+					request += "<UserType>" + usertype + "</UserType>"	
+					request += "<AccessType>" + accesstype + "</AccessType>"
+					request += "<AccessOptions><![CDATA[" + accessoptions + "]]></AccessOptions>"
+					request += "<RolesList><![CDATA[" + roleslist + "]]></RolesList>"
+					request += "</Document>"
+					request += "</Request>"
+					var result = AppSubmitRequest(request, agentName)
+					InitACLList(entryname)
+					dlgEntry.closeDialog();
+				}	
+			},
+			"Cancel": function(){
+				dlgEntry.closeDialog();
+				}
+		}
+	})
+	
+	return; 	
+}
+
+function CopyACL(){
+
+	var dbpath = window.prompt("{% trans %}Please enter the path to source application with the security you wish to copy.{% endtrans %}", "");
+	if(dbpath === null || dbpath === ""){
+		return;
+	}
+	
+	if(!window.confirm("{% trans with {'%dbpath%' : '" + dbpath + "'} %}This operation will overwrite the current application's security with the one from [%dbpath%].\n  Are you sure you wish to continue?{% endtrans %}")){
+		return;
+	}
+	
+
+	var agentName = "AccessServices"
+	
+	var uidoc = Docova.getUIDocument();
+	
+	var request = "<Request><Action>COPYACL</Action>";
+	request += "<Document>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<server><![CDATA[]]></server>";	
+	request += "<path><![CDATA[" + dbpath + "]]></path>";
+	request += "<AppID>" + docInfo.DocKey + "</AppID>";	
+	request += "</Document>";
+	request += "</Request>";
+
+	var result = AppSubmitRequest(request, agentName);
+	InitACLList();	
+	return; 	
+}
+
+function RemoveACLEntry(){
+	var entryname = $(currEntry).attr('actual_value').replace(/&#39;/g, "'");
+	var entrytype = $(currEntry).has('span.fa-users').length || $(currEntry).has('span.fa-angle-right').length ? 2 : 1;
+	
+	//--- If entry is the default entry, it cannot be removed
+	if(entryname == "-Default-"){
+		var msg = "{% trans %}You cannot remove the -Default- entry!{% endtrans %}"
+		window.top.Docova.Utils.messageBox({
+			icontype: 1,
+			msgboxtype: 0,
+			prompt: msg,
+			width: 350,
+			title: "{% trans %}Cannot remove entry.{% endtrans %}"
+		})
+		return;
+	}
+	
+	//---Warning msgbox before removing entry
+	var msg = "{% trans %}You are about to remove access for{% endtrans %}: " + entryname + "<br><br>{% trans %}Are you sure?{% endtrans %}"
+	window.top.Docova.Utils.messageBox({
+			icontype: 2,
+			msgboxtype: 4,
+			prompt: msg,
+			width: 350,
+			title: "{% trans %}Remove Entry.{% endtrans %}",
+			onYes: function(){
+				var agentName = "AccessServices"
+				var request = "<Request><Action>REMOVEACLENTRY</Action>"
+				request += '<Application>' + docInfo.DocKey + '</Application>';
+				request += "<Document>"
+				request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>"
+				request += "<EntryName><![CDATA[" + entryname + "]]></EntryName>"
+				request += '<EntryType>' + entrytype + '</EntryType>';
+				request += "</Document>"
+				request += "</Request>"
+				
+				var result = AppSubmitRequest(request, agentName)				
+				if(result == "SUCCESS"){
+					InitACLList();
+				}else{
+					window.top.Docova.Utils.messageBox({
+						icontype: 1,
+						msgboxtype: 0,
+						prompt: "{% trans %}Error: Could not remove the Entry{% endtrans %}",
+						width: 350,
+						title: "{% trans %}Error removing entry.{% endtrans %}"
+					})
+				}
+			},
+			onNo: function(){
+				return false;
+			}			
+	})	
+}
+
+function AddACLRole(){
+	var agentName = "AccessServices"
+	var currentryname = $(currEntry).attr('actual_value').replace(/&#39;/g, "'");
+	var rolename = ""
+	var roleexists = false;
+	
+	var uidoc = Docova.getUIDocument();
+	var dlgRole = uidoc.openDialog({
+ 		formname: "dlgACLAddRole",
+		title: "{% trans %}New Role{% endtrans %}",
+		height: 185,
+		width: 500,
+		buttons: {
+			"{% trans %}Add Role{% endtrans %}": function(){
+				//Get entered Role
+				var dlgDoc = uidoc.getDialogDocument({formname: "dlgACLAddRole"});
+				var roledisplayname = $("#ACLRoleName", dlgDoc).val();
+				//Check to ensure the new Role is not blank
+				if($.trim(roledisplayname) == ""){
+					alert("{% trans %}The Role is blank.  Please enter a Role or Cancel.{% endtrans %}")
+					return;
+				}
+				rolename = 'ROLE_' + roledisplayname.replace(' ', '').toUpperCase();
+				//Check to ensure the new Role does not already exist
+				$("[name=RolesList").each(function(){
+					if($(this).val().toUpperCase() == (rolename.toUpperCase())){
+						roleexists = true;
+					}
+				})
+				if(roleexists == true){ //if entry exists, msgbox and return
+					window.top.Docova.Utils.messageBox({
+						icontype: 1,
+						msgboxtype: 0,
+						prompt: "{% trans %}This Role already exists.{% endtrans %}",
+						width: 350,
+						title: "{% trans %}Cannot Add Role.{% endtrans %}"
+					})
+					dlgRole.closeDialog();
+					return;
+				}else{ //if entry is new, add it
+					//---Use the currently selected entry as the options to set for the new entry	
+					var request = "<Request><Action>ADDACLROLE</Action>"
+					request += "<Document>"
+					request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>"
+					request += "<RoleName><![CDATA[" + roledisplayname + "]]></RoleName>"
+					request += "<Application><![CDATA[" + docInfo.DocKey + "]]></Application>";
+					request += "</Document>"
+					request += "</Request>"
+					var result = AppSubmitRequest(request, agentName)
+					InitACLList(currentryname)
+					dlgRole.closeDialog();
+				}	
+			},
+			"{% trans %}Cancel{% endtrans %}": function(){
+				dlgRole.closeDialog();
+			}
+		}
+	})
+	return; 	
+}
+
+function RemoveACLRole(){
+	var agentName = "AccessServices"
+	var currentryname = $(currEntry).attr('actual_value').replace(/&#39;/g, "'");
+	var roledisplay = '';
+	var rolename = "";
+	var roleexists = false;
+	retValues.length = 0
+	var uidoc = Docova.getUIDocument();
+	var dlgRole = uidoc.openDialog({
+ 		formname: "dlgACLRemoveRole",
+		title: "{% trans %}Remove Role{% endtrans %}",
+		height: 400,
+		width: 500,
+		buttons: {
+			"{% trans %}Remove Role{% endtrans %}": function(){
+				roledisplay = retValues[1];
+				rolename = retValues[0];
+				var msg = "{% trans with {'%rdisplay%' : '" + roledisplay + "' } %}You are about to remove the %rdisplay% Role from this Application.{% endtrans %}<br><br>Are you sure?"
+				window.top.Docova.Utils.messageBox({
+					icontype: 2,
+					msgboxtype: 4,
+					prompt: msg,
+					width: 400,
+					title: "{% trans %}Remove Entry.{% endtrans %}",
+					onYes: function(){
+						var request = "<Request><Action>REMOVEACLROLE</Action>"
+						request += '<Application>'+docInfo.DocKey+'</Application>';
+						request += "<Document>"
+						request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>"
+						request += "<RoleName><![CDATA[" + rolename + "]]></RoleName>"	
+						request += "</Document>"
+						request += "</Request>"
+						var result = AppSubmitRequest(request, agentName)				
+
+						if(result == "SUCCESS"){
+							InitACLList(currentryname);
+							dlgRole.closeDialog();
+						}else{
+							window.top.Docova.Utils.messageBox({
+								icontype: 1,
+								msgboxtype: 0,
+								prompt: "{% trans %}Error: Could not remove the Role{% endtrans %}",
+								width: 350,
+								title: "{% trans %}Error removing Role.{% endtrans %}"
+							})
+						}
+					},
+					onNo: function(){
+						return false;
+					}			
+				})	
+			},
+			"{% trans %}Cancel{% endtrans %}": function(){
+				dlgRole.closeDialog();
+			}
+		}
+	})
+	return; 	
+}
+
+function SelectInheritApp(){
+	var dlgUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/dlgInheritApp?OpenForm"
+	var dlgInheritApp = window.top.Docova.Utils.createDialog({
+		id: "divDlgInheritApp",
+		url: dlgUrl,
+		title: "{% trans %}Inherit Design from Application{% endtrans %}",
+		height: 450,
+		width: 500,
+		useiframe: true,
+		sourcewindow: window,
+		sourcedocument: document,
+		buttons: {
+			"{% trans %}Select{% endtrans %}": function (){
+				var dlgDoc = window.top.$("#divDlgInheritAppIFrame")[0].contentWindow.document
+				var appUnid = $("#AppUnid", dlgDoc).text();
+				var currAppId = $("#currAppId").text();
+				if(appUnid == ""){
+					window.top.Docova.Utils.messageBox({
+						title: "{% trans %}Nothing Selected{% endtrans %}",
+						prompt: "{% trans %}You have not selected an Application from the list. <br><br> Please select and Application.{% endtrans %}",
+						icontype: 1,
+						msgboxtype: 0,
+						width: 400
+					});
+					return;
+				}
+
+				if(currAppId == appUnid){
+					window.top.Docova.Utils.messageBox({
+						title: "{% trans %}Invalid Selection{% endtrans %}",
+						prompt: "{% trans %}The application you have selection is invalid. An application cannot inherit from itself. <br><br> Please select a different Application, or Clear.{% endtrans %}",
+						icontype: 1,
+						msgboxtype: 0,
+						width: 400
+					});
+					return;
+				}
+				
+				$("#InheritDesignFrom").val(appUnid);
+				dlgInheritApp.closeDialog();
+				
+			},
+			"{% trans %}Clear{% endtrans %}": function(){
+				clearmsgtxt = "{% trans %}You are about to CLEAR the application this application inherits its design from.<br><br>Blank means this application will be updated from the general Master Template when updating its design.<br><br>Are you sure?{% endtrans %}"
+				var choice = window.top.Docova.Utils.messageBox({ 
+				prompt: clearmsgtxt, 
+				icontype: 2, 
+				title: "{% trans %}Clear Design Inheritance{% endtrans %}", 
+				width:400, 
+				msgboxtype: 4,
+				onNo: function() {return},
+				onYes: function() {
+						$("#InheritDesignFrom").val("")
+						dlgInheritApp.closeDialog();
+				}
+				})
+			},			
+			"{% trans %}Cancel{% endtrans %}": function(){
+				dlgInheritApp.closeDialog();
+			}
+		}
+	})
+}
+
+function PushApp()
+{
+	var server = $('input[name="deploy_server"]:checked').val();
+	if (!server || server == '') {
+		alert('No server was selected to deploy!');
+		return false;
+	}
+	server = server.split('::');
+	var port = server[1];
+	server = server[0];
+
+	var request = "<Request><Action>PUSHAPPTOSERVER</Action>";
+	request += "<AppID><![CDATA[" + docInfo.AppID + "]]></AppID>";
+	request += '<ServerPath><![CDATA['+ server +']]></ServerPath>';	
+	request += '<ServerPort><![CDATA['+ port +']]></ServerPort>';	
+	request += "<Username><![CDATA[" + docInfo.UserName + "]]></Username>"
+	request += "</Request>";
+	var result = AppSubmitRequest(encodeURIComponent(request), "PushService");
+	if (result) {
+		result = result.split(':');
+		if (result[0] == 'SUCCESS' && result[1] > 0) {
+			var progressDiv = "<div id='dlgAppDeployStatus' style='position:absolute;width:40%;right:0;bottom:1px;z-index:2;'><div id='progressDeployStatus' style='width:100%;height:21px;display:block;'><span style='left:45%;top:4px;font-weight:bold;position:absolute;'>Pushing Application ...</span></div><div style='text-align:center;font-size:11px;'>Deploying application status</div></div>";
+			$("body", window.top.document).append(progressDiv);
+			$('#progressDeployStatus', window.top.document).progressbar({
+				value: false,
+				change: function() {
+					$("#progressDeployStatus span", window.top.document).text($("#progressDeployStatus", window.top.document).progressbar("value") + "%" );
+				},
+				complete: function() {
+					clearInterval(window.top.timer);
+					window.top.clearInterval(window.top.timer);
+					$("#progressDeployStatus", window.top.document).find('span').css('cursor', 'pointer').text("Done! Click to close.");
+					$("#progressDeployStatus", window.top.document).on('click', function(){
+						$("#dlgAppDeployStatus", window.top.document).remove();
+					});
+				}
+			});
+
+			setTimeout(function(){
+				$("#progressDeployStatus", window.top.document).progressbar('value', parseInt(result[1]));
+			}, 300 );
+
+			window.top.timer = window.top.setInterval(function(){
+    			checkUpdateStatus(docInfo.AppID, server, port);
+    		}, 5000);
+		}
+		return;
+	}
+
+	window.top.Docova.Utils.messageBox({
+		width: 400,
+		title: "Pushing Application",
+		prompt: 'Oops! Pushing application failed!<br>'+(result ? result : ''),
+		icontype: 1,
+		msgboxtype: 0
+	});
+}
+
+function checkUpdateStatus(appid, server, port)
+{
+	var request = "<Request><Action>GETUPDATESTATUS</Action>";
+	request += "<AppFile><![CDATA[" + appid + "]]></AppFile>";
+	request += '<ServerPath><![CDATA['+ server +']]></ServerPath>';	
+	request += '<ServerPort><![CDATA['+ port +']]></ServerPort>';	
+	request += '<Username><![CDATA['+ docInfo.UserNameCN +']]></Username>';	
+	request += "<DnAbbreviated><![CDATA[" + docInfo.UserNameAB + "]]></DnAbbreviated>"
+	request += "</Request>";
+	var result = AppSubmitRequest(encodeURIComponent(request), 'ServerUpdateStatus');
+	
+	$("#progressDeployStatus", window.top.document).progressbar('value', parseInt(result));
+	if (result > 99) {
+		clearInterval(window.top.timer);
+	}
+}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" onunload="return processOnUnload(); //declared in sfWebCommon" onload="setFieldFocus(document.getElementById('Title'))">
+	<form method="post" action="" name="_Application">
+		<div id="FormHeader" style="background-color: white; padding-top: 2px; padding-bottom: 2px; border-bottom: 1px solid #BBBBBB; display:none;">
+			<table border=0 cellspacing=0 cellpadding=0 width=100%>
+				<tr>
+					<td id="tdActionBar">
+						<a onclick="ImportApp(); return false;" href="" primary="" secondary="">{% trans %}Import Application{% endtrans %}</a>
+						<a onclick="ImportAppData(); return false;" href="" primary="" secondary="">{% trans %}Import Data{% endtrans %}</a>
+						<a onclick="if (docInfo.source != 'admin') {
+if(docInfo.isDocBeingEdited){
+	Docova.Utils.messageBox({
+		width: 400,
+		title: '{% trans %}Closing Document{% endtrans %}',
+		prompt: '{% trans %}Would you like to save the changes to this document?{% endtrans %}',
+		msgIcon : 'ui-icon-close',
+		msgboxtype : 4,
+		onYes: function() { SaveAndClose(true) },
+		onNo: function() { window.parent.fraTabbedTable.objTabBar.CloseTab('appBuilderMainView', true, false); }
+		});
+}else{
+	window.parent.fraTabbedTable.objTabBar.CloseTab('appBuilderMainView', true, false);
+}
+}
+else {
+var top_frame = parent.frames['fraAdminContentTop'];
+if (!top_frame) { return false; }
+var index = top_frame.tabs.tabs('option', 'active');
+top_frame.removeTabByIndex(index);
+}
+return false;" href="" primary="ui-icon-close" secondary="">{% trans %}Close{% endtrans %}</a>
+						<a onclick="SaveAndClose(true); return false;" href="" primary="ui-icon-check" secondary="">{% trans %}Save and Close{% endtrans %}</a>					
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<h3 class="adjusted headings1">{% trans with {'%appname%' : application.getLibraryTitle} %}Application Settings for %appname%{% endtrans %}</h3>
+		<div id="divFormContainer">
+			<h3>{%trans%}General Settings{%endtrans%}</h3>
+			<div>
+    			<table class="elmContainer" cellspacing="0">
+    				<tr>
+    					<td class="firstRw">{% trans %}Title{% endtrans %}:</span></td>
+    					<td class="firstRw"><input type="text" name="Title" value="{{ application.getLibraryTitle }}" id="Title" class="text ui-widget-content ui-corner-all"></td>
+    				</tr>
+    
+    				<tr>
+    					<td>{% trans %}Description{% endtrans %}:</span></td>
+    					<td><input type="text" name="Description" value="{{ application.getDescription }}" class="text ui-widget-content ui-corner-all"></td>
+    				</tr>
+    				
+    				<tr>
+    					<td>{% trans %}Icon{% endtrans %}:</td>
+    					<td><input type="text" name="AppIcon" value="{{ application.getAppIcon }}" id="Title_1" class="text ui-widget-content ui-corner-all"></td>
+    				</tr>
+    
+    				<tr>
+    					<td>{% trans %}Is Template?{% endtrans %}:</td>
+    					<td>
+    						<label><input type="radio" name="IsAppTemplate" value="1" {{ application.getIsTemplate ? 'checked' : '' }} /> {% trans %}Yes{% endtrans %}</label>
+    						<label><input type="radio" name="IsAppTemplate" value="0" {{ not application.getIsTemplate ? 'checked' : '' }} /> {% trans %}No{% endtrans %}</label>
+    					</td>
+    				</tr>
+    
+    				<tr>
+    					<td>{% trans %}Inherits Design From{% endtrans %}:</td>
+    					<td>
+    						<input type="text" name="InheritDesignFrom" value="{{ application.getInheritDesignFrom }}" id="InheritDesignFrom" class="text ui-widget-content ui-corner-all" readonly>&nbsp&nbsp
+    						<button id="btn-InheritDesignFrom"></button>
+    					</td>
+    				</tr>
+    				<tr>
+    					<td>{% trans %}Mobile Launch Settings{% endtrans %}:</td>
+    					<td>
+        					<select name="MobileLaunchType" id="MobileLaunchType" style="width: 80px;" class="text ui-widget-content ui-corner-all">
+        					{% set tmplaunchtype = application.getMobileLaunchType %}
+        						<option value="">-{% trans %}Select{% endtrans %}-</option>
+        						<option value="Menu" {{ tmplaunchtype == "Menu" ? "selected" : "" }}>{% trans %}Menu{% endtrans %}</option>
+        						<option value="View" {{ tmplaunchtype == "View" ? "selected" : "" }}>{% trans %}View{% endtrans %}</option>
+        						<option value="Page" {{ tmplaunchtype == "Page" ? "selected" : "" }}>{% trans %}Page{% endtrans %}</option>
+         						<option value="Form" {{ tmplaunchtype == "Form" ? "selected" : "" }}>{% trans %}Form{% endtrans %}</option>					
+        					</select>
+							<select name="MobileLaunchId" id="MobileLaunchId" style="width: 200px;" class="text ui-widget-content ui-corner-all">
+    							<option value="">-{% trans %}Select{% endtrans %}-</option>
+    							{% set tmplaunchid = application.getMobileLaunchId %}
+    							{% if tmplaunchtype and tmplaunchid  %}
+    							<option value="{{ tmplaunchid }}" selected>{{ tmplaunchid }}</option>
+    							{% endif %}
+    						</select>        						
+    					</td>
+    				</tr>    
+    				<tr>
+    					<td>{% trans %}HTTP Host Name{% endtrans %}:</td>
+    					<td>{{ app.request.server.get('HTTP_HOST') }}</td>
+    				</tr>
+    				
+    				<tr>
+    					<td>{% trans %}Library Key{% endtrans %}:</td>
+    					<td id="currAppId"><font color="#808080">{{ application.getId }}</font></td>
+    				</tr>
+    			</table>
+    		</div>
+		
+			<h3>{% trans %}Security Settings{% endtrans %}</h3>
+			<div>
+				<table class="elmContainer" cellspacing="0">
+					<tr>
+						<td class="firstRw">
+							<span class="frmLabel">{% trans %}People, Groups{% endtrans %}</span><br>
+							<div id="ACLList" style="max-height: 200px; max-width: 300px; overflow: auto; border: 1px solid gray;"></div>
+						</td>
+						<td class="firstRw">
+							<table class="elmContainer" cellspacing="0" style="width:90%">
+								<tr>
+									<td class="firstRw">{% trans %}User type{% endtrans %}:</td>
+									<td class="firstRw">
+        								<select name="UserType" id="UserType" class="text ui-widget-content ui-corner-all">
+        									<option value="1">{% trans %}Person{% endtrans %}
+        									<option value="2">{% trans %}Group{% endtrans %}
+        								</select>									
+									</td>
+								</tr>
+								
+								<tr>
+									<td>{% trans %}Access{% endtrans %}:</td>
+									<td>
+        								<select name="AccessType" id="AccessType" class="text ui-widget-content ui-corner-all">
+        									<option value="6">{% trans %}Manager{% endtrans %}
+        									<option value="5">{% trans %}Designer{% endtrans %}
+        									<option value="4">{% trans %}Editor{% endtrans %}
+        									<option value="3">{% trans %}Author{% endtrans %}
+        									<option value="2">{% trans %}Reader{% endtrans %}
+{# NOT APPILICABLE IN SE					<option value="1">{% trans %}Depositor{% endtrans %} #}
+        									<option value="0">{% trans %}No Access{% endtrans %}
+        								</select>
+									</td>
+								</tr>
+								
+								<tr>
+									<td>{% trans %}Options{% endtrans %}:</td>
+									<td class="lblList">
+        								<label> <input type="checkbox" name="AccessOptions" value="Create documents" >{% trans %}Create documents{% endtrans %}</label>
+        								<label> <input type="checkbox" name="AccessOptions" value="Delete documents" >{% trans %}Delete documents{% endtrans %}</label>
+{# ------------------- Not required in SE ----------------------
+        								<label> <input type="checkbox" name="AccessOptions" value="Read public documents" >{% trans %}Read public documents{% endtrans %}</label>
+        								<label> <input type="checkbox" name="AccessOptions" value="Write public documents" >{% trans %}Write public documents{% endtrans %}</label>
+---------------------- #}
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td class="firstRw">
+							<strong>{% trans %}Roles{% endtrans %}:</strong><br>
+							<div id="divRolesList" style="height: 200px; min-width:250px; border: 1px solid gray;"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button class="aclBtn" id="btn-AddACLEntry"></button>
+							<button class="aclBtn" id="btn-RemoveACLEntry"></button>
+						</td>
+						<td></td>
+						<td>
+							<button class="aclBtn" id="btn-AddACLRole"></button>
+							<button class="aclBtn" id="btn-RemoveACLRole"></button>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<h3>{% trans %}Deployment{% endtrans %}</h3>
+			<div>
+				<table class="elmContainer" cellspacing="0">
+					<tr>
+						<td class="firstRw">Servers: </td>
+						<td class="firstRw">
+							Select instance to deploy the application:<br>
+							<div style="display:inline-block; padding-top:5px;">
+							{% set servers_list = settings.getDeployServerPath %}
+							{% if servers_list|length %}
+								{% for path in servers_list %}
+								{% set item = path|split('::') %}
+								<label style="display:block;margin:3px 1px;"><input name="deploy_server" type="radio" value="{{ path }}" /> {{ item[0] }}</label>
+								{% endfor %}
+							{% else %}
+								<i>No server is configured for deployment. Contact administrator to set up deployment servers in DOCOVA.</i>
+							{% endif %}
+							</div>
+						</td>
+					</tr>
+					{% if servers_list|length %}
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							<span style="color:#808080;">Once the deployment is started a progress bar will appear at the buttom right corner of DOCOVA<br>You can continue working with DOCOVA while the progress bar is updating.</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<button type="button" id="btn_deploy" style="float:right; margin-right:10px; height:30px;">Deploy</button>
+						</td>
+					</tr>
+					{% endif %}
+				</table>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,34 @@
+	{% set selected_section = '' %}
+	{% set section_properties = '' %}
+	{% for subform in document.getDocTypeSubform %}
+ 		{% if subform.getSubform.getFormName in ['Docova Text Editor', 'Rich Text Editor', 'Plain Text Editor'] %}
+ 			{% set selected_section = subform %}
+ 			{% set section_properties = subform.getPropertiesXML(true) %}
+ 		{% endif %}
+ 	{% endfor %}
+ 	{% if section_properties != '' %}
+ 	<table cellspacing="0" class="elmContainer">
+ 		{% if selected_section.getSubform.getFormName != 'Docova Text Editor' %}
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">{{ section_properties['Interface']['EditorReadOnly'] == 1 ? 'Read Only'|trans : '' }}</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td class="{{ selected_section.getSubform.getFormName != 'Docova Text Editor' ? 'firstRw' : '' }}">{% trans %}Label{% endtrans %}:</td>
+			<td class="{{ selected_section.getSubform.getFormName != 'Docova Text Editor' ? 'firstRw' : '' }}">{{ section_properties['Interface']['EditorLabel'] }}</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Height{% endtrans %}:</td>
+			<td>{{ section_properties['Interface']['EditorHeightValue'] }}</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Visibility{% endtrans %}:</td>
+			<td>
+				{% trans %}Hide Text area when{% endtrans %}
+				{% if section_properties['Interface']['HideOnReading'] == 1 %}{% trans %}Reading{% endtrans %}{% endif %}
+				{% if section_properties['Interface']['HideOnEditing'] == 1 %}{% trans %}Editing{% endtrans %}{% endif %}
+			</td>
+		</tr>
+	</table>
+	{% endif %}

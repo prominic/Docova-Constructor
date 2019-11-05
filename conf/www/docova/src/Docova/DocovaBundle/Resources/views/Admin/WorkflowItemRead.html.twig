@@ -1,0 +1,242 @@
+<ul class="d_tabs">
+	<li class="active">General Settings</li>
+	<li>Actions</li>
+	<li id="edit_btn" class="btn">Edit</li>
+</ul>
+<table class="container selected">
+	<tr><td></td><td></td></tr>
+	<tr>
+		<td>Step name: </td><td>{{ step.getStepName }}</td>
+	</tr>
+	<tr>
+		<td>Step type: </td><td>{{ step.getStepType(1) }}</td>
+	</tr>
+	<tr>
+		<td>Document Status: </td><td>{{ step.getDocStatus }}</td>
+	</tr>
+	<tr>
+		<td>Position: </td><td>{{ step.getPosition + 1 }} of {{ step.getWorkflow.getSteps.count }}</td>
+	</tr>
+	<tr>
+		<td>Distribution: </td><td>{% if not step.getDistribution or step.getDistribution == 1 %}Serial{% elseif step.getDistribution == 2 %}Parallel{% endif %}</td>
+	</tr>
+	<tr>
+		<td>Participants: </td>
+		<td>
+			{% set participants = '' %}
+			{% if step and step.getOtherParticipant.count > 0 %}
+			{% for op in step.getOtherParticipant %}
+				{% set participants = op.getUserNameDnAbbreviated ~ ',' %}
+			{% endfor %}
+			{% set participants = participants[:participants|length -1] %}
+			{% endif %}
+			{% if step.getParticipants == 1 or step.getParticipants == 3 %}Document Author<br>{% endif %}
+			{% if step.getDistribution == 1 and step.getParticipants != 1 and step.getParticipants != 3 %}or <br>
+			{% elseif step.getDistribution == 2 %}
+			and/or <br>
+			{% endif %}
+			<p>{{ participants }}</p>
+			{% if step and step.getParticipants > 1 %}Allow author to modify participant names{% endif %}
+		</td>
+	</tr>
+	<tr>
+		<td>Allow approver to edit document? </td><td>{% if step.getApproverEdit == true %}Yes{% else %}No{% endif %}</td>
+	</tr>
+	<tr>
+		<td>Optional Review/Approve comments? </td><td>{% if step.getOptionalComments == true %}Yes{% else %}No{% endif %}</td>
+	</tr>
+	<tr>
+		<td>Approve button label: </td>
+		<td>
+			Custom button label @Formula:<br>
+			<textarea rows="4" cols="60" name="wfCustomApproveButtonLabel"></textarea>
+			<p>@Formula that returns the text string. "Approve" will be used if left blank.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>Decline button label: </td>
+		<td>
+			Custom button label @Formula:<br>
+			<textarea rows="4" cols="60" name="wfCustomDeclineButtonLabel"></textarea>
+			<p>@Formula that returns the text string. "Decline" will be used if left blank.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>Workflow buttons visibility: </td>
+		<td>
+			Hide workflow buttons when:<br>
+			{% if step.getHideReading == true %}Reading &nbsp;&nbsp;&nbsp;{% endif %} 
+			{% if step.getHideEditing == true %}Editing &nbsp;&nbsp;&nbsp;{% endif %} 
+			{% if step.getHideCustom == true %}Custom &nbsp;&nbsp;&nbsp;{% endif %}
+			{% if step.getHideCustom == true %}
+				<p>Custom hide when @Formula:<br></p>
+				<p>@Formula that returns 1 or @true (hide) or 0 or @false (show).</p>
+			{% endif %}
+			</div>
+		</td>
+	</tr>
+</table>
+
+<table class="container hidden">
+	<tr>
+		<td colspan="2"><b>When the step is being...</b></td>
+	</tr>
+	<tr>
+		<td><b>Activated</b></td><td></td>
+	</tr>
+	<tr>
+		<td>Actions: </td>
+		<td>
+			<label><input type="checkbox" disabled="disabled" name="wfEnableActivateMsg" value="1" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSendMessage == true %}checked="checked"{% endif %}></label>
+			<input type="text" disabled="disabled" value="{% if step_actions['ACTIVATE'] is defined %}{% if step_actions['ACTIVATE'].getMessage.getMessageName == 'DEFAULT_ACTIVATE' %}Default{% else %}{{ step_actions['ACTIVATE'].getMessage.getMessageName }}{% endif %}{% endif %}"> message 
+			<p>
+				to: <label><input disabled="disabled" type="checkbox" name="wfActivateNotifyParticipants" value="P" {% if step_actions['ACTIVATE'] is defined and (step_actions['ACTIVATE'].getToOptions == 3 or step_actions['ACTIVATE'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+				<label><input disabled="disabled" type="checkbox" name="wfActivateNotifyParticipants" value="A" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+				<br> and/or: <br>
+				{% set nameslist = '' %}
+				{% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSendTo.count > 0 %}
+					{% for item in step_actions['ACTIVATE'].getSendTo %}
+						{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+					{% endfor %}
+					{% set nameslist = nameslist[1:] %}
+				{% endif %}
+				{% if nameslist != '' %}<p>{{ nameslist }}</p>{% endif %}
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td><b>Completed</b></td><td></td>
+	</tr>
+	<tr>
+		<td>Actions: </td>
+		<td>
+			<label><input disabled="disabled" type="checkbox" name="wfEnableCompleteMsg" value="1" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSendMessage == true %}checked="checked"{% endif %}></label>
+			<input type="text" disabled="disabled" value="{% if step_actions['COMPLETE'] is defined %}{% if step_actions['COMPLETE'].getMessage.getMessageName == 'DEFAULT_COMPLETE' %}Default{% else %}{{ step_actions['COMPLETE'].getMessage.getMessageName }}{% endif %}{% endif %}"> message 
+			<p>
+				to: <label><input disabled="disabled" type="checkbox" name="wfCompleteNotifyParticipants" value="P" {% if step_actions['COMPLETE'] is defined and (step_actions['COMPLETE'].getToOptions == 3 or step_actions['COMPLETE'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+				<label><input disabled="disabled" type="checkbox" name="wfCompleteNotifyParticipants" value="A" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+				<br> and/or: <br>
+				{% set nameslist = '' %}
+				{% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSendTo.count > 0 %}
+					{% for item in step_actions['COMPLETE'].getSendTo %}
+						{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+					{% endfor %}
+					{% set nameslist = nameslist[1:] %}
+				{% endif %}
+				{% if nameslist != '' %}<p>{{ nameslist }}</p>{% endif %}
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td><b>Declined</b></td><td></td>
+	</tr>
+	<tr>
+		<td>Actions: </td>
+		<td>
+			<label><input disabled="disabled" type="checkbox" name="wfEnableDeclineMsg" value="1" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendMessage == true %}checked="checked"{% endif %}></label>
+			<input type="text" disabled="disabled" value="{% if step_actions['DECLINE'] is defined %}{% if step_actions['DECLINE'].getMessage.getMessageName == 'DEFAULT_DECLINE' %}Default{% else %}{{ step_actions['DECLINE'].getMessage.getMessageName }}{% endif %}{% endif %}"> message 
+			<p>
+				to: <label><input disabled="disabled" type="checkbox" name="wfDeclineNotifyParticipants" value="P" {% if step_actions['DECLINE'] is defined and (step_actions['DECLINE'].getToOptions == 3 or step_actions['DECLINE'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+				<label><input disabled="disabled" type="checkbox" name="wfDeclineNotifyParticipants" value="A" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+				<br> and/or: <br>
+				{% set nameslist = '' %}
+				{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendTo.count > 0 %}
+					{% for item in step_actions['DECLINE'].getSendTo %}
+						{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+					{% endfor %}
+					{% set nameslist = nameslist[1:] %}
+				{% endif %}
+				{% if nameslist != '' %}<p>{{ nameslist }}</p>{% endif %}
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td><b>Paused</b></td><td></td>
+	</tr>
+	<tr>
+		<td>Actions: </td>
+		<td>
+			<label><input disabled="disabled" type="checkbox" name="wfEnablePauseMsg" value="1" {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getSendMessage == true %}checked="checked"{% endif %}></label>
+			<input type="text" disabled="disabled" value="{% if step_actions['PAUSE'] is defined %}{% if step_actions['PAUSE'].getMessage.getMessageName == 'DEFAULT_PAUSE' %}Default{% else %}{{ step_actions['PAUSE'].getMessage.getMessageName }}{% endif %}{% endif %}"> message 
+			<p>
+				to: <label><input disabled="disabled" type="checkbox" name="wfPauseNotifyParticipants" value="P" {% if step_actions['PAUSE'] is defined and (step_actions['PAUSE'].getToOptions == 3 or step_actions['PAUSE'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+				<label><input disabled="disabled" type="checkbox" name="wfPauseNotifyParticipants" value="A" {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+				<br> and/or: <br>
+				{% set nameslist = '' %}
+				{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendTo.count > 0 %}
+					{% for item in step_actions['DECLINE'].getSendTo %}
+						{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+					{% endfor %}
+					{% set nameslist = nameslist[1:] %}
+				{% endif %}
+				{% if nameslist != '' %}<p>{{ nameslist }}</p>{% endif %}
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td><b>Cancelled</b></td><td></td>
+	</tr>
+	<tr>
+		<td>Actions: </td>
+		<td>
+			<label><input disabled="disabled" type="checkbox" name="wfEnableCancelMsg" value="1" {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSendMessage == true %}checked="checked"{% endif %}></label>
+			<input type="text" disabled="disabled" value="{% if step_actions['CANCEL'] is defined %}{% if step_actions['CANCEL'].getMessage.getMessageName == 'DEFAULT_CANCEL' %}Default{% else %}{{ step_actions['CANCEL'].getMessage.getMessageName }}{% endif %}{% endif %}"> message 
+			<p>
+				to: <label><input disabled="disabled" type="checkbox" name="wfCancelNotifyParticipants" value="P" {% if step_actions['CANCEL'] is defined and (step_actions['CANCEL'].getToOptions == 3 or step_actions['CANCEL'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+				<label><input disabled="disabled" type="checkbox" name="wfCancelNotifyParticipants" value="A" {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+				<br> and/or: <br>
+				{% set nameslist = '' %}
+				{% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSendTo.count > 0 %}
+					{% for item in step_actions['CANCEL'].getSendTo %}
+						{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+					{% endfor %}
+					{% set nameslist = nameslist[1:] %}
+				{% endif %}
+				{% if nameslist != '' %}<p>{{ nameslist }}</p>{% endif %}
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td><b>Delayed</b></td><td></td>
+	</tr>
+	<tr>
+		<td>Actions: </td>
+		<td>
+			If not completed within: 
+			<input disabled="disabled" type="text" name="wfDelayCompleteThreshold" value="{% if step_actions['DELAY'] is defined %}{{ step_actions['DELAY'].getDueDays }}{% endif %}" > day(s)
+			<label><input disabled="disabled" type="checkbox" name="wfEnableDelayMsg" value="1" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSendMessage == true %}checked="checked"{% endif %}></label>
+			<input type="text" disabled="disabled" value="{% if step_actions['DELAY'] is defined %}{% if step_actions['DELAY'].getMessage.getMessageName == 'DEFAULT_DELAY' %}Default{% else %}{{ step_actions['DELAY'].getMessage.getMessageName }}{% endif %}{% endif %}"> message 
+			<p>
+				to: <label><input disabled="disabled" type="checkbox" name="wfDelayNotifyParticipants" value="P" {% if step_actions['DELAY'] is defined and (step_actions['DELAY'].getToOptions == 3 or step_actions['DELAY'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+				<label><input disabled="disabled" type="checkbox" name="wfDelayNotifyParticipants" value="A" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+				<br> and/or: <br>
+				{% set nameslist = '' %}
+				{% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSendTo.count > 0 %}
+					{% for item in step_actions['DELAY'].getSendTo %}
+						{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+					{% endfor %}
+					{% set nameslist = nameslist[1:] %}
+				{% endif %}
+				{% if nameslist != '' %}<p>{{ nameslist }}</p>{% endif %}
+			</p>
+			<hr style="clear:both;">
+			If not completed within further: 
+			<input disabled="disabled" type="text" name="wfDelayEsclThreshold" value="{% if step_actions['DELAYESCL'] is defined %}{{ step_actions['DELAYESCL'].getDueDays }}{% endif %}"> day(s)
+			<label><input disabled="disabled" type="checkbox" name="wfEnableDelayEsclMsg" value="1" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSendMessage == true %}checked="checked"{% endif %}></label>
+			<input type="text" disabled="disabled" value="{% if step_actions['DELAYESCL'] is defined %}{% if step_actions['DELAYESCL'].getMessage.getMessageName == 'DEFAULT_DELAYESCL' %}Default{% else %}{{ step_actions['DELAYESCL'].getMessage.getMessageName }}{% endif %}{% endif %}"> message 
+			<p>
+				to: <label><input disabled="disabled" type="checkbox" name="wfDelayEsclNotifyParticipants" value="P" {% if step_actions['DELAYESCL'] is defined and (step_actions['DELAYESCL'].getToOptions == 3 or step_actions['DELAYESCL'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+				<label><input disabled="disabled" type="checkbox" name="wfDelayEsclNotifyParticipants" value="A" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+				<br> and/or: <br>
+				{% set nameslist = '' %}
+				{% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSendTo.count > 0 %}
+					{% for item in step_actions['DELAYESCL'].getSendTo %}
+						{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+					{% endfor %}
+					{% set nameslist = nameslist[1:] %}
+				{% endif %}
+				{% if nameslist != '' %}<p>{{ nameslist }}</p>{% endif %}
+			</p>
+		</td>
+	</tr>
+</table>

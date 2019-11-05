@@ -1,0 +1,21 @@
+function runme(event){ 
+    event.preventDefault(); 
+    var frameID = window.parent.fraTabbedTable.objTabBar.GetNewDocID();
+    var docUrl = docInfo.PortalWebPath + "WorkflowBuilder?openForm&AppID=" + docInfo.AppID; 
+    window.parent.fraTabbedTable.objTabBar.CreateTab("New Workflow", frameID, "D", docUrl, "appBuilderMain", true); 
+} 
+
+function onDocumentOpen(){
+	var entryObj = objView.GetCurrentEntry();
+	var frameID = "";
+	var title = "";
+	frameID = entryObj.entryId; 
+			
+    if ( frameID.indexOf("~" ) > 0 ){
+    	frameID = frameID.substring(0, frameID.indexOf("~") );
+    }
+
+	title = entryObj.GetElementValue("CF1");
+	var docUrl = docInfo.PortalWebPath + "WorkflowBuilder?openForm&AppID=" + docInfo.AppID + "&wfID=" + entryObj.entryId; 
+	window.parent.fraTabbedTable.objTabBar.CreateTab(title, frameID, "D", docUrl, docInfo.DocID, false);
+}

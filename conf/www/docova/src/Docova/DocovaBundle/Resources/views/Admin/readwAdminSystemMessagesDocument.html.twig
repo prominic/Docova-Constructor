@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{% trans %}System Message{% endtrans %}</title>
+<!--  common javascript & CSS header -->
+{% include 'DocovaBundle:Admin:sfWebAdminCommonScriptHeader.html.twig'%}
+{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+	'document' : message, 
+	'view_name' : 'wAdminSystemMessages', 
+	'view_title' : 'System Messages', 
+	'path_info' : path('docova_admin_readdocument', { 'view_name' : 'wAdminSystemMessages', 'doc_id' : message.getId }) ~ '?OpenDocument&ParentUNID=',
+	'mode' : 'read' 
+} %}
+
+</head>
+<body scroll="no">
+	<ul class="ui-widget-header actionBar hidetoload">
+		<a id="editBtn" href="{{ path('docova_admin_editdocument', { 'view_name' : 'wAdminSystemMessages', 'doc_id' : message.getId }) }}" >{% trans %}Edit{% endtrans %}</a>
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+	</ul>
+	<div id="frmEmulator" class="hidetoload">
+		<div id="divFormContainer">
+			<table class="elmContainer" cellspacing="0">
+				<tr>
+					<td colspan="2" class="firstRw"><h3 class="headings1">{% trans %}System Mail Message Template{% endtrans %}</h3></td>
+				</tr>
+				<tr>
+					<td class="firstRw">{% trans %}Message Name{% endtrans %}:</td>
+					<td class="firstRw">{{ message.getMessageName }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Message Link{% endtrans %}:</td>
+					<td>{{ message.getLinkType ? 'Open document only'|trans : 'Open whole application'|trans }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Sender{% endtrans %}:</td>
+					<td>
+						{% set senders = '' %}
+						{% if message.getSenders.count > 0 %}
+							{% for item in message.getSenders %}
+								{% set senders = ',' ~ item.getUserNameDnAbbreviated ~ senders %}
+							{% endfor %}
+						{% endif %}
+						{% if message.getSenderGroups|length > 0 %}
+							{% set senders = ',' ~ (message.getSenderGroups|join(',')) ~ senders %}
+						{% endif %}
+						{% set senders = senders[1:] %}
+						{{ senders }}
+						<span class="elNote">{% trans %}System message sender name will be used if empty.{% endtrans %}</span>
+					</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Subject line{% endtrans %}:</td>
+					<td>{{ message.getSubjectLine }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Body content{% endtrans %}:</td>
+					<td>{{ message.getMessageContent|nl2br }}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

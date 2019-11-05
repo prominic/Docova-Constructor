@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% trans %}Applications{% endtrans %}</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<style type="text/css">
+table {
+	display: block;
+	width: 100%;
+	overflow-y: auto;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+
+.iconpicker-item {
+	float: left;
+	width: 14px;
+	height: 14px;
+	padding: 12px;
+	margin: 0 12px 12px 0;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 3px;
+	font-size: 14px;
+	box-shadow: 0 0 0 1px #ddd;
+	color: inherit
+}
+
+.iconpicker {
+	width: 225px;
+	height: 200px;
+	border: 1px solid black;
+	overflow: auto;
+}
+
+.iconpicker-selected {
+	background-color: #C0C0C0;
+}
+</style>
+<script language="JavaScript" type="text/javascript">
+var dlgDoc = null;
+var parentWin = window.top.Docova.GlobalStorage["divDlgCopyApp"].sourcewindow;
+var params = parentWin.dlgParams;
+var appfname = "";
+var newstring = "";
+var info = {
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ user.username }}",
+	"ServiceAgent" : "LibraryServices",
+	"UserRoles" : "$$WebClient;[Administration]",
+	"HTTP_Referer" : "",
+	"Query_String" : "OpenForm",
+	"Query_String_Decoded" : "OpenForm",
+	"Path_Info_Decoded" : "",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"HomePageWeb" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"SecureUrl" : "OFF"
+};
+function getinfovar() {
+	return info;
+}
+InitVars(info);
+
+$(document).ready(function() {
+	//---Get app name
+	$("#Title").bind(
+			"keyup",
+			function(event) {
+				newstring = $(this).val().replace(/[^a-z0-9\s]/gi,
+						'').replace(/\s/g, '') //Filename will only be alpha numeric and no spaces
+				newstring = newstring.substr(0, 20);
+			});
+
+	$("#Title").val(params[0]);
+	$("#Description").val(params[1]);
+});
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+	<form method="post" action="" name="_dlgCopyApp">
+		<table class="tblFields" width="100%" border="0" cellspacing="0"
+			cellpadding="0">
+			<tr valign="top">
+				<td width="31%">{% trans %}Title{% endtrans %}:</td>
+				<td width="69%"><input name="Title" value="" id="Title" class="frmField" style="width: 300px;" maxlength="40"></td>
+			</tr>
+
+			<tr valign="top">
+				<td width="31%">{% trans %}Description{% endtrans %}:</td>
+				<td width="69%"><input name="Description" value="" id="Description" style="width: 300px;" title="maxlength=&quot;50&quot;"></td>
+			</tr>
+
+			<tr valign="top">
+				<td width="31%">{% trans %}Copy What?{% endtrans %}</td>
+				<td width="69%">
+					<label> <input type="radio" disabled="disabled" name="CopyOption" value="DD" id="CopyOption">{% trans %}Design and documents{% endtrans %}</label><br>
+					<label> <input type="radio" disabled="disabled" name="CopyOption" value="DO" checked id="CopyOption">{% trans %}Design only{% endtrans %}</label>
+				</td>
+			</tr>
+
+			<tr valign="top">
+				<td width="31%">{% trans %}Update design{% endtrans %}:</td>
+				<td width="69%">
+					<label> <input type="checkbox" name="InheritOption" value="I" id="InheritOption">{% trans %}Inherit from copied application{% endtrans %}</label>
+				</td>
+			</tr>
+		</table>
+		<br>
+		<div style="display: none;">
+			{% trans %}Original App{% endtrans %}: <input name="SrcAppFileName" value="" id="SrcAppFileName">
+			{% trans %}Web domain server{% endtrans %}: <input name="Server" value="{{ app.request.server.get('HTTP_HOST') }}" id="Server">
+			{% trans %}Web path{% endtrans %}: <input name="WebAppPath" value="{{ path('docova_homepage') }}" id="WebAppPath">
+		</div>
+	</form>
+</body>
+</html>

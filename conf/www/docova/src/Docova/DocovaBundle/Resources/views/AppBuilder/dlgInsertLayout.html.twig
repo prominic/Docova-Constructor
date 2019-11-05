@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<title>{% trans %}Split Pane{% endtrans %}</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleViewDialogBase.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleAdministration.css') }}">
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no">
+	<table class="DlgTable" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+			<td class="DlgContentCell" width="100%">
+				<div id="dlgContentNh" style="width: 100%;">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr valign="top">
+							<td width="100%"></td>
+						</tr>
+						<tr valign="top">
+							<td class="txFldLabel" width="100%">
+								<div>
+									<table border=0 class="tblFields" style="border-collapse: collapse;">
+										<tr>
+											<td class="frmLabel" style="width: 140;">{% trans %}Pane name{% endtrans %}:</td>
+											<td style="width: 200;"><input name="LayoutName" value="" id="LayoutName"></td>
+										</tr>
+										<tr>
+											<td class="frmLabel" style="width: 140px; vertical-align: top;">{% trans %}Split into{% endtrans %}:</td>
+											<td style="width: 200;">
+												<input name="bInsert" id="rows" type="radio" value="rows">{% trans %}Rows{% endtrans %}</input>
+												<input name="bInsert" id="cols" type="radio" value="columns">{% trans %}Columns{% endtrans %}</input>
+											</td>
+										</tr>
+										<tr>
+											<td class="frmLabel" style="width: 140px; vertical-align: top;">{% trans %}How many{% endtrans %}:</td>
+											<td style="width: 200;"><input name="InsertCount" value="" id="InsertCount" class="txFld" style="width: 30px;"></td>
+										</tr>
+										<tr>
+											<td class="frmLabel" style="width: 140px; vertical-align: top;">{% trans %}Scrollable{% endtrans %}?</td>
+											<td style="width: 200;"><input type="checkbox" name="scrolling" id="scrolling">{% trans %}Yes{% endtrans %}</input></td>
+										</tr>
+										<tr>
+											<td class="frmLabel" style="width: 140px; vertical-align: top;">{% trans %}Resizable?{% endtrans %}</td>
+											<td style="width: 200;"><input type="checkbox" name="resizable" id="resizable">{% trans %}Yes{% endtrans %}</input></td>
+										</tr>
+									</table>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr valign="top">
+			<td id="buttonCell" class="DlgButtonCell" width="100%" valign="middle">&nbsp;</td>
+		</tr>
+	</table>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

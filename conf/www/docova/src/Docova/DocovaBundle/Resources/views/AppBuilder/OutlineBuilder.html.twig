@@ -1,0 +1,3185 @@
+<!doctype html>
+<html>
+<head>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness-flat/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleOutlineBuilder.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleNewAppBuilder.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/admin/appBuilderJS.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/DesignImportFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/ace/src-noconflict/ace.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/admin/sfWorkspaceCommonJsHeader.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/FormulaLanguage.js') }}"></script>
+{% if custcss %}
+{% set cssFile = appOutline.getOutlineName|replace({'/':'-', '\\':'-'})|replace({' ':''}) %}
+<link rel="stylesheet" type='text/css' href="{{ asset('bundles/docova/css/custom/'~ app.request.query.get('AppID') ~'/outlines/' ~ cssFile ~ '.css?'~random() ) }}" />
+
+{% endif %}
+
+{% if outlineContent %}
+{{ outlineContent|raw }}
+{% endif %}
+
+<style type="text/css">
+.dfas { font-weight: 800}
+</style>
+
+<script language="JavaScript" type="text/javascript">
+var entryHTML =   '<li class="d-ui-widget-header" text-align:left;" eType="" eElement="" eTarget="" eInitiallyExpanded="0" eMenuItemType="M" eInitiallySelected="0" eNoTab="0"><span class="" style="position:relative; " iconTitle=""></span><div class="itemlabel" style="display:inline-block;">Header 1</div></li>';
+entryHTML += '<ul style="list-style-type:none;" class="d-ui-state-default"><li etype="" eelement="" etarget="" einitiallyexpanded="0" emenuitemtype="M" einitiallyselected="0" eNoTab="0"><span class="" style="position:relative; " icontitle=""></span><div class="itemlabel" style="display:inline-block;">Sub Item 1</div></li></ul>';
+entryHTML +=   '<li class="d-ui-widget-header" text-align:left;" eType="" eElement="" eTarget="" eInitiallyExpanded="0" eMenuItemType="M" eInitiallySelected="0" eNoTab="0"><span class="" style="position:relative; " iconTitle=""></span><div class="itemlabel" style="display:inline-block;">Header 2</div></li>';
+entryHTML += '<ul style="list-style-type:none;" class="d-ui-state-default"><li etype="" eelement="" etarget="" einitiallyexpanded="0" emenuitemtype="M" einitiallyselected="0" eNoTab="0"><span class="" style="position:relative; " icontitle=""></span><div class="itemlabel" style="display:inline-block;">Sub Item 2</div></li></ul>';
+
+var entryHTMLSingle =  '<li class="d-ui-widget-header" text-align:left;" eType="" eElement="" eTarget="" eInitiallyExpanded="0" eMenuItemType="M" eInitiallySelected="0" eNoTab="0"><span class="" style="position:relative; " iconTitle=""></span><div class="itemlabel" style="display:inline-block;">Menu Item</div></li>';
+var entryHTMLSingleIcon =  '<li class="d-ui-widget-header" emenuitemtype="H" isspacer="0" etarget="null" title="" docova_custom_icon="1" eelement="" etype="null" eviewtype="" expicon=" fas fa-users" colicon=" fas fa-users" einitiallyselected="0" eNoTab="0" einitiallyexpanded="0" ><span class="itm_label  expandable fa-1x  fas fa-users" style="font-size: 20.6px;  float:left; "></span><div class="itemlabel"></div></li>';
+
+var entryHTMLIcon = '<li class="d-ui-widget-header" emenuitemtype="H" isspacer="0" etarget="null" title="" docova_custom_icon="1" eelement="" etype="null" eviewtype="" expicon=" fas fa-comments" colicon=" fas fa-comments" einitiallyselected="0" eNoTab="0" einitiallyexpanded="0" ><span class="itm_label  expandable fa-1x  fas fa-comments" style="font-size: 20.6px;  float:left; "></span><div class="itemlabel"></div></li>';
+entryHTMLIcon += '<ul style="list-style-type:none;" class="d-ui-state-default"><li etype="" eelement="" etarget="" einitiallyexpanded="0" emenuitemtype="M" einitiallyselected="0" eNoTab="0"><span class="" style="position:relative; " icontitle=""></span><div class="itemlabel" style="display:inline-block;">Sub Item 1</div></li></ul>';
+
+entryHTMLIcon += '<li class="d-ui-widget-header" emenuitemtype="H" isspacer="0" etarget="null" title="" docova_custom_icon="1" eelement="" etype="null" eviewtype="" expicon=" fas fa-users" colicon=" fas fa-users" einitiallyselected="0" eNoTab="0" einitiallyexpanded="0" ><span class="itm_label  expandable fa-1x  fas fa-users" style="font-size: 20.6px;  float:left; "></span><div class="itemlabel"></div></li>';
+entryHTMLIcon += '<ul style="list-style-type:none;" class="d-ui-state-default"><li etype="" eelement="" etarget="" einitiallyexpanded="0" emenuitemtype="M" einitiallyselected="0" eNoTab="0"><span class="" style="position:relative; " icontitle=""></span><div class="itemlabel" style="display:inline-block;">Sub Item 2</div></li></ul>';
+
+
+var defaultOutlineHTML = '<ul class="OutlineItems" style="list-style-type:none;" >' + entryHTML + "</ul>";
+var defaultOUtlineHTMLIcon = '<ul class="OutlineItems" style="list-style-type:none;">' + entryHTMLIcon + "</ul>";
+var defaultOutlineHTMLSingle = '<ul class="OutlineItems" style="list-style-type:none;" >' + entryHTMLSingle + "</ul>";
+var defaultOutlineHTMLSingleIcon = '<ul class="OutlineItems" style="list-style-type:none;" >' + entryHTMLSingle + "</ul>";
+
+
+
+var currMenuItem;
+var currMenuItemLabel;
+var currMenuItemIcon;
+var initFormName = "";
+var elemlistobj = [];
+var custcssdelm = '/*--CustomCSS--*/';
+var cssstylestring = "";
+var deficon = "fas fa-caret-down";
+var deficonsub = "fas fa-caret-down";
+var headerClass  = "d-ui-widget-header";
+var itemsClass = "d-ui-state-default";
+var origpaddingvalue = "";
+var isfirstrun = false;
+
+
+var defaultVal = null; //hold last val for.inputEntry class fields
+
+var formID;
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "UserRoles" : "[Administration]",
+  "Query_String" : "openForm&AppID={{ appId }}",
+  "Query_String_Decoded" : "openForm&AppID={{ appId }}",
+  "Path_Info_Decoded" : "{{ path('docova_outlinebuilder') }}?openForm&AppID={{ appId }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "PortalWebPath" : "{{ url('docova_homepage') }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "HomePageWeb" : "{{ path('docova_homepage') }}",
+  "SessionDateFormat" : "mm/dd/yy",
+  "AppID" : "{{ appId }}",
+  "SSLState" : "OFF",
+  "ImagesPath" : "{{ asset('bundles/docova/images') }}",
+  "OutlineID": "{{ appOutline ? appOutline.getId : '' }}",
+  "FormUNID":"{{ appOutline ? appOutline.getId : '' }}",
+  "DesignElementType" : "Outline",
+  "TriggerDesignCreation" : "{{ app.request.query.get('TriggerDesignCreation') }}",
+  "DesignElementLabel" : "Menu"
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+
+//gets http: or https: to ensure lookups use correct protocol
+var currProtocol; 
+var secureflag = "OFF"
+
+//var used for icon picker
+var srch = "";
+var srchArray;
+var iconhtml = "";
+var alliconhtml = "";
+{% include 'DocovaBundle:AppBuilder:FontAwesomeIcons.html.twig' %}
+var is_chrome =false;
+var is_firefox = false;
+var is_opera = false;
+var is_explorer  = false;
+var is_safari = false;
+{% include 'DocovaBundle:AppBuilder:MenuThemeDefaults.html.twig' %}
+
+
+
+$(function() {
+	//Disable context menu
+	$(document).on("contextmenu", function(e){ e.preventDefault(); e.stopPropagation();});
+
+	$( "#divOutlineBuilder" ).resizable();
+	$(".ui-layout-east").resizable({
+		handles: 'w',
+ 		ghost: true,
+ 		resize:function( e,ui ){
+ 			$(".ui-resizable-helper").css("border-left", " 8px solid  rgb(221,221,221)");
+ 		},
+ 		stop: function(e, ui){
+ 			resizeNewPanelHorizontal(ui);	
+		}
+	});
+
+	
+
+	//calculate the widths of the panels - horizontal
+	$("#eastpane").width("414px").css({
+		'left' : 'auto',
+		'right' : '0'
+	});
+	$("#inner-center").width($("#divContentSection").width() - $("#eastpane").outerWidth() - 15);
+	
+	$(window).resize(function(e) {
+		e = e || event;
+		if (e.target == window) {
+			$("#inner-center").width($("#divContentSection").width() - $(".ui-layout-east").outerWidth() - 15);
+			$(".ui-layout-east").css("left", "");
+		}
+	});
+
+
+	$("#icon_close_wizard").click ( function () {
+		closeSelectWizard();	
+	})
+
+	$(".MenuSampleContainer").on ( "click " ,".mtheme",  function () 
+	{
+		var curid = $(this).attr("id");
+		var tmparr = curid.split("-");
+		closeSelectWizard();	
+		var stype = tmparr[0];
+		if ( stype == "treeview" ) stype = "B" ;
+		if ( stype == "vcascading" ) stype = "C";
+		if ( stype == "vnavigator" ) stype = "N" ;
+		if ( stype == "vcascadings" ) stype = "VP";
+		if ( stype == "hcascadings") stype = "HP" ;
+		if ( stype == "hcascading") stype = "HC";
+		if ( stype == "hicononly") stype = "IC";
+		if ( stype == "hicononlys") stype = "IS";
+		if ( stype == "vicononly") stype = "VC";
+		if ( stype == "vicononlys") stype = "VS";
+
+		$("#OutlinePerspective").val(stype);
+		$("#OutlinePerspectiveDisp").val($("#OutlinePerspective option:selected").text());
+		$("#OutlineStyle").val(tmparr[1] );
+
+
+		if ( isfirstrun )
+		{
+			if ( stype == "IC" || stype == "IS" || stype == "VC" || stype == "VS"){
+				//icon only
+				$("#divOutlineBuilder").html(defaultOUtlineHTMLIcon);		
+			}
+		}
+		isfirstrun = false;
+
+		resetEntriesToBasic();
+
+		updateStyleFields();
+		refreshAfterChange(); 
+		setEntryProperties();			
+
+	})
+
+	$('#selLayout').click(function (e) 
+	{
+		e.preventDefault();
+		e.stopPropagation()
+		
+		
+ 		var shown = $(".selectWizard").css("display") == "none" ? false : true;
+		
+	    $(".selectWizard").css({
+	    		'left' : '',
+	            'right': "100px",
+	            'top': $(this).offset().top + $(this).height() + 5
+	    }).toggle("slow");
+
+	    if ( ! shown )
+	    {
+	    	$(this).find("i").removeClass("fa-caret-right").addClass("fa-caret-down");
+	    	initMenuSelectionDialog();
+		}else{
+			$(this).find("i").removeClass("fa-caret-down").addClass("fa-caret-right")
+	    	
+		}
+	});
+
+	$("#layout-tabs").click(function(event){
+		event.preventDefault();
+		$('#element-type').html('Menu Properties');
+		$("#tabsForm").css("display", "");
+		$("#element_properties").css("display", "none");
+		$('#prStyle').css('display', 'none');
+		$('#prHideShow').css('display', 'none');
+		$('#prIcons').css('display', 'none');
+		$('a[target="prHideShow"]').hide();
+		$('a[target="prIcons"]').hide();
+		currElem = null; //make currElem nothing
+	});
+
+	$('h3.tool_box_header').on('click', function(){
+		var header = '';
+		var showTarget = $(this).attr('target');
+		if (!$(".OutlineItems .isSelected").length) {
+			switch(showTarget) {
+    			case 'prProperties':
+    				$("#tabsForm").show();
+    				$("#element_properties").css("display", "none");
+    				header = '{% trans %}Menu Properties{% endtrans %}';
+    				$('#element-type').html(header.replace(/^\w/, c => c.toUpperCase()));
+    				break;
+    			case 'prStyle':
+    				$('#frmStyle').show();
+    				$('#elmStyle').hide();
+    				break;
+				case 'prHideShow':
+        			$('#frmHideShow').show();
+        			$('#elmHideShow').hide();
+					break;
+    			case 'prIcons':
+        			$('#frmIcons').show();
+        			$('#elmIcons').hide();
+        			break;
+			}
+			if ($('#'+showTarget).is(':hidden')) {
+				$('#'+showTarget).slideDown();
+			}
+			else {
+				$('#'+showTarget).slideUp();
+			}
+		}
+		else {
+			$('#frmStyle').hide();
+			$("#tabsForm").hide();
+			switch(showTarget) {
+				case 'prProperties':
+    				$("#element_properties").show();
+    				header = '{% trans %}Menu Item Properties{% endtrans %}';
+					break;
+				case 'prStyle':
+    				$('#frmStyle').hide();
+    				$('#elmStyle').show();
+					break;
+				case 'prHideShow':
+        			$('#frmHideShow').hide();
+        			$('#elmHideShow').show();
+					break;
+				case 'prIcons':
+        			$('#frmIcons').hide();
+        			$('#elmIcons').show();
+					break;
+			}
+			if ($('#'+showTarget).is(':hidden')) {
+				$('#'+showTarget).slideDown();
+			}
+			else {
+				$('#'+showTarget).slideUp();
+			}
+		}
+	});
+
+	//---Color picker-----
+   //IE and Safari can't use the HTML5 colorpicker, this exposes the Docova color picker to those browsers
+   //IE10 and older, IE11 and Edge are difficult to detect so we will employ a process of elimination
+	is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
+    is_firefox = navigator.userAgent.indexOf('Firefox') > -1;
+    is_opera = navigator.userAgent.toLowerCase().indexOf("opr") > -1;
+    if(!(is_chrome) && !(is_firefox) && !(is_opera)){ //check for Safari after Chrome as Chrome has "Chrome" and "Safari" in userAgent text
+    	is_safari = navigator.userAgent.indexOf("Safari") > -1;
+    }
+    if(!(is_chrome) && !(is_firefox) && !(is_opera) && !(is_safari)){ //if none of the others then its explorer
+		is_explorer = true;
+    }
+
+	if(is_explorer || is_safari){ //set color pickers
+		$("#btn-ColorPicker").css("display", "");
+		$("#btn-IconColorPicker").css("display", "");
+		$("#btn-BorderColorPicker").css("display", "");
+		$(".colorpickerhelper").hide();
+	}	
+
+	designversion = 2;
+
+	
+
+	$('#right-panel-tabs').tabs({
+		collapsible: true,
+		activate: function(e, ui) {
+			if (!ui.newPanel.html()) {
+				$('#eastpane').width($('#vertical-tabs').width() + 10).css({
+					'left' : 'auto',
+					'right' : '0'
+				});
+			}
+			else {
+				$('#eastpane').width(414).css({
+					'left' : 'auto',
+					'right' : '0'
+				});
+			}
+			$("#inner-center").width($("#divContentSection").width() - $(".ui-layout-east").outerWidth() - 15);
+			$(".ui-layout-east").css("left", "");
+		}
+	});
+
+	var all$$funcs =  getAll$$Functions();
+	$('span.longtext_values').on('click', function() {
+		var $this = $(this);
+		var target = $this.attr('target');
+		var value = $('#'+target).val();
+		if ($.trim(value) != '') {
+			$('#divMultiLinePopup #multilineinput').text(value);
+		}
+		else {
+			value = '';
+			$('#divMultiLinePopup #multilineinput').text('');
+		}
+		var html = $('#divMultiLinePopup').html();
+		var dlgTextInput = window.top.Docova.Utils.createDialog({
+			id: "divDlgMultiLineInput",
+			title: "{% trans %}Enter Script/Value{% endtrans %}",
+			height: 313,
+			width: 800,
+			dlghtml: html,
+			resizable: true,
+			sourcewindow: window,
+			sourcedocument: document,
+			onOpen : function () 
+			{
+				
+				var obj = $( "#divDlgMultiLineInput #docova_formula_helper" , window.top.document);
+				var dlg = $("#divDlgMultiLineInput", window.top.document);
+				var tbox = $("#divDlgMultiLineInput #multilineinput", window.top.document);
+				var btn = $( "#divDlgMultiLineInput #btnInsertFormula", window.top.document );
+				obj.autocomplete({
+  					source: all$$funcs,
+  					appendTo: dlg,
+  					open : function () {
+  						$("#divDlgMultiLineInput ul.ui-menu", window.top.document).width( $(this).innerWidth() ); 
+  						$("#divDlgMultiLineInput ul.ui-menu", window.top.document).height( dlg.height() -30 ); 
+  						$("#divDlgMultiLineInput ul.ui-menu", window.top.document).css("overflow-x", "hidden")
+  					},
+					select : function(e, ui) {
+  	  					if ($.trim(ui.item.value) != '')
+  	  	  				{
+      						if (tbox.val() != "" ){
+      				  			tbox.val(tbox.val() + "\n" + $.trim(ui.item.value));
+      				  		}else{
+      				  			tbox.val($.trim(ui.item.value));
+      				  		}
+  	  	  				}
+  	  				}
+				});
+
+				btn.on('click', function()
+				{
+					if ( trim(obj.val()) == "" ) return;
+
+					if ( tbox.val() != "" ){
+			  			tbox.val (tbox.val() + "\n" + $.trim(obj.val()) );
+			  		}else{
+			  			tbox.val ($.trim(obj.val()));
+			  		}
+				});
+
+			},
+
+			buttons: {
+				"{% trans %}OK{% endtrans %}": function (){
+					var tbox = $("#divDlgMultiLineInput #multilineinput", window.top.document);
+					var input_value = tbox.val();
+					$('#'+target).val(input_value);
+					$this.text(input_value);
+					setEntryProperties();
+					dlgTextInput.closeDialog();
+				},
+				"{% trans %}Cancel{% endtrans %}": function(){
+					dlgTextInput.closeDialog();
+				}
+			}
+		});
+	});
+
+	$('#prStyle TH[expcol^="pr"]').on('click', function(){
+		if ($('#prStyle TR.'+ $(this).attr('expcol')).first().is(':visible')) {
+			$('#prStyle TR.'+ $(this).attr('expcol')).hide();
+			$(this).children('i').prop('class', 'far fa-caret-right');
+		}
+		else {
+			$('#prStyle TR.'+ $(this).attr('expcol')).show();
+			$(this).children('i').prop('class', 'far fa-caret-down');
+		}
+	});
+	
+    $( ".OutlineItems" ).disableSelection();
+
+    
+    $("[name=menuor]").on("change", function(){
+		var curval =Docova.Utils.getField("menuor");
+		if ( curval == "H"){
+			$(".MenuVert").hide();
+			$(".MenuHoriz").show();
+		}else{
+			$(".MenuVert").show();
+			$(".MenuHoriz").hide();
+		}
+	})
+
+	//---Hide/When---
+	$("[name=HideWhen]").on("change", function(){
+		if(Docova.Utils.getField("HideWhen").indexOf("C") != -1){
+			$("#spanCustomHideWhen").css("display", "")
+		}else{
+			$("#spanCustomHideWhen").css("display", "none")
+			$("#CustomHideWhen").val("");
+		}
+		setEntryProperties();
+	})
+
+	//Initialize ACE editor
+	editorcss = ace.edit("CSSCode");
+	editorcss.setTheme("ace/theme/chrome");
+	editorcss.getSession().setMode("ace/mode/css");
+	editorcss.setOptions({
+     	maxLines: Infinity
+	});
+
+	$( "#btn-applycss" ).button({
+		text: false,
+		label: "{% trans %}Apply CSS{% endtrans %}",
+		icons: {primary: "ui-icon-squaresmall-plus"}
+	})
+	.click(function( event ) {
+		event.preventDefault();
+		var csstxt = editorcss.getValue ();
+		addcss(csstxt);
+	});
+    
+    $("#inner-center").click(function(){
+		$("#tabs").css("display", "none");
+		$("#tabsOutline").css("display", "");
+		$(".OutlineItems li").removeClass("isSelected"); //unselect any selected menu items
+    });
+
+	$( "#btn-ResetText" ).button({
+		text: true,
+		label: "{% trans %}Reset Text{% endtrans %}",
+		icons: {primary: "ui-icon-close"}
+	})
+	.click(function( event ) {
+		event.preventDefault();
+		resetTextProperties();
+	});		
+	
+	$( "#btn-ResetIcon" ).button({
+		text: true,
+		label: "{% trans %}Reset Icon{% endtrans %}",
+		icons: {primary: "ui-icon-close"}
+	})
+	.click(function( event ) {
+		event.preventDefault();
+		if($(currMenuItemIcon).attr("iconTitle") == deficon || $(currMenuItemIcon).attr("iconTitle") == deficonsub){
+			window.top.Docova.Utils.messageBox({
+				title: "{% trans %}Expandable/Collapsible Menu Entry{% endtrans %}",
+				prompt: "{% trans %}Sorry, you cannot clear the icon for a Menu Entry that is expandable/collapsible.  These items use the expand/collapse icons.{% endtrans %}",
+				icontype: 1,
+				msgboxtype: 0,
+				width: 500
+			});						
+			return;
+		}
+		resetIcon();
+	});
+		
+	$( "#btn-ResetOutlineBorder" ).button({
+		text: true,
+		label: "{% trans %}Reset{% endtrans %}",
+		icons: {primary: "ui-icon-close"}
+	})
+	.click(function( event ) {
+		event.preventDefault();
+		resetOutlineBorder();
+	});	
+
+	$( "#computelabel").change (function(){
+		if ( $(this).is(":checked") ) {
+			$("#EntryLabel").prop("disabled", true);
+			$("#rowcomputtitle").show();
+		}else{
+			$("#EntryLabel").prop("disabled", false)
+			$("#rowcomputtitle").hide();
+
+		}
+		setEntryProperties();
+	});
+	
+	//show divContentSection
+	$("#divContentSection").css("display", "block");
+
+	//-----Set some property behaviours----
+	
+	//---MenuItemType---
+	$("input[name=MenuItemType]").change(function(){  toggleMenuItemHeader(); setEntryProperties(); });
+	//--Entry Type---
+	$("#EntryType").change(function(){
+		if($(this).val() == "url"){
+			$("#divEntryUrl").css("display", "");
+			$("#divEntryJS").css("display", "none");
+			$("#ForceNoTab").prop("disabled", false);
+			$("#EntryJS").val("");
+			$("#elementListRow").css("display", "none");
+		}else if($(this).val() == "js"){
+			$("#ForceNoTab").prop("disabled", true);
+			$("#divEntryUrl").css("display", "none");
+			$("#EntryUrl").val("");
+			$("#divEntryJS").css("display", "");			
+			$("#elementListRow").css("display", "none");
+		}else{
+			if ($(this).val() == 'view') {
+				$("#ForceNoTab").prop("disabled", true);
+			}
+			else {
+				$("#ForceNoTab").prop("disabled", false);
+			}
+			getElementList($(this).val());
+			$("#divEntryUrl").css("display", "none");
+			$("#EntryUrl").val("");
+			$("#divEntryJS").css("display", "none");
+			$("#EntryJS").val("");	
+			$("#elementListRow").css("display", "");			
+		}
+		setEntryProperties();
+	});
+	//--ElementList---
+	$("#ElementList").change(function(){ setEntryProperties(); });	
+	//--Outline Style---
+	//--Outline Perspective---
+	$("#OutlinePerspective").change(function(){ 	
+		/*if(jQuery(this).val() == "HC" || jQuery(this).val() == "C" ){
+			UpdateCSSTxt();
+			fixMinPadding();
+		}*/
+
+		resetEntriesToBasic();
+
+		updateStyleFields();
+		refreshAfterChange(); 
+		setEntryProperties();			
+	});
+
+	$(".inputEntryCSS").on("change", function(){
+		UpdateCSSTxt();
+	});
+
+	//--Submenu detector---
+	$("#SubmenuDetector").change(function(){ 	
+			setEntryProperties();			
+	});		
+
+
+
+
+	//--Outline Style---
+	$("#OutlineStyle").change(function(){
+		$(".themehidden").show();
+		resetEntriesToBasic();
+		setEntryProperties(); 
+	});	
+	//---Entry initially selected radio button---
+	$("input[name=EntryInitiallySelected]").change(function(){ setInitiallySelected(); });
+	//---Entry initially expanded radio button---
+	$("input[name=EntryInitiallyExpanded]").change(function(){ setEntryProperties(); });
+	//---Set bold---
+	$("#PropBold").click(function(){ setEntryProperties();	});
+	$("#EntryIsSpacer").click(function(){ setEntryProperties();	});
+	$("#ForceNoTab").click(function(){ setEntryProperties();	});
+
+	//---Set italic---
+	$("#PropItalic").click(function(){ setEntryProperties(); });
+	//---Set font size---
+	$("#PropFontSize").change(function(){	setEntryProperties(); });
+	//---IconFontSize---
+	$("#IconFontSize").change(function(){	setEntryProperties(); });
+	//---Outline border related---
+	$("#BorderWidth").change(function(){ setEntryProperties(); });
+	$("#PaddingTop").change(function(){ setEntryProperties(); });
+	$("#PaddingRight").change(function(){ setEntryProperties(); });
+	$("#PaddingBottom").change(function(){ setEntryProperties(); });	
+	$("#PaddingLeft").change(function(){ setEntryProperties(); });
+	$("#BorderRadius").change(function(){ setEntryProperties(); });
+	
+	
+	//---Icon Picker----
+	//---Generate and store html for all icons
+	for(var x=0; x<fa_items.length; x++){
+		iconhtml += "<a title='" + fa_items[x] + "' role='button' href='#' class='iconpicker-item'><i class='" + fa_items[x] + "'></i></a>";
+	}
+	alliconhtml = iconhtml;
+
+	//---Set delay on icon picker search field
+	var delayMilliseconds = 750; // i.e. = 1 second
+	var timeoutId;
+	$("#IconSearch").on('keyup', function () {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(geticonsOutline, delayMilliseconds);
+	});
+	
+	//Initialize icons
+	geticonsOutline();
+
+  
+
+		
+	$( "button" ).click(function( event ) {
+		event.preventDefault();
+	});
+
+	var csstxt = $("#outlineCSSTxt").html();
+
+	if ( csstxt != "" ){
+		readCSSStyleString(csstxt);
+	}else{
+
+	}
+	
+	TriggerLoadOutline(docInfo.OutlineID);
+
+	UpdateHelperColors();
+	
+
+	$("input[type='color']").change(function(){
+		var helper = $(this).prev("input");
+		if ( helper.length > 0){
+			helper.val($(this).val());
+		}
+	})
+
+	$(".colorpickerhelper").change ( function(){
+		$(this).next("input").val($(this).val());
+		UpdateCSSTxt();
+	})
+	
+	$( "#divOutlineBuilder" ).resizable();
+	
+	$(".manualEntry").focus( function(event){
+		setEntryProperties();
+		$(this).prop("defaultValue", $(this).val());
+		currManualEntry = $(this);
+		var posleft = parseInt($(this).offset().left, 10) + parseInt($(this).outerWidth(),10);
+		var postop = parseInt($(this).offset().top, 10) + 3;
+	});
+	
+	//Set inputEntry behaviour
+	$(".inputEntry").on('keypress', function(e) {
+		if (e.keyCode == 13) {
+			var inputs = $('form[name=_OutlineBuilder]').find(":input:visible");
+            var idx = inputs.index(this);
+
+       		if (idx == inputs.length - 1) {
+           		inputs[0].select()
+       		} else {
+           		inputs[idx + 1].focus();
+           		inputs[idx + 1].select()
+       		}
+       		return false;
+		}
+	})
+	.on('focus', function(e) {
+		if (typeof $(this).val() == typeof undefined) {
+			defaultVal = '';
+		}
+		else {
+			defaultVal = $(this).val();
+		}
+	})
+	.on ('blur', function(e){
+		if ($(this).val() != defaultVal) {
+       		$(this).effect("highlight", {color: "#008000"}, 1000);
+    		setEntryProperties();
+		}
+		defaultVal = null;
+	});	
+	
+	$("#btn-Apply").click(function(event){
+		setEntryProperties();
+	});
+	
+	$("#btn-Cancel").click(function(event){
+		$(currManualEntry).val( $(currManualEntry).prop("defaultValue"));
+
+	});
+	
+	//get current protocol to use in lookups
+	currProtocol = location.protocol;
+	if(currProtocol == "http:"){
+		secureflag = "OFF";
+	}else{
+		secureflag = "ON";
+	}
+
+	$("[isspacer='1'").each ( function () {
+	
+		$(this).css("border-bottom",  "0px")
+	})	
+
+	createMenuThemeImages();
+	//special case where this document/form is being loaded with the sole intent of triggering the process of creating the back end design document
+	if(docInfo && docInfo.TriggerDesignCreation && docInfo.TriggerDesignCreation != ""){
+		var dsnType = docInfo.DesignElementType;
+		var lctemptype = dsnType.toLowerCase();
+		
+		doCreateDesignElement();
+		window.location = "about:blank";  //clear the current contents
+	}
+});
+
+function closeSelectWizard()
+{
+	$(".selectWizard").hide();	
+	$(".ui-widget-overlay").remove();
+	$(".selectWizard").css("z-index", "");
+	$("#selLayout").find("i").removeClass("fa-caret-down").addClass("fa-caret-right")
+}
+
+function initMenuSelectionDialog()
+{
+	var curtype = $("#OutlinePerspective").val();
+	var curtheme = $("#OutlineStyle").val();
+	if ( curtype == "HP" || curtype == "HC" || curtype == "IC" || curtype == "IS"){
+		Docova.Utils.setField({field:"menuor", value:"H"});
+	}else{
+		Docova.Utils.setField({field:"menuor", value:"V"});
+	}
+
+	if ( curtype == "B") curtype = "treeview";
+	if ( curtype == "C") curtype = "vcascading";
+	if ( curtype == "N") curtype = "vnavigator";
+	if ( curtype == "VP") curtype = "vcascadings";
+	if ( curtype == "HP") curtype = "hcascadings";
+	if ( curtype == "HC") curtype = "hcascading";
+	if ( curtype == "IC") curtype = "hicononly";
+	if ( curtype == "IS") curtype = "hicononlys";
+	if ( curtype == "VC") curtype = "vicononly";
+	if ( curtype == "VS") curtype = "vicononlys";
+
+	$("body").append('<div class="ui-widget-overlay ui-front" style="z-index: 100;"></div>');
+	$(".selectWizard").css("z-index", "400");
+
+	var curval =Docova.Utils.getField("menuor");
+	if ( curval == "H"){
+		$(".MenuVert").hide();
+		$(".MenuHoriz").show();
+	}else{
+		$(".MenuVert").show();
+		$(".MenuHoriz").hide();
+	}
+
+	
+	$(".curseltheme").removeClass("curseltheme");
+	$("#" + curtype + "-"  + curtheme).addClass("curseltheme");
+	try {
+		$("#" + curtype +"-" + curtheme)[0].scrollIntoView({
+    		behavior: "smooth", // or "auto" or "instant"
+    		block: "start" // or "end"
+		});
+	}catch (e){}
+}
+
+function createMenuThemeImages()
+{
+	$(".MenuImage").each ( function () {
+
+		var stype = $(this).attr('for');
+		var inhtml = "";
+		var keys = Object.keys(stylesarr);
+		for ( var p = 0; p < keys.length; p ++)
+		{
+			var cls =  stype.toLowerCase().indexOf("cascading") > 0 ? "horizontal" : "vertical";
+			cls = stype.toLowerCase().indexOf("icononly") > 0 ? "horizontal" : cls;
+
+			inhtml += '<div class="mtheme" id="' +  stype + "-" + keys[p] + '"><img class="' + cls + '" src="' + docInfo.ImagesPath + '/menu-' + stype  + '-' + keys[p].toLowerCase() + '.png"> <div class="MenuImageThemeText">' + stylesarr[keys[p]].Title + '</div></div>';
+		}
+		
+		$(this).html(inhtml);
+								
+	})
+
+}
+
+function UpdateHelperColors(){
+	$("input[type='color']").each(function(){
+		if ( is_explorer || is_safari)
+			return;
+		
+		var helper = $(this).prev("input");
+		if ( helper.length > 0){
+			 helper.width("70px");
+			 helper.val($(this).val());
+			 $(this).width("20px")
+		}
+	});
+}
+
+function TriggerLoadOutline(OutlineID)
+{
+
+	if(typeof OutlineID == "undefined" || OutlineID === null || OutlineID === ""){
+		if(typeof outlineJson == "undefined" || outlineJson === null){
+			outlineJson = $.extend({}, defaultJsonOutline);
+		}
+
+		$(".selectWizard").css({
+	            'top': 80,
+	            'left': "20%"
+	    }).show("slow");
+		isfirstrun = true;
+		LoadOutline(OutlineID);
+		resetEntriesToBasic();
+		initMenuSelectionDialog();
+
+		
+	}else{
+		var TargetApplication = $("#TargetApplication").val();
+		var elementURL = docInfo.PortalWebPath + "ReadContent/" + OutlineID + "?OpenDocument&DesignElement=Outline&AppID=" + docInfo.AppID + "&" + (new Date()).valueOf();
+	
+		var ProhibitDesignUpdate = ""
+
+		LoadOutline(OutlineID);
+		if ( ! outlineJson.menuStyle )
+				resetEntriesToBasic();
+		
+	}
+}
+
+function selectHeaderIcon(id) 
+{
+	selectIcon(id, true, function () 
+	{
+		$("#" + id + "Disp").removeClass().addClass($("#" + id).val() );
+		UpdateCSSTxt();
+		fixIndentation(null, 1);
+	}); 
+	
+}
+
+function geticonsOutline(){
+  srch = $("#IconSearch").val();
+  if(srch == ""){
+    $("#iconpicker").html(alliconhtml);
+  }else{
+    iconhtml = "";
+    for(var x=0; x<fa_items.length; x++){
+      if(fa_items[x].indexOf(srch)>-1){
+        iconhtml += "<a title='" + fa_items[x] + "' role='button' href='#' class='iconpicker-item'><i class='" + fa_items[x] + "'></i></a>";
+        $("#iconpicker").html(iconhtml);
+      }
+    }
+  }
+   //set click on returned icons
+  $(".iconpicker-item").click(function(){
+
+    if($(currMenuItemIcon).attr("iconTitle") == deficon || $(currMenuItemIcon).attr("iconTitle") == deficonsub) {
+      window.top.Docova.Utils.messageBox({
+        title: "{% trans %}Expandable/Collapsible Menu Entry{% endtrans %}",
+        prompt: "{% trans %}Sorry, you cannot change the icon for a Menu Entry that is expandable/collapsible.  These items use the expand/collapse icons.{% endtrans %}",
+        icontype: 1,
+        msgboxtype: 0,
+        width: 400
+      });       
+      return
+    };
+    $(".iconpicker-selected").removeClass("iconpicker-selected");
+    $(this).addClass("iconpicker-selected");
+    var menuIconClass = " " + $(this).prop("title")
+    var dispIconClass = " " + $(this).prop("title") + " fa-5x";
+
+    var hasExpandable = false;
+    if ($(currMenuItemIcon).hasClass("expandable") ){
+    	hasExpandable = true;
+    }
+
+    $(currMenuItemIcon).removeClass();
+    $(currMenuItemIcon).parent().attr("expicon", menuIconClass)
+    $(currMenuItemIcon).parent().attr("colicon", menuIconClass)
+
+    if ( hasExpandable){
+   		$(currMenuItemIcon).addClass("expandable"); 	
+    }
+
+  
+    $(currMenuItemIcon).parent().attr("docova_custom_icon", "1" );
+    
+    $(currMenuItemIcon).addClass(menuIconClass);
+    $(currMenuItemIcon).attr("iconTitle", $(this).prop("title"));
+    $("#showIcon").removeClass();
+    $("#showIcon").addClass(dispIconClass);
+    var currIconColor = rgb2hex($(currMenuItemIcon).css("color"));
+    $("#icon-color-picker").val(currIconColor);
+  });
+
+  return;
+}
+
+function updateStyleFields(){
+	var tmpstyle = $("#OutlinePerspective").val();
+	
+	if(tmpstyle == "HC" || tmpstyle == "C" ){
+		$("#docova_shs").hide();
+	}else{
+		$("#docova_shs").show();
+	}
+
+	if ( tmpstyle == "IC" || tmpstyle == "IS" || tmpstyle == "VC" || tmpstyle == "VS"){
+		$(".iconmenuprop").show()
+		$("#iconMenuAccentColorShow").is(':checked') ? $('.iconmenuacolor').show() : $('.iconmenuacolor').hide() 
+
+
+	}else{
+		$(".iconmenuprop").hide();
+	}
+}
+
+
+function UpdateCSSTxt(prevstyle){
+
+	//pretxt stores a semicolon delimited list of values that corresponds to the values that were selected by the uesr from the "styles tab"
+
+	var pretxt = "";
+
+	if ( ! $("#MenuBackgroundTransparent").is(":checked"))
+		var bgcolor =  $("#MenuBackground").val();
+	else
+		var bgcolor = "Transparent";
+
+
+
+	var stylejson = {};
+	stylejson.MenuBackground = bgcolor;
+	stylejson.HeaderBackground = $("#HeaderBackground").val();
+	stylejson.HeaderPadding = $("#HeaderPadding").val();
+	stylejson.HeaderFontColor = $("#HeaderFontColor").val() ;
+	stylejson.HeaderFontSize = $("#HeaderFontSize").val()  ;
+	stylejson.SubHeaderBackground = $("#SubHeaderBackground").val() ;
+	stylejson.SubHeaderPadding =  $("#SubHeaderPadding").val();
+	stylejson.SubHeaderFontColor = $("#SubHeaderFontColor").val() ;
+	stylejson.SubHeaderFontSize = $("#SubHeaderFontSize").val() ;
+	stylejson.catIconHeader= $("#catIconHeaderExp").val() + ":" + $("#catIconHeaderColl").val();
+	stylejson.catIconSubHeader = $("#catIconSubHeaderExp").val() + ":" + $("#catIconSubHeaderColl").val();
+	stylejson.ExpIconPlacementHeader = $("#ExpIconPlacementHeader").val() ;
+	stylejson.ExpIconPlacementSubHeader = $("#ExpIconPlacementSubHeader").val() ;
+	stylejson.HeaderIconSize = $("#HeaderIconSize").val() ;
+	
+	stylejson.SubHeaderIconSize = $("#SubHeaderIconSize").val() ;
+	
+	stylejson.ItemsBackground = $("#ItemsBackground").val() ;
+	stylejson.ItemsFontColor = $("#ItemsFontColor").val() ;
+	stylejson.ItemsPadding = $("#ItemsPadding").val() ;
+	stylejson.border_style = $("#border_style").val() ;
+	stylejson.bordercolor = $("#bordercolor").val() ;
+	stylejson.ItemsFontSize = $("#ItemsFontSize").val() ;
+	stylejson.MenuHoverColor = $("#MenuHover").val();
+	stylejson.IconMenuDropShadow = $("#iconMenuDropShadow").is(":checked") ? 1 : 0;
+
+	if ( $("#iconMenuAccentColorShow").is(":checked")){
+		stylejson.IconMenuAccentColor = $("#iconMenuAccentColor").val();	
+	}else{
+		stylejson.IconMenuAccentColor = null;	
+	}
+	
+	stylejson.MenuPadding =  $("#paddingall").val() + ":" +$("#paddingleft").val() + ":" + $("#paddingright").val() + ":" + $("#paddingtop").val() + ":" + $("#paddingbottom").val();
+
+	outlineJson.menuStyle = stylejson;
+	
+	csstxt = "";
+	csstxt = Docova.Utils.generateMenuCSSFromJSON(stylejson, outlineJson.Perspective);
+
+	//if horizontal cascase then we don't want padding on the items as the css will add it.
+	//var perspective = $("#OutlinePerspective").val();
+	//if  ( perspective == "HC"){
+	//	csstxt += "\r\nul.d-ui-state-default > [emenuitemtype='M'] { padding: 0px }"
+	//}
+
+
+	var expandicon = "fa-caret-right";
+	var colicon = "fa-caret-down";
+	var expandiconsub = "fa-caret-right";
+	var coliconsub = "fa-caret-down"
+	//expand collapse icons
+	if (  $("#catIconHeaderExp").val() &&  $("#catIconHeaderExp").val() != ""){
+		colicon = $("#catIconHeaderExp").val();
+		
+	}
+
+	if (  $("#catIconHeaderColl").val() &&  $("#catIconHeaderColl").val() != ""){
+		expandicon =  $("#catIconHeaderColl").val();
+		deficon = expandicon;
+	}
+
+	//expand collapse sub-category icons
+	if (  $("#catIconSubHeaderExp").val() &&  $("#catIconSubHeaderExp").val() != ""){
+		coliconsub = $("#catIconSubHeaderExp").val();
+		
+	}
+
+	if (  $("#catIconSubHeaderColl").val() &&  $("#catIconSubHeaderColl").val() != ""){
+		expandiconsub =  $("#catIconSubHeaderColl").val();
+		deficonsub = expandiconsub;
+	}
+	
+	$('[emenuitemtype="H"]').each( function()  {
+		var spn = $(this).find("span");
+		//check if this a sub-heading
+
+		if ( ! $(this).attr("docova_custom_icon") || $(this).attr("docova_custom_icon") != "1")
+		{
+		
+			if ( $(this).parent().hasClass("d-ui-state-default")){
+				$(this).attr("expicon", expandiconsub);
+				$(this).attr("colicon", coliconsub);
+				spn.removeClass().addClass("expandable " + expandiconsub);
+			}else{
+				$(this).attr("expicon", expandicon);
+				$(this).attr("colicon", colicon);
+				spn.removeClass().addClass("expandable " + expandicon);
+			}
+		}
+	});
+
+	cssstylestring = csstxt;
+	addcss(csstxt);
+}
+
+function addcss(css){
+    var s = $("#curcss");
+    if ( s.length > 0)
+    	s.get(0).parentNode.removeChild(s.get(0));
+  
+    var head = document.getElementsByTagName('head')[0];
+	s = document.createElement('style');
+  	s.setAttribute('type', 'text/css');
+	s.setAttribute('id', "curcss")
+	head.appendChild(s);
+  	if (s.styleSheet) {   // IE
+		 s.styleSheet.cssText = css;
+	} else {                // the world
+		s.appendChild(document.createTextNode(css));
+	}
+}
+
+function readCSSStyleString(cssstring)
+{
+	updateCSSValuesFromArray ( outlineJson.menuStyle);
+	var styleoverride =cssstring.substring(cssstring.indexOf(custcssdelm) + custcssdelm.length );
+
+	editorcss.setValue ( styleoverride);
+	return;
+}
+
+function resizeNewPanelHorizontal( ui )
+{
+	var elem = ui.element.parent();
+	var parentWidth = ui.element.parent().width();
+	var divTwo = ui.element.prev();
+	var id = ui.element.attr("id");
+	var remainingSpace = parentWidth - ( ui.element.width() + 15);
+	if (remainingSpace < 710) {
+		remainingSpace = 710;
+		ui.element.width(parentWidth - 690);
+		$(".ui-layout-east").resizable();
+	}
+	else if (ui.element.width() <= 414) {
+		$("#eastpane").width("414px").css({
+			'left' : 'auto',
+			'right' : '0'
+		});
+		$("#inner-center").width($("#divContentSection").width() - $("#eastpane").outerWidth() - 15);
+		$(".ui-layout-east").resizable();
+	}
+	
+    divTwo.width(remainingSpace);
+	
+	var bcWidth = jQuery(".ui-layout-center").width() - 35;
+	jQuery("#eBreadCrumbs").css("width",  bcWidth + "px");
+
+	if ($("#inner-center").width() > ($("#divContentSection").outerWidth() - $("#eastpane").outerWidth() - 40))
+	{
+		$("#inner-center").width($("#divContentSection").width() - $("#eastpane").width() - 15);
+	}
+}
+
+function LoadOutline(OutlineID)
+{
+			
+		$("#OutlinePerspective").val(outlineJson.Perspective);	
+		$("#OutlinePerspectiveDisp").val($("#OutlinePerspective option:selected").text());	
+		$('#OutlineStyle').val(outlineJson.Style ? outlineJson.Style : 'Basic');
+
+		var defoutline = defaultOutlineHTML;
+		
+		$('#SubmenuDetector').prop('checked', (outlineJson.SubmenuDetector ? true : false));
+									
+		$('#ContainerAlignment').val(outlineJson.Alignment);
+
+		$('#BorderWidth').val(outlineJson.borderWidth);
+		$('#BorderColor').val(outlineJson.borderColor);
+		$('#BorderRadius').val(outlineJson.borderRadius);
+		$('#PaddingTop').val(outlineJson.bpaddingTop);
+		$('#PaddingRight').val(outlineJson.bpaddingRight);
+		$('#PaddingBottom').val(outlineJson.bpaddingBottom);
+		$('#PaddingLeft').val(outlineJson.bpaddingLeft);
+
+		if(typeof OutlineID == "undefined" || OutlineID === null || OutlineID === "")
+		{
+			$("#designversion").text(designversion.toString() || "");
+			$("#divOutlineBuilder").html(defoutline);				
+		}else{
+			$("#designversion").text(outlineJson.designversion || "");		
+			$("#divOutlineBuilder").html(generateOutlineHtml(outlineJson));					
+		}
+
+		
+		refreshAfterChange();
+
+		//setEntryProperties();
+		
+		initOutlineProperties();	
+
+		reAddLIClick();		
+		updateStyleFields();
+		if(docInfo && docInfo.TriggerDesignCreation && docInfo.TriggerDesignCreation != "")
+			UpgradeCheck(true);
+		else
+			UpgradeCheck();
+}
+
+function generateOutlineHtml(outlineJson, submenu, iteration){
+	var liclass =  itemsClass;
+	var liheaderclass = headerClass;
+	
+	var menu_items = !submenu || typeof submenu == typeof undefined ? ( outlineJson.Items  ): submenu;
+
+	var cls = "OutlineItems"
+
+	//we want the class on the UL only when its not the parent UL..here we check for submenu to exist which will only happen when its not a parent UL
+	if ( typeof submenu !== typeof undefined){
+		cls += " " + itemsClass + " ";
+
+	}else{
+		liclass= headerClass;
+	}
+
+	if ( typeof iteration == typeof undefined)
+		iteration = 0
+
+	if ( iteration > 1 )
+		html = '<ul class="' + cls + '" style="padding:0px" >';
+	else
+		html = '<ul class="' + cls + '" >';
+	
+	for (var itemindex = 0 ; itemindex < menu_items.length; itemindex++)
+	{
+		html += '<li class="' + (menu_items[itemindex].type == 'header' ? liheaderclass : liclass) + '" ';
+		html += 'emenuitemtype="' + (menu_items[itemindex].type == 'header' ? 'H' : 'M') + '" ';
+		html += 'isSpacer="'  + menu_items[itemindex].isSpacer + '" ';
+		html += 'etarget="' + menu_items[itemindex].etarget + '" ';
+		html += 'title="' + (menu_items[itemindex].helptext ? menu_items[itemindex].helptext  : '' )  + '" ';
+		html += 'docova_custom_icon="' + menu_items[itemindex].customicon + '" ';
+		html += 'eNoTab="' + menu_items[itemindex].enotab +'" ';
+		html += 'eelement="' + safe_quotes_js(menu_items[itemindex].eelement) + '" ';
+		html += 'etype="' + menu_items[itemindex].etype + '" ';
+		if ( menu_items[itemindex].hidewhen && menu_items[itemindex].hidewhen != "" ){
+			html += 'hidewhen ="C" customhidewhen="' +   safe_quotes_js(menu_items[itemindex].hidewhen) + '" '
+		}
+
+		if ( menu_items[itemindex].labelformula && menu_items[itemindex].labelformula != "" ){
+			html += 'computelabel ="1" labelformula="' +  safe_quotes_js( menu_items[itemindex].labelformula) + '" '
+		}
+		html += 'eviewtype="' + (menu_items[itemindex].eviewtype ? menu_items[itemindex].eviewtype : '') + '" ';
+		html += 'expicon="' + (menu_items[itemindex].expandicon ? menu_items[itemindex].expandicon : '') + '" ';
+		html += 'colicon="' + (menu_items[itemindex].collapseicon ? menu_items[itemindex].collapseicon : '') + '" ';
+		html += 'einitiallyselected="' + (menu_items[itemindex].initselected ? "1" : "0") + '" ';
+		html += 'einitiallyexpanded="' + (menu_items[itemindex].initexpand ? "1" : "0") + '">';	
+
+		html += '<span class="itm_label ';
+		if (menu_items[itemindex].type == 'header')
+		{
+			
+			html += ' expandable fa-1x ' + menu_items[itemindex].collapseicon + '" ' ;
+			
+			if ( menu_items[itemindex].customicon === "1"){
+				html += ' style="';
+				html += menu_items[itemindex].iconfontsize ? 'font-size: ' +  menu_items[itemindex].iconfontsize + '; ' : '';
+				html += menu_items[itemindex].iconcolor ? 'color:' + menu_items[itemindex].iconcolor + '; ' : '';
+				html += menu_items[itemindex].iconplacement ? 'float:' + menu_items[itemindex].iconplacement + '; ' : '';
+			}else{
+				html += 'style="';
+			}
+			
+		}
+		else{
+			html += menu_items[itemindex].icontitle ? 'fa-1x ' + menu_items[itemindex].icontitle + '" ' : '" ';
+			html += menu_items[itemindex].icontitle ? ' iconTitle="' + menu_items[itemindex].icontitle + '" ' : '" ';
+			html += 'style="';
+			html += menu_items[itemindex].iconfontsize ? 'font-size: ' + (menu_items[itemindex].iconfontsize == '0px' || menu_items[itemindex].iconfontsize == '0' ? '3px' : menu_items[itemindex].iconfontsize) + '; ' : '';
+			html += menu_items[itemindex].iconcolor ? 'color:' + menu_items[itemindex].iconcolor + '; ' : '';
+		}
+	//	if ( typeof iteration != typeof undefined && iteration > 0 )
+	//			html +=  'margin-left : ' + ( 0.5 * iteration ) + 'em ';
+		html += '" ></span>';
+		html += '<div class="itemlabel" style="';
+		//if ( typeof iteration != typeof undefined && iteration > 0 )
+		//	html +=  'margin-left : ' + ( 0.5 * iteration ) + 'em ;';
+		html += menu_items[itemindex].size ? 'font-size:' + menu_items[itemindex].size + '; ' : '';
+		html += menu_items[itemindex].isbold ? 'font-weight: bold; ' : '';
+		html += menu_items[itemindex].isitalic ? 'font-style: italic; ' : '';
+		html += menu_items[itemindex].fontcolor ? 'color: ' + menu_items[itemindex].fontcolor + ';' : '';
+
+		var attrstr = menu_items[itemindex].size ? 'd-font-size="' + menu_items[itemindex].size + '" ' : '"';
+		attrstr += menu_items[itemindex].isbold ? ' d-font-weight="bold" ' : '';
+		attrstr += menu_items[itemindex].isitalic ? ' d-font-style="italic"' : '';
+		attrstr += menu_items[itemindex].fontcolor ? ' d-color="' + menu_items[itemindex].fontcolor + '"' : '';
+
+		html += '"';
+		html += attrstr + '>' + menu_items[itemindex].context + '</div></li>';
+
+		//convert older code that has lowercase items
+		if (menu_items[itemindex].items ){
+			var orig = menu_items[itemindex].items;
+			delete menu_items[itemindex].items;
+			menu_items[itemindex].Items  = orig;
+		}
+		iteration++;
+		//some older code has "items" and other has "Items"..we check both
+		if ( menu_items[itemindex].Items && menu_items[itemindex].Items.length){
+			html += generateOutlineHtml(outlineJson, menu_items[itemindex].Items, iteration);
+		}
+		iteration--;
+	}
+	html += '</ul>';
+	
+	return html;	
+}
+
+function initOutlineProperties(){
+	var outline = $(".OutlineItems");
+
+	$(".OutlineItems li").unbind().click(function(event){
+    	event.stopPropagation();
+    	
+		$('a[target="prHideShow"]').show();
+		$('a[target="prIcons"]').show();
+    	$("#tabs").css("display", "");
+		$("#tabsOutline").css("display", "none");
+		$("#tabsForm").css('display', 'none');
+		$("#element_properties").css("display", '');
+		$('#prStyle').css('display', 'none');
+		$('#prHideShow').css('display', 'none');
+		$('#prIcons').css('display', 'none');
+		$(".OutlineItems li").removeClass("isSelected");
+		$(this).addClass("isSelected");
+		currMenuItem = this;
+		currMenuItemLabel = $(this).find(".itemlabel");
+		currMenuItemIcon = $(this).find("span");
+		getEntryProperties();
+	});
+
+//	var style= outline.attr("ostyle");
+//	$("#OutlineStyle").val(style);
+	
+	return;
+}
+
+function EntryAdd(){
+	var oItem = $(".OutlineItems .isSelected");
+	var parentUL = $(oItem).parent();
+	var perspective = Docova.Utils.getField({ field: 'OutlinePerspective' });
+	var defout = defaultOutlineHTMLSingle;
+	var defentry = entryHTMLSingle;
+	
+	if ( perspective == "IC" || perspective == "IS" || perspective == "VC" || perspective == "VS" ){
+		defout = defaultOutlineHTMLSingleIcon;
+		defentry =entryHTMLSingleIcon ;
+	}
+	
+
+	//If all items have been deleted, then add new first default entry
+	var hasitems = $("#divOutlineBuilder").html();
+	if(hasitems == ""){
+		
+		$("#divOutlineBuilder").html(defout);
+		reAddLIClick();
+		return;
+	}
+		
+	//Ensure something is selected
+	if($(oItem).prop("tagName") == "undefined" || $(oItem).prop("tagName") == null){ //tagName should be LI
+		//if there are no menu items, then add a new one, otherwise, prompt the user to select an entry
+		window.top.Docova.Utils.messageBox({
+			title: "{% trans %}No Menu Entry Selected{% endtrans %}",
+			prompt: "{% trans %}Please select a menu item first, then try adding a new menu item.{% endtrans %}",
+			icontype: 1,
+			msgboxtype: 0,
+			width: 500
+		});						
+		return;		
+	}
+	
+	var prevItem = $(oItem).prev()
+	var prevItemTag = $(oItem).prev().prop("tagName")
+	var nextItem = $(oItem).next()
+	var nextItemTag = $(oItem).next().prop("tagName")
+	
+	if(nextItemTag == null || nextItemTag == "LI"){
+		$(oItem).after(defentry);
+	}
+	if(nextItemTag == "UL"){
+		//add before first LI in UL
+		$(nextItem).children().first().before(defentry);
+	}
+	
+	formissaved = false;
+	reAddLIClick();
+}
+
+function EntryInsert(){
+	var oItem = $(".OutlineItems .isSelected");
+	var parentUL = $(oItem).parent();
+	var perspective = Docova.Utils.getField({ field: 'OutlinePerspective' });
+	var defout = defaultOutlineHTMLSingle;
+	var defentry = entryHTMLSingle;
+	
+	if ( perspective == "IC" || perspective == "IS" || perspective == "VC" || perspective == "VS" ){
+		defout = defaultOutlineHTMLSingleIcon;
+		defentry =entryHTMLSingleIcon ;
+	}
+	
+	//Ensure something is selected
+	if($(oItem).prop("tagName") == "undefined" || $(oItem).prop("tagName") == null){ //tagName should be LI
+		window.top.Docova.Utils.messageBox({
+			title: "{% trans %}No Menu Entry Selected{% endtrans %}",
+			prompt: "{% trans %}Please select a menu item first, then try inserting a new menu item.{% endtrans %}",
+			icontype: 1,
+			msgboxtype: 0,
+			width: 500
+		});
+		return;
+	}
+	
+	var prevItem = $(oItem).prev()
+	var prevItemTag = $(oItem).prev().prop("tagName")
+	var nextItem = $(oItem).next()
+	var nextItemTag = $(oItem).next().prop("tagName")
+	
+	if(prevItemTag == null || prevItemTag == "LI"){
+		$(oItem).before(defentry);
+	}
+	if(prevItemTag == "UL"){
+		//add before first LI in UL
+		$(prevItem).children().last().after(defentry);
+	}
+
+	formissaved = false;	
+	reAddLIClick();
+}
+
+function EntryDelete(){
+	var oItem = $(".OutlineItems .isSelected");
+	var parentUL = $(oItem).parent();
+
+	//Ensure something is selected
+	if($(oItem).prop("tagName") == "undefined" || $(oItem).prop("tagName") == null){ //tagName should be LI
+		window.top.Docova.Utils.messageBox({
+			title: "{% trans %}No Menu Entry Selected{% endtrans %}",
+			prompt: "{% trans %}Please select a menu item first, then try deleting the item.{% endtrans %}",
+			icontype: 1,
+			msgboxtype: 0,
+			width: 500
+		});
+		return;
+	}
+	
+	//If item being deleted has UL as next sibling then remove that first
+	var nextItem = $(oItem).next();
+	var nextItemTag = $(oItem).next().prop("tagName");
+	if(nextItemTag == "UL"){
+		$(nextItem).remove();
+	}
+	//if only one li left in a UL, then remove the UL instead of LI
+	var itemNum = $(parentUL).children().length;
+	if(itemNum == 1){
+		$(parentUL).remove();
+	}else{
+		$(oItem).remove();
+	}
+	
+	formissaved = false;
+}
+
+function EntryIndent(){
+	var oItem = $(".OutlineItems .isSelected");
+	var prevItem = $(oItem).prev();
+	var prevItemTag = $(oItem).prev().prop("tagName");
+	var nextItem = $(oItem).next();
+	var nextItemTag = $(oItem).next().prop("tagName");
+
+	//Ensure something is selected
+	if($(oItem).prop("tagName") == "undefined" || $(oItem).prop("tagName") == null){ //tagName should be LI
+		window.top.Docova.Utils.messageBox({
+			title: "{% trans %}No Menu Entry Selected{% endtrans %}",
+			prompt: "{% trans %}Please select a menu item first, then indent it.{% endtrans %}",
+			icontype: 1,
+			msgboxtype: 0,
+			width: 500
+		});						
+		return;
+	}	
+	
+	if(prevItemTag == null){ //if prev item is undefined then there is nothing to indent to, so do nothing
+		return;
+	}
+
+	
+
+	
+	if((prevItemTag == "UL" && nextItemTag == "LI") || (prevItemTag == "UL" && nextItemTag == null)){
+		var parentItem = $(oItem).parent();
+		var oItemHTML = $(oItem).prop("outerHTML");
+		prevItem.append(oItemHTML);
+		$(oItem).remove();
+		reAddLIClick();
+	}
+	
+	if((prevItemTag == "LI" && nextItemTag == "LI") || (prevItemTag == "LI" && nextItemTag == null)){
+		//$(oItem).removeClass("ui-state-default");
+		var oItemHTML = $(oItem).prop("outerHTML");
+		prevItem.after("<ul style='list-style-type:none;' class='" + itemsClass + "'>" + oItemHTML + "</ul>");
+		$(oItem).remove();
+
+
+		reAddLIClick();
+	}
+	
+	if(prevItemTag == "LI" && nextItemTag == "UL"){
+		var oItemHTML = $(oItem).prop("outerHTML");
+		var oNextItemHTML = $(nextItem).prop("outerHTML");
+		prevItem.after("<ul style='list-style-type:none;' class='" + itemsClass + "'>" + oItemHTML + oNextItemHTML + "</ul>");
+		$(oItem).remove();
+		$(nextItem).remove();
+		reAddLIClick();
+	}
+	
+	if(prevItemTag == "UL" && nextItemTag == "UL"){
+		var oItemHTML = $(oItem).prop("outerHTML");
+		var oNextItemHTML = $(nextItem).prop("outerHTML");
+		prevItem.append(oItemHTML);
+		prevItem.append(oNextItemHTML);
+		$(oItem).remove();
+		$(nextItem).remove();
+		reAddLIClick();
+	}
+	
+	formissaved = false;	
+}
+
+function EntryOutdent(){
+	var oItem = $(".OutlineItems .isSelected");
+	var parentUL = $(oItem).parent();
+	var prevItem = $(oItem).prev();
+	var prevItemTag = $(oItem).prev().prop("tagName");
+	var nextItem = $(oItem).next();
+	var nextItemTag = $(oItem).next().prop("tagName");
+
+	//Ensure something is selected
+	if($(oItem).prop("tagName") == "undefined" || $(oItem).prop("tagName") == null){ //tagName should be LI
+		window.top.Docova.Utils.messageBox({
+			title: "{% trans %}No Menu Entry Selected{% endtrans %}",
+			prompt: "{% trans %}Please select a menu item first, then outdent it.{% endtrans %}",
+			icontype: 1,
+			msgboxtype: 0,
+			width: 500
+		});						
+		return;		
+	}
+		
+	if($(oItem).parent().hasClass("OutlineItems")){
+		//return;
+	}
+	
+	if(prevItemTag == null && nextItemTag == null){
+		var oItemHTML = $(oItem).prop("outerHTML");
+		$(parentUL).prev().after(oItemHTML);
+		$(parentUL).remove();
+		reAddLIClick();
+	}
+	
+	if(prevItemTag == null && nextItemTag == "LI"){
+		var oItemHTML = $(oItem).prop("outerHTML");
+		$(parentUL).prev().after(oItemHTML);
+		$(oItem).remove();
+		reAddLIClick();
+	}
+	
+	if(prevItemTag == "LI" && nextItemTag == null){
+		var oItemHTML = $(oItem).prop("outerHTML");
+		$(parentUL).after(oItemHTML);
+		$(oItem).remove();
+		reAddLIClick();
+	}
+	
+	if(prevItemTag == null && nextItemTag == "UL"){
+		var oItemHTML = $(oItem).prop("outerHTML");
+		var oNextItemHTML = $(nextItem).prop("outerHTML");
+		$(parentUL).prev().after(oItemHTML + oNextItemHTML);
+		$(parentUL).remove();
+		reAddLIClick();
+	}
+	
+	if(prevItemTag == "LI" && nextItemTag == "LI"){
+		//outdenting LI that is in the middle of LIs in the UL
+		//need split the UL into two html chunks and put back together with LI indented
+		var oItemHTML = $(oItem).prop("outerHTML");
+		var topHTML = "";
+		var bottomHTML = "";
+		var currItemFound = false;
+		$(parentUL).children().each(function(){
+			if(!$(this).hasClass("isSelected")){ //if not the currently seleted outline item
+				if(!currItemFound){
+					topHTML += $(this).prop("outerHTML");
+				}else{
+					bottomHTML += $(this).prop("outerHTML");
+				}
+			}else{
+				currItemFound = true;
+			}
+		});
+
+		var newHTML = "<ul style='list-style-type:none;' class='" + itemsClass + "'>" + topHTML + "</ul>";
+		newHTML += oItemHTML;
+		newHTML += "<ul style='list-style-type:none;' class='" + itemsClass + "'>" + bottomHTML + "</ul>"
+		$(parentUL).prev().after(newHTML)
+		$(parentUL).remove();
+		reAddLIClick();
+	}
+	
+	if(prevItemTag == "LI" && nextItemTag == "UL"){
+		//outdenting LI that is in the middle of LIs in the UL
+		//need split the UL into two html chunks and put back together with LI indented
+		var oItemHTML = $(oItem).prop("outerHTML");
+		var topHTML = "";
+		var bottomHTML = "";
+		var midHTML = "";
+		var currItemFound = false;
+		var cnt = 0;
+		$(parentUL).children().each(function(){
+			if(!$(this).hasClass("isSelected")){ //if not the currently seleted outline item
+				if(!currItemFound){
+					topHTML += $(this).prop("outerHTML");
+				}else{
+					if(cnt <=1){
+						midHTML += $(this).prop("outerHTML");
+						cnt = cnt + 1;
+					}else{
+						bottomHTML += $(this).prop("outerHTML");
+					}
+				}
+			}else{
+				currItemFound = true;
+				cnt = cnt + 1;
+				midHTML += $(this).prop("outerHTML");
+			}
+		});
+
+		var newHTML = "<ul>" + topHTML + "</ul>";
+		newHTML += midHTML;
+		newHTML += "<ul>" + bottomHTML + "</ul>";
+		$(parentUL).prev().after(newHTML);
+		$(parentUL).remove();
+		reAddLIClick();
+	}
+	formissaved = false;	
+}
+
+
+function EntryMoveUp(){
+	var oItem = $(".OutlineItems .isSelected")
+	var prevItem = $(oItem).prev()
+	var prevItemTag = $(oItem).prev().prop("tagName")
+	var nextItem = $(oItem).next()
+	var nextItemTag = $(oItem).next().prop("tagName")
+
+	//Ensure something is selected
+	if($(oItem).prop("tagName") == "undefined" || $(oItem).prop("tagName") == null){ //tagName should be LI
+		window.top.Docova.Utils.messageBox({
+			title: "{% trans %}No Menu Entry Selected{% endtrans %}",
+			prompt: "{% trans %}Please select a menu item first, then move it.{% endtrans %}",
+			icontype: 1,
+			msgboxtype: 0,
+			width: 500
+		});						
+		return;
+	}	
+	
+	if(prevItemTag == null){ //if prev item is undefined then there is nothing to move before, so do nothing
+		return;
+	}
+	
+	var oItemHTML = $(oItem).prop("outerHTML")
+	prevItem.before(oItemHTML)
+	$(oItem).remove();
+	reAddLIClick();
+		
+	formissaved = false;	
+}
+
+function EntryMoveDown(){
+	var oItem = $(".OutlineItems .isSelected")
+	var prevItem = $(oItem).prev()
+	var prevItemTag = $(oItem).prev().prop("tagName")
+	var nextItem = $(oItem).next()
+	var nextItemTag = $(oItem).next().prop("tagName")
+
+	//Ensure something is selected
+	if($(oItem).prop("tagName") == "undefined" || $(oItem).prop("tagName") == null){ //tagName should be LI
+		window.top.Docova.Utils.messageBox({
+			title: "{% trans %}No Menu Entry Selected{% endtrans %}",
+			prompt: "{% trans %}Please select a menu item first, then move it.{% endtrans %}",
+			icontype: 1,
+			msgboxtype: 0,
+			width: 500
+		});						
+		return;
+	}	
+	
+	if(nextItemTag == null){ //if next item is undefined then there is nothing to move before, so do nothing
+		return;
+	}
+	
+	var oItemHTML = $(oItem).prop("outerHTML")
+	nextItem.after(oItemHTML)
+	$(oItem).remove();
+	reAddLIClick();
+		
+	formissaved = false;	
+}
+
+function reAddLIClick(){
+
+    $(".OutlineItems li").unbind().click(function(event){
+    	event.stopPropagation();
+		$('a[target="prHideShow"]').show();
+		$('a[target="prIcons"]').show();
+    	$("#tabs").css("display", "");
+		$("#tabsOutline").css("display", "none");
+		$("#tabsForm").css('display', 'none');
+		$("#element_properties").css("display", '');
+		$('#prStyle').css('display', 'none');
+		$('#prHideShow').css('display', 'none');
+		$('#prIcons').css('display', 'none');
+		$(".OutlineItems li").removeClass("isSelected");
+		$(this).addClass("isSelected");
+		currMenuItem = this;
+		currMenuItemLabel = $(this).find(".itemlabel")
+		currMenuItemIcon = $(this).find("span");
+		
+		getEntryProperties();
+	});
+
+	
+
+	//readjust the margins to show indentation
+	fixIndentation(null, 1);
+	
+
+	//reset any LI elements that might have been outdented, so dont have expandable icon but might have been set to be initially expanded
+	$("li").each(function(){
+		if(!($(this).find("span").hasClass(deficon)) && !($(this).find("span").hasClass(deficonsub))) {
+			$(this).attr("eInitiallyExpanded", "0");
+		}
+
+		
+	});
+}
+
+
+function fixIndentation( parentUl, level)
+{
+	
+
+	var list = (typeof parentUl == "undefined" || parentUl === null) ? $('#divOutlineBuilder > ul > li') : parentUl.children('li');
+	list.each(function() {
+		var firstspan =$('span:first', this);
+		var isselected = $(this).hasClass("isSelected");
+
+		if ( level > 1 )
+		{
+			$(this).removeClass(itemsClass);
+			$(this).css("padding-left", (level * 1) +"em");
+			if ($(this).next('ul').length) 
+			{
+				$(this).attr("eMenuItemType", "H");
+				
+				$(this).addClass(headerClass);
+				if ( ! $(this).attr("docova_custom_icon") || $(this).attr("docova_custom_icon") != "1"){
+					firstspan.attr("style", "");
+					firstspan.removeClass().addClass(" " + deficonsub + " fa-1x expandable");
+				}
+				
+				
+			}else{
+				$(this).attr("eMenuItemType", "M");
+				if ( ! $(this).attr("docova_custom_icon") || $(this).attr("docova_custom_icon") != "1"){
+					firstspan.removeClass( deficonsub );
+				}
+
+				//firstspan.attr("iconTitle", "");
+				$(this).removeClass();
+			}
+
+		}else{
+			$(this).removeClass().addClass(headerClass);
+			
+			if ($(this).next('ul').length) {
+				$(this).attr("eMenuItemType", "H");
+				if ( ! $(this).attr("docova_custom_icon") || $(this).attr("docova_custom_icon") != "1")
+				{
+					firstspan.attr("style", "");
+					firstspan.removeClass().addClass(" " + deficon + " fa-1x expandable");
+				}			
+				
+			}else{
+				$(this).attr("eMenuItemType", "M");
+
+				if ( ! $(this).attr("docova_custom_icon") || $(this).attr("docova_custom_icon") != "1")
+				{
+	        		if ( firstspan.hasClass(deficon)){
+				 	   firstspan.removeClass( deficon);
+	        		}
+	        	}
+				
+			}
+
+			$(this).css("padding-left", "8px");
+		}
+		
+		if ( isselected) {
+			$(this).addClass("isSelected");
+			$('a[target="prHideShow"]').show();
+			$('a[target="prIcons"]').show();
+		}
+		if ($(this).next('ul').length) {
+			level++;
+
+			fixIndentation($(this).next('ul'),level);
+			level--;
+		}
+	});
+
+	return;
+}
+
+function getEntryProperties(){
+	var outline = $(".OutlineItems");
+	var olBorderWidth = parseInt($(outline).css("border-top-width")); //can only get specific border side, but we only allow 1 border for all sides so this is fine
+	var olBorderColor = rgb2hex($(outline).css("border-top-color")); //same situation as width
+	var olBorderPaddingTop = parseInt($(outline).css("padding-top"));
+	var olBorderPaddingRight = parseInt($(outline).css("padding-right"));
+	var olBorderPaddingBottom = parseInt($(outline).css("padding-bottom"));
+	var olBorderPaddingLeft = parseInt($(outline).css("padding-left"));
+	var olBorderRadius = parseInt($(outline).css("borderTopLeftRadius")); //same type of issue as above, cant actually get border-radius
+	var eType = $(currMenuItem).attr("eType");
+	var eNoTab = $(currMenuItem).attr('eNoTab');
+	var eElement = $(currMenuItem).attr("eElement");
+	var eTarget = $(currMenuItem).attr("eTarget");
+	var eInitiallySelected = $(currMenuItem).attr("eInitiallySelected");
+	var eInitiallyExpanded = $(currMenuItem).attr("eInitiallyExpanded");
+	var eMenuItemType = $(currMenuItem).attr("eMenuItemType") == null ? "M" : $(currMenuItem).attr("eMenuItemType");
+
+	if ( $(currMenuItem).attr("isSpacer") && $(currMenuItem).attr("isSpacer") == "1"){
+		$("#EntryIsSpacer").prop("checked", true);
+	}else{
+		$("#EntryIsSpacer").prop("checked", false);
+	}
+
+	if ( $(currMenuItem).attr("Title") ){
+		$("#EntryHelpText").val($(currMenuItem).attr("Title"))
+	}else{
+		$("#EntryHelpText").val("");
+	}
+	
+	getHideWhenProperties(currMenuItem);
+
+	var formulaforlabel = $(currMenuItem).attr("computelabel");
+	if(formulaforlabel == null || formulaforlabel == "undefined"){
+		$("#rowcomputtitle").hide();
+		$("#EntryLabel").prop("disabled", false);
+		$("#labelformula").val("");
+		
+	}
+	Docova.Utils.setField({
+			field: "computelabel",
+			value: $(currMenuItem).attr("computelabel")
+		})
+	if ( formulaforlabel == "1"){
+		$("#rowcomputtitle").show();
+		$("#EntryLabel").prop("disabled", true);
+		$("#labelformula").val($(currMenuItem).attr("labelformula"))
+	}
+	
+	if ( typeof eType == 'undefined' )
+		eType = "";
+	
+	//If the EntryType is View or Page, then populate and show the ElementList field to receive the get of eElement, otherwise clear it and hide it
+	getElementList(eType);
+	
+	$("#EntryLabel").val($(currMenuItemLabel).text());
+	Docova.Utils.setField({ field: "MenuItemType", value: eMenuItemType });
+	Docova.Utils.setField({ field: "EntryType", value: eType });
+	
+	$("#divEntryUrl").css("display", "none");
+	$("#divEntryJS").css("display", "none");
+	
+	if(eType.toLowerCase() == "url"){
+		$("#EntryUrl").val(eElement);
+		$("#divEntryUrl").css("display", "");					
+	}else{
+		$("#EntryUrl").val("");
+		var elemlist = $("#ElementList");
+		var optsarray = elemlist.find("option").each( function() {
+			if ( $(this).val() == eElement || $(this).text() == eElement  )
+				$(this).prop('selected', true)
+		});
+	}
+	
+	if(eType.toLowerCase() == "js"){
+		var escapedcode = eElement;
+		var unescapedcode = safe_quotes_js(escapedcode, false, true);
+		unescapedcode = safe_tags(unescapedcode, true);
+		$("#EntryJS").val(unescapedcode);
+		$("#divEntryJS").css("display", "");
+	}else{
+		$("#EntryJS").val("");
+	}
+	
+	$("#EntryTargetFrame").val(eTarget);
+	$('#ForceNoTab').prop('checked', eNoTab == '1' ? true : false);
+	$("input[name=EntryInitiallySelected][value='" + eInitiallySelected + "']").prop('checked', true);
+	$("input[name=EntryInitiallyExpanded][value='" + eInitiallyExpanded + "']").prop('checked', true);
+	if($(currMenuItemIcon).hasClass(deficon) || $(currMenuItemIcon).hasClass(deficonsub)){
+		$("input[name=EntryInitiallyExpanded]").prop("disabled", false);
+	}else{
+		$("input[name=EntryInitiallyExpanded]").prop("disabled", true);
+	}
+	
+	$("#BorderWidth").val(olBorderWidth);
+	$("#BorderColor").val(olBorderColor);
+	$("#PaddingTop").val(olBorderPaddingTop);
+	$("#PaddingRight").val(olBorderPaddingRight);
+	$("#PaddingBottom").val(olBorderPaddingBottom);
+	$("#PaddingLeft").val(olBorderPaddingLeft);
+	$("#BorderRadius").val(olBorderRadius);
+
+	//get bold -  normal = 400 bold = 700 in some browsers
+	var propFontWeight = $(currMenuItemLabel).attr("d-font-weight");
+	var propFontStyle = $(currMenuItemLabel).attr("d-font-style");
+	var propFontSize =  parseInt($(currMenuItemLabel).attr("d-font-size"));
+	var propFontColor = $(currMenuItemLabel).attr("d-color");
+	
+	if ( propFontSize && typeof propFontSize !== typeof undefined){
+		//---Get Font Size---
+		$("#PropFontSize").val(propFontSize);
+	}else{
+		$("#PropFontSize").val("");
+	}
+	//--- Get Bold---
+	if(propFontWeight == "bold"){
+		$("#PropBold").prop("checked", true);
+	}else{
+		$("#PropBold").prop("checked", false);
+	}
+	//---Get Italic---
+	if(propFontStyle == "italic"){
+		$("#PropItalic").prop("checked", true);
+	}else{
+		$("#PropItalic").prop("checked", false);
+	}
+	//---Get Font Color---
+	$("#color-picker").val(propFontColor);
+	//---Get Icon---
+	var propShowIconClass = "far " + $(currMenuItemIcon).attr("iconTitle") + " fa-5x";
+	$("#showIcon").removeClass();
+	$("#showIcon").addClass(propShowIconClass);
+	//---Get Icon Color---
+	var iconcolor = rgb2hex($(currMenuItemIcon).css("color"));
+	//$("#showIcon").css("color", iconcolor);
+	$("#icon-color-picker").val(iconcolor);
+	//---Get Icon Top Padding---
+	$("#IconFontSize").val($(currMenuItemIcon).css("font-size"));
+	
+	$("#ExpIconPlacementCustom").val($(currMenuItemIcon).css("float"));
+	
+	//This toggles certain properties on/off if the menu item is a header or not
+	 toggleMenuItemHeader();
+}
+
+function setEntryProperties(){
+	//Outline properties/styles
+	var outline = $(".OutlineItems");
+	var paddingtop = $("#PaddingTop").val();
+	var paddingright = $("#PaddingRight").val();
+	var paddingbottom = $("#PaddingBottom").val();
+	var paddingleft = $("#PaddingLeft").val();
+	var newpadding = paddingtop + "px " + paddingright + "px " + paddingbottom + "px " + paddingleft + "px";
+
+	$(outline).first().css("padding", newpadding);
+	var bordercolor = $("#BorderColor").val();
+	var borderwidth = $("#BorderWidth").val();
+	var newborder = borderwidth + "px solid " + bordercolor;
+	var borderradius = $("#BorderRadius").val();
+	$(outline).first().css("border", newborder)
+	$(outline).first().css("border-radius", $("#BorderRadius").val() + "px");
+	
+	//Entry properties
+	var oItem = $(".OutlineItems .isSelected");
+	var entryType = Docova.Utils.getField({ field: "EntryType" });
+
+	var perspective = Docova.Utils.getField({ field: 'OutlinePerspective' });
+	var alignment = Docova.Utils.getField({ field: 'ContainerAlignment' });
+	var outlineStyle = Docova.Utils.getField({ field: 'OutlineStyle' });
+	var submenudetector =  $("#SubmenuDetector").prop("checked") ? true : false;
+
+	//hidewhen
+	var submenutype = perspective;
+	if(perspective == "HC"){
+	    submenutype = "C";
+	}else if(perspective == "HP" ){
+	    submenutype = "HP";
+	}else if ( perspective == "VP"){
+	 	submenutype = "VP"
+	}
+	
+	outline.attr("ostyle", outlineStyle );
+	outlineJson.Perspective = perspective;
+	outlineJson.Alignment = alignment;
+	outlineJson.Style = outlineStyle;
+	outlineJson.SubmenuDetector = submenudetector;
+	outlineJson.SubmenuPerspective = submenutype;
+	outlineJson.borderColor = bordercolor;
+	outlineJson.borderRadius = borderradius;
+	outlineJson.borderWidth = borderwidth;
+	outlineJson.bpaddingTop = paddingtop;
+	outlineJson.bpaddingRight = paddingright;
+	outlineJson.bpaddingBottom = paddingbottom;
+	outlineJson.bpaddingLeft = paddingleft;
+	
+	if ( $("#EntryIsSpacer").is(":checked") )
+	{
+		$(oItem).attr("isSpacer","1");	
+		$(oItem).css("border-bottom",  "0px")
+	}else{
+		$(oItem).attr("isSpacer","0");	
+		$(oItem).css("border-bottom",  "")
+	}
+
+	$(oItem).attr("Title", $("#EntryHelpText").val());
+	$(oItem).attr('eNoTab', $('#ForceNoTab').prop('checked') ? '1' : '0');
+
+	$(oItem).find(".itemlabel").text($("#EntryLabel").val());
+	$(oItem).attr("eMenuItemType", Docova.Utils.getField({ field: "MenuItemType" }));
+	$(oItem).attr("eType", entryType);
+	if(entryType && entryType.toLowerCase() == "url"){
+		$(oItem).attr("eElement", $("#EntryUrl").val());
+	}else if(entryType && entryType.toLowerCase() == "js"){
+		$(oItem).attr("eElement", safe_quotes_js(safe_tags($("#EntryJS").val()), false));
+	}else if(entryType && entryType.toLowerCase() == "view"){		//Calendar/Plug-in support
+		var eviewtype = getMenuViewType();
+		$(oItem).attr("eViewType", eviewtype);		
+		$(oItem).attr("eElement", Docova.Utils.getField({ field: "ElementList" })); 
+	}else{
+		$(oItem).attr("eElement", Docova.Utils.getField({ field: "ElementList" }));
+	}
+	$(oItem).attr("eTarget", $("#EntryTargetFrame").val());
+	$(oItem).attr("eInitiallySelected", $("input[name=EntryInitiallySelected]:checked").val());	
+	$(oItem).attr("eInitiallyExpanded", $("input[name=EntryInitiallyExpanded]:checked").val());
+	
+	//---Set bold---
+	if($("#PropBold").is(":checked")){
+		$(currMenuItemLabel).css("font-weight", "bold");
+		$(currMenuItemLabel).attr("d-font-weight", "bold");
+	}else{
+		$(currMenuItemLabel).css("font-weight", "");
+		$(currMenuItemLabel).attr("d-font-weight", "");
+	}
+	//---Set italic---
+	if($("#PropItalic").is(":checked")){
+		$(currMenuItemLabel).css("font-style", "italic");
+		$(currMenuItemLabel).attr("d-font-style", "italic");
+	}else{
+		$(currMenuItemLabel).css("font-style", "");
+		$(currMenuItemLabel).css("d-font-style", "");
+	}
+
+	if ( $("#PropFontSize").val() != ""){
+		//---Set font size---
+		$(currMenuItemLabel).css("font-size", $("#PropFontSize").val() + "px");
+		$(currMenuItemLabel).attr("d-font-size", $("#PropFontSize").val() + "px");
+	}
+
+	//---Icon padding top setting
+	$(currMenuItemIcon).css("font-size", $("#IconFontSize").val() );
+	$(oItem).attr("hidewhen", Docova.Utils.getField("HideWhen"))
+	$(oItem).attr("customhidewhen", $("#CustomHideWhen").val());
+	$(oItem).attr("computelabel",  Docova.Utils.getField("computelabel"));
+	$(oItem).attr("labelformula", $("#labelformula").val());
+	reAddLIClick();
+}
+
+function getHideWhenProperties(currElem){
+	var showCustomHideWhen = false;
+	var hidewhenvals = $(currElem).attr("hidewhen");
+	if(hidewhenvals == null || hidewhenvals == "undefined"){
+		hidewhenvals = "";
+		$("#spanCustomHideWhen").css("display", "none");
+	}
+	var showCustomHideWhen = (hidewhenvals.indexOf("C") != -1) ? true : false;
+	Docova.Utils.setField({
+		field: "HideWhen",
+		value: $(currElem).attr("hidewhen"),
+		separator: ";"
+	})
+	$("#CustomHideWhen").val($(currElem).attr("customhidewhen"))
+	if(showCustomHideWhen){
+		$("#spanCustomHideWhen").css("display", "");
+	}else{
+		$("#spanCustomHideWhen").css("display", "none");
+	}
+}
+
+function getMenuViewType() {		//Calendar/Plug-in support
+
+	var selectedOptionText = $("#ElementList").find("option:selected").text()
+	if(selectedOptionText == "" || selectedOptionText == "-Select-") {return ""}
+	var result = "";
+	if ( ! ( "view" in elemlistobj ) ) {
+		getElementList("view");
+	}
+
+	var viewarr = elemlistobj["view"].split(";");
+	for ( var t = 0; t < viewarr.length; t++){
+		var viewdetarr = viewarr[t].split("|");
+		if ( viewdetarr[1] == selectedOptionText.trim() || viewdetarr[0] == selectedOptionText.trim() ){
+			result =  viewdetarr[2];
+			break;
+		}
+	}
+	return result;
+}
+
+function toggleMenuItemHeader(){
+	//---if MenuItemType is Header--- then reset some fields and apply the ui-widget-header class on the li
+	var outlineStyle = Docova.Utils.getField({ field: "OutlineStyle" });
+	var oItem = $(".OutlineItems .isSelected");
+	if(Docova.Utils.getField({ field: "MenuItemType" }) == "H"){
+		//$("#EntryType").val("-Select-");
+		//$("#EntryType").prop("disabled", true);
+		//$("#EntryURL").val("");
+		//$('#ForceNoTab').prop({'checked': false, 'disabled': true});
+		//$("#EntryTargetFrame").val("");
+		//$("#EntryTargetFrame").prop("disabled", true);
+		//$("input[name=EntryInitiallySelected][value=0]").prop('checked', true);
+		//$("[name=EntryInitiallySelected").prop("disabled", true);
+	}else{
+		//if not top level then re-set the class
+		if ( $(oItem).parent().parent().attr("id") != "divOutlineBuilder") {
+			$(oItem).removeClass(headerClass).addClass(itemsClass);
+		}
+		//$(oItem).removeClass("ui-widget-header")
+		//$('#ForceNoTab').prop('disabled', false);
+		//$("#EntryType").prop("disabled", false);
+		//$("#EntryTargetFrame").prop("disabled", false);
+		//$("[name=EntryInitiallySelected").prop("disabled", false);
+	}
+	return;
+}
+
+function setInitiallySelected(){
+	$(".OutlineItems li").attr("eInitiallySelected", "0"); //clear all initiallyselected attributes and then let setEntryProperties set it for current item
+	setEntryProperties();
+}
+
+function resetTextProperties(){
+	$("#PropFontSize").val("");
+	$("#PropBold").prop("checked", false);
+	$("#PropItalic").prop("checked", false);
+
+	$(currMenuItemLabel).removeAttr("d-font-weight");
+	$(currMenuItemLabel).removeAttr("d-font-style");
+	$(currMenuItemLabel).removeAttr("d-font-size");
+	$(currMenuItemLabel).removeAttr("d-color");
+
+	var defaultColor = rgb2hex($(currMenuItemLabel).css("color"));
+	$("#color-picker").val(defaultColor);
+	formissaved = false;	
+	setEntryProperties();
+	$(currMenuItemLabel).removeAttr('style');
+}
+
+function resetIcon(){
+	$(currMenuItemIcon).removeClass();
+	$(currMenuItemIcon).css("color", "");
+	$(currMenuItemIcon).css("padding-top", "");
+	$(currMenuItemIcon).attr("iconTitle", "");
+	var defaultColor = rgb2hex($(currMenuItemIcon).css("color"));
+	$(currMenuItemIcon).parent().removeAttr("docova_custom_icon");
+    
+	$("#showIcon").removeClass();
+	$("#showIcon").css("color", defaultColor);
+	$("#icon-color-picker").val(defaultColor);
+	$("#IconFontSize").val("12px");
+	formissaved = false;	
+	UpdateCSSTxt();
+	fixIndentation(null, 1);
+}
+
+function resetOutlineBorder(){
+	$("#BorderWidth").val(0);
+	$("#BorderColor").val("#FFFFFF");
+	$("#PaddingTop").val(0);
+	$("#PaddingRight").val(0);
+	$("#PaddingBottom").val(0);
+	$("#PaddingLeft").val(0);
+	$("#BorderRadius").val(0);
+	formissaved = false;	
+	setEntryProperties();
+}
+
+function convertFontWeight(fontWeight){
+	if (fontWeight  == 'normal'|| fontWeight  == '400') { return "normal"; }
+	if (fontWeight  == 'bold' || fontWeight  == '700') { return "bold"; }
+}
+
+function rgb2hex(rgb) {
+	//if color is already returned as hex val, just return it
+	if(rgb.indexOf("#") >= 0) return rgb;
+	//if color is rgb, this converts and returns hex value
+	rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+	function hex(x) {
+		return ("0" + parseInt(x).toString(16)).slice(-2);
+	}
+	return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
+
+function getViewDetails(){
+	var optionlist = '';
+	var strUrl = '/' + docInfo.NsfName + '/luApplication/Views?ReadViewEntries&RestrictToCategory=' + docInfo.AppID;
+	$.ajax({
+		url : strUrl,
+		async : false,
+		cache : false,
+		type : "GET",
+		dataType : "xml"
+	})
+	.done(function(data) {
+		var resultArr = [];
+		jQuery(data).find("viewentries").children().each(function () {
+			resultArr.push($(this).find("entrydata[name='ViewName']").text() + "|" + $(this).find("entrydata[name='ViewAlias']").text() + "|" + $(this).find("entrydata[name='ViewType']").text());
+		});
+		optionlist = resultArr.join(";")
+	})
+	.fail(function() {
+		optionlist = '';
+	});
+
+	return optionlist;
+}
+
+function getLayoutsList(){
+	var optionlist = '';
+	var strUrl = '/' + docInfo.NsfName + '/luApplication/Layouts?ReadViewEntries&RestrictToCategory=' + docInfo.AppID;
+	$.ajax({
+		url : strUrl,
+		async : false,
+		cache : false,
+		type : "GET",
+		dataType : "xml"
+	})
+	.done(function(data) {
+		var resultArr = [];
+		jQuery(data).find("viewentries").children().each(function () {
+			var layoutname = $(this).find("entrydata[columnnumber='5']").text();
+			layoutname = layoutname.split('|');
+			resultArr.push((layoutname[0] ? layoutname[0] : layoutname[1]) + "|" + $(this).attr('unid') + "|" + (layoutname[1] ? layoutname[1] : layoutname[0]));
+		});
+		optionlist = resultArr.join(";")
+	})
+	.fail(function() {
+		optionlist = '';
+	});
+
+	return optionlist;	
+}
+
+function getElementList(eElement){
+	var elementList = $("#ElementList");
+	var TargetApplication = $("#TargetApplication").val();
+
+	if(eElement == "" || eElement == null){
+		eElement = "-Select-";
+	}
+	
+	if(eElement.toLowerCase() == "-select-"){
+		elementList.empty();
+		$('#elementListRow').css("display", "none");
+		return;
+	}
+	
+	if(eElement.toLowerCase()== "url" || eElement.toLowerCase() == "js"){
+		elementList.empty();
+		$('#elementListRow').css("display", "none");
+		return;
+	}	
+
+	var viewname = "";
+	var col = 7;
+	if(eElement.toLowerCase() == "view"){
+		viewname = "Views";
+		col = 8;
+	}else if(eElement.toLowerCase() == "page"){
+		viewname = "Pages";
+	}else if(eElement.toLowerCase() == "form"){
+		viewname = "Forms";
+	}
+	else if (eElement.toLowerCase() == 'layout') {
+		viewname = 'Layouts';
+	}
+	//clear and then set element list options
+	elementList.empty();
+	
+	//store this value in json array so we can use it later
+	if (! (eElement.toLowerCase() in elemlistobj ))
+	{
+		var optionlist = "";
+		if ( viewname == "Views"){
+			optionlist = getViewDetails();
+		}
+		else if (viewname == 'Layouts') {
+			optionlist = getLayoutsList();
+		}else{
+			optionlist = Docova.Utils.dbColumn({
+				'servername' : "",
+				'nsfname' : docInfo.NsfName,
+				'viewname' : 'luApplication',
+				'urlsuffix' : [viewname],
+				'viewiscategorized' : true,
+				'key' : docInfo.AppID,
+				'column' : col,
+				'secure': secureflag
+			});	
+		}
+		elemlistobj[eElement.toLowerCase()] = optionlist;
+	}else{
+		optionlist = elemlistobj[eElement.toLowerCase()];
+	}
+	
+	var optionlistarray = optionlist.split(";");
+
+	elementList.append($("<option></option>").attr("value", "-Select-").text("-Select-"));
+	for(x=0;x<optionlistarray.length;x++){
+		
+		var txtarry = optionlistarray[x].split("|");
+		var opttxt = "";
+		var optval = ""; 
+		if ( txtarry.length > 1 )
+			optval = txtarry[1];
+		opttxt = txtarry[0];
+		if ( optval == "" ) 
+			optval = opttxt;
+			
+		elementList.append($("<option></option>").attr("value", optval).text(opttxt));
+	}	
+	$('#elementListRow').css("display", "");
+	
+	return;
+}
+
+function refreshAfterChange(){
+	var perspective = $("#OutlinePerspective").val();
+		
+	if (perspective == 'N' || perspective == 'C' || perspective == 'VP' || perspective == 'HC' || perspective == 'HP') {
+		$('.PerspectiveC').show();
+	}else{
+		$('.PerspectiveC').hide();
+		$('#SubmenuDetector').prop('checked', false);					
+	}
+}
+
+function updateCSSValuesFromArray(styleproparr)
+{
+
+	if ( styleproparr){
+		if ( styleproparr.MenuBackground == "Transparent"){
+			$("#MenuBackgroundTransparent").prop("checked", true)
+		}else
+			$("#MenuBackground").val(styleproparr.MenuBackground) ;
+
+		$("#HeaderBackground").val(styleproparr.HeaderBackground) ;
+		$("#HeaderPadding").val(styleproparr.HeaderPadding) ;
+		$("#HeaderFontColor").val(styleproparr.HeaderFontColor) ;
+		$("#HeaderFontSize").val(styleproparr.HeaderFontSize) ;
+		$("#SubHeaderBackground").val(styleproparr.SubHeaderBackground);
+		$("#SubHeaderPadding").val(styleproparr.SubHeaderPadding);
+		$("#SubHeaderFontColor").val(styleproparr.SubHeaderFontColor) ;
+		$("#SubHeaderFontSize").val(styleproparr.SubHeaderFontSize) ;
+		if ( styleproparr.catIconHeader  && styleproparr.catIconHeader != "" ){
+
+			try {
+
+				var j =  styleproparr.catIconHeader;
+				if ( Array.isArray(j))
+					j = j[0];
+				deficon = j.split(":")[1];
+				$("#catIconHeaderExp").val(j.split(":")[0]) ;
+				$("#catIconHeaderExpDisp").removeClass().addClass(j.split(":")[0]) ;
+				$("#catIconHeaderColl").val(j.split(":")[1]) ;
+				$("#catIconHeaderCollDisp").removeClass().addClass(j.split(":")[1]) ;
+				
+			}catch(e){}
+		}
+
+		if ( styleproparr.catIconSubHeader  && styleproparr.catIconSubHeader != "" ){
+
+			try {
+				var j =  styleproparr.catIconSubHeader;
+				if ( Array.isArray(j))
+					j = j[0];
+				deficonsub = j.split(":")[1];
+				$("#catIconSubHeaderExp").val(j.split(":")[0]) ;
+				$("#catIconSubHeaderExpDisp").removeClass().addClass(j.split(":")[0]) ;
+				$("#catIconSubHeaderColl").val(j.split(":")[1]) ;
+				$("#catIconSubHeaderCollDisp").removeClass().addClass(j.split(":")[1]) ;
+			}catch(e){}
+		}
+
+		$("#ExpIconPlacementHeader").val(styleproparr.ExpIconPlacementHeader) ;
+		$("#ExpIconPlacementSubHeader").val(styleproparr.ExpIconPlacementSubHeader) ;
+		$("#HeaderIconSize").val(styleproparr.HeaderIconSize) ;
+		$("#SubHeaderIconSize").val(styleproparr.SubHeaderIconSize);
+		$("#ItemsBackground").val(styleproparr.ItemsBackground) ;
+		$("#ItemsFontColor").val(styleproparr.ItemsFontColor) ;
+		$("#ItemsPadding").val(styleproparr.ItemsPadding);
+		$("#border_style").val(styleproparr.border_style);
+		$("#bordercolor").val(styleproparr.bordercolor);
+		$("#ItemsFontSize").val(styleproparr.ItemsFontSize);
+		$("#MenuHover").val(styleproparr.MenuHoverColor);
+		if ( typeof styleproparr.IconMenuDropShadow == "undefined" || styleproparr.IconMenuDropShadow == "1"  ) 
+		{
+			$("#iconMenuDropShadow").prop("checked" , true);
+		}else{
+			$("#iconMenuDropShadow").prop("checked" , false);
+		}
+
+		if ( styleproparr.IconMenuAccentColor )
+		{
+			$("#iconMenuAccentColorShow").prop("checked", true);
+			$("#iconMenuAccentColor").val(styleproparr.IconMenuAccentColor);
+		}else{
+			$("#iconMenuAccentColorShow").prop("checked", false);
+		}
+		
+		if (styleproparr.MenuPadding )
+		{	
+			var paddarr = styleproparr.MenuPadding.split(":");
+			if ( paddarr.length >= 0 ) $("#paddingall").val(paddarr[0]);
+			if ( paddarr.length >= 1 ) $("#paddingleft").val(paddarr[1]);
+			if ( paddarr.length >= 2 ) $("#paddingright").val(paddarr[2]);
+			if ( paddarr.length >= 3 ) $("#paddingtop").val(paddarr[3]);
+			if ( paddarr.length >= 4 ) $("#paddingbottom").val(paddarr[4]);
+		}
+		else{
+			$("#paddingall").val("0.8em");
+			$("#paddingleft").val("");
+			$("#paddingright").val("");
+			$("#paddingtop").val("");
+			$("#paddingbottom").val("");
+			
+				
+			
+		}
+
+		UpdateHelperColors();
+	}
+}
+
+
+
+function resetEntriesToBasic(){
+
+	var curstyle = $("#OutlineStyle").val();
+	
+	var styleprop = stylesarr[curstyle];
+
+	//override some settings based on menu type
+	var tmpstyle = $("#OutlinePerspective").val();
+	if (tmpstyle == "C"){
+		styleprop.MenuPadding = "1.2em";
+	}else if ( tmpstyle == "N" || tmpstyle == "VP" || tmpstyle == "VC" || tmpstyle =="VS"){
+		styleprop.MenuPadding = "1.2em";
+	}else if ( tmpstyle == "HP" || tmpstyle == "HC" || tmpstyle == "IC" || tmpstyle == "IS"){
+		styleprop.MenuPadding = "0.8em";
+	}
+
+	if (tmpstyle == "VP" || tmpstyle == "C" ){
+		styleprop.catIconHeader = "fas fa-chevron-right:fas fa-chevron-right";
+		styleprop.ExpIconPlacementHeader =  "Right" ;
+		
+	}
+
+	if (tmpstyle == "HP" || tmpstyle == "HC" ){
+		styleprop.catIconHeader = "fas fa-chevron-down:fas fa-chevron-down";
+		styleprop.ExpIconPlacementHeader =  "Right" ;
+		styleprop.HeaderIconSize = "1.1em"
+	}
+
+
+	
+	updateCSSValuesFromArray ( styleprop);
+	updateStyleFields();
+	UpdateCSSTxt();
+	
+}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+	<div id="divMultiLinePopup" style="display:none;">
+		<input type="text" id="docova_formula_helper" placeholder = "Search $$DocovaScript functions" style="width:92%; margin-bottom:8px"></input> <i id="btnInsertFormula" title="Add Formula" class="fas fa-check"></i>
+		<textarea id="multilineinput" style="width:98%; height:80%; outline:none; border:1px #CCC solid; border-radius:3px;"></textarea>
+	</div>
+	
+	<form method="post" action="" name="_OutlineBuilder">
+		<div class="selectWizard" style="display:none">
+		<div>
+			<i id="icon_close_wizard" class="fas fa-times" style="float:right;font-size:15px"></i>
+			<h3 style="margin-top:0px">Select Menu Type/Theme</h3>
+			<span>Menu Orientation : </span>
+			<input type="radio" name="menuor" checked value="V">Vertical</input>
+			<input type="radio" name="menuor" value="H">Horizontal</input>
+		</div>
+		<hr>
+		<div class="MenuSampleContainer">
+			<div class="MenuExample MenuVert">
+				<div for="treeview" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Tree View</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Vertical</div>
+					<p>Tree View Menu can be used to show hierarchical menus in a tree view.  Each level can be individually expanded/collapsed.
+					
+				</div>
+			</div>
+			<div class="MenuExample MenuVert">
+				<div for="vcascading" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Popup - Cascading </h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Vertical</div>
+					<p>Menu where sub menus are shown in a popup menu.  Further submenus are shown as cascading popups.
+				</div>
+			</div>
+			<div class="MenuExample MenuVert">
+				<div for="vnavigator" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Navigator</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Vertical</div>
+					<p>Menu where only top level items are shown initially.  Clicking on a menu with submenus replaces the current menu with its submenus.  A bread-crum trail at the top allows traversal of the menu.
+				</div>
+			</div>
+
+			<div class="MenuExample MenuVert">
+				<div for="vcascadings" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Popup - Single</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Vertical</div>
+					<p>Menu where sub menus are shown in a popup menu.  Sub menus are shown in a single popup where menu hierarchy is shown through indentation.
+				</div>
+			</div>
+			<div class="MenuExample MenuHoriz">
+				<div for="hcascading" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Popup - Cascading</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Horizontal</div>
+					<p>Menu where sub menus are shown in a popup menu.  Further submenus are shown as cascading popups.
+				</div>
+			</div>
+			<div class="MenuExample MenuHoriz">
+				<div for="hcascadings" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Popup - Single</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Horizontal</div>
+					<p>Menu where sub menus are shown in a popup menu.  Sub menus are shown in a single popup where menu hierarchy is shown through indentation.
+				</div>
+			</div>
+			<div class="MenuExample MenuHoriz">
+				<div for="hicononly" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Icon Only - Cascading</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Horizontal</div>
+					<p>Menu where top level entries can be shown as icons.  Submenus are shown as cascading popups.  Any text in the menu items will appear under the icons. 
+				</div>
+			</div>
+			<div class="MenuExample MenuHoriz">
+				<div for="hicononlys" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Icon Only - Single</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Horizontal</div>
+					<p>Menu where top level entries can be shown as icons.  Sub menus are shown in a single popup where menu hierarchy is shown through indentation.  Any text in the menu items will appear under the icons. 
+				</div>
+			</div>
+			<div class="MenuExample MenuVert">
+				<div for="vicononly" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Icon Only - Cascading</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Vertical</div>
+					<p>Menu where top level entries can be shown as icons.  Submenus are shown as cascading popups.  Any text in the menu items will appear under the icons. 
+				</div>
+			</div>
+			<div class="MenuExample MenuVert">
+				<div for="vicononlys" class="MenuImage"></div>
+				<div class="MenuDesc">
+					<h3>Icon Only - Single</h3>
+					<div style="margin-top: 0px;margin-bottom: 8px;color: #8c8f9a;">Orientation: Vertical</div>
+					<p>Menu where top level entries can be shown as icons.  Sub menus are shown in a single popup where menu hierarchy is shown through indentation.  Any text in the menu items will appear under the icons. 
+				</div>
+			</div>
+			
+		</div>
+	</div>
+		<div id="divContentSection" class="app-form" style="display: none;">
+			<div class="ui-layout-center" id="inner-center">
+
+				<div id="actionbar_box" class="ui-widget ui-tabs ui-widget-header" style="height:30px;"></div>
+				<div id="layout-tabs" class="scroll" style="text-align:center;padding-top:5px;">
+					{% trans %}Current Menu{% endtrans %}<br>
+					<div id="divOutlineBuilder" style="display"></div>
+					
+				</div>
+				<!--- end scroll-->
+				<ul id="tdActionBar" style="width:98%;">
+					<li title="{% trans %}Add Entry{% endtrans %}"><a onclick="EntryAdd(); return false;" href="" primary="" secondary=""><i class="fas fa-long-arrow-alt-down"></i></a></li>
+					<li title="{% trans %}Insert Entry{% endtrans %}"><a onclick="EntryInsert(); return false;" href="" primary="" secondary=""><i class="far fa-arrow-to-right"></i></a></li>
+					<li title="{% trans %}Delete Entry{% endtrans %}"><a onclick="EntryDelete(); return false;" href="" primary="" secondary=""><i class="far fa-minus"></i></a></li>
+					<li title="{% trans %}Indent Entry{% endtrans %}"><a onclick="EntryIndent(); return false;" href="" primary="" secondary=""><i class="fas fa-indent"></i></a></li>
+					<li title="{% trans %}Outdent Entry{% endtrans %}"><a onclick="EntryOutdent(); return false;" href="" primary="" secondary=""><i class="fas fa-outdent"></i></a></li>        			
+					<li style="float:right;"><a onclick="SaveForm(true, true); return false;" href="" primary="ui-icon-disk" secondary="">{% trans %}Save and Close{% endtrans %}</a></li>
+					<li style="float:right;"><a onclick="SaveForm(false, false); return false;" href="" primary="ui-icon-disk" secondary="">{% trans %}Save{% endtrans %}</a></li>
+					<li style="float:right;"><a onclick="closeDocumentPrompt('{% trans %}Closing menu{% endtrans %}', '{% trans %}Would you like to save the changes to this menu?{% endtrans %}'); return false;" href="" primary="ui-icon-close" secondary="">{% trans %}Close{% endtrans %}</a></li>
+				</ul>
+			</div>
+			<!-- end inner-center -->
+			<div class="ui-layout-east" id="eastpane" style="right:0;">
+        		<div id="right-panel-tabs">
+        			<ul id="vertical-tabs">
+        				<li title="{% trans %}Properties{% endtrans %}"><a href="#frm-properties" class="far fa-tasks"></a></li>
+        			</ul>
+        			<div id="frm-properties">
+       					<h3 class="tool_box_header ui-widget-header" id="element-type" target="prProperties">{% trans %}Menu Properties{% endtrans %}</h3>
+						<div id="prProperties">
+	        				<div id="tabsForm">
+	    						<div class="prp-container">
+	    							<table class="tblRows" width="100%" border="0" cellspacing="0" cellpadding="0">
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Menu Name{% endtrans %}:</td>
+	    									<td width="70%"><input name="DEName" value="{{ appOutline ? appOutline.getOutlineName : '' }}" id="DEName" class="inputEntry prp_inputs"></td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Menu Alias{% endtrans %}:</td>
+	    									<td width="70%"><input name="DEAlias" value="{{ appOutline ? appOutline.getOutlineAlias : '' }}" id="DEAlias" class="inputEntry prp_inputs"></td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Layout{% endtrans %}:</td>
+	    									<td width="70%">
+	    										<input type="text" id="OutlinePerspectiveDisp" disabled><button id="selLayout" ><i class="fas fa-caret-right"></i></button>
+	    										<select style="display:none" name="OutlinePerspective" id="OutlinePerspective" class="inputEntry combobox">
+	        										<option value="B" selected="">{% trans %}Vertical Treeview{% endtrans %}</option>
+	        										<option value="C">{% trans %}Vertical - Popup - Cascading{% endtrans %}</option>
+	        										<option value="N">{% trans %}Vertical - Navigator{% endtrans %}</option>
+	        										<option value="VP">{% trans %}Vertical - Popup - Single{% endtrans %}</option>
+	        										<option value="HP">{% trans %}Horizontal -Popup - Single{% endtrans %}</option>
+	        										<option value="HC">{% trans %}Horizontal - Popup - Cascading{% endtrans %}</option>
+	        										<option value="IC">{% trans %}Horizontal - IconOnly - Cascading{% endtrans %}</option>
+	        										<option value="IS">{% trans %}Horizontal - IconOnly - Single{% endtrans %}</option>
+	        										<option value="VC">{% trans %}Vertical - IconOnly - Cascading{% endtrans %}</option>
+	        										<option value="VS">{% trans %}Vertical - IconOnly - Single{% endtrans %}</option>
+	    										</select>
+	    									</td>
+	    								</tr>
+	    								<tr class="PerspectiveC" style="display:none;">
+	    									<td></td>
+	    									<td width="70%">
+	    										<label>(<input type="checkbox" name="SubmenuDetector" value="Yes" id="SubmenuDetector">{% trans %}Always show sub menu indicator{% endtrans %}</label> )
+	    									</td>
+	    								</tr>
+
+	    								
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Container Alignment{% endtrans %}</td>
+	    									<td width="70%">
+	    										<select class="inputEntry combobox" name="ContainerAlignment" id="ContainerAlignment">
+	        										<option value="L" selected="selected">{% trans %}Left{% endtrans %}</option>
+	        										<option value="C">{% trans %}Center{% endtrans %}</option>
+	        										<option value="R">{% trans %}Right{% endtrans %}</option>
+	        										<option value="J">{% trans %}Justified{% endtrans %}</option>
+	    										</select>
+	    									</td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td width ="30%" class="frmLabel">{% trans %}Design Replace{% endtrans %}</td>
+	    									<td width="70%">
+	    										<label> <input type="checkbox" name="ProhibitDesignUpdate" value="PDU" {{ appOutline and appOutline.getPDU ? 'checked="checked"' : '' }} id="ProhibitDesignUpdate">{% trans %}Prohibit Design Update{% endtrans %}</label>
+												<input name="DEKey" value="" id="DEKey" type="hidden">
+												<input name="TargetApplication" value="" id="TargetApplication" type="hidden">
+												<div id="designversion" style="display:none;"></div>
+	    									</td>
+	    								</tr>
+	    							</table>
+	    						</div>
+	    					</div>
+	    					<!-- end tabsForm -->
+	    					<div id="element_properties" style="display:none;">
+	        					<div class="prp-container" id="element-prp">
+	    							<table class="tblRows" width="100%" border="0" cellspacing="0" cellpadding="0">
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Label{% endtrans %}:</td>
+	    									<td width="70%"><input name="EntryLabel" value="" id="EntryLabel" class="inputEntry"></td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td>&nbsp</td>
+	    									<td><input type=checkbox id="computelabel" name="computelabel" value="1">{% trans %}Compute Label{% endtrans %}</input></td>
+	    								</tr>
+	    								<tr valign="top" id="rowcomputtitle" style="display:none">
+	    									<td width="30%" class="frmLabel">{% trans %}Label $$DOCOVAScript{% endtrans %}:</td>
+	    									<td width="70%">
+	    										<span class="longtext_values" target="labelformula"></span>
+	    										<span style="display:none;"><textarea id="labelformula" class="manualEntry"></textarea></span>
+												<font>{% trans %}$$DOCOVAScript that returns a string{% endtrans %}</font>
+	    									</td>
+	    								</tr>
+	    								<tr valign="top" style="display:none">
+	    									<td>{% trans %}Menu item type{% endtrans %}:</td>
+	    									<td>
+	    										<label> <input type="radio" name="MenuItemType" value="M" checked id="MenuItemType">{% trans %}Menu Item{% endtrans %}</label>
+	    										<label> <input type="radio" name="MenuItemType" value="H" id="MenuItemType">{% trans %}Header{% endtrans %}</label>
+	    									</td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Type{% endtrans %}:</td>
+	    									<td width="70%">
+	    										<select name="EntryType" id="EntryType" class="inputEntry combobox">
+	    											<option value="">-Select-</option>
+	    											<option value="view">View</option>
+	    											<option value="page">Page</option>
+	    											<option value="form">Form</option>
+	    											<option value="layout">Layout</option>
+	    											<option value="js">Javascript</option>
+	    											<option value="url">URL</option>
+	    										</select>
+	    									</td>
+	    								</tr>
+	    								<tr valign="top" id="elementListRow" style="display:none;">
+	    									<td></td>
+	    									<td width="70%">
+	    										<select name="ElementList" id="ElementList" class="inputEntry combobox"></select>
+	    									</td>
+	    								</tr>
+	    								<tr valign="top" id="divEntryUrl" style="display: none;">
+	    									<td width="30%" class="frmLabel">{% trans %}Element / URL{% endtrans %}:</td>
+	    									<td width="70%"><input name="EntryUrl" value="" id="EntryUrl" class="inputEntry"></td>
+	    								</tr>
+	    								<tr valign="top" id="divEntryJS" style="display: none;">
+											<td width="30%" class="frmLabel">Javascript / $$DOCOVAScript:</td>
+											<td width="70%">
+	    										<span class="longtext_values" target="EntryJS"></span>
+	    										<span style="display:none;"><textarea id="EntryJS" class="manualEntry"></textarea></span>
+												<font>{% trans %}Use Javascript or DocovaScript{% endtrans %}</font>
+											</td>
+	   									</tr>
+	   									<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Is Spacer{% endtrans %}:</td>
+	    									<td width="70%"><input type="checkbox" name="EntryIsSpacer" value="yes" id="EntryIsSpacer" class="inputEntry"> Yes</td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Help Text{% endtrans %}:</td>
+	    									<td width="70%"><input type="text" name="EntryHelpText" value="" id="EntryHelpText" class="inputEntry"></td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Target frame{% endtrans %}:</td>
+	    									<td width="70%"><input name="EntryTargetFrame" value="" id="EntryTargetFrame" class="inputEntry"></td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">Force no tab:</td>
+	    									<td width="70%"><label><input type="checkbox" name="ForceNoTab" id="ForceNoTab" value="yes" class="inputEntry" /> Yes</label></td>
+	    								</tr>
+	    								<tr valign="top">
+	    									<td width="30%" class="frmLabel">{% trans %}Initially selected{% endtrans %}:</td>
+	    									<td width="70%">
+	    										<label> <input type="radio" name="EntryInitiallySelected" value="1">{% trans %}Yes{% endtrans %}</label>
+	    										<label> <input type="radio" name="EntryInitiallySelected" value="0" checked>{% trans %}No{% endtrans %}</label>
+	    									</td>
+	    								</tr>
+	    								<tr valign="top" id="InitiallyExpandedHeader">
+	    									<td width="30%">{% trans %}Initially expanded{% endtrans %}:</td>
+	    									<td width="70%">
+	    										<label> <input type="radio" name="EntryInitiallyExpanded" value="1" id="EntryInitiallyExpanded">{% trans %}Yes{% endtrans %}</label>
+	    										<label> <input type="radio" name="EntryInitiallyExpanded" value="0" checked id="EntryInitiallyExpanded">{% trans %}No{% endtrans %}</label>
+	    									</td>
+	    								</tr>
+	    							</table>
+	        					</div>
+	        				</div>
+	        				<!-- end elemproperties -->
+						</div>
+						<!-- end prProperties -->
+       					<h3 class="tool_box_header ui-widget-header" target="prStyle">{% trans %}Style{% endtrans %}</h3>
+        				<div id="prStyle" style="display:none;">
+        					<div class="prp-container" id="frmStyle">
+								<table class="tblRows" width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tbody>
+        								<tr valign="top" style="display:none">
+        									<td width='40%' class="frmLabel">{% trans %}Menu Style{% endtrans %}:</td>
+        									<td widht="60%">
+        										<select class="inputEntry combobox" name="OutlineStyle" id="OutlineStyle">
+        											<option selected value="Basic">Whitewash</option>
+        											<option value="Smokey">Smokey</option>
+        											<option value="Rhino">Rhino</option>
+        											<option value="Airline">Airline</option>
+        											<option value="Dusk">Dusk</option>
+        											<option value="Onyx">Onyx</option>
+        											<option value="Green">Green</option>
+        											<option value="Green2">Green2</option>
+        											<option value="Yellow">Gold</option>
+        											<option value="Yellow2">Light Gold</option>
+        											<option value="Red">Red</option>
+        											<option value="Blue">Blue</option>
+        											<option value="Black">Black</option>
+        										</select>
+        									</td>
+        								</tr>
+        								<tr valign="top">
+        									<td width='40%' class="frmLabel">{% trans %}Menu Background{% endtrans %}:</td>
+        									<td width="60%">
+        										<input type='text' class="colorpickerhelper" /><input class="inputEntryCSS" name="MenuBackground" value="#FFFFFF" style='' id="MenuBackground" type="color">
+        										<span style='padding-left:8px'><input type='checkbox' name='MenuBackgroundTransparent' id="MenuBackgroundTransparent" value="Transparent" class="inputEntryCSS"/>{% trans %}Transparent{% endtrans %}</span>
+        									</td>
+        								</tr>
+        								<tr valign="top" class="iconmenuprop" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Drop-Shadow{% endtrans %}:</td>
+											<td width="60%">
+												<input name="iconMenuDropShadow" value="1" id="iconMenuDropShadow" class="inputEntryCSS" checked type='checkbox'>Show Drop-Shadow</checkbox>
+											</td>
+										</tr>
+										<tr valign="top" class="iconmenuprop" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Show Accent Color{% endtrans %}:</td>
+											<td width="60%">
+												<input name="iconMenuAccentColorShow" value="1" id="iconMenuAccentColorShow" class="inputEntryCSS" checked type='checkbox' onchange="$(this).is(':checked') ? $('.iconmenuacolor').show() : $('.iconmenuacolor').hide() ">
+											</td>
+										</tr>
+										<tr valign="top" class="iconmenuprop iconmenuacolor" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Accent Color{% endtrans %}:</td>
+											<td width="60%">
+												<input type='text' class="colorpickerhelper" />
+												<input name="iconMenuAccentColor" value="1" id="iconMenuAccentColor" class="inputEntryCSS" checked type='color'>
+											</td>
+										</tr>
+        								<tr valign="top">
+        									<td width='40%' class="frmLabel">{% trans %}Menu Hover Color{% endtrans %}:</td>
+        									<td width="60%">
+        										<input type='text' class="colorpickerhelper" />
+        										<input class="inputEntryCSS" name="MenuHover" value="#5C9CCC" style='' id="MenuHover" type="color">
+        									</td>
+        								</tr>
+
+        								<tr valign="top">
+											<th colspan="2" expcol="prPadding"><i class="far fa-caret-right"></i>{% trans %}Padding{% endtrans %}</th>
+										</tr>
+										<tr valign="top" class="prPadding" style="display:none;">
+											<td width="30%">{% trans %}All{% endtrans %}:</td>
+											<td width="70%">
+												<input type="text" name="paddingall" id="paddingall" class="inputEntryCSS" style="width:65px;" value="0.8em">
+											</td>
+										</tr>
+										<tr valign="top" class="prPadding" style="display:none;">
+											<td width="30%">{% trans %}Left{% endtrans %}:</td>
+											<td width="70%">
+												<input type="text" name="paddingleft" id="paddingleft" class="inputEntryCSS" style="width:65px;" value="">
+											</td>
+										</tr>
+										<tr valign="top" class="prPadding" style="display:none;">
+											<td width="30%">{% trans %}Right{% endtrans %}:</td>
+											<td width="70%">
+												<input type="text" name="paddingright" id="paddingright" class="inputEntryCSS" style="width:65px;" value="">
+											</td>
+										</tr>
+										<tr valign="top" class="prPadding" style="display:none;">
+											<td width="30%">{% trans %}Top{% endtrans %}:</td>
+											<td width="70%">
+												<input type="text" name="paddingtop" id="paddingtop" class="inputEntryCSS" style="width:65px;" value="">
+											</td>
+										</tr>
+										<tr valign="top" class="prPadding" style="display:none;">
+											<td width="30%">{% trans %}Bottom{% endtrans %}:</td>
+											<td width="70%">
+												<input type="text" name="paddingbottom" id="paddingbottom" class="inputEntryCSS" style="width:65px;" value="">
+											</td>
+										</tr>
+        								
+        								<tr valign="top">
+            								<td colspan="2" class="frmLabel">
+            								    {% trans %}Custom CSS{% endtrans %}<br>
+                								<div id="dsnCSSCode" style="height:98%; background-color:#ffffff;" >
+                    								<div id="divCSSCode" style="position:relative; height:100%;"> 
+                    									<pre name="CSSCode" id="CSSCode" style="height:100%;"></pre>
+                    								</div>
+                    							</div>
+            								</td>
+            							</tr>
+        								<tr valign="top">
+        									<td colspan='2'>
+        								        {% trans %}Menu CSS{% endtrans %} (<span style='font-size:10px; font-color:lightgray'>{% trans %}Click the apply css button to apply any manual changes to the css below.{% endtrans %})<br>
+        										<input type="button" id="btn-applycss" value="{% trans %}Apply CSS{% endtrans %}"/>
+        									</td>
+        								</tr>
+										<tr valign="top">
+											<th colspan="2" expcol="prHeader"><i class="far fa-caret-right"></i>{% trans %}Header/Top-Level{% endtrans %}</th>
+										</tr>
+										<tr valign="top" class="prHeader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Background{% endtrans %}:</td>
+											<td width="60%">
+                                                <input type='text' class="colorpickerhelper" />
+                                                <input name="HeaderBackground" value="#FFFFFF" id="HeaderBackground" class="inputEntryCSS" style="width:70px;" type=color>
+											</td>
+										</tr>
+										<tr valign="top" class="prHeader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Font Color{% endtrans %}:</td>
+											<td width="60%">
+												<input type='text' class="colorpickerhelper" />
+												<input name="HeaderFontColor" value="#000000" id="HeaderFontColor" class="inputEntryCSS" style="width:70px;" type=color>
+											</td>
+										</tr>
+										<tr valign="top" class="prHeader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Line-Height{% endtrans %}:</td>
+											<td width="60%">
+												<input name="HeaderPadding" value="8px" id="HeaderPadding" class="inputEntryCSS" style="width:70px;" type='text'>
+											</td>
+										</tr>
+										<tr valign="top" class="prHeader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Font Size{% endtrans %}:</td>
+											<td width="60%">
+												<input name="HeaderFontSize" value="12px" id="HeaderFontSize" class="inputEntryCSS" style="width:70px;" type='text'>
+											</td>
+										</tr>
+										<tr valign="top" class="prHeader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Collapse Icon{% endtrans %}:</td>
+											<td>
+												<input class="inputEntryCSS" id= "catIconHeaderExp" style="display:none" type="text"></input>
+												<button onClick='selectHeaderIcon("catIconHeaderExp")' ><i style='font-size: 1.8em' id='catIconHeaderExpDisp'></i></button>
+											</td>
+											
+										</tr>
+										
+										<tr valign="top" class="prHeader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Expand Icon{% endtrans %}:</td>
+											<td>
+												<input class="inputEntryCSS" id= "catIconHeaderColl" style="display:none" type="text"></input>
+												<button onClick='selectHeaderIcon("catIconHeaderColl")' ><i style='font-size: 1.8em' id='catIconHeaderCollDisp'></i></button>
+											</td>
+											
+										</tr>
+										
+										
+										<tr valign="top" class="prHeader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Icon Placement{% endtrans %}</td>
+											<td width="60%">
+												<select id="ExpIconPlacementHeader" class="inputEntryCSS" style="width:75px;">
+													 <option>{% trans %}Right{% endtrans %}</option>
+									   				 <option selected>{% trans %}Left{% endtrans %}</option>
+												</select>
+											</td>
+										</tr>
+										<tr valign="top" class="prHeader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Icon Size{% endtrans %}:</td>
+											<td width="60%">
+												<input name="HeaderIconSize" value="1.4em" id="HeaderIconSize" class="inputEntryCSS" style="width:70px;" type='text'/>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<table class="tblRows" id="docova_shs" width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tbody>
+										<tr valign="top">
+											<th colspan="2" expcol="prSubheader"><i class="far fa-caret-right"></i>{% trans %}Sub Header{% endtrans %}</th>
+										</tr>
+										<tr valign="top" class="prSubheader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Background{% endtrans %}:</td>
+											<td width="60%">
+												 <input type='text' class="colorpickerhelper" />
+												 <input name="SubHeaderBackground" value="#FFFFFF" id="SubHeaderBackground" class="inputEntryCSS" style="width:70px;" type=color>
+											</td>
+										</tr>
+										<tr valign="top" class="prSubheader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Font Color{% endtrans %}:</td>
+											<td width="60%">
+												<input type='text' class="colorpickerhelper" />
+												<input name="SubHeaderFontColor" value="#000000" id="SubHeaderFontColor" class="inputEntryCSS" style="width:70px;" type=color>
+											</td>
+										</tr>
+										<tr valign="top" class="prSubheader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Line-Height{% endtrans %}:</td>
+											<td width="60%">
+												<input name="SubHeaderPadding" value="8px" id="SubHeaderPadding" class="inputEntryCSS" style="width:70px;" type='text'/>
+											</td>
+										</tr>
+										<tr valign="top" class="prSubheader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Font Size{% endtrans %}:</td>
+											<td width="60%"><input name="SubHeaderFontSize" value="12px" id="SubHeaderFontSize" class="inputEntryCSS" style="width:70px;" type='text'></td>
+										</tr>
+										<tr valign="top" class="prSubheader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Expand Icon{% endtrans %}:</td>
+
+											<td width="60%">
+												<input class="inputEntryCSS" id= "catIconSubHeaderExp" style="display:none" type="text"></input>
+												<button onClick='selectHeaderIcon("catIconSubHeaderExp")' ><i style='font-size: 1.8em' id='catIconSubHeaderExpDisp'></i></button>
+												
+											</td>
+										</tr>
+										<tr valign="top" class="prSubheader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Collapse Icon{% endtrans %}:</td>
+
+											<td width="60%">
+												<input class="inputEntryCSS" id= "catIconSubHeaderColl" style="display:none" type="text"></input>
+												<button onClick='selectHeaderIcon("catIconSubHeaderColl")' ><i style='font-size: 1.8em' id='catIconSubHeaderCollDisp'></i></button>
+												
+											</td>
+										</tr>
+										<tr valign="top" class="prSubheader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Icon Placement{% endtrans %}</td>
+											<td width="60%">
+												<select id="ExpIconPlacementSubHeader" class="inputEntryCSS" style="width:75px;">
+													<option>{% trans %}Right{% endtrans %}</option>
+									   				<option selected>{% trans %}Left{% endtrans %}</option>
+												</select>
+											</td>
+										</tr>
+										<tr valign="top" class="prSubheader" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Icon Size{% endtrans %}:</td>
+											<td width="60%">
+												<input name="SubHeaderIconSize" value="1.4em" id="SubHeaderIconSize" class="inputEntryCSS" style="width:70px;" type='text'/>
+											</td>
+										</tr>
+										<tr valign="top">
+											<th colspan="2" expcol="prMenuItem"><i class="far fa-caret-right"></i>{% trans %}Menu Items{% endtrans %}</th>
+										</tr>
+										<tr valign="top" class='prMenuItem' style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Background{% endtrans %}:</td>
+											<td width="60%">
+                                        		<input type='text' class="colorpickerhelper" />
+                                        		<input name="ItemsBackground" value="#FFFFFF" id="ItemsBackground" class="inputEntryCSS" style="width:70px;" type=color>
+											</td>
+										</tr>
+										<tr valign="top" class="prMenuItem" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Font Color{% endtrans %}:</td>
+											<td width="60%">
+												<input type='text' class="colorpickerhelper" />
+												<input name="ItemsFontColor" value="#000000" id="ItemsFontColor" class="inputEntryCSS" style="width:70px;" type=color>
+											</td>
+										</tr>
+										<tr valign="top" class="prMenuItem" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Separator Style{% endtrans %}:</td>
+											<td width="60%">
+                                                <select name="border_style" id="border_style" class="inputEntryCSS" style="width:75px;">
+                                                	<option value="none">None</option>
+													<option value="solid">Solid</option>
+													<option value="dashed">Dashed</option>
+													<option value="dotted">Dotted</option>
+													<option value="double">Double</option>
+													<option value="groove">Groove</option>
+													<option value="inset">Inset</option>
+													<option value="outset">Outset</option>
+													<option value="ridge">Ridge</option>
+												</select>
+											</td>
+										</tr>
+										<tr valign="top" class="prMenuItem" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Separator Color{% endtrans %}:</td>
+											<td width="60%">
+												<input type='text' class="colorpickerhelper" />
+												<input name="bordercolor" id="bordercolor" style="width:60px;" value="#000000" class="inputEntryCSS" type=color>
+											</td>
+										</tr>
+										<tr valign="top" class="prMenuItem" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Line-Height{% endtrans %}:</td>
+											<td width="60%">
+												 <input name="ItemsPadding" value="18px" id="ItemsPadding" class="inputEntryCSS" style="width:70px;" type='text'/>
+											</td>
+										</tr>
+										<tr valign="top" class="prMenuItem" style="display:none;">
+											<td width="40%" class="frmLabel">{% trans %}Font Size{% endtrans %}:</td>
+											<td width="60%">
+												<input name="ItemsFontSize" id="ItemsFontSize" style="width:70px;" value="12px" class="inputEntryCSS" >
+											</td>
+										</tr>
+									</tbody>
+								</table>
+			        		</div><!-- end frmStyle -->
+			        		<div class="prp-container" id="elmStyle">
+			        			<table class="tblRows" width="100%" border="0" cellspacing="0" cellpadding="0">
+    								<tr valign="top">
+    									<td width="40%" class="frmLabel">{% trans %}Size{% endtrans %}:</td>
+    									<td width="60%">
+    										<select name="PropFontSize" id="PropFontSize" class="inputEntry" style="width:70px;">
+    											<option value="">--Select--</option>
+    											<option>8</option>
+    											<option>9</option>
+    											<option>10</option>
+    											<option>11</option>
+    											<option>12</option>
+    											<option>13</option>
+    											<option>14</option>
+    											<option>15</option>
+    											<option>16</option>
+    											<option>17</option>
+    											<option>18</option>
+    											<option>19</option>
+    											<option>20</option>
+    										</select> px
+    									</td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%" class="frmLabel">{% trans %}Bold{% endtrans %}:</td>
+    									<td width="60%">
+    										<label> <input type="checkbox" name="PropBold" value="On" id="PropBold">{% trans %}On{% endtrans %}</label>
+    									</td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%" class="frmLabel">{% trans %}Italic{% endtrans %}:</td>
+    									<td width="60%">
+    										<label> <input type="checkbox" name="PropItalic" value="On" id="PropItalic">{% trans %}On{% endtrans %}</label>
+    									</td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%" class="frmLabel">{% trans %}Color{% endtrans %}:</td>
+    									<td width="60%">
+    										<input type='text' class="colorpickerhelper" />
+    										<input id="color-picker" style="width:70px;" value="#0080ff" type="color" onchange="$(currMenuItemLabel).css('color', $('#color-picker').val());$(currMenuItemLabel).attr('d-color', $('#color-picker').val()); ">
+    									</td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%"><button id="btn-ResetText" class="btn-Standard"></button></td>
+    									<td width="60%"></td>
+    								</tr>
+			        			</table>
+			        		</div>
+			        	</div>
+			        	<!-- end prStyle -->
+       					<h3 class="tool_box_header ui-widget-header" target="prHideShow">{% trans %}Hide/Show{% endtrans %}</h3>
+						<div id="prHideShow" style="display:none;">
+							<div class="prp-container">
+								<p id="frmHideShow">Not Applicable</p>
+								<table id="elmHideShow" class="tblRows" width="100%" border="0" cellspacing="0" cellpadding="0" style="dispaly:none;">
+									<tr valign="top">
+										<td width="30%" class="frmLabel">{% trans %}Visibility{% endtrans %}:</td>
+										<td width="70%">
+											{% trans %}Hide when{% endtrans %}<br>
+											<label><input type="checkbox" name="HideWhen" value="R" class="inputEntry">{% trans %}Reading{% endtrans %}</label><br>
+											<label><input type="checkbox" name="HideWhen" value="E" class="inputEntry">{% trans %}Editing{% endtrans %}</label><br>
+											<label><input type="checkbox" name="HideWhen" value="C" class="inputEntry">{% trans %}Custom{% endtrans %}</label>
+										</td>
+									</tr>
+									<tr id="spanCustomHideWhen" style="display:none;">
+										<td colspan="2">
+											{% trans %}Custom hide when $$DOCOVAScript{% endtrans %}:<br>
+											<span class="longtext_values" target="CustomHideWhen"></span>
+											<span style="display:none;"><textarea id="CustomHideWhen" class="manualEntry"></textarea></span>
+											<font>{% trans %}$$DOCOVAScript that returns 1 or $$True (hide) or 0 or $$False (show){% endtrans %}</font>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<!-- end prHideShow -->
+       					<h3 class="tool_box_header ui-widget-header" target="prIcons">{% trans %}Icons{% endtrans %}</h3>
+						<div id="prIcons" style="display:none;">
+							<div class="prp-container">
+								<p id="frmIcons">Not Applicable</p>
+    							<table id="elmIcons" class="tblRows" width="100%" border="0" cellspacing="0" cellpadding="0" style="display:none;">
+    								<tr valign="top">
+    									<td colspan="2" class="frmLabel">{% trans %}Icon{% endtrans %}:</td>
+    								</tr>
+    								<tr valign="top">
+    									<td colspan="2" rowspan="2">
+    										<input name="IconSearch" value="" class="prp_inputs" id="IconSearch" placeholder="Type words here to search">
+    										<div id="iconpicker" class="iconpicker"></div>
+    									</td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%" align="center"><i id="showIcon" class="far fa-500px fa-5x" style="color: #0080ff;"></i></td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%" class="frmLabel">{% trans %}Color{% endtrans %}:</td>
+    									<td width="60%">
+    										<input id="icon-color-picker" style="width:70px;" value="#0080ff" type="color" onchange="$(currMenuItemIcon).css('color', $('#icon-color-picker').val());$('#showIcon').css('color', $('#icon-color-picker').val())">
+    										
+    									</td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%" class="frmLabel">{% trans %}Placement{% endtrans %}:</td>
+    									<td width="60%">
+    										<select id="ExpIconPlacementCustom" onchange = "$(currMenuItemIcon).css('float', $('#ExpIconPlacementCustom').val()); " >
+    											 <option selected value=""></option>
+												 <option value="right">{% trans %}Right{% endtrans %}</option>
+								   				 <option  value="left">{% trans %}Left{% endtrans %}</option>
+											</select>
+    									</td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%" class="frmLabel">{% trans %}Font Size{% endtrans %}:</td>
+    									<td width="60%">
+    										<input name="IconFontSize" id="IconFontSize" value="12px" />
+    									</td>
+    								</tr>
+    								<tr valign="top">
+    									<td width="40%"><button id="btn-ResetIcon" class="btn-Standard"></button></td>
+    									<td width="60%"></td>
+    								</tr>
+    							</table>
+							</div>
+						</div>
+						<!-- end prIcons -->
+						<div style="display: none">
+							<textarea name="outlineCSSTxt" id="outlineCSSTxt" rows="7" cols="50">{{  outlinecss |raw }}</textarea>
+						</div>
+
+
+					</div>
+					<!-- end frm-properties -->
+        		</div>
+        	</div>
+		</div>
+		<!-- end divContentSection -->
+	</form>
+</body>
+</html>

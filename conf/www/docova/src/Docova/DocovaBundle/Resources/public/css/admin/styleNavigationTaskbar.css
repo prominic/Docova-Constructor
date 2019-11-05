@@ -1,0 +1,40 @@
+BODY { 
+	background-color: #c0c0c0; 
+	margin: 0px 0px 0px 0px; 
+	padding: 0px; 
+	font : normal 11px Verdana,  Arial, sans-serif;
+}
+#tabContainer {
+	position:absolute;
+	top: 0px;
+	width:100%;
+}
+:focus {
+	outline: 0;
+}
+.ui-icon-custom-logo {
+	background-image: url(DOCOVALogo16x16.gif) !important;
+	background-repeat: no-repeat;
+	width: 16px; 
+	height:16px;
+}
+  /* force a height so the tabs don't jump as content height changes */
+/*  #tabs .tabs-spacer { float: left; height: 200px; } */
+  .tabs-bottom .ui-tabs-nav { clear: left; padding: 0 .2em .2em .2em; }
+  .tabs-bottom .ui-tabs-nav li { top: auto; bottom: 0; margin: 0 .2em 1px 0; border-bottom: auto; border-top: 0; }
+  .tabs-bottom .ui-tabs-nav li.ui-tabs-active { margin-top: -1px; padding-top: 1px; }
+#tabs li .ui-icon-close {
+	float: right;
+	margin: 0.4em 0.2em 0 0;
+	cursor: pointer;
+}
+.ui-widget-content {
+	border-top: 0px;
+}
+.ui-tabs .ui-tabs-panel {
+	padding-bottom: 0px;
+	padding-top: 0px;
+}
+.tabs-bottom .ui-tabs-nav {
+	padding-bottom: 1em;
+}

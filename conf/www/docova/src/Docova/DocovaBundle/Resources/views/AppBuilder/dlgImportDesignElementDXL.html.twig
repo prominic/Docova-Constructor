@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Applications</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleViewDialogBase.css') }}"	type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleAdministration.css') }}"	type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/DesignImportFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/beautify/beautify.js') }}"></script>
+
+
+
+<script language="JavaScript" type="text/javascript">
+
+var info = {
+	"UserName" : "",
+	"UserNameAB" : "",
+	"UserNameCN" : "",
+	"ServiceAgent" : "LibraryServices",
+	"UserRoles" : "",
+	"HTTP_Referer" : "",
+	"Query_String" : "OpenForm",
+	"Query_String_Decoded" : "OpenForm",
+	"Path_Info_Decoded" : "{{ path('docova_dlgimportdesignelementdxl') }}",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"PortalWebPath" : "{{ url('docova_homepage') }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"SecureUrl" : "OFF"
+};
+function getinfovar() {
+	return info;
+}
+
+function initDialog()
+{	
+	InitVars(info);	 
+	refreshChoices();			
+	return;
+}
+
+function refreshChoices()
+{	
+	var path = jQuery("#Path").val();	
+	var type = jQuery("#ElementType").val();	
+	if(path == "" || type == ""){
+		return;
+	}
+	
+	var options = jQuery("input[name=ImportOptions]:checked").map(function(){return $(this).val()}).get().join(",");
+	var result = GetDesignElementNames( path, type, options);			
+	if(result && Array.isArray(result) && result.length > 0){		
+		result.sort();		
+		var items = [];		
+		items.push('<option value=""></option>');		
+		for (var x = 0; x < result.length; x ++) 
+		{			
+			items.push('<option value="' + result[x] +'">' + result[x] +'</option>');					
+		}		
+		jQuery("#Name").empty().append(items.join(''));		
+	}else{		
+		jQuery("#Name").empty();	
+	}	
+}
+</script>
+<style type="text/css">
+  .ui-progressbar {
+    position: relative;
+  }
+  .progress-label {
+    position: absolute;
+    left: 50%;
+    top: 4px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+  }
+</style>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onload="initDialog();">
+	<form method="post" action="" name="_dlgimportDesignElementDXL">
+		<input type='hidden' id="dKey" value=''></input>
+		<table class="DlgTable" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="DlgContentCell" width="100%">
+					<div id="dlgContentNh" style="width: 100%;">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr valign="top">
+								<td width="100%"><br></td>
+							</tr>
+							<tr valign="top">
+								<td class="txFldLabel" width="100%">
+									<table border=0 class="tblFields" style="border-collapse: collapse;"></table>
+									<div>
+										<table border=0 class="tblFields" style="border-collapse: collapse;">
+											<tr>
+												<td class="frmLabel" style="width: 140px; vertical-align: top;">{% trans %}Path{% endtrans %}:</td>
+												<td style="width: 300;"><input name="Path" value="" onchange="refreshChoices();" id="Path"></td>
+											</tr>
+											<tr>
+												<td class="frmLabel" style="width: 140px; vertical-align: top;">{% trans %}Element Type{% endtrans %}:</td>
+												<td style="width: 300;">
+													<span id="Type">
+														<select name="ElementType" onchange="refreshChoices();" id="ElementType" class="txFld" style="width: 300px;">
+															<option selected value="{{ app.request.query.get('Type') }}">{{ app.request.query.get('Type') }}</option>
+															{% if app.request.query.get('Type') == 'JavaScriptLibrary' %}<option value="lslibrary">{% trans %}LotusScript Library{% endtrans %}</option>option>{% endif %}
+														</select>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="frmLabel" style="width: 140px; vertical-align: top;">{% trans %}Element Name{% endtrans %}:</td>
+												<td style="width: 300;">
+													<select name="Name" id="Name" class="txFld" style="width: 300px;"></select>
+												</td>
+											</tr>
+											<tr>
+												<td class="frmLabel" style="width: 140px; vertical-align: top;">{% trans %}Import Options{% endtrans %}:</td>
+												<td style="width: 300;">
+													<span><input type="checkbox" name="ImportOptions" onchange="refreshChoices();" class="txFld" value="docovadomino" >{% trans %}DOCOVA for Domino{% endtrans %}</span>													
+												</td>
+											</tr>											
+										</table>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr valign="top">
+				<td id="buttonCell" class="DlgButtonCell" width="100%" valign="middle">&nbsp;<font size="2"> </font></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

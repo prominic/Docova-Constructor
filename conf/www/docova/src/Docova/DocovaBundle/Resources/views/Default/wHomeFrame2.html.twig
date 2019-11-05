@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<TITLE>{{ settings.getApplicationTitle }}</TITLE>
+<META charset="utf-8">
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="icon" href="{{ asset('bundles/docova/images/favicon.ico') }}">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript">
+function isMobileBrowser() {
+	//var mobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+	var mobile = (/iphone|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+	if (mobile){
+	 	var docID="";
+	    var gotoOptions="{{ app.request.query.get('goto') }}";
+		var splitIds = gotoOptions.split(",");
+		var currentUrl = document.location.href;
+		var redirectUrl = ""; // get the server
+		var homePath= currentUrl.substring(0, currentUrl.lastIndexOf(".nsf") + 4); 
+		var serverDirPath= currentUrl.substring(0, homePath.lastIndexOf("/")); 
+		var libPath="{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}";
+		//check if there are any params
+		if(splitIds.length > 2) {
+		    docID= splitIds[splitIds.length-1]
+			redirectUrl =libPath+"/lumobile/"+docID+"?opendocument&emailLink=true";
+			document.location.href=redirectUrl ;
+		}else{
+			// rediect do docova mobile home page
+			document.location.href = homePath + "/mobile.htm";
+		}
+	}
+}
+  
+//check for mobile page & redirect
+isMobileBrowser(); 
+//prompt user to close browser window - hidden unless feature enabled in app settings
+jQuery(window).bind('beforeunload', function() {
+	return '\nBe sure to save any documents you may have been working on before closing DOCOVA.\n';
+});</script>
+<frameset  name="fsMain" id="fsMain" ROWS="70,*,0,0,0,0,0,0" FRAMESPACING="0" FRAMEBORDER="0">
+	<frame name="fraToolbar" id="fraToolbar" SCROLLING="no"  NORESIZE FRAMEBORDER="0" SRC="{{ path('docova_hometop') }}{{ app.request.query.get('goto') ? '?goto='~app.request.query.get('goto') : '' }}">
+	<frame name="fraDashboard" id="fraDashboard" TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" BORDERCOLOR="#6CAFD3" src="{{ app.request.query.get('goto') and ',appdoc,' in app.request.query.get('goto') ? '' : path('docova_dashboard') }}">
+	<frame name="fraLibraries" id="fraLibraries" TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" BORDERCOLOR="#6CAFD3" src="{% if not app.request.query.get('goto') or ',appdoc,' not in app.request.query.get('goto') %}{{ path('docova_libraries') }}{{ app.request.query.get('goto') ? '?goto='~app.request.query.get('goto') : '' }}{% endif %}">
+	<frame name="fraSearch" id="fraSearch" TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" BORDERCOLOR="#6CAFD3" src="">
+	<frame name="fraDesigner" id="fraDesigner" TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" BORDERCOLOR="#6CAFD3" src="">
+	<frame name="fraRecordsManager" id="fraRecordsManager" TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" BORDERCOLOR="#6CAFD3" src="">
+	<frame name="fraAdmin" id="fraAdmin" TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" BORDERCOLOR="#6CAFD3" src="">
+	<frame name="fraUserProfile" id="fraUserProfile" TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" BORDERCOLOR="#6CAFD3" src="">
+</frameset>
+</HTML>

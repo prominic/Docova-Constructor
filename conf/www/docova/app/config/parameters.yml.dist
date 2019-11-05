@@ -1,0 +1,30 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_sqlsrv
+    database_host: 127.0.0.1
+    database_port: 1433
+    database_name: docova_db_dev
+    database_user: docova_user
+    database_password: L1m1t3dd12
+#    ldap_username: LDAPConnect
+#    ldap_password: 0ewwviqEuZQ8YlIV
+#    ldap_domain: null
+    ldap_username: LDAPConnect@docova.com
+    ldap_password: 0ewwviqEuZQ8YlIV
+    ldap_domain: DOCOVA
+    ldap_adkey: userPrincipalName
+    ldap_groupkey: null
+    mailer_transport: smtp
+    mailer_host: 10.0.0.3
+    mailer_user: 'DLI Tools/DLI'
+    mailer_password: newjersey
+    locale: en
+    secret: 550e822a52e9e2409087e81c7cc3aaa4cbec9ceb
+    document_root: 'C:\attachments'
+    domino_username: 'Dli Tools/DLI'
+    domino_password: newjersey
+    domino_services_url: 'http://dev01.dlitools.com/Docova/Dev/V5B/docovahome.nsf'
+    datamigrator_path: 'C:\DataMigrator\DOCOVAMigrator5\'
+    client_id: 55515e64-fd24-415e-90e1-414d492e4adc
+    client_secret: 'exxKFKA447{gebzZRC30::%'
+    client_directory: f6bbeaa3-33d5-44c7-8953-069b6f95f066

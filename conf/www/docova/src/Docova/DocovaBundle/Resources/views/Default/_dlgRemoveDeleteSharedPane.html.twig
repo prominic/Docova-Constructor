@@ -1,0 +1,10 @@
+<p>
+	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+	{% trans %}You are requesting to Remove/Delete the following panel.{% endtrans %} </br>
+	</br> {% trans %}Panel name{% endtrans %}: &nbsp&nbsp
+	<span id="deletePanelName" class="bold"></span>
+	</br></br> {% trans %}You are the Owner of this panel and you have Shared it with others.{% endtrans %} </br>
+	</br> <span class="bold"> {% trans %}Please select an action{% endtrans %}:</span> </br>
+	</br> <input type="radio" name="DeleteAction" value="Remove" checked=true>{% trans %}Remove this panel just for me. (You can re-add it later){% endtrans %}</input>
+	<br> <input type="radio" name="DeleteAction" value="Delete">{% trans %}Delete this panel for me and everyone it is shared with.{% endtrans %}</input>
+</p>

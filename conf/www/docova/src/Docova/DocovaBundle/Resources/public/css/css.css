@@ -1,0 +1,82 @@
+* {
+	padding: 0;
+	margin: 0;
+	font-family: Verdana, Arial;
+	font-size: 12px;
+}
+HTML, BODY {
+	width: 100%;
+	height: 88%;
+}
+UL {
+	list-style: none;
+}
+LI {
+	float: left;
+}
+A {
+	text-decoration: none;
+}
+#header {
+	height: 75px;
+	filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#C8DFFB', EndColorStr='#7DA5E0');
+}
+#LogoBox {
+	top: 0px;
+	left: 10px;
+	width: 98px;
+	height: 38px;
+	position: absolute;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color='#666666', Direction=135, Strength=2);
+}
+#user_info {
+	top: 5px;
+	right: 20px; 
+	font-size: 11px;
+	position: absolute;
+}
+#user_info LI {
+	font-size: 11px;
+	line-height: 11px;
+	padding: 2px 7px 0 7px;
+	border-right: 1px #111 solid;
+}
+#user_info LI:first-of-type {
+	font-weight: bold;
+}
+#user_info LI:last-of-type {
+	border-right: 0;
+}
+#user_info LI SPAN {
+	font-size: 10px;
+}
+#tab_container {
+	position:absolute;
+	left: 10px; 
+	top: 39px; 
+	width: 90%; 
+	height: 35px;
+	overflow: hidden;
+}
+#tab_container LI {
+	height: 23px;
+	cursor: pointer;
+	margin-left: 1px;
+	padding: 10px 10px 2px 10px;
+	background-color: #568AE6;
+	/*background:#568AE6 url('../images/menu_glossyback.gif') -35px repeat-x; */
+}
+#tab_container LI.selected {
+	background: #B45A1B;
+}
+#tab_container LI:not(.selected):hover {
+	background: #B45A1B;
+}
+#tab_container A {
+	color: white;
+	font-weight: bold;
+}
+#content_container {
+	width: 100%;
+	height: 100%;
+}

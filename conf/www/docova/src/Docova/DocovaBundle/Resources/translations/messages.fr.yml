@@ -1,0 +1,2401 @@
+"'More' section label" : Label de section 'Plus'
+"e.g. &quot;D.Doc_Title = 'my_value' AND (CU.userNameDnAbbreviated = 'DLI Tools/DOCOVA' OR AU.userNameDnAbbreviated = 'DLI Tools/DOCOVA')&quot;" : "p. ex., &quot;D.Doc_Title = 'my_value' AND (CU.userNameDnAbbreviated = 'DLI Tools/DOCOVA' OR AU.userNameDnAbbreviated = 'DLI Tools/DOCOVA')&quot;"
+"eg: Server/ABC (use Abbreviated format)" : "p. ex. : Serveur/ABC (utiliser le format abrégé)"
+"Error, no names found for instant messaging." : "Erreur, aucun nom trouvé pour la messagerie instantanée."
+"Error: InitVars - info parameter is undefined" : "Erreur : InitVars - le paramètre info n'est pas défini"
+"Error: No attachments section found or attachment section not initialized properly." : "Erreur : Aucune section pièces jointes trouvée ou la section pièce jointe n'est initialisée correctement." 
+"Error: Printer %printername% could not be selected as the default printer." : "Erreur: L’imprimante %printername% ne peut pas être choisie comme imprimante par défaut."
+"Error: Printer" : "Erreur : Imprimante" 
+"Error: Unable to launch folder browse window." : "Erreur: Incapable de lancer la fenêtre de navigation du dossier."
+"Error: Unable to set default printer. No printer specified." : "Erreur: Impossible de régler l’imprimante par défaut. Aucune imprimante spécifiée."
+"For example: authenticate your internal users with LDAP/AD and external users with DOCOVA." : "Par exemple, authentifier vos utilisateurs internes avec LDAP/AD et les utilisateurs externes avec DOCOVA."
+"In all cases, PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns true (allowed) or false (not allowed). Default is true. Available objects are $docova and $user." : "Dans tous les cas, le script PHP compris dans \"<span class=\"red\">&lt;? ?&gt;</span>\" qui renvoie à vrai (permis) ou faux (interdit). Par défaut est vrai. Les objets disponibles sont $docova et $user."
+"Incorrect credential!" : "Accréditation incorrecte!"
+"Note: The profile picture must be 180x180 pixels." : "Note : L’image du profil doit être de 180x180 pixels."
+"Note: When checked the user credentials will be emailed to the user along with a link to DOCOVA." : "Note : Une fois vérifiée, l’accréditation de l’utilisateur lui sera envoyée par courriel avec un lien vers DOCOVA."
+"Operation did not succeed successfully!" : "L'opération a échoué!"
+"Password Do Not Match!" : "Le mot de passe ne correspond pas!"
+"Password Match!" : "Le mot de passe correspond!"
+"PDF Conversion Failed!" : "La conversion en PDF a échoué!"
+"Percentage (value*100)" : "Pourcentage (valeur*100)"
+"PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a true (disable) or false (enabled). Default is false. Available objects are $docova and $user." : "Script PHP compris dans \"<span class=\"red\">&lt;? ?&gt;</span>\" qui renvoie à vrai (désactiver) ou faux (activer). Par défaut est faux Les objets disponibles sont $docova et $user."
+"PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a true (hide) or false (show). Combined with the built-in hide criteria. Available objects are $docova and $user." : "Script PHP compris dans \"<span class=\"red\">&lt;? ?&gt;</span>\" qui renvoie à vrai (masquer) ou faux (afficher). Combiné avec les critères de masquage intégré Les objets disponibles sont $docova et $user."
+"Please select a folder from the left hand side to navigate to your documents!" : "Prière de sélectionner un dossier à gauche pour naviguer dans vos documents !"
+"Search for: ( Use AND, OR, and wildcards like *, ? To search for exact phrase use &quot; )" : "Rechercher : (Utiliser AND, OR, et des caractères de remplacement comme *, ? pour rechercher une phrase exacte utiliser &quot;)"
+"Selected page is out of range!" : "La page sélectionnée est hors de la plage !"
+"Separate values with carriage return. If required, include value aliases separated by &quot;|&quot; character (Example: Choice Text|Field Value)." : "Séparer les valeurs par un retour de chariot Au besoin, inclure des alias de valeur séparés par le caractère &quot;|&quot; (exemple ; Texte choisi I Valeur du champ)."
+"String value or PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a text string; available objects are $docova and $user.<br>e.g. <span class=\"red\">&lt;?</span> <span class=\"purple\">return</span> $docova->isNew() ? <span class=\"blue\">'Enter Subject'</span> : <span class=\"blue\">''</span>; <span class=\"red\">?&gt;</span>" : "Valeur de chaîne ou script PHP compris dans \"<span class=\"red\">&lt;? ?&gt;</span>\" qui renvoie à une chaîne. \"Terminer la révision\" sera utilisé si laissé vierge. Les objets disponibles sont $docova et $user.<br>p. ex.,<span class=\"red\">&lt;?</span> <span class=\"purple\">return</span> $docova->isNew() ? <span class=\"blue\">'Saisir l’objet'</span> : <span class=\"blue\">''</span>; <span class=\"red\">?&gt;</span>"
+"Tasks: document review items, escalation email notifications." : "Tâches : articles de révision de documents, escalade de notifications de courriel"
+"Tasks: library archiver." : "Tâche : archiver bibliothèque"
+"Tasks: trash deletion, expired log deletion, expired archive deletion." : "Tâches : suppression de rebut, suppression de journaux expirés, suppression d’archives expirées."
+"The Server Web Path should not have any forward '/' slashes nor 'http://' in it." : "Le chemin du serveur Web ne doit pas contenir de barres obliques '/' de transfert ni de 'http://'."
+"Warning: An existing draft or pending version of this document,\ncreated by %hasdraft%, was found.\n\nIf you continue it will be discarded.\n\nContinue?" : "Avertissement: Un brouillon existant ou une version en attente de ce document,\ncreated by %hasdraft%, a été trouvé\n\nSi vous poursuivez, il sera rejeté.\n\nPoursuivre?"
+"When Adding Subscribers, only pick individual's names, not groups" : "Lors de l’ajout d’un adhérent, choisir seulement des noms d’individus et non de groupes"
+'A log file was found, indicating you have recoverable attachments,\rhowever the corresponding files could not be found on your local PC.' : 'Un fichier journal a été trouvé, ce qui indique que vous avez des pièces jointes récupérables,\rtoutefois, les fichiers correspondants étaient introuvables sur votre PC local.'
+'Could not initialize %currentObject% object.\rError' : 'Impossible d''initialiser objet %currentObject% .\rErreur'
+'Could not locate user''s manager profile. Check to see if the manager''s profile exists and the manager field  under the work tab for this user is populated.' : 'Impossible de trouver le profil administrateur de l''utilisateur. Vérifiez la présence d''un profil administrateur et que le champ administrateur situé sous l''onglet travaux est rempli.'
+'Could not open the template file: ''%filename%'' it may be already opened.' : 'Impossible d''ouvrir le modèle: ''%filename%'' il peut être déjà ouvert.'
+'Email Address %emailaddress% already exists. Please choose a different email address.' : 'Adresse électronique %emailaddress% existe déjà. Veuillez choisir une adresse électronique différente.'
+'File %filename% is currently checked out by %person%. Please see document log for more details' : 'Fichier %filename% est actuellement extrait par %person%. Veuillez vous reporter au journal du document pour voir plus de détails.'
+'No documents with a subject starting with %subject% were found' : 'Aucun document dont le sujet commence par %subject% ont été trouvées'
+'Only files with %allowedextension% extensions are allowed.' : 'Seuls les fichiers avec les extensions %allowedextension%  sont permises.'
+'Operation did not complete.\rError: No data received from server.' : 'L''opération ne s''est pas terminée.\rErreur: Aucune donnée reçue du serveur.'
+'The %simplefile% file is currently open in %assocapp%.  Please save and close that file before trying to Save this document.' : 'Le fichier %simplefile% est ouvert dans %assocapp%. Veuillez enregistrer et fermer ce fichier avant de tenter d''enregistrer ce document.' 
+'The file %filename% has been checked out by %person% on %checkoutdate% .\rYou can replace this file once it is checked in.' : 'Le fichier %filename% a été extrait par %person% sur %checkoutdate% . \rVous pouvez remplacer ce fichier une fois qu''il est vérifié.'
+'The file %filename% has been checked out by %person% on %checkoutdate%.\rYou can only download this file and edit it locally. Once the file is checked in you will be able to edit it in-place.' : 'Le fichier %filename% a été extrait par %person% sur %checkoutdate%.\rVous pouvez uniquement télécharger ce fichier et le modifier localement. Une fois que le fichier est archivé, vous pourrez le modifier sur place.'
+'The log file will be removed.\r\rFile(s) not found' : 'Le fichier journal sera retiré.\r\rFichier(s) non trouvé(s)'
+'This document type can contain only %maxfiles% attachment(s).' : 'Ce type de document peut uniquement contenir %maxfiles% attachement.'
+'User ID %username% already exists. Please choose a different user ID.' : 'ID d’utilisateur %username% existe déjà. Veuillez choisir une ID d’utilisateur différente.'
+'(enter a list of extensions separated by comma. Eg. doc,docx,docm' : '(saisir une liste des extensions séparées par une virgule. P. ex. doc, docx, docm'
+0 for unlimited : 0 pour illimité
+A copy of the file : Une copie du fichier
+A target field for the returned date has not been provided. : Aucun champ cible fourni pour la date retournée.
+Account Type : Type de compte
+Acknowledge Required : Accusé de réception requis
+Acknowledged : Reconnu
+Acquire : Acquérir
+Acquire from email : Acquérir depuis un courriel
+Acquire from scanner : Acquérir depuis un scanneur
+Acquire Mail Content : Acquérir du contenu de courriel
+Action 1 : Action 1
+Action 2 : Action 2
+Action 3 : Action 3
+Action default instruction : Instruction d’action par défaut
+Action option : Option d’action
+Actions - 'Send' selected but no recipients defined : Actions - « Envoyé » sélectionné mais aucun destinataire défini
+Actions : Actions
+Activate discarded : Activer les rejets
+Activate version? : Activer la version ?
+Active : Actif
+Activities : Activités
+Activities created. : Activités créées.
+Activities were created for all Recipients. : Activités créées pour tous les destinataires.
+Activity Action : Action de l’activité
+Activity Complete. : Activité terminée.
+Activity Definition : Définition de l’activité
+Activity Instruction : Instruction de l’activité
+Activity was successfully completed. : L'activité est réussie.
+Add a Panel : Ajouter un panel
+Add an available panel. : Ajouter un panel disponible.
+Add Archive Policy : Ajouter une politique d’archivage
+Add Comment : Ajouter un commentaire
+Add Document Type : Ajouter un type de document
+Add Files : Ajouter des fichiers
+Add Files : Ajouter des fichiers
+Add Group : Ajouter un groupe
+Add Library : Ajouter une bibliothèque
+Add New Activity : Ajouter une nouvelle activité
+Add New Column : Ajouter une nouvelle colonne
+Add New Field : Ajouter un nouveau champ
+Add New HTML Resource : Ajouter de nouvelles ressources HTML
+Add New System Message : Ajouter un nouveau message du système
+Add New Template : Ajouter un nouveau modèle
+Add Panel : Ajouter un panel
+Add Review Policy : Ajouter une politique de révision
+Add Selected Names : Ajouter les noms sélectionnés
+Add to favorites : Ajouter aux favoris
+Add to Favorites : Ajouter aux favoris
+Add User : Ajouter un utilisateur
+Add users/groups here to restrict who can delete documents in this folder. : Ajouter ici des utilisateurs ou des groupes pour déterminer qui peut supprimer des documents dans ce dossier.
+Add Workflow : Ajouter un flux de travaux
+Add Workflow Step : Ajouter une étape au flux de travaux
+Adding Files : Ajouter des fichiers
+Additional Editors : Réviseurs supplémentaires
+Additional Editors entered on the document : Réviseurs supplémentaires saisis sur le document
+Additional style CSS text : Text style CSS supplémentaire
+Address Bar : Barre d’adresse
+Address Book Override : Contourner le carnet d’adresses
+Admin : Administration
+Administration : Administration
+Administrator : Administrateur
+Advanced : Avancé
+Advanced Options : Options avancées
+Advanced Search : Recherche avancée
+After being deleted, this perspective will no longer be available in related folders.\rDo you want to continue? : Après avoir été supprimée, cette perspective ne sera plus disponible dans les dossiers associés.\rDésirez-vous poursuivre ?
+Alignment : Alignement
+All : Tous
+All Apps : Toutes les applications
+All Authors can delete by default (blank). : Tous les auteurs peuvent supprimer par défaut (vierge)
+All Document Types contain a reserved field called ActivityRecipients, a text field that can accept a comma delimited list of User Names and/or Groups which will be used as the default Recipient list in a new Activity. : Tous les types de documents comprennent un champ réservé nommé Destinataires d’activité, une zone texte qui peut accepter une liste de noms d’utilisateurs et/ou de groupes séparés par des virgules qui servira de liste par défaut de destinataires dans une nouvelle activité. 
+All LDAP/AD : Tout LDAP/AD
+All on start up : Tout au démarrage
+All Tags : Tous les onglets
+All versions (exclude drafts) : Toutes les versions (excluant les brouillons)
+All versions (include drafts) : Toutes les versions (incluant les brouillons)
+All versions (including drafts) : Toutes les versions (incluant les brouillons)
+All versions : Toutes les versions 
+Allow approver to edit? : Permettre à l’approbateur de modifier ?
+Allow author to modify participant names : Permettre à l’auteur de modifier le nom des participants
+Allow authors to create revisions of documents they have not authored : Permettre aux auteurs de créer des révisions de documents qu’ils n’ont pas écrits
+Allow custom sort by clicking column heading : Permettre le tri personnalisé en cliquant sur l'en-tête de la colonne
+Allow document author to customize this process : Permettre à l’auteur d’un document de personnaliser ce processus
+Allow Forwarding : Permettre le transfert
+Allow Retract : Permettre de retirer
+Allow retractions of Released documents under Strict Version control. : Permettre le retrait des documents publiés sous le contrôle strict de la version
+Allow to create discussion threads : Permettre de créer des fils de discussion
+Allow to release bypassing workflow : Permettre de contourner un flux de travaux
+Allowed Document Types : Types de documents autorisés
+Allowed file extensions : Extensions autorisées des fichiers
+Always : Toujours
+Always open the latest version : Toujours ouvrir la version la plus récente
+Always open the linked version : Toujours ouvrir la version liée
+An empty list means share with everybody. : Une liste vierge signifie partager avec tout le monde.
+An error has been encountered : Une erreur est survenue
+An error has occurred in the copyFileToTempLocation function. : Une erreur est survenue dans la fonction copyFileToTempLocation.
+An error occured while subscribing new users columns, check event logs for error. : Une erreur est survenue en abonnant des colonnes de nouveaux utilisateurs, recherche l’erreur dans les journaux d’événements
+An error occurred retrieving data from the server. : Une erreur est survenue lors de l'extraction des données du serveur.
+and : et
+and satisfy the following custom formula : et respecte la formule personnalisée suivante
+and/or : et/ou
+Answer/Response : Question/Réponse
+App-Builder : App-Builder
+App Builder : App Builder
+App Properties : Propriétés de l'application
+Appearance : Apparence
+Append : Annexer
+Append column : Annexer la colonne
+Append Column : Annexer la Colonne
+Append Version Information : Annexer l’information sur la version
+Applicable Custom Perspectives : Perspectives de personnalisation applicables
+Applicable document types : Types de document applicables
+Applicable Document Types : Types de document applicables
+Applicable in multi server environment : Applicable dans un environnement multiserveur
+Applicable Libraries : Bibliothèques applicables
+Applicable Review Policies : Politiques de révision applicables
+Applicable workflows : Flux de travaux applicables
+Application Builder : Application Builder
+Application Integration : Intégration de l’application
+Application Settings : Paramètres de l’application
+Application title : Titre de l’application
+Application Workspace : Espace de travail de l’application
+Application Logo : Logo de l’application
+Applications : Applications
+Apply Changes : Appliquer les modifications
+Approve : Approbation
+Approve button : Approuver le bouton
+Approve button label : Approuver le texte du bouton
+"Apps & Libraries" : "Applications & Bibliothèques"
+Apr : Avril
+Archive document : Document d’archives
+Archive on : Archivé sur
+Archive Policies : Politiques d’archives
+Archive retention : Rétention d’archives
+Archive Selected : Archive sélectionnée
+Archive Selected Documents : Archiver des documents sélectionnés
+Archived : Archivé
+Archived documents log status. : État du journal des documents archivés
+Archiving : Archivage
+Archiving document? : Archivage du document ?
+Archiving documents? : Archivage de documents ?
+Archiving policies : Archivage de politiques
+Are you sure to delete this subform? : Êtes-vous sûr de vouloir supprimer ce sous-formulaire ?
+Are you sure to replace with current element? : Êtes-vous sûr de vouloir remplacer avec l’élément en cours ?
+Are you sure you want to delete the %currentfolder% folder? : Êtes-vous sûr de vouloir supprimer le dossier %currentfolder% ?
+Are you sure? : Êtes-vous certain?
+Area : Zone
+As per applicable policy : Selon la politique en vigueur
+Ascending : Ascendant
+Associated template files : Fichiers associés au modèle
+At least 1 file is still open in an application. : Au moins un (1) fichier d'une application est encore ouvert.
+Attach Profile Picture : Joindre la photo au profil
+Attachment Handling : Traitement de la pièce jointe
+attachments(s). : pièce(s) jointe(s).
+Attribute : Attribut
+Attributes : Attributs
+Audit Log : Journal
+Audit log when Users download files : Vérifier le journal lorsque les utilisateurs téléchargent des fichiers
+Audit log when Users view files : Vérifier le journal lorsque les utilisateurs affichent des fichiers
+Aug : Août
+author : auteur
+Author : Auteur
+Authors : Auteurs
+Authors can edit each others draft documents : Les auteurs peuvent modifier les brouillons des autres auteurs
+Authors can not create folders : Les auteurs ne peuvent pas créer de dossiers
+Authors can not create sub-folders : Les auteurs ne peuvent pas créer de sous-dossiers
+Authors have been restricted from creating sub-folders in this folder. : Les auteurs n’ont pas eu l’autorisation de créer des sous-dossiers dans ce dossier.
+Auto : Automatique
+Auto attach template on document creation : Joindre automatiquement le modèle à la création du document 
+Auto launch linked files : Lancer automatiquement les fichiers liés 
+Automatic : Automatique
+Automatically install components : Éléments installés automatiquement
+Automatically open linked file attachments. : Ouvrir automatiquement les fichiers liés joints.
+Available Libraries : Bibliothèques disponibles
+Average : Moyen
+Background : Arrière-plan
+Background color : Couleur en arrière-plan
+Background Processing : Traitement en arrière-plan
+Basic Options : Options de base
+Basics : Éléments de base
+Before you can complete this workflow step you must check in any files you have checked out : Avant de pouvoir terminer cette étape du flux de travaux, vous devez archiver tous les fichiers que vous avez extraits.
+Before you can complete your Approval step you must check in any files you have checked out : Avant de pouvoir terminer votre étape d'approbation, vous devez archiver tous les fichiers que vous avez extraits.
+Before you can complete your workflow step you must check in any files you have checked out : Avant de pouvoir terminer votre étape du flux de travaux, vous devez archiver tous les fichiers que vous avez extraits.
+Before you can release this document you must check in any files you have checked out : Avant que vous puissiez publier ce document, vous devez archiver les fichiers que vous avez extraits
+Before you can start the workflow you must check in any files you have checked out : Avant de pouvoir commencer le flux de travaux, vous devez archiver tous les fichiers que vous avez extraits.
+Before you decline this workflow step you must check in any files you have checked out : Avant de refuser cette étape du flux de travaux, vous devez archiver tous les fichiers que vous avez extraits.
+blank for any : vierge pour un
+Body : Corps
+Body content : Contenu du corps
+Bold : Gras
+Bookmark created in selected folder. : Signet créé dans le dossier sélectionné.
+Bookmark documents will be updated to the latest released version of a document. : Les documents avec signet seront mis à jour à la version publiée la plus récente d’un document.
+Bookmark successfully created in chosen folder. : Signet créé avec succès dans le dossier choisi.
+Bottom Banner : Bandeau en bas de page
+Browse : Naviguer
+Browser layout : Mise en page du navigateur
+Building view. Please wait : Visualisation en préparation. Veuillez attendre
+Built In : Intégré
+built-in field validation : validation de champ intégré
+Button visibility : Visibilité de la touche
+By : Par
+By default the label will be "Comments" : Par défaut, le label sera « Commentaires »
+By default, notify : Par défaut, signaler 
+Cancel : Annuler
+Cancel : Annuler
+Case sensitive, separate entries with carriage return : Sensible à la casse, séparer les entrées à l’aide d’un retour de chariot
+Categorize : Catégoriser
+Categorized : Catégorisé
+Cell Properties : Propriétés des cellules
+Cells : Cellules
+Center : Centre
+Central Locking : masque personnalisé lors de script PHP
+Change a Panel : Changer un panel
+Change Additional Editors : Changer les correcteurs supplémentaires
+Change current panel. : Changer le panel courant.
+Change Doc Type : Changer le type de doc
+Change Doc Type : Changer le type de document
+Change document author : Changer l’auteur du document
+Change Document Type : Changer le type de document
+Change Owner : Changer le propriétaire
+Change Panel : Changer le panel
+Change panel denied. : Changement de panel refusé.
+Change Restrict read access to : Changer Limiter l’accès en lecture 
+Change the layout style : Changer le style de mise en page
+Change this panel. Modify the options below and change the layout on the right. : Changer ce panel Modifier les options ci-dessous et changer la mise en page à droite.
+Change widget denied. : Changement de widget refusé.
+Change widget : Changer le widget
+Change Widgets Layout : Modifier la disposition des widgets
+Check in files : Archivage des fichiers
+Check out files : Extraction des fichiers
+Check to disable : Vérifier pour désactiver
+Check to hide : Vérifier pour masquer
+Checkbox : Case à cocher
+Checkbox Properties : Propriétés de la case à cocher
+Checked Out Files : Vérifier les fichiers
+Checkout failed : Extraction échouée
+Checkout Files : Extraction des fichiers
+Choose 'Yes' if User must acknowledge that they have completed the action of this Activity. : Choisir « Oui » si l’utilisateur doit indiquer qu’il a terminé l’action de cette activité. 
+Choose 'Yes' if User should provide a response for the Activity like answering a question. : Choisir « Oui » si l’utilisateur doit fournir une réponse pour l’activité, comme répondre à une question.
+Clear : Effacer
+Click + button above : Cliquer sur le bouton + ci-dessus
+Click the + button above to add a widget. : Cliquer sur le bouton + ci-dessus pour ajouter un widget.
+Close : Quitter
+Close All Tabs : Fermer tous les onglets
+Close review : Quitter la révision
+Closing Document : Fin de document
+Cloud : Nuage
+Collapse all : Réduire tout
+Collapse All : Réduire tout
+Collapse when first opened : Réduire lorsqu’ouvert en premier
+Collecting file information from selected documents : Cueillette des renseignements sur le fichier dans les documents sélectionnés
+Color : Couleur
+Column : Colonne
+Column Status : État de la colonne
+Column Title : Titre de la colonne
+Column Type : Type de colonne
+Columns : Colonnes
+Combo box : Liste déroulante
+Comma separated list of acceptable file extensions, blank for any. : Liste des extensions de fichier acceptables séparées par une virgule, vierge pour un.
+Commentaries : Commentaires
+Comments : Commentaires
+Community : Communauté
+Compare Documents : Comparer les documents
+Comparing documents : Comparaison des documents
+Comparison results will be displayed in Word and printing will not be controlled. : Les résultats des comparaisons seront affichés en Word et l’impression ne sera pas contrôlée.
+Complete Review button : Terminer la révision du bouton
+Complete Review button label : Remplir le texte du bouton de révision
+Completed : Terminé
+Component installer package : Pack d’installation des composantes
+Contact the owner (%paneleditor%) to request changes. : Contacter le propriétaire (%paneleditor%) pour demander des changements.
+contains : contient
+Content : Contenu
+Content Paging : Pagination du contenu
+Content Settings : Paramètres du contenu
+Converting comparison results to PDF : Convertir les résultats de comparaison en PDF
+Converting to PDF : Conversion en PDF
+Copy : Copier 
+Copy App : Copier l'application
+Copy Folder : Copier le dossier
+Copy Folder Link : Copier le lien du dossier
+Copy Link : Copier le lien 
+Copy Selected : Copier la sélection
+could not be deleted. Please check that the file is not currently open or locked by some other process. : suppression impossible. Veuillez vérifier que le fichier n'est pas ouvert ni verrouillé par un autre processus.
+could not be selected as the default printer. : ne peut pas être choisie comme imprimante par défaut.
+Could not complete adding user to the group. Contact Admin for details. : Impossible de terminer l’ajout de l’utilisateur au groupe. Contacter l’administrateur pour les détails.
+Could not complete deleting selected user(s). Contact Admin for details. : Impossible de terminer la suppression des utilisateurs sélectionnés. Contacter l’administrateur pour les détails.
+Could not complete importing group; contact admin for details. : Impossible de terminer l’importation du groupe ; contacter l’administrateur pour les détails.
+Could not complete the request; due to the following error : Impossible de terminer la demande; à cause de l’erreur suivante 
+Could not convert file to html.\rError : Conversion en html impossible.\rErreur
+Could not create filter : Impossible de créer un filtre
+Could not delete the selected subform. Contact Admin for details. : Impossible de supprimer le sous-formulaire sélectionné. Contacter l’administrateur pour les détails.
+Could not launch MS Excel : Impossible de lancer MS Excel
+Could not locate the source library for selected entry. : Impossible de trouver la bibliothèque source pour l’entrée sélectionnée.
+Could not locate the source library for this document. : Impossible de trouver la bibliothèque source pour ce document.
+Could not located requested User Name. : Impossible de trouver le nom d’utilisateur demandé.
+Could not log that file was downloaded. Exiting. : Impossible de consigner le fichier téléchargé. Quitter.
+Could not log that file was viewed. Exiting. : Impossible de consigner le fichier visualisé. Quitter.
+Could not open the file : Impossible d'ouvrir le fichier
+Could not process spreadsheet data. Error : Impossible de traiter les données du tableur électronique. Erreur
+Could not save subform because of the following issues : Impossible d'enregistrer le sous-formulaire en raison des problèmes suivants
+Could not save the file.\rError : Impossible d'enregistrer le fichier.\rErreur
+Create a dynamic panel layout. Complete the options below and select a layout on the right. : Créer une mise en page dynamique du panel Remplir les options ci-dessous et choisir une mise en page à droite.
+Create a Panel : Créer un panel
+Create actions : Créer des actions
+Create an Activity : Créer une activité
+Create and assign a review action item to : Créer et attribuer un document de révision à
+Create Application : Créer une application
+Create Bookmark : Créer un signet
+Create Bookmark? : Créer un signet?
+Create Document : Créer un document
+Create Library : Créer une bibliothèque
+Create new folder in folder : Créer un nouveau dossier dans un dossier
+Create new panel. : Créer un nouveau panel.
+Create Panel : Créer un panel
+Create Shortcut : Créer un raccourci
+created : créé
+Created By : Créé Par
+Created Date : Date de création
+Creating New Document : Créer un nouveau document
+Creation of documents is limited/restricted in this edition of DOCOVA. : La création de documents est limitée/restreinte dans cette édition de DOCOVA.
+Cross link : Lien croisé
+Current Subscribers : Abonnés actuels
+Current versions : Versions actuelles
+Currently, you have no checked out items. : Actuellement vous n’avez aucun fichier extrait.
+Custom : Personnalisé
+custom : personnalisé
+Custom agent to run : Agent personnalisé à exécuter
+Custom button label : Texte de bouton personnalisé 
+Custom edit function could not be executed due to the following error : La fonction personnalisée de modification ne peut pas être exécutée à cause de l’erreur suivante
+Custom hide when PHP script : Masque personnalisé lors de script PHP
+Custom JavaScript code(s) to be run before release. : Codes personnalisés JavaScript à exécuter avant la publication.
+Custom JavaScript code(s) to be run. Default function will run if left blank. : Codes personnalisés JavaScript à exécuter La fonction par défaut s’exécutera si laissé vierge.
+Custom JavaScript codes to be run on load. : Codes personnalisés JavaScript à exécuter au chargement.
+Custom JavaScript codes to be run on unload. : Codes personnalisés JavaScript à exécuter au déchargement.
+custom JavaScript function : Fonction personnalisée JavaScript
+Custom JS function on button click : Fonction personnalisée JS au clic du bouton
+Custom JS function to run : Fonction personnalisée JS à exécuter
+Custom onLoad function could not be executed due to the following error : La fonction personnalisée onLoad ne peut pas être exécutée à cause de l’erreur suivante
+Custom onUnLoad function could not be executed due to the following error : La fonction personnalisée onUnLoad ne peut pas être exécutée à cause de l’erreur suivante
+Custom print function could not be executed due to the following error : La fonction personnalisée d’impression ne peut pas être exécutée à cause de l’erreur suivante
+Custom save function could not be executed due to the following error : La fonction personnalisée d’enregistrement ne peut pas être exécutée à cause de l’erreur suivante
+Custom Scan JS function : Fonction personnalisée de numérisation JS
+Custom Search Fields : Champs de recherche personnalisée
+Custom selection criteria : Critères de sélection personnalisés
+Cut : Couper
+Cut Folder : Couper un dossier
+"D = day(s); W = week(s); M = month(s); Y = year(s)" : "J = jour(s) ; S = semaine(s) ; M = moi(s) ; A = année(s)"
+Dashboard : Tableau de bord
+Data column : Colonne de données
+Data could not be retrieved from the server. : Impossible d'extraire les données du serveur.
+Data could not be returned from the server when attempting to get Author's ability to create sub-folders flag.\n In function:CanCreateFolders() in wHomeLeftNav : Les données ne peuvent pas être retournées depuis le serveur lors de la tentative d’obtenir la capacité d’auteur pour créer un drapeau de sous-dossiers.\n dans function:CanCreateFolders() dans wHomeLeftNav
+Data entry error : Erreur d’entrée des données
+Data Query : Recherche de données
+Data Sources : Les sources de données
+Data Type : Type de données
+Data Views : Vues de données
+date : date
+Date : Date
+Date field : Champ de date
+Date Field Properties : Propriétés du champ de date
+Date Modified : Date modifiée
+Date/Time/Who : Date/Heure/Qui
+day(s) : jour(s)
+day(s) after the document is permanently deleted. : jour(s) après la suppression permanente du document
+day(s) ago. : il y a .... jour(s).
+day(s) ahead of due date : jour(s) avant la date d’échéance
+day(s) of document release. : jour(s) de la publication du document.
+Dec : Décembre 
+Decimal places : Décimales
+Decline button label : Refuser le texte du bouton
+Default : Par défaut
+Default Column Title : Titre de la colonne par défaut
+Default document type : Types du document par défaut
+Default List Type : Types de liste par défaut
+Default new documents to include Authors as additional editors : Nouveaux documents par défaut pour inclure les auteurs comme réviseurs supplémentaires
+Default Open mode : Mode ouverture par défaut
+Default Perspective : Perspective par défaut
+Default scan function called if left blank. : La fonction numérisation par défaut s’exécutera si laissée vierge.
+Default sender for system messages : Expéditeur par défaut des messages du système
+Default sort : Tri par défaut
+Default style : Style par défaut
+Default value : Valeur par défaut
+Default Width : Largeur par défaut
+Default workflows will apply if none selected : Les flux de travaux par défaut s’appliquent si aucun n’est sélectionné
+Defaults to "Subject/Title". : Se positionne par défaut sur « Objet/Titre ».
+Delayed Actions (Escalation) - 'Send' selected but no recipients defined : Actions retardées (Escalade) - « Envoyé » sélectionné, mais aucun destinataire défini
+Delayed Actions - 'Send' selected but no recipients defined : Actions retardées - « Envoyé » sélectionné, mais aucun destinataire défini
+Delayed actions : Actions retardées
+Delete : Supprimer
+Delete App : Supprimer l'application
+Delete column : Supprimer la colonne
+Delete Column : Supprimer la Colonne
+Delete Dashboard Panel? : Supprimer le panel du tableau de bord ?
+Delete Element : Supprimer l’élément
+Delete files locally after successful upload to DOCOVA : Supprimer les fichiers localement après un téléchargement réussi vers DOCOVA
+Delete from archive log status. : Supprimer de l’état du journal des archives
+Delete options : Supprimer les options
+Delete Panel : Supprimer le panel
+Delete Perspective : Supprimer la perspective
+Delete Perspective? : Supprimer la perspective?
+Delete Rights : Supprimer les droits
+Delete Saved Search : Supprimer
+Delete Selected : Supprimer la sélection
+Deleted : Supprimé
+Deleted Users : Utilisateurs supprimés
+Deny button : Refuser le bouton
+Department : Service
+Descending : Descendant
+Description : Description
+Deselect All : Désélectionner tout
+Deselect all : Désélectionner tout
+Design Elements : Concevoir les éléments
+Designer : Concepteur
+Details : Détails
+Detecting records managed documents. Please wait : Détecter enregistre les documents gérés. Prière d’attendre
+Directories : Répertoires
+Directory Integration : Intégration des répertoires
+Directory name presented to users : Nom des répertoires présentés aux utilisateurs
+Disable Activities : Désactiver les activités
+Disable Cut/Copy/Paste : Désactiver Couper/Copier/Coller
+Disable Toolbar - Create Bookmark : Désactiver la barre d’outils - Créer un signet
+Disabled : Désactivé
+Discarded : Rejeté
+Discarded drafts that are kept in library. : Les brouillons rejetés sont conservés dans une bibliothèque
+Discuss : Examiner
+Display Embedded Form 1 in "More" section : Afficher le formulaire intégré 1 dans la section « Plus »
+Display Name : Afficher le nom
+Display Related Documents in "More" section : Afficher les documents associés dans la section « Plus »
+Display Subject and Status in "More" section : Afficher l’objet et l’état dans la section « Plus »
+Display Title : Afficher le titre
+Display workflow actions list in "More" section : Afficher la liste des actions de flux de travaux dans la section « Plus »
+Distribution : Distribution
+Do not add "background-color" attribute. : Ne pas ajouter l’attribut « couleur en arrière-plan ».
+Do not Archive : Ne pas archiver
+Do not archive active draft documents : Ne pas archiver de brouillons actifs
+Do not archive documents with active workflow : Ne pas archiver de documents en flux de travaux actif
+Do you want to leave the page without saving changes? : Voulez-vous quitter la page sans enregistrer les modifications ?
+Doc compare file source : Comparez le document au fichier source
+Doc Specific Open Mode : Mode ouverture de document spécifique
+DOCOVA Application Settings : Paramètres de l’application DOCOVA
+DOCOVA base DN : Base DN de DOCOVA
+DOCOVA base dn e.g. "/DOCOVA" : Base dn de DOCOVA, p. ex. « /DOCOVA »
+Docova Component setup files : Fichiers de configuration de composantes Docova
+DOCOVA Environment : Environnement DOCOVA
+DOCOVA Home Database : Base de données d’accueil DOCOVA
+Docova Home Tabs : Onglets d’accueil DOCOVA
+Docova Install : Installation de DOCOVA
+DOCOVA(Internal) : DOCOVA(Interne)
+Document : Document
+Document Activities : Activités des documents
+Document added to favorites. : Document ajouté aux favoris.
+Document archived from : Document archivé depuis
+document author / all reviewers named above : Auteur du document/tous les réviseurs nommés précédemment
+Document author : Auteur du document
+document author and/or : auteur du document et/ou
+Document cannot be deleted once workflow starts : Le document ne peut pas être supprimé après le démarrage du flux de travaux
+Document Cannot Be Opened : Impossible d'ouvrir le document
+Document Date : Date du document
+Document Deleted : Document supprimé
+Document Details : Détails du document
+Document Details Tab : Onglet Détails du document
+Document has been deleted : Le document a été supprimé
+Document is not available. : Le document n'est pas disponible.
+Document Log retention : Conservation du journal du document
+Document not yet saved. : Document pas encore enregistré.
+Document save was cancelled, Removing any linked documents. : L’enregistrement du document a été annulé, retirant tous les documents liés.
+Document shortcut was added to your desktop. : Le raccourci du document a été ajouté à votre bureau.
+Document Status : État du document
+Document Type : Type de document
+Document type determines the fields and content sections available within the document. : Le type de document détermine les champs et les sections de contenu du document.
+Document type determines the fields and content sections available within the document. : Le type de document détermine les champs et les sections de contenu du document.
+Document Type Settings : Paramètres du type de document
+Document Types : Types de document
+Document Url cannot be located. : Impossible de trouver l’URL du document
+Document Versioning : Versionnage du document
+Document Workflow : Flux de travaux du document
+document(s). Are you sure? : Document(s). Êtes-vous certain ?
+Documents 0 to 0 of 0 : Documents 0 à 0 de 0
+Documents : Documents
+Documents that were : Documents qui étaient
+does not contain : ne contient pas
+Does not require review : N’exige pas de révision
+Done : Fait
+Draft : Brouillon 
+Draft/Not Released : Brouillon/non publié
+Dropdown : Liste déroulante
+Dropdown Properties : Propriétés de la liste déroulante
+Duplicate Panel. : Dupliquer le panel.
+Duplicate widget. : Dupliquer le widget.
+During workflow all user prompted comments will also be tracked in this section. : Pendant le flux de travaux, tous les commentaires suscités par les utilisateurs seront aussi suivis dans cette section.
+Dutch : néerlandais
+e.g. : p. ex., 
+Earlier, unreleased drafts superseded by this version will be discarded. : Auparavant, les brouillons non publiés remplacés par cette version seront rejetés.
+Edit : Modifier
+Edit Document button : Modifier le bouton du document
+Edit in New Window : Modifier dans une nouvelle fenêtre
+Edit/Save Perspective : Modifier/enregistrer la perspective
+Editable field : Champ modifiable
+Editable with selection : Modifiable avec sélection
+Edited Attachment Recovery : Reprise de la pièce jointe modifiée
+Editing : Modifiant
+Editors : Réviseurs
+Element ID : ID de l’élément
+Element Name : Nom de l’élément
+Email Address : Adresse électronique
+Email event to Administrators : Envoyer un événement aux administrateurs par courriel
+Email Notification : Notification de courriel
+Empty Recycle Bin : Vider la corbeille
+Empty Widget : Widget vide
+Enable access to local scanner : Activer l’accès au scanneur local
+Enable acquiring content from user's email : Activer acquisition de contenu depuis un courriel d’utilisateur
+Enable centralized document locking : Activer verrouillage centralisé du document
+Enable Content Paging : Activer Pagination du contenu
+Enable cross linking : Activer la formation de liens croisés
+Enable document lifecycle : Activer le cycle de vie d’un document
+Enable document versioning : Activer le versionnage du document
+Enable document workflow : Activer le flux de travaux d’un document
+Enable file check in and out tracking : Activer le suivi d’archivage et d’extraction de fichiers
+Enable File Sync : Activer la synchro d’un fichier
+Enable Filtering : Activer le filtrage
+Enable filtering will allow users to click on the column headers of this folder/view to filter content. : Activer le filtrage permet aux utilisateurs de cliquer sur les en-têtes de colonne de ce dossier/d’afficher pour filtrer le contenu.
+Enable Folder Filtering : Activer le filtrage de dossier
+Enable linked files : Activer les fichiers liés
+Enable Records Manager Express Integration : Activer l’intégration expresse de gestionnaire d’enregistrements
+Enabled : Activé
+End : Fin
+ends with : finit par
+English : Anglais
+Enter a field name for Review Period - custom frequency : Saisir un nom de champ pour la période de révision - fréquence personnalisée
+Enter a field name for Review Period - custom starting date : Saisir un nom de champ pour la période de révision - date de début personnalisée
+enter a list of extensions separated by comma. eg. doc,docx, docm : Saisir une liste des extensions séparées par une virgule. p. ex. doc, docx, docm
+enter file path for exact match, or file path followed by * to match the path and any sub folder : saisir un chemin de fichier pour une correspondance exacte, ou un chemin de fichier suivi d’un * pour correspondre au chemin et à tout sous-dossier
+Enter new folder name : Saisir le nom du nouveau fichier
+Enter the name of a field on the document that will determine the frequency of the review period. : Saisir le nom d’un champ sur le document pour déterminer la fréquence de la période de révision.
+Enter users participating in the file sync. : Saisir les utilisateurs participant à la synchro des fichiers.
+Enter your comments below : Saisir vos commentaires ci-dessous
+Error - Unable to download file %filename% to %filepath%. \n\nPlease check that the source file is present and undamaged. \n\n Source file URL : Erreur - Impossible de télécharger le fichier %filename% au %filepath%. \n\nPrière de vérifier que le fichier source est présent et sans dommage. \n\n URL du fichier source
+Error - Unable to print file %filename%. \n\nPlease check that the source file is present and undamaged. \n\n Source file URL : Erreur - Impossible d’imprimer le fichier %filename%. \n\nPrière de vérifier que le fichier source est présent et sans dommage. \n\n URL du fichier source
+Error - Unable to print file : Erreur - Impossible d’imprimer le fichier 
+Error : Erreur
+Error Adding Files : Erreur lors de l'ajout de fichiers
+Error clearing view data : Erreur lors de l'effacement des données visualisées
+Error deleting temporary files. : Erreur en supprimant des fichiers temporaires.
+Error in search dialog code. Field with node id %fieldId% could not be located. : Erreur dans le code de dialogue de recherche. Impossible de localiser le champ avec l’id de nœud %fieldId%.
+Error loading view settings : Erreur lors du chargement des paramètres d'affichage
+Error populating bookmarks in Word document.  Aborting. : Erreur lors du remplissage des signets dans le document Word  Interruption.
+Error processing pasted data : Erreur lors du traitement des données collées
+Error writing selected names. Parent document might be closed. : Erreur en écrivant les noms sélectionnés. Le document parent pourrait être fermé.
+escalation message : escalade de messages
+Event log retention : Conservation du journal d’événements
+Event logging : Enregistrement des événements
+Events : Événements
+Exclude files with the following extensions : Exclure les fichiers des extensions suivantes
+Exemptions : Exemptions
+Expand All : Agrandir tout
+Expand all : Agrandir tout
+Expertise (skills) : Expertise (compétences)
+Export : Exporter
+Export Files : Exporter les fichiers
+Export files from the following documents : Exporter les fichiers des documents suivants
+Export sub folders : Exporter les sous-dossiers
+Export to Excel : Exporter vers Excel
+Exporting data. Please wait : Exportation des données. Veuillez attendre
+Exporting files.  Please wait : Exporter les fichiers.  Prière d’attendre
+External : Externe
+External Data : Données externes
+External setup information URL : URL d’information sur la configuration externe
+External URL : URL externe
+Facet Maps : Cartes des facettes
+Facet Maps Options : Options des cartes des facettes
+Favorites : Favoris
+Feb : Février
+Field Description : Description du champ
+Field list is either empty or its length does not match the bookmark list. : La liste des champs est vide ou sa longueur ne correspond pas à la liste des signets.
+Field Name : Nom du champ
+field on the document containing names to assign the review action to : champ dans le document contenant les noms pour attribuer la révision à
+field on the document containing names to send the review action to : champ dans le document contenant les noms pour attribuer la révision à
+Field or Formula : Champ ou formule
+Field validation : Validation du champ
+File attachments : Pièces jointes au fichier
+File document : Fichier document
+File edits and check in/out are automatically logged. : Les modifications du fichier et l’archivage/extraction sont automatiquement consignés
+File Export Complete.\n Please open %folder% to view any exported files. : Exportation du fichier terminée.\n Prière d’ouvrir le %folder% pour afficher les fichiers exportés.
+File Import : Importation du fichier
+File Name : Nom du fichier
+File Resources : Ressources de fichiers
+File Sync : Synchro des fichiers
+File Templates : Modèles de fichier
+File Type : Type de fichier
+File types to view using local applications (rather than browser) : Types de fichier à afficher à l’aide d’applications locales (plus qu’à l’aide du navigateur)
+Filenames can not contain semi-colons. : Le nom de fichier ne doit pas contenir de point-virgule.
+Files : Fichiers
+Files could not be checked out properly. Please try again or contact system administrator. : Impossible d'extraire les fichiers correctement. Veuillez essayer de nouveau ou communiquer avec l'administrateur de système.
+Files Export : Exportations de fichiers
+Files Path : Chemin de fichiers
+Files to import (a document for be create for each file) : Fichiers à importer (un document à créer pour chaque fichier)
+Files to import (a document will be created for each file) : Fichiers à importer (un document sera créé pour chaque fichier)
+Filter by : Filtrer par
+Filter error : Erreur de filtre
+Filter field : Champ du filtre
+Finish : Terminer
+First Name : Prénom
+First page : Première page
+First position index of 0, not 1. : Premier indice de position de 0, pas 1.
+Folder : Dossier
+Folder Archive : Archive du dossier
+Folder Control : Contrôle du dossier
+Folder icon : Icône du dossier
+Folder Information : Information du dossier
+Folder Meta-Data Subform : Sous-formulaire de métadonnées du dossier
+Folder Name : Nom du dossier
+Folder name is required. : Le nom du dossier est requis.
+Folder path : Chemin du dossier
+Folder Properties : Propriétés du dossier
+Folder shortcut was added to your desktop. : Le raccourci du dossier a été ajouté à votre bureau.
+Folders : Dossiers
+Folders and views : Dossiers et vues
+Font : Police
+Font size : Taille de la police
+For more information please contact DOCOVA sales team at (866) 331-1354. : Pour plus d’information, prière de contacter l\'équipe de ventes de DOCOVA au 866-331-1354.
+Form 1 : Formulaire 1
+Form alias : Alias du formulaire
+Form Elements : Éléments du formulaire
+Form Name : Nom du formulaire
+Forms : Formulaires
+Forward Document : Transférer le document
+French : Français
+Full Screen : Plein écran
+Fully qualified domain name : Nom de domaine entièrement qualifié
+General : Général
+General Information : Information générale
+General Settings : Paramètres généraux
+General type : Type général
+Generate Thumbnail : Générer la miniature
+German : allemand
+Global Settings : Paramètres globaux
+Group Definition : Définition du groupe
+Group Members : Membres du groupe
+Group Name : Nom du groupe
+Groups : Groupes
+has already been downloaded and cannot be updated. Please check that the file is not already opened for editing/viewing. : a déjà été téléchargé et ne peut être mis à jour. Veuillez vérifier que le fichier n'est pas déjà ouvert pour une modification/visualisation.
+has already been downloaded and cannot be updated. Please close the file if already open for editing/viewing. : a déjà été téléchargé et ne peut être mis à jour. Veuillez fermer le fichier s'il est déjà ouvert pour une modification/visualisation.
+has already been downloaded and cannot be updated. Please close the file if it is open already for editing/viewing. : a déjà été téléchargé et ne peut être mis à jour. Veuillez fermer le fichier s'il est déjà ouvert pour une modification/visualisation.
+Has multiple attachment sections : A plusieurs sections de pièces jointes
+Header : En-tête
+Header Access Control : Commande d’accès à l’en-tête
+Height : Hauteur
+Hide attachment section buttons : Masquer les boutons des sections de pièces jointes
+Hide attachment section when : Masquer la section des pièces jointes quand
+Hide Comments section when : Masquer la section des commentaires quand
+Hide entire document header when : Masquer l’en-tête complet du document quand
+Hide Logout Link : Masquer le lien de déconnexion
+Hide Related Documents section when : Masquer la section des documents associés quand
+Hide Related Emails section when : Masquer la section des courriels associés quand
+Hide Related Links section when : Masquer la section des liens associés quand
+Hide Text area when : Masquer la zone de texte quand
+Hide Web bookmark section when : Masquer la section des signets Web quand
+Hide when : Masquer quand
+Hide workflow buttons when : Masquer les boutons du flux de travaux en
+High : Élevée
+Home Page : Page d’accueil
+html : html
+HTML Code : Code HTML
+HTML Head : En-tête HTML
+HTML Resource : Ressource HTML 
+HTML Resources : Ressources HTML 
+HTML String(s) to include extra header tags like external javascript/css files. : Chaîne(s) HTML pour inclure des onglets supplémentaires d’en-tête comme les fichiers externes javascript/css
+HTTP Host Name : Nom de l’hôte HTTP
+Http Port : Port Http
+Icon : Icone
+Icons : Icônes
+If \"Enable Filtering\" is enabled above, you can select filter fields below to define the default filtering for this folder/view. Any filters selected below that are defined in a User's Profile will provide a customized content experience for them based on their settings. : Si « Activer le filtrage » est activé ci-dessus, vous pouvez sélectionner les champs de filtre ci-dessous pour définir le filtrage par défaut pour ce dossier/affichage. Les filtres sélectionnés ci-dessous qui sont définis dans un profil utilisateur offriront une expérience de contenu personnalisé selon leurs paramètres.
+If not completed within : Si non terminé dans les
+If previously released version exists set it as the current version : Si une version antérieurement publiée existe, la définir comme version actuelle
+If using multiple uploaders and want to limit the files collected by the Compare Documents process, enter the field specified by the AttachmentNames param of the Uploader to be used. Leave blank to collect all files. : Si vous utilisez plusieurs uploaders et désirez limiter le nombre de fichiers recueillis par le processus Comparer des documents, saisir le champ spécifié par le paramètre AttachmentNames du uploader à utiliser. Laisser vierge pour recueillir tous les fichiers
+Import as document type : Importer comme document type
+Import as document type : Importer comme type de document
+Import Email Messages : Importer les messages de courriel
+Import Files : Importer les fichiers
+Import Folder : Importer dossier
+Import LDAP Group : Importer le groupe LDAP
+Import Messages : Importer les messages
+Import Messages is not available for your current mail configuration. : Importer les messages n’est pas disponible pour votre configuration actuelle de courriel.
+Import Messages Not Available : Importer les messages n’est pas disponible
+Import was completed successfully. : L'importation est réussie.
+In case the date field specified above has no value, the process will pick the first non-empty date in the following order : Au cas où le champ de date spécifié ci-dessus n’a aucune valeur, le processus choisira la première date non vierge dans l’ordre suivant
+In order to use this  feature please upgrade your DOCOVA license subscription to either Company or Enterprise Edition. : Afin d’utiliser cette fonctionnalité, prière de mettre à jour votre abonnement de licence de DOCOVA à la société ou à Enterprise Edition.
+Inactive : Inactif
+Include : Comprend
+Include archives : Comprend les archives
+Include in the \"Add Panel\" list : Compris dans la liste « Ajouter panel »
+Include subfolders : Comprend les sous-dossiers
+Include Thumbnails : Comprend les miniatures
+Initial cursor focus field : Zone cible du curseur initial
+Input field : Champ de saisie
+Input Field Properties : Propriétés du champ de saisie
+Insert : Insérer
+Insert column : Insérer une colonne
+Insert Column : Insérer une Colonne
+Internal : Interne
+Invalid entry : Entrée invalide
+is : est
+is a newly added file. Please save this document before making any edits or revisions to it. : est un fichier nouvellement ajouté. Veuillez enregistrer ce document avant de le modifier ou de le réviser.
+it may already be opened. : est peut-être déjà ouvert.
+Italic : Italique
+Jan : Janvier
+Japanese : Japonais
+JavaScript : JavaScript
+JavaScript code(s) as Print event. : Codes JavaScript comme événement d’impression.
+JS function to call when element gets focus. : Fonction JS à appeler quand l’élément est ciblé.
+JS function to call when element is clicked. : Fonction JS à appeler quand l’élément est cliqué.
+JS function to call when element loses focus. : Fonction JS à appeler quand l’élément n'est plus ciblé.
+JS function to call when element value changes. : Fonction JS à appeler quand la valeur de l’élément change.
+Jul : Juillet
+Jump 200 records : Sauter 200 enregistrements
+Jun : Juin
+Keep drafts private : Garder les brouillons privés
+Keep latest : Garder le dernier
+Keywords : Mots de passe
+label : label
+Label Properties : Propriétés du label
+Label value : Valeur du label
+Last Access : Dernier accès
+last modified : Dernière modification
+Last Name : Nom de famille
+Last page : Dernière page
+last review date : Date de la dernière révision
+Latest released version (exclude drafts and prior versions) : Dernière version publiée (à l’exclusion des brouillons et des versions antérieures)
+Latest released versions (exclude drafts and prior versions) : Dernières versions publiées (à l’exclusion des brouillons et des versions antérieures)
+Layout : Mise en page
+LDAP base DN : Base DN LDAP
+LDAP base dn e.g. "O=DLI" : Base dn LDPA, p. ex. « O=DLI »
+LDAP directory path : Chemin du répertoire LDPA
+Leave blank for all : Laisser vierge pour tout
+Leave blank if a different mail server is used. No http:// or https:// is required. Default port is 993, concatenate the port to the url by ":" if different. : Laisser vierge si un serveur de courriel différent est utilisé. Pas de http:// ni https:// requis. Le port par défaut est 993, enchaîner le port avec l’URL par ":" si elle est différente.
+Leave blank if using 80 for non-SSL or 443 for SSL. : Laisser vierge si vous utilisez 80 pour non-SSL ou 443 pour SSL.
+Left : Gauche
+Let user select which one to open : Laisser l’utilisateur sélectionner celui à ouvrir
+Libraries : Bibliothèques
+Libraries and Applications : Bibliothèques et applications
+Libraries to search : Bibliothèques à rechercher
+Libraries update failed. : Échec de la mise à jour des bibliothèques.
+Library : Bibliothèque
+Library Key : Infos bibliothèque
+Library Name : Nom de la bibliothèque
+Library Settings : Paramètres de la bibliothèque
+Library Statistics : Statistiques de la bibliothèque
+Library Subscriptions : Abonnements à la bibliothèque
+Library update failed.\nServer return code : Échec de la mise à jour de la bibliothèque. code de retour \nServer
+License Code : Code de licence
+Licensed component : Composante sous licence
+Lifecycle settings : Paramètres du cycle de vie
+Link Comments : Commentaires du lien
+Link to document(s) : Lien vers les documents
+List : Liste
+Load Library Folders : Charger les dossiers de la bibliothèque
+Local file delete exclusion list : Le fichier local supprime la liste d’exclusion
+Local host code (optional) : Code d’hôte local (facultatif)
+Location : Emplacement
+Log all events : Consigner tous les événements
+Log only critical errors : Consigner seulement les erreurs critiques
+Logging comment. Please wait : Consignation du commentaire. Veuillez attendre
+Logout : Déconnexion
+Logout Link : Lien de déconnexion
+Low : basse
+Mail for : Envoyer pour
+Mail memo : Envoyer un mémo par courriel
+Mail Server Port : Envoyer le port du serveur par courriel
+Mail Server Url : Envoyer l’URL du serveur par courriel
+Maintain only one live Draft at a time. Drafts can originate from Released documents or other Draft documents. : Conserver seulement un brouillon actif à un moment donné. Les brouillons peuvent provenir de documents publiés ou d’autres brouillons.
+Make available in all folders in this library : Rendre disponible dans tous les dossiers de cette bibliothèque
+Make available to DOCOVA Explorer : Rendre disponible à Explorer de DOCOVA
+Manage App Groups : Gérer les groupes d'applications
+Manager : Gestionnaire
+Manual : Manuel
+Mar : Mars
+Mark current document as an inactive version : Marquer le document actuel comme version inactive
+Max results : Résultats max
+Maximum number of files : Nombre maximal de fichiers
+May : Mai
+Med : moyenne
+Menu Bar : Barre des menus
+Merge Cells : Fusionner les cellules
+Merge Right : Fusionner à droite
+Message : Message
+message : message
+Message Link : Lien du message
+Message link : Lien du message
+Message Name : Nom du message
+Message was forwarded. : Message transféré.
+Message was sent. : Message envoyé.
+Message/Question : Message/Question
+Meta-Data : Métadonnées
+Missing Activity Message/Instruction. : Message/Instruction activité manquante.
+Mobile Phone : Téléphone mobile
+Modified By : Modifié par 
+month(s) : mois
+More : Plus
+more than : plus que
+Most mail servers are set to 993 as default. : La plupart des serveurs de courrier électronique sont réglés par défaut à 993.
+Moving documents. Please wait : Déplacement des documents. Prière d’attendre
+Moving folder. Please wait : Déplacement du dossier. Prière d’attendre
+Multiple : Multiple
+My mail system : Mon système de courriel
+My Managed : Mon nom
+My Recently Used Apps : Mes applications récemment utilisées
+Name : Nom
+Name Lookup : Recherche de nom
+Name of the html field to place the cursor in when document is opened for editing. : Nom du champ html où placer le curseur quand un document est ouvert pour correction.
+Name Selection : Sélection du nom
+Names field : Champ de noms
+Names Field Properties : Propriétés du champ de nom
+Names of fields to validate : Noms de champs à valider
+never : jamais
+Never : Jamais
+New : Nouveau
+New Activity : Nouvelle activité
+New App Group : Nouveau groupe d'applications
+New Archive Policy : Nouvelle politique d’archivage
+New Document : Nouveau document
+New Document Type : Nouveau type de document
+New Drafts can only originate from Released documents. : Les nouveaux brouillons peuvent seulement provenir des documents publiés.
+New File Template : Nouveau modèle du fichier
+New Folder : Nouveau dossier
+New Group : Nouveau groupe
+New HTML Resource : Nouvelle ressource HTML
+New major version : Nouvelle version majeure
+New minor version : Nouvelle version mineure
+New Password did not match with Confirm password.Please correct your password : Le nouveau mot de passe ne correspond pas au mot de passe confirmé. Veuillez corriger votre mot de passe.
+New Review Policy : Nouvelle politique de révision
+New revision : Nouvelle révision
+New Search Field : Nouveau champ de recherche
+New Subform : Nouveau sous-formulaire
+New System Message : Nouveau message du système
+New User Profile : Nouveau profil utilisateur
+New View Column : Nouvelle colonne d’affichage
+Newly created documents. : Documents nouvellement créés
+Next 200 records : 200 enregistrements suivants
+Next page : Page suivante
+Next page group : Groupe de pages suivant
+No : Non
+No Action selected. : Aucune action sélectionnée.
+No Activity Subject provided. : Aucun objet d’activité fourni.
+No Document Type selected. Please select a Document Type : Aucun type de document sélectionné. Prière de sélectionner un type de document
+No Document Type selected. Please select a Document Type to create. : Aucun type de document sélectionné. Prière de sélectionner un type de document pour créer.
+No Documents Found : Aucun document trouvé
+No documents found. : Aucun document trouvé.
+No entries found. : Aucune entrée trouvée.
+No File(s) Selected : Aucun fichier sélectionné
+No folder meta-data have been configured currently. Folder meta-data fields can be enabled in the Library Profile for this library in the Application Settings area. : Aucune métadonnée du dossier n’est actuellement configurée. Les champs de métadonnées du dossier peuvent être activés dans le profil de bibliothèque de cette bibliothèque dans la zone des paramètres de l’application.
+No folder selected. : Aucun dossier sélectionné
+No http:// or https:// is required. : Pas de http:// ni https:// requis.
+No logging : Aucune journalisation
+No panel selected. : Aucun panel sélectionné.
+No pending review items found. : Aucun élément de révision en attente trouvé.
+No pending workflow items found. : Aucun flux de travaux en attente trouvé.
+No Recipients selected. : Aucun destinataire sélectionné.
+No selected entries were found for the chosen folder. : Aucune entrée sélectionnée n’a été trouvée pour le dossier choisi.
+No Server Web Path value. : Aucune valeur de chemin Web du serveur.
+No workflow actions are defined in this document : Aucune action du flux de travaux définie dans ce document
+No Workflow Defined : Aucun flux de travaux défini
+No workflow items found. : Aucun élément de flux de travaux trouvé.
+No working folder is currently in use. Please edit a document first. : Aucun dossier de travail n'est actuellement utilisé. Veuillez d'abord modifier un document.
+non : non
+None : aucun
+Not Authorized : Non autorisé
+NOTE : NOTE
+Notes mail server URL (if applicable) : Note l’URL du serveur de courrier électronique (s’il y a lieu)
+Notification message sent. : Message de notification envoyé.
+Notify the following that a review is now pending : Notifie au suivant qu’une révision est en attente
+Notify user : Notifie à l’utilisateur
+Nov : Novembre
+Number : Chiffre
+number : chiffre
+Oct : Octobre
+Office Phone : Téléphone du bureau
+OK : OK
+Ok : OK
+On all events : Pour tous les événements
+On Blur : Sur un flou
+On Change : Sur un changement
+On Click : Sur un clic
+On critical errors only : Sur des erreurs critiques seulement
+On Focus : Sur cible de saisie
+On Logout : Sur déconnexion
+on server : sur serveur
+OnBeforeRelease Javascript event : Événement Javascript OnBeforeRelease
+One moment. : Un moment.
+One or more 'Records Managed' documents were found under this folder \n or one of its subfolders.  It can NOT be deleted. : Un ou plusieurs documents « Enregistrement géré » ont été trouvés dans ce dossier \n ou dans un de ses sous-dossiers.  Il NE peut PAS être supprimé.
+One or more selected documents can not be deleted because they are records managed. : Un ou plus d'un document sélectionné ne peut pas être supprimé, car il s'agit d'un enregistrement administré.
+One or more selected documents can not be deleted because they are Released and strict version controlled. : Un ou plus d'un document sélectionné ne peut pas être supprimé, car il a été publié et il s'agit d'une version strictement contrôlée.
+One or more selected documents can not be deleted because they are Released and version controlled. Use Retract instead. : Un ou plus d'un document sélectionné ne peut pas être supprimé, car il a été publié et il s'agit d'une version contrôlée. Utiliser plutôt retirer.
+One or more selected documents can not be deleted because workflow has started and deletion during workflow has been disabled. : Un ou plus d'un document sélectionné ne peut pas être supprimé, car le flux de travaux est commencé et la suppression est désactivée pendant celui-ci.
+OnLoad JavaScript event : Événement Javascript OnLoad
+Only allow 1 live Draft at a time in non-Strict mode : autoriser seulement 1 brouillon actif à la fois en mode non strict
+Only one file can be converted to html and displayed in the current document.\rPlease delete one of the existing files before adding a new one. : Un seul fichier peut être converti en html et être affiché dans le document actuel.\rVeuillez supprimer l'un des fichiers existants avant d'en ajouter un autre.
+Only the following users can subscribe to this library (blank allows all) : Seuls les utilisateurs suivants peuvent s’abonner à cette bibliothèque (vierge permet à tous)
+only when commentor chooses : seulement lorsque le commentateur choisit
+OnUnLoad JavaScript event : Événement Javascript OnUnLoad
+Open : Ouvrir
+Open document only : Ouvrir le document seulement
+Open Folder Archive : Ouvrir l’archive du dossier
+Open in App-Builder : Ouvrir dans App Builder
+Open in New Tab : Ouvrir dans un nouvel onglet
+Open in New Window : Ouvrir dans une nouvelle fenêtre
+Open latest version : Ouvrir la version la plus récente 
+Open linked version : Ouvrir la version liée
+Open Mode : Ouvrir le mode
+Open whole application : Ouvrir toute l’application
+Opening the document : Ouvrir le document
+Operation Canceled : Opération annulée
+Operation did not complete. Please contact system administrator. : L'opération ne s'est pas terminée. Veuillez communiquer avec l'administrateur de système.
+Operation did not complete.\rStatus code : L'opération ne s'est pas terminée.\rCode d'état
+Operation was not complete, due to : L'opération ne s'est pas terminée en raison de
+Operation was not complete. : L’opération n’était pas terminée.
+Optional currency symbol etc. : Symbole de devise facultatif, etc.
+Optional Doctrine DQL where clause for a select from document table. "D" refers to Document; "CU" refers to Creator; "AU" refers to Authors. : Doctrine en DQL en option où il y a une clause pour une sélection du tableau du document « D » renvoie à Document ; « CU » renvoie à Créateur ; « AU» renvoie à Auteurs.
+Optional Review/Approve comments? : Commentaires facultatifs Réviser/Approuver ?
+Optional units etc. : Unités facultatives, etc.
+Optional, friendly field labels to be included in error message (field name will be user if blank). : Facultatif, labels de champ conviviaux à inclure dans le message d’erreur (le nom du champ sera utilisateur s’il est vierge).
+Optional, matching data types ("text", "number" or "date"). blank enties are treated as text. : Facultatif, types de données correspondantes (« texte », « numéro » ou « date »). Les entrées vierges sont traitées comme du texte.
+Options : Options
+or : ou
+Order : Ordre
+Other : autre
+Output Folder : Dossier de sortie
+Owner : Propriétaire
+Panel : Panel
+Panel description is blank.  Please provide a description for this panel. : La description du panel est vierge.  Prière de fournir une description pour ce panel.
+Panel list type : Type de liste de panneaux
+Panel name : Nom du panel
+Panel name is blank.  Please provide a panel name. : Le nom du panel est vierge.  Prière de fournir un nom pour ce panel.
+Paper color : Couleur de papier
+Parallel : Parallel
+Parentheses on negative numbers : Parenthèses sur les chiffres négatifs
+Participants : Participants
+Password : Mot de passe
+Paste : Coller
+Paste Folder : Coller le dossier
+Pasting documents. Please wait : Collage de documents. Prière d’attendre
+Pasting folder. Please wait : Collage du dossier. Prière d’attendre
+Path : Chemin
+PDF Creator not installed : Le créateur de PDF n'est pas installé
+PDF Creator not required for document comparison : PDF Creator non requis pour comparaison de documents
+Pending releases : Publications en attente
+People : Gens
+Percentage (value*100)% : Pourcentage (valeur*100)%
+Permanently delete from library : Supprimer définitivement de la bibliothèque
+Perspective : Perspective
+Perspective name : Nom de la perspective
+Plain : Évident
+Please check that the source file is present and undamaged. : Prière de vérifier que la source est présente et sans dommage.
+Please complete the following fields : Prière de remplir les champs suivants
+Please complete/correct the invalid entries. : Veuillez compléter/corriger les entrées invalides.
+Please contact Administrator. : Veuillez communiquer avec l'administrateur.
+Please describe changes to be included in the revision sheet : Prière de décrire les changements à inclure dans la feuille de révision
+Please described the changes to be included in this version. : Veuillez décrire les changements à inclure dans cette version.
+Please enter description. : Prière de saisir la description.
+Please enter Mail Server Url. : Veuillez saisir l'URL du serveur de courrier électronique.
+Please enter New/Confirmed Password. : Veuillez saisir un nouveau mot de passe/un mot de passe confirmé.
+Please enter the name of the folder you would like to create. : Prière de saisir le nom du dossier que vous désirez créer.
+Please enter the perspective name. : Prière de saisir le nom de la perspective.
+Please enter the release comments (optional) : Prière de saisir les commentaires relatifs à la publication (facultatif)
+Please enter the search query. : Prière de saisir la demande de recherche.
+Please enter the search query. : Prière de saisir la demande de recherche.
+Please enter the Tag Cloud name. : Prière de saisir le nom du nuage de mots-clés.
+Please enter User Email Address. : Veuillez saisir l'adresse électronique de l'utilisateur.
+Please enter User First Name. : Veuillez saisir le prénom de l'utilisateur.
+Please enter User Last Name. : Veuillez saisir le nom de l'utilisateur.
+Please fill in the Activity Subject. : Prière de remplir l’objet de l’activité.
+Please fill out all the required fields. To start designing you need to go to "Layout" tab. : Prière de remplir la totalité du champ requis. Pour commencer à concevoir, vous devez aller à l’onglet « Mise en page ».
+Please highlight a document to create a bookmark for. : Prière de mettre en surbrillance un document afin de créer un signet pour.
+Please highlight a document to create a bookmark for. : Prière de mettre en surbrillance un document afin de créer un signet pour.
+Please make this panel Shared before trying to add it to the Add List. : Prière de rendre ce panel Partagé avant d’essayer de l’ajouter à la liste des ajouts.
+Please make this panel Shared before trying to add names. : Prière de rendre ce panel Partagé avant d’essayer d’ajouter des noms.
+Please provide an Activity Message/Instruction. : Prière de fournir un message/une instruction pour l’activité.
+Please save this document before creating an Activity. : Veuillez enregistrer ce document avant de créer une activité.
+Please select a document from the Version History tab to compare this document to. : Prière de sélectionner un document depuis l’onglet Historique de version pour le comparer à.
+Please select a group. : Prière de sélectionner un groupe.
+Please select a new widget. A description of your selection will appear here. : Prière de sélectionner un nouveau widget. Une description de votre sélection apparaîtra ici.
+Please select a panel. A description of your selection will appear here. : Prière de sélectionner un panel. Une description de votre sélection apparaîtra ici.
+Please select at least one document for archiving. : Prière de sélectionner au moins un document pour archivage
+Please select at least one document for changing the doc type. : Prière de sélectionner au moins un document pour changer le type de doc.
+Please select at least one document type. : Prière de sélectionner au moins un type de document.
+Please select at least one document. : Veuillez sélectionner au moins un document.
+Please select at least one library to search. : Prière de sélectionner au moins une bibliothèque pour la recherche.
+Please select documents to print. : Prière de sélectionner les documents à imprimer.
+Please select libraries to update. : Prière de sélectionner les bibliothèques à mettre à jour.
+Please select name(s) from right pane to remove. : Prière de sélectionner les noms depuis le volet droit pour les retirer.
+Please select name(s) to add. : Prière de sélectionner les noms à ajouter.
+Please select only one document to compare to the current document : Prière de sélectionner un seul document à comparer au document actuel
+Please select the applicable workflow. : Veuillez sélectionner le flux de travaux applicable.
+Please select the data column. : Prière de sélectionner la colonne de données.
+Please select the delete action. : Prière de sélectionner l’action de suppression.
+Please select the document type. : Prière de sélectionner le type de document.
+Please select the file(s) you would like to check out. : Veuillez sélectionner le(s) fichier(s) que vous souhaitez extraire.
+Please select the files to import. : Prière de sélectionner les fichiers à importer.
+Please select the save action. : Prière de sélectionner l’action d’enregistrement.
+Please select two documents to compare. : Prière de sélectionner deux documents à comparer.
+Please Select User Mail System. : Veuillez sélectionner un système de courriel d'un utilisateur
+Please specify field 1. : Prière de préciser le champ 1.
+Please specify search criteria. : Prière de préciser les critères de recherche.
+Please wait until the other user releases document lock and latest changes are available to you. : Prière d’attendre que l’autre utilisateur déverrouille le document et que les changements les plus récents vous soient disponibles.
+Policy Name : Nom de la politique
+Port : Port
+Position : Position
+Prefix : Préfixe
+Preparing Excel for export. Please wait : Préparation d'Excel pour l'exportation. Veuillez attendre
+Preview Height : Afficher la hauteur
+Previous 20 records : 20 enregistrements précédents
+Previous Drafts become "Discarded". Release numbers are always the next Major version number. : Les brouillons précédents deviennent « rejetés ». Les numéros de publication sont toujours le numéro de version majeure suivant.
+Previous page : Page précédente
+Previous page group : Groupe de pages précédent
+Previously published, replaced by another version. : publié antérieurement, remplacé par une autre version.
+Primary lock server : Serveur principal verrouillé
+Print : Imprimer
+Print Attachments : Imprimer les pièces jointes
+Print Cancelled : Impression annulée
+Print cancelled : Impression annulée
+Print Document : Imprimer le document
+Print event : Imprimer l'événement
+Priority : Priorité
+Private : Privé
+Problems encountered exporting files.\n Some files could not be exported. Please open  to view any exported %folder% files. : Problèmes rencontrés en exportant les fichiers.\n Certains fichiers n’ont pas pu être exportés. Prière d’ouvrir pour afficher les fichiers %folder% exportés.
+Problems encountered exporting files.\n Some files could not be exported. Please open %folder% to view any exported files. : Problèmes rencontrés en exportant les fichiers.\n Certains fichiers n’ont pas pu être exportés. Prière d’ouvrir le %folder% pour afficher les fichiers exportés.
+Process id : ID du processus
+Processing request. Please wait : Traitement de la demande. Prière d’attendre
+Promote release : Promouvoir la publication
+Prompt : Invite
+properties : Propriétés
+Properties : Propriétés
+Public Panels : Panneaux publics
+Published documents. : Documents publiés.
+Punctuated at thousands : Ponctué aux milliers
+Purpose/Description : Objectif/Description
+Radio button : Bouton radio
+Radio Button Properties : Propriétés du bouton radio
+Read Only : Lecture seule
+Read/Edit Access : Accès Lire/Modifier
+Read/Edit Access Tab : Onglet Accès Lire/Modifier
+Readers : Lecteurs
+Readers Can See Drafts : Les lecteurs peuvent voir les brouillons
+Reading : Lisant
+Reading spreadsheet data. Please wait : Lecture des données du tableur électronique. Veuillez attendre
+Realm : Domaine
+Recipient : Destinataire
+Recipients : Destinataires
+Record count : Nombre d'enregistrements
+Records Manager Express Integration : Intégration expresse de gestionnaire d’enregistrements
+Records Manager(s) : Gestionnaire(s) d’enregistrements
+Recycle Bin retentions : Éléments dans la corbeille
+Redirect : Rediriger
+Reference periods to : Périodes de référence de
+Refresh : Rafraîchir
+Refresh view : Affichage rafraîchi
+Related Document Types : Types de documents liés
+Related Documents : Documents associés
+Related Email & Links : Courriel et liens associés
+Related Email : Courriel associé
+Related Links : Liens associés
+Release as version : Publier comme version
+Release button label : Publier le texte du bouton
+Release Document : Publier le document
+Release Document(s) : Publier le(s) document(s)
+Release Document button : Publier le bouton du document
+Released : Publié
+Released Date : Date de publication
+releases in the version stream (discarded drafts are not counted) : Publications dans la version stream (les brouillons rejetés ne sont pas comptés)
+Remove : Retirer
+Remove Adminstrator Role? : Retirer le rôle administrateur?
+Remove Files : Retirer les fichiers
+Remove from current folder : Retirer du dossier actuel
+Remove Selected Names : Retirer les noms sélectionnés
+Remove sharing information? : Retirer l’information de partage ?
+Remove Subscribers : Retirer les abonnés
+Remove widget denied. : Retrait du widget refusé.
+Remove widget. : Retirer le widget.
+Remove Widget? : Retirer le widget ?
+Remove/Delete Panel : Retirer/Supprimer le panel
+Rename : Renommer
+Renaming of this folder has been disabled in the folder properties. : Le changement de nom de ce dossier a été désactivé dans ses propriétés.
+Repeat every : Répéter chaque
+Request acknowledgement : Demander un accusé de réception
+Request response : Demander une réponse 
+Require PDF Creator to be installed for document comparison : Demander l’installation de PDF Creator pour comparaison de documents
+Response Requested : Réponse demandée
+Resrict who can see this folder and its subfolders. Folder Authors and Editors listed above always have access. : Limiter ceux qui peuvent voir ce dossier et ses sous-dossiers. Les auteurs et les réviseurs du dossier listés ci-dessus ont toujours accès.
+Restict read access to : Limiter l’accès en lecture
+Restore : Restaurer
+Restore Selected : Restaurer sélectionné
+Restore Selected Documents : Restaurer les documents sélectionnés
+Restoring view state. Please wait : Restauration de l'état de visualisation. Veuillez attendre
+Restric Draft : Limiter l'ébauche
+Restrict document types: Limiter les types de documents
+Restrict Printing : Limiter l’impression 
+Restrict readers to authors list : Limiter les lecteurs à la liste d’auteurs
+Restrict Readers to Authors list above : Limiter les lecteurs à la liste d’auteurs ci-dessus
+Restrict who can create documents in this folder. Folder Editors listed above can always create documents. : Limiter ceux qui peuvent créer des documents dans ce dossier. Les réviseurs du dossier listés ci-dessus peuvent toujours créer des documents.
+Restrict who can delete documents : Limiter ceux qui peuvent supprimer des documents 
+Restrict who can delete documents in this folder. : Limiter ceux qui peuvent supprimer des documents dans ce dossier.
+Restriction limiting access to draft documents to document editors : Restriction limitant l’accès aux brouillons aux réviseurs du document
+RestrictLive Drafts : Brouillons RestrictLive 
+Results perspective : Perspective de résultats
+Retract Release : Retirer la publication
+Retract release : Retirer la publication 
+Retract version? : Retirer la version ?
+Retrieving data from the server. Please wait : Retrait des données du serveur. Prière d’attendre
+Retrieving records. Please wait : Extraction des enregistrements. Veuillez attendre
+Retrieving XML. Please wait : Extraction de XML. Veuillez attendre
+Return current document to draft state : Retourner le document actuel à l’état de brouillon
+Retype password : Retaper le mot de passe
+Review : Révision
+Review button label : Texte du bouton de révision
+Review Cycle : Cycle de révision
+Review cycle : Cycle de révision
+Review every : Réviser chacun(e)
+Review Period - 'Repeat every' value : Période de révision - valeur « Répéter chacun(e)»
+Review period : Période de révision
+Review Policies : Réviser les politiques
+Review Policy : Réviser une politique
+Reviewers : réviseurs
+Right : Droite
+Right for authors to create revisions of documents they have not authored : Droits pour les auteurs de créer des révisions de documents qu’ils n’ont pas écrits
+Rows : Rangées
+Run archiving tasks at : Exécuter des tâches d’archivage à
+Run cleanup tasks at : Exécuter des tâches de nettoyage à
+Run lifecycle and notification tasks at : Exécuter un cycle de vie et des tâches de notification à
+Save : Enregistrer
+Save and Close : Enregistrer et quitter
+Save and Close button : Bouton Enregistrer et quitter
+Save as new perspective : Enregistrer comme nouvelle perspective
+Save Forward As : Enregistrer Transférer comme
+Save Forwards : Enregistrer les transferts
+Save Perspective : Enregistrer la perspective
+Saving the document : Enregistrer le document
+Scheduled processes : Processus planifiés
+Search : Recherche
+Search Bar : Barre de recherche
+Search Deleted : Recherche supprimée
+Search Field : Champ de recherche
+Search for : Rechercher
+Search in : Rechercher dans
+Search Results : Résultats de la recherche
+Search Saved : Recherche enregistrée
+Search Trail : Piste de recherche
+search value must be a number. : La valeur de recherche doit être un chiffre.
+search value must be a valid date. Please use date selection buton next to the field. : La valeur de recherche doit être une date valide. Prière d’utiliser le bouton de sélection de dates à côté du champ.
+Secondary lock server : Serveur secondaire verrouillé
+Section label : Label de section
+Section Label : Label de section
+Section order : Ordre des sections
+Section style : Style des sections
+Security : Sécurité
+Select "None" when re-ordering choices. : Sélectionner « Aucun » en réorganisant les choix.
+Select : Sélectionner
+Select a built-in embedded form or type the name of your custom embedded form. : Sélectionner un formulaire intégré ou taper le nom de votre formulaire intégré personnalisé.
+Select a layout style : Sélectionner un style de mise en page
+Select a Widget : Sélectionner un widget
+Select all : Sélectionner tout
+Select All : Sélectionner tout
+select criteria : sélectionner les critères
+Select Document Type : Sélectionner le type de document
+Select font : Sélectionner la police
+Select Names : Sélectionner les noms
+Select people and/or groups. : Sélectionner les personnes et/ou les groupes.
+Select search criteria : Sélectionner les critères de recherche
+Select the Applicable Document Types : Sélectionner les types de documents applicables
+Select the Applicable Libraries : Sélectionner les bibliothèques applicables
+Select the document type above to see its description. : Sélectionner le type de document ci-dessus pour voir sa description
+Select the options to use for exporting the folder contents. : Sélectionner les options pour exporter les contenus du dossier.
+Select values : Sélectionner les valeurs
+Select whether to include/exclude files based on extension : Sélectionner l’inclusion ou l’exclusion de fichiers selon l’extension
+Selected : Sélectionné
+Selected document types : Types de document sélectionnés
+Selected documents : Documents sélectionnés
+Selection criteria : Critères de sélection
+Selection Type : Type de sélection
+Send : Envoyer
+Send Email Notification : Envoyer une notification d’e-mail
+Sender : Expéditeur
+Sep : Septembre
+Separate entries with comma or semicolon. : Séparer les entrées par une virgule ou un point-virgule.
+Serial : Série
+Server : Serveur
+Server and File Paths : Chemins de serveur et de fichier
+Server Web Path is incorrect. : Le chemin Web du serveur est inexact.
+Set as default for current folder : Définir le dossier actuel par défaut
+Set as default in this library : Définir par défaut dans cette bibliothèque
+Set Status : Définir l’état
+Settings : Paramètres
+Setup Files and License Keys : Fichiers de configuration et clés de licence
+Setup information page : Page d’information sur la configuration
+Share current panel. : Partager le panel courant.
+Share Panel : Partager le panel
+Share panel denied. : Refus du partage du panel.
+Share this Panel : Partager ce panel
+Share with : Partager avec
+Shared : Partagé
+Show : Montrer
+Show blank entries as zeroes : Montrer les entrées vierges comme zéros
+Show Details Description : Montrer la description des détails
+Show User help : Montrer l’aide aux utilisateurs
+Since parent folder has read restrictions, you cannot completely remove read restrictions from the current folder. : Comme le dossier parent a des restrictions de lecture, vous ne pouvez pas retirer ces restrictions du dossier actuel.
+Single : Simple
+Size : Taille
+Skip first review if it falls within : Sauter la première révision si elle correspond à
+Sorry, no names were found to turn into SameTime links. : Désolé, aucun nom trouvé à convertir en liens SameTime.
+Sorry, that panel is already on your Dashboard.  Please select a different panel. : Désolé, ce panel est déjà sur votre tableau de bord.  Prière de sélectionner un autre panel.
+Sorry, You do not have access to change this panel. : Désolé, vous n’êtes pas autorisé à changer ce panel.
+Sort : Trier
+Sort ascending : Tri ascendant
+Sort descending : Tri descendant
+Sorted : Trié
+Source file URL : URL du fichier source
+Specify who can modify folder properties in addition to editors of any folders above in the hierarchy. Click here to see the names of inherited editors. : Préciser qui peut modifier les propriétés du dossier en plus des réviseurs des dossiers ci-dessus dans la hiérarchie. Cliquer ici pour voir les noms des réviseurs héritiers
+Standard document : Document standard
+Start : Début
+Start type in search box. : Commencer à taper dans la case de recherche.
+Start typing application name : Commencez à taper le nom de l'application
+Start workflow button : Bouton de démarrage du flux de travaux
+Starting from : Commençant depuis
+starts with : Commence par
+Startup page : Page de démarrage
+Starup page : Page de démarrage
+Status : État
+Status Bar : Barre d’état
+Step ID : ID d’étape
+Step name : Nom de l’étape
+Step type : Type d’étape
+Strict Versioning : Versionnage strict
+String of PHP files to be included before opening document (COMING SOON). : Chaîne de fichiers PHP à inclure avant d’ouvrir le document (à paraître bientôt).
+String of PHP files to be included before save section (COMING SOON). : Chaîne de fichiers PHP à inclure avant d’enregistrer la section (à paraître bientôt).
+String value or PHP script enclosed in "<? ?>" that returns a string. "Release Document" will be used if left blank. Available objects are $docova and $user. : Valeur de chaîne ou script PHP compris dans "<? ?>" qui renvoie à une chaîne. "Publier le document" sera utilisé si laissé vierge. Les objets disponibles sont $docova et $user.
+String value or PHP script enclosed in "<? ?>" that returns a text string; available objects are $docova and $user. : Valeur de chaîne ou script PHP compris dans "<? ?>" qui renvoie à une chaîne de texte; Les objets disponibles sont $docova et $user.
+Subform saved. : Sous-formulaire enregistré.
+Subforms : Sous-formulaires
+Subject : Objet
+Subject default label text : Texte du label par défaut de l’objet
+Subject default value : Valeur par défaut de l’objet
+Subject input translation : Traduction de l’entrée de l’objet
+Subject line : Ligne d’objet
+Subject/Title : Objet/Titre
+Submit for review? : Soumettre pour examen?
+Subscribe : S’abonner
+Subscribed Libraries : Bibliothèques abonnées
+Subscriber Name : Nom de l’abonné
+Subscription Restrictions : Restrictions aux abonnements
+Subscriptions : Abonnements
+Suffix : Suffixe
+SuperCookie Error : Erreur SuperCookie
+Superseded : Remplacé
+Switch Style : Changer de style
+Sync Subfolders : Synchroniser les sous-dossiers
+System : Système
+System Mail Message Template : Modèle de message du courrier électronique du système
+System message sender name will be used if empty. : Le nom de l’expéditeur du message sera utilisé si vierge.
+System Messages : Messages du système
+System Tag Search Cloud columns can not be modified. For more info please contact system administrator : Les colonnes du nuage de recherche de mots-clés du système ne peuvent pas être modifiées. Pour plus d’information, contacter l’administrateur du système
+Tab name : Nom de l’onglet
+Table : Tableau
+Table Properties : Propriétés du tableau
+Tag Cloud : Nuage des mots-clés
+Tags : Mot-clés
+Tasks : Tâches
+Template File : Modèle
+Template file attachment : Pièce jointe au modèle
+Template file type : Type de modèle
+Template key : Touche du modèle
+Template name : Nom du modèle
+Template Name : Nom du modèle
+Template type : Type de modèle
+Template Version : Version du modèle
+Templates : Modèles
+text : texte
+Text : Texte
+Text entry type : Type de saisie de texte
+Text label : Label de texte
+Textarea : Zone de texte
+Textarea Properties : Propriétés de la zone de texte
+The : Le
+The currently selected widgets will remain intact if you change the layout. : Les widgets actuellement sélectionnés resteront intacts si vous changez la mise en page.
+The document has been locked for editing by %user% on %lockdate% : Le document a été verrouillé pour révision par %user% le%lockdate%
+The document has been locked on %lockdate% by %locker% on server %server% . : Le document a été verrouillé le %lockdate% par %locker% sur le serveur %server%.
+The document updates done on %modifydate% by %modifier% on server %server% have not yet replicated to your server. : Les mises à jour du document faites le %modifydate% par %modifier% sur le serveur %server% n’ont pas été dupliquées sur votre serveur.
+The field must contain a value that corresponds to the following list : Le champ contient une valeur qui correspond à la liste suivante
+The following editors of higher level folders can manage this folder : Les réviseurs suivants de dossiers de niveau élevé peuvent gérer ce dossier
+The following fields did not pass the validation : Les champs suivants n’ont pas passé la validation
+The information provided cannot be resolved as a Notes doclink or Web URL : L'information fournie ne peut pas être résolue en notes doclink ou en URL Web
+The number of cells does not match the number of fields. : Le nombre de cellules ne correspond pas au nombre de champs.
+The selected document could not be accessed.\nIt has most likely been deleted. : Impossible d’accéder au document SUIVANT.\nIl a très probablement été supprimé.
+The selected related document has been Deleted. : Le document lié sélectionné a été supprimé.
+The selected widget is already on this panel.  Please select a different widget. : Le widget sélectionné est déjà sur ce panel.  Prière de sélectionner un autre widget.
+The Server Web Path on the Server and File Paths tab is blank.  Please provide a value. : Le chemin du serveur Web sur le serveur et sur l’onglet des chemins de fichier est vierge.  Prière de fournir une valeur.
+The temporary working folder could not be deleted. Please check that all related documents have been closed and select Retry. : Le fichier de travail temporaire ne peut pas être sélectionné. Veuillez vérifier que tous les documents liés sont fermés et sélectionnez Essayer de nouveau.
+There are no documents to filter. : Il n’y a pas de documents à filtrer
+There are no documents to filter. : Il n’y a pas de documents à filtrer.
+There are no steps that can be deleted. : Il n'y a aucune étape à supprimer.
+There are no workflow processess available for this document. : Aucun flux de travaux disponible pour le moment.
+There is no mail in your inbox. : Il n'y a aucun courriel dans votre boîte de réception.
+thingFactory : thingFactory
+This document has version control and its workflow has completed. \nYou can not check-out files.  Please create a new version if required. : Ce document est doté d'un contrôle de versions et son flux de travaux est terminé. \nVous ne pouvez pas extraire les fichiers.  Veuillez créer une nouvelle version, au besoin.
+This is a root level folders hence it does not inherit any editors. : C’est un fichier niveau racine, par conséquent il ne peut pas hériter d’éditeurs.
+This panel is : Ce panel est
+This process might take several minutes to finish so please be patient while this operation is in progress. : Ce processus peut nécessiter plusieurs minutes avant de se terminer, veuillez être patient pendant l'exécution de cette opération.
+This process might take several minutes to finish so please be patient while this operation is in progress.\n\nWould you like to continue? : Ce processus pourrait prendre plusieurs minutes avant de terminer, prière d’être patient pendant que cette opération est en cours.\n\nDésirez-vous poursuivre ?
+Thumbnail Height : Hauteur de la miniature
+Thumbnail Width : Largeur de la miniature
+Time : Heure
+Title : Titre
+to : vers
+To : Vers
+Tool Bar : Barre d’outils
+Tools : Outils
+Top Banner : Bandeau en haut de page
+Total : Total
+Type : Type
+Type Key : Clé du type
+Unable to acces template file. : Impossible d'accéder au modèle de fichier.
+Unable to access Excel object. : Impossible d'accéder à l'objet Excel.
+Unable to access file system object. : Impossible d’accéder à l’objet système du fichier.
+Unable to access Internet Explorer object. : Impossible d'accéder à l'objet Internet Explorer.
+Unable to access Power Point object. : Impossible d'accéder à l'objet PowerPoint.
+Unable to access shell object. : Impossible d'accéder à l'objet coquille.
+Unable to access template file. : Impossible d'accéder au modèle de fichier.
+Unable to access the local Word Application. : Impossible d'accéder à l'application Word locale.
+Unable to access windows script network object. : Impossible d’accéder à l’objet réseau de Windows script.
+Unable to access windows script network object. : Impossible d’accéder à l’objet réseau de Windows script.
+Unable to access windows script shell object. : Impossible d’accéder à l’objet coquille de Windows script.
+Unable to access windows script shell object. : Impossible d’accéder à l’objet coquille de Windows script.
+Unable to create bookmark in the same folder as the source document. Please choose an alternate folder. : Impossible de créer un signet dans le même dossier que le document source. Prière de choisir un autre dossier.
+Unable to create bookmark in the same folder as the source document. Please choose an alternate folder. : Impossible de créer un signet dans le même dossier que le document source. Prière de choisir un autre dossier.
+Unable to create Excel objects. : Impossible de créer des objets Excel.
+Unable to create folder : Impossible de créer un dossier
+Unable to create temporary folder.  Print cancelled : Impossible de créer un dossier temporaire.  Impression annulée
+Unable to create temporary folder. Print cancelled. : Impossible de créer un dossier temporaire. Impression annulée.
+Unable to delete folder : Impossible de supprimer un fichier
+Unable to launch Microsoft Word object. : Impossible de lancer un objet Microsoft Word.
+Unable to locate file : Impossible de trouver le fichier
+Unable to open folder. The requested folder could not be opened. : Impossible d’ouvrir un dossier. Le dossier demandé ne peut pas être ouvert.
+Unable to run document comparison.  PDF Creator is not installed. : Impossible d’exécuter la comparaison de document.  PDF Creator n’est pas installé.
+Unable to run document comparison. PDF Creator is not installed. : Impossible d’exécuter la comparaison de document. PDF Creator n’est pas installé.
+Unable to update SuperCookie (%cookie%)\n Please contact Administrator. : Impossible de mettre à jour SuperCookie (%cookie%)\n Prière de contacter l’administrateur.
+Unable to update SuperCookie : Impossible de mettre à jour le SuperCookie
+Underline : Souligner
+Unlock : Déverrouiller
+Unselected : Non sélectionné
+Unsubscribe : Se désabonner
+Update : Mettre à jour
+Update Bookmarks to Latest Version : Mettre à jour les signets à la version la plus récente
+Update current perspective : Mettre à jour la perspective actuelle
+Update Design : Mise à jour
+Update full text index when file import is completed : Mettre à jour l’index complet du texte lorsque l’importation du fichier est terminée
+Update Library Design : Mettre à jour la conception de la bibliothèque
+Update View Columns. : Mettre à jour les colonnes de visualisation.
+Updating checked out file list from the server. Please wait : Mise à jour de la liste des fichiers extraits à partir du serveur. Veuillez attendre...
+Updating checked out file list on the server. Please wait : Mise à jour de la liste des fichiers extraits dans le serveur. Veuillez attendre...
+Updating folder and document properties. Please wait : Mise à jour des propriétés du dossier et du document. Prière d’attendre
+Updating full text search index. Please wait : Mise à jour de l’index de la recherche plein texte. Prière d’attendre
+Updating library design. Please wait : Mise à jour de la conception de la bibliothèque. Prière d’attendre
+Uploader Pro : Uploader Pro
+Use : Utiliser
+Use as default document workflow if none specified : Utiliser comme flux de travaux par défaut du document si aucun n’est spécifié
+Use DOCOVA for user authentication : Utiliser DOCOVA pour l’authentification de l’utilisateur
+Use jQuery onDomReady : Utiliser jQuery onDomReady
+Use LDAP/AD for user authentication : Utiliser LDAP/AD pour l’authentification de l’utilisateur
+Use Widget : Utiliser le widget
+User : Utilisateur
+User Comment : Commentaire de l’utilisateur
+User Experience : Expérience d’utilisateur
+User Experience Attributes : Attributs de l’expérience d’utilisateur
+User ID : ID d’utilisateur
+User Profile : Profil utilisateur 
+User Profile Creation : Création du profil utilisateur
+User Profiles : Profils utilisateur
+User Role : Rôle d’utilisateur
+User selects version : L’utilisateur sélectionne la version
+User Settings : Paramètres d’utilisateur
+User Theme : Thème d’utilisateur
+Username : Nom d’utilisateur
+Users should not be accessing the libraries while this operation is in progress. : Les utilisateurs ne doivent pas accéder aux bibliothèques tant que cette opération est en cours.
+Uses SSL? : Utilise SSL ?
+Validation function could not be executed due to the following error : La fonction de validation ne peut pas être exécutée à cause de l’erreur suivante
+Value : Valeur
+Value sum : Somme des valeurs
+Version : Version
+Version History : Historique des versions
+Versioning : Contrôle des versions
+Versioning options : Options de versionnage
+View : Afficher
+View Column Settings : Afficher les paramètres de colonnes
+View Columns : Afficher les colonnes
+View Manager Hierarchy : Afficher la hiérarchie des gestionnaires
+View Options Bar : Afficher la barre des options
+Viewing the document : Affichage du document
+Visibility : Visibilité
+Web Bookmark : Signet Web
+Web components and desktop client : Composants Web et ordinateur client
+Web components only : Composants Web seulement
+Web Path : Chemin du Web
+WebQueryOpen event : Événement WebQueryOpen
+WebQuerySave event : Événement WebQuerySave
+week(s) : semaine(s)
+When a new version is created include all Related Email links? : Lorsqu’une nouvelle version est créée, inclure tous les liens de courriel associés ?
+When a new version is created include all Related Links? : Lorsqu’une nouvelle version est créée, inclure tous les liens associés ?
+When a new version is created, copy links for the following document types : Lorsqu’une nouvelle version est créée, copier les liens pour les types de documents suivants
+When applying changes, copy the following settings to all subfolders of the current folder : En appliquant les changements, copier les paramètres suivants dans tous les sous-dossiers du dossier en cours.
+When library selected : Quand la bibliothèque sélectionnée
+When linking to one or more documents, cross link automatically, creating links to the source document in the target document simultaneously . : Lors de la liaison à un ou plusieurs documents, établir automatiquement des liaisons croisées, en créant simultanément des liens sur le document source et le document cible.
+When linking to one or more documents, linked files option allows the attachments in related documents to be launched when the main file is viewe/edited. Allows for the use of embedded/linked content within Office documents (eg. Excel, Word, Powerpoint). : Lors de la liaison à un ou plusieurs documents, l’option de fichiers liés permet de joindre des pièces dans les documents associés à envoyer lorsque le fichier principal est affiché ou modifié. Permet l’utilisation de contenu lié/intégré dans les documents Office (p. ex. Excel, Word, PowerPoint).
+When related document has newer version : Quand le document associé a une nouvelle version
+whenever a comment is entered : chaque fois qu’un commentaire est saisi 
+Who : Qui
+Who can create folders at the library root level? : Qui peut créer des dossiers au niveau racine de la bibliothèque ?
+Width : Largeur
+Workflow : Flux de travaux
+Workflow buttons visibility : Visibilité des boutons du flux de travaux
+Workflow Cancelled : Flux de travaux annulé
+Workflow on after release function could not be executed due to the following error : La fonction de mise en marche du flux de travaux après publication ne peut pas être exécutée à cause de l’erreur suivante
+Workflow on approve function could not be executed due to the following error : La fonction de mise en marche du flux de travaux autorisée ne peut pas être exécutée à cause de l’erreur suivante
+Workflow on before release function could not be executed due to the following error : La fonction de mise en marche du flux de travaux avant publication ne peut pas être exécutée à cause de l’erreur suivante
+Workflow on complete function could not be executed due to the following error : La fonction de mise en marche du flux de travaux terminée ne peut pas être exécutée à cause de l’erreur suivante
+Workflow on deny  function could not be executed due to the following error : La fonction de mise en marche du flux de travaux refusée ne peut pas être exécutée à cause de l’erreur suivante
+Workflow on start function could not be executed due to the following error : La fonction de mise en marche du flux de travaux commencée ne peut pas être exécutée à cause de l’erreur suivante
+Workflow Process Settings : Paramètres du traitement du flux de travaux
+Workflow Processes : Traitements du flux de travaux
+Workflow Start : Démarrage du flux de travaux
+Workflow Step Complete : Étape du flux de travaux terminée
+Workflow Step Paused : Étape du flux de travaux suspendue
+Workflow Step Settings : Paramètres de l’étape du flux de travaux
+Workflow validation function could not be executed due to the following error : La fonction de validation du flux de travaux ne peut pas être exécutée à cause de l’erreur suivante
+Working Folder Busy : Fichier de travail occupé
+Workspace : Espace de travail
+Would you like to close your browser window? : Désirez-vous fermer la fenêtre de votre navigateur?
+Would you like to continue? : Désirez-vous continuer?
+Would you like to create a Bookmark entry for the current document? : Désirez-vous créer un signet pour le document actuel?
+Would you like to create a Bookmark entry for the highlighted document? : Désirez-vous créer un signet pour le document en surbrillance?
+Would you like to save the changes to this document? : Désirez-vous enregistrer les changements pour ce document ?
+XML Node cannot be empty. : Le nœud XML ne peut pas être vide.
+XML NodeName : XML NodeName
+xmlNode : xmlNode
+year(s) : année(s)
+Yes : Oui
+You and the folder managers can always edit this document. : Vous ainsi que les gestionnaires du dossier pouvez toujours modifier de document.
+You are about to archive %entries% document(s).  Are you sure? : Vous êtes sur le point d’archiver les %entries% document(s).  Êtes-vous certain ?
+You are about to archive : Vous êtes sur le point d’archiver 
+You are about to archive current document.  Are you sure? : Vous êtes sur le point d’archiver le document actuel.  Êtes-vous certain ?
+You are about to backtrack the workflow.  Are you sure? : Vous êtes sur le point de retourner le flux de travaux en arrière.  Êtes-vous certain?
+You are about to cancel the workflow. This action will delete the current workflow and return this document to Draft state.\r\rDo you want to continue? : Vous êtes sur le point d'annuler le flux de travaux. Cette action supprimera le flux de travaux actuel et remettra ce document à son état de brouillon.\r\rDésirez-vous continuer?
+You are about to Check-out the following files : Vous êtes sur le point d'extraire les fichiers suivants
+You are about to delete the current Saved Search named %searchname%.  Are you sure? : Vous êtes sur le point de supprimer la recherche enregistrée actuelle nommée %searchname%.  Êtes-vous certain ?
+You are about to deny the approval.  Are you sure? : Vous êtes sur le point de refuser l'approbation.  Êtes-vous certain?
+You are about to pause the workflow. This action will stop past due reminders.\r\rAre you sure? : Vous êtes sur le point de suspendre le flux de travaux. Cette action interrompra les rappels échus.\r\rÊtes-vous certain?
+You are about to reactivate discarded draft document.\rAre you sure? : Vous êtes sur le point de réactiver un brouillon rejeté.\rÊtes-vous certain ?
+You are about to remove a widget from this panel.  Are you sure? : Vous êtes sur le point de retirer un widget de ce panel.  Êtes-vous certain ?
+You are about to remove Administrator Access for yourself.  Are you sure? : Vous êtes sur le point de retirer votre accès administrateur.  Êtes-vous certain?
+You are about to retract a published document.\rAre you sure? : Vous êtes sur le point de de retirer un document publié.\rÊtes-vous certain ?
+You are about to retract a released document.  Please select retract options : Vous êtes sur le point de retirer un document publié.  Prière de sélectionner les options de retrait
+You are about to start workflow process for this document.  Are you sure? : Vous êtes sur le point de commercer un traitement du flux de travaux pour ce document.  Êtes-vous certain?
+You are changing this panel to be Private. Any sharing options will be cleared. Are you sure? : Vous êtes en train de rendre privé ce panel. Toutes les options de partage seront effacées. Êtes-vous certain ?
+You are not authorized to access this document. : Vous n’êtes pas autorisé à accéder à ce document.
+You are not authorized to edit this document. : Vous n’êtes pas autorisé à modifier ce document.
+You are not authorized to open this document, or the document could not be found : Vous n’êtes pas autorisé à ouvrir ce document, ou le document est introuvable
+You are not permitted to print this document : Vous n’êtes pas autorisé à imprimer ce document
+You are requesting to delete the panel named %paneltitle% from your Dashboard. Are you sure? : Vous demandez de supprimer un panel nommé %paneltitle% de votre tableau de bord. Êtes-vous certain ?
+You can change the layout style of a panel at any time. : Vous pouvez changer le style de mise en page d’un panel en tout temps
+You can use either your own internal LDAP/AD directory to authenticate the users, or you can use DOCOVA to authenticate the users, or you can use both.: Vous pouvez utiliser soit le répertoire interne LDAP/AD soit DOCOVA pour authentifier les utilisateurs, ou utiliser les deux. 
+You cannot modify LDAP directory members. : Vous ne pouvez pas modifier les membres du répertoire LDAP
+You cannot modify the current document until the latest changes are available to you. Please try again in few minutes. : Vous ne pouvez pas modifier le document actuel avant d’avoir accès aux changements les plus récents. Prière de réessayer dans quelques minutes.
+You cannot select the current folder. : Vous ne pouvez pas sélectionner le dossier actuel 
+You currently have no pending Activities to display. : Vous n’avez actuellement aucune activité en attente à afficher.
+You do not have sufficient rights to create documents in the selected folder. Please choose an alternate folder. : Vous n’avez pas les droits suffisants pour créer des documents dans le dossier sélectionné. Prière de choisir un autre dossier
+You do not have sufficient rights to create documents in the selected folder. Please choose an alternate folder. : Vous n’avez pas les droits suffisants pour créer des documents dans le dossier sélectionné. Prière de choisir un autre dossier.
+You have error : Vous avez commis une erreur
+You have insufficient access to create a root folder. : Votre accès est insuffisant pour créer un dossier racine.
+You have insufficient access to cut this folder. : Votre accès est insuffisant pour couper ce dossier.
+You have insufficient access to delete this folder. : Votre accès est insuffisant pour supprimer ce dossier.
+You have insufficient access to paste into this folder. : Votre accès est insuffisant pour coller dans ce dossier.
+You have no checked out files associated with this document. : Vous n'avez pas extrait les fichiers associés à ce document.
+You have reached the maximum number of Document Types allowed for this edition of DOCOVA. : Vous avez atteint le nombre maximum de types de document permis pour cette édition de DOCOVA.
+You must assign this Action to the Document Owner or select one or more people for the Recipient List. : Vous devez assigner cette action au propriétaire du document ou sélectionner une ou plusieurs personnes pour la liste des destinataires.
+You must choose an Action : Vous devez choisir une action
+You must enter the numeric values fo major and minor version number. : Vous devez saisir les valeurs numériques des numéros des versions majeures et mineures.
+You must have at least one facet map field. : vous devez avoir au moins un mappage de facettes
+You must have at least one facet map field. : Vous devez avoir au moins un mappage de facettes.
+You must select participant names for all steps of the document workflow. : Vous devez sélectionner les noms des participants pour toutes les étapes du flux de travaux d'un document.
+You must select the major or minor version increment. : Vous devez sélectionner l'incrémentation des versions majeures et mineures.
+You selected the current document.  Please select a different version. : Vous avez sélectionné le document actuel.  Prière de sélectionner une autre version.
+You, folder managers and Additional Editors can always read this document. : Vous, ainsi que les gestionnaires du dossier et les réviseurs supplémentaires, pouvez toujours lire ce document 
+Your Libraries : Vos bibliothèques
+Your search was deleted. : Votre recherche a été supprimée.
+Your search was saved. : Votre recherche a été enregistrée.
+Your session has timed out.  Please press F5 to login again. : Votre session est expirée.  Appuyer sur F5 pour vous reconnecter.
+
+#New translations starting from workspace
+Welcome to your Workspace : Bienvenue dans votre espace de travail
+"Getting Started with the DOCOVA Workspace!" : "Démarrer avec l'espace de travail DOCOVA!"
+"The DOCOVA Workspace is where you can add and organize your DOCOVA Applications. You can add as many slider Panels as you want and add Applications to those Panels. If you have the right access control, you can also create applications here quickly and easily" : "L'espace de travail DOCOVA est l'endroit où vous pouvez ajouter et organiser vos applications DOCOVA. Vous pouvez ajouter autant de panneaux de curseur que vous le souhaitez et ajouter des applications à ces panneaux. Si vous avez le bon contrôle d'accès, vous pouvez également créer des applications ici rapidement et facilement."
+"To get you started, the <b>\"DOCOVA Dashboard\", \"DOCOVA Library Repository\"</b> and <b>\"DOCOVA Federated Search\"</b>have been automatically added to your Workspace." : "Pour commencer, le <b>\"Tableau de bord DOCOVA\", \"Référentiel de bibliothèques DOCOVA\"</b> et <b>\"Recherche fédérée DOCOVA\"</b> ont été automatiquement ajoutés à votre espace de travail." 
+"To add more Applications and Panels click on the \"Options\" button provided at the top right of your Workspace." : "Pour ajouter plus d'applications et de panneaux, cliquez sur le bouton \"Options\" situé en haut à droite de votre espace de travail."
+Library Groups : Groupes de bibliothèques,
+System Applications : Applications système
+"Libraries / Library Groups" : "Bibliothèques / Groupes de bibliothèques"
+"There are currently no Library/Library Group available to you." : "Il n’existe actuellement aucune bibliothèque / groupe de bibliothèques à votre disposition."
+There are currently no Applications available to you. : Il n'y a actuellement aucune application disponible pour vous.
+Select an App from the above list. : Sélectionnez une application dans la liste ci-dessus..
+"Select a Library / Library Group from the above list." : "Sélectionnez une bibliothèque / un groupe de bibliothèques dans la liste ci-dessus."
+Nothing selected. : "Rien n'est sélectionné."
+Select an Icon : Sélectionnez une icône
+Select a color : Choisissez une couleur
+Application Type : "Type d'application"
+"Is Template?" : Est le modèle?
+Application key : "Clé d'application"
+Type words here to search : Tapez les mots ici pour chercher
+Application Icon : "Icône d'application"
+Application Icon Color : "Couleur de l'icône d'application"
+Change Workspace Layout : "Changer la disposition de l'espace de travail"
+"Copy What?" : "Copier quoi?"
+Design and documents : Design et documents
+Design only : Conception uniquement
+Inherit from copied application : Hériter d'une application copiée
+Original App : App originale
+Web domain server : Serveur de domaine Web
+Use Template : Utilise le modèle
+Select a template to use : Sélectionnez un modèle à utiliser
+There are currently no Templates available to you. : "Il n'y a actuellement aucun modèle disponible pour vous."
+Specify what to copy : Spécifier quoi copier
+Design changes : Changement de design
+Inherit future template changes : Hériter de futurs changements de modèles
+Application template path : Chemin du modèle d'application
+"Is App?" : "Est l'application?"
+Create App Group : "Créer un groupe d'applications"
+Please select at least one app from left side. : Veuillez sélectionner au moins une application sur le côté gauche.
+Please select at least one app from right side. : Veuillez sélectionner au moins une application à droite.
+Select your app-group to edit : "Sélectionnez votre groupe d'applications à modifier"
+App Group Name : "Nom du groupe d'applications"
+Choose applications to be presented inside panel. : "Choisissez les applications à présenter à l'intérieur du panneau."
+Please select libraries to add. : Veuillez sélectionner les bibliothèques à ajouter.
+Could not update Library Group with one or more of the libraries selected. : Impossible de mettre à jour le groupe de bibliothèques avec une ou plusieurs des bibliothèques sélectionnées.
+Please select libraries to remove. : Veuillez sélectionner les bibliothèques à supprimer.
+Could not update Library Group Libraries with one or more of the libraries selected. : Impossible de mettre à jour les bibliothèques de groupes de bibliothèques avec une ou plusieurs des bibliothèques sélectionnées.
+Library id : ID de la bibliothèque
+There are no libraries available to you at this time. : "Il n'y a pas de bibliothèques disponibles pour vous en ce moment."
+Libraries in this Group : Bibliothèques de ce groupe
+There are currently no Libraries assigned to this Group. Please select one or more libraries above and then click the Add button. : "Il n'y a actuellement aucune bibliothèque assignée à ce groupe. Veuillez sélectionner une ou plusieurs bibliothèques ci-dessus, puis cliquez sur le bouton Ajouter."
+Please provide a Panel name : Prière de fournir un nom pour ce panel.
+Panel Name : Nom du panneau
+Nothing Defined : Rien défini
+Open this App in the DOCOVA App Builder to edit its design and layout. : "Ouvrez cette application dans le générateur d'applications DOCOVA pour modifier sa conception et sa présentation."
+Docova Workspace : Espace de travail Docova
+Change panel layout denied. : Modifier la disposition du panneau refusée.
+Standard Dialog Box : Boîte de dialogue standard
+Standard Sub Dialog Box : Boîte de dialogue standard standard
+Make Copy : Faire une copie
+Manage Libraries : Gérer les bibliothèques
+Delete Application : Supprimer l'application
+DOCOVA Application Builder : Application Builder de DOCOVA
+DOCOVA Administration : Administration de DOCOVA
+DOCOVA User Dashboard : Tableau de bord de l'utilisateur de DOCOVA
+DOCOVA Form Designer : Concepteur de formulaires de DOCOVA
+DOCOVA Libraries Repository : Référentiel de bibliothèques de DOCOVA
+DOCOVA Federated Search : Recherche fédérée de DOCOVA
+Workspace Options : Options de l'espace de travail
+Add an App : Ajouter une application
+Create a New App : Créer une nouvelle application
+Add New Panel : Ajouter un nouveau panneau
+Delete Current Panel : Supprimer le panneau actuel
+Current Panel Properties : Propriétés du panneau actuel
+"Error: There is an error in the code being executed by this outline entry." : "Erreur: Il y a une erreur dans le code en cours d'exécution par cette entrée hiérarchique."
+"Unable to load outline!" : "Impossible de charger le contour!"
+"There was an error while fetching events!" : "Une erreur s'est produite lors de la récupération des événements!"
+Cannot write. : Ne peut pas écrire.
+No rights for update. Parent out of editor scope. : "Aucun droit pour la mise à jour. Parent hors de portée de l'éditeur."
+Start is a milestone. : Le début est un jalon.
+End is a milestone. : La fin est un jalon.
+Task has constraints. : La tâche a des contraintes.
+"Error: Depends upon an open task." : "Erreur: dépend d'une tâche ouverte."
+"Error: Descendant of a closed task." : "Erreur: descendant d'une tâche fermée."
+Task has external dependencies. : La tâche a des dépendances externes.
+Error loading data. A task has been removed. : Erreur lors du chargement des données. Une tâche a été supprimée.
+Error setting dates. : Erreur de fixation des dates.
+Circular reference. : Référence circulaire.
+Task cannot be moved. : La tâche ne peut pas être déplacée.
+A task cannot depend upon an ancestor. : "Une tâche ne peut pas dépendre d'un ancêtre."
+A task cannot depend upon a descendant. : "Une tâche ne peut pas dépendre d'un descendant."
+Invalid Date Format : Format de date invalide
+Task move is to an inconsistent level. : Le déplacement des tâches est à un niveau incohérent.
+The task cannot be closed with an issue open. : La tâche ne peut pas être fermée avec un problème ouvert.
+Please save the project. : Veuillez sauvegarder le projet.
+"Reload Tasks?" : "Recharger des tâches?"
+"This process will overwrite any unsaved changes you have made to the current project.  Do you wish to continue?" : "Ce processus écrasera toutes les modifications non enregistrées que vous avez apportées au projet en cours. Souhaitez-vous continuer?"
+"Not connect.\n Verify Network." : "Pas connecté. \nVérifiez le réseau."
+Requested page not found. : Page demandée non trouvée.
+Internal Server Error : Erreur Interne du Serveur
+Requested JSON parse failed. : "L'analyse JSON demandée a échoué."
+Time out error. : Erreur de temporisation.
+Ajax request aborted. : Demande Ajax abandonnée.
+Uncaught Error. : Erreur non capturée.
+"Saving this project will result in %taskid% documents/tasks being deleted.  Do you wish to continue?" : "Si vous enregistrez ce projet, %taskid% documents / tâches seront supprimés. Souhaitez-vous continuer?"
+Project successfully saved. : Projet enregistré avec succès.
+Errors saving project. : Erreurs d'enregistrement du projet.
+"Full-text Search (incl. Attachments)" : "Recherche en texte intégral (pièces jointes comprises)"
+Clear Search : Effacer la recherche
+Delete Current Saved Search : Supprimer la recherche actuelle sauvegardée
+Filters : Les filtres
+Clear All Filters : Effacer tous les filtres
+Reset Folder Filter : Réinitialiser le filtre de dossier
+Displaying records : Affichage des enregistrements
+First : Premier
+Previous : précédent
+Next : Suivant
+Last : Dernier
+Find : Trouver
+DOCOVA Richtext Editor Help : "Aide de l'éditeur DOCOVA Richtext"
+Write a comment. : Écrire un commentaire.
+Print this document : Imprimer ce document
+"Show/Hide Comments" : Afficher / masquer les commentaires
+"Would you like to save any recent changes?" : "Souhaitez-vous enregistrer les modifications récentes?"
+Schedule : Programme
+Scheduled : Prévu
+Agent Name : Nom d'agent
+Script Library Name : Nom de la bibliothèque de scripts{% endtrans %}
+Enter an Agent name. : "Entrez un nom d'agent."
+Enter an Script Library. : Entrez une bibliothèque de scripts.
+Agent Alias : "Alias de l'agent"
+Enter an Agent name alias. : "Entrez un alias de nom d'agent."
+Agent Type : Type d'agent
+Script Library Type : Type de bibliothèque de script
+Select the language type for the agent : "Sélectionnez le type de langue pour l'agent"
+Select the language type for the script library : Sélectionnez le type de langue pour la bibliothèque de scripts
+Design Replace : Design Remplacer
+Prohibit Design Update : Interdire la mise à jour de la conception
+More than once : Plus d'une fois
+Daily : Quotidien
+Weekly : Hebdomadaire
+Monthly: Mensuel
+Select whether this agent should run on schedule or not : Indiquez si cet agent doit être exécuté selon un calendrier ou non
+Day of Month : Jour du mois
+Week Day : Jour de la semaine
+Sunday : Dimanche
+Monday : Lundi
+Tuesday : Mardi
+Wednesday : Mercredi
+Thursday : Jeudi
+Friday : Vendredi
+Saturday : Samedi
+"Hours/Minutes" : Heures/Minutes
+Hours : Heures
+Minutes : Minutes
+Run agent as : "Exécuter l'agent en tant que"
+Active User : Utilisateur actif
+Database Admin : Administrateur de base de données
+Runtime security level : "Niveau de sécurité d'exécution"
+Do not allow restricted operations : Ne pas autoriser les opérations restreintes
+Allow restricted operations : Autoriser les opérations restreintes
+Allow restricted operations with full admin rights : "Autoriser les opérations restreintes avec tous les droits d'administrateur"
+Insufficient Access : Accès insuffisant
+"Sorry, you have insufficient access to create applications." : "Désolé, vous ne disposez pas d'un accès suffisant pour créer des applications."
+Create a New Application : Créer une nouvelle application
+Create : Créer
+Add an Application : Ajouter une application
+Application Title Empty : Titre de l'application vide
+The Application Title cannot be blank.  Please provide a Title : "Le titre de l'application ne peut pas être vide. S'il vous plaît fournir un titre"
+Application Description Empty : "Description de l'application vide"
+The Application Description cannot be blank.  Please provide a Description : "La description de l'application ne peut pas être vide. S'il vous plaît fournir une description"
+The Application could not be created. : "L'application n'a pas pu être créée."
+An Application with this name already exists.  Please provide a different Application Filename. : "Une application portant ce nom existe déjà. Veuillez fournir un nom de fichier d'application différent."
+"You have not selected an Application from the list. <br><br> Please select and Application." : "Vous n'avez pas sélectionné d'application dans la liste. <br><br> Veuillez sélectionner et application."
+The Application could not be opened in App Builder. : "L'application n'a pas pu être ouverte dans App Builder."
+Create New Application : Créer une nouvelle application
+Open Existing Application : Ouvrir une application existante
+Docova App Builder : Docova App Builder
+"To create a new application, start by clicking the \"Create New Application\" button. To open an existing application that does not appear in the list, click the \"Open Existing App\" button." : "Pour créer une nouvelle application, commencez par cliquer sur le bouton \"Créer une nouvelle application\". Pour ouvrir une application existante qui ne figure pas dans la liste, cliquez sur le bouton \"Ouvrir une application existante\"."
+CSS Name : Nom CSS
+Enter a CSS file name. : Entrez un nom de fichier CSS.
+There was an issue saving the image.  Please contact an Administrator. : "Un problème est survenu lors de l'enregistrement de l'image. Veuillez contacter un administrateur."
+"Invalid file type.  Only jpg, jpeg, gif and png are allowed." : "Type de fichier invalide. Seuls les formats jpg, jpeg, gif et png sont autorisés."
+Add an Image : Ajouter une image
+Image File : "Fichier d'image"
+Filename : Nom de fichier
+File Size : Taille du fichier
+Image preview : Aperçu de l'image
+"Only one file attachment of jpg, gif or png is allowed here" : "Une seule pièce jointe de jpg, gif ou png est autorisée ici"
+Last modified by : Dernière modification par
+Add a new tab : Ajouter un nouvel onglet
+Delete this tab : Supprimer cet onglet
+Select primary icon : Sélectionnez l'icône principale
+Select secondary icon : Sélectionnez l'icône secondaire
+Apply border to all cells : Appliquer une bordure à toutes les cellules
+Reset cell to default : Réinitialiser la cellule aux valeurs par défaut
+Apply padding to all cells : Appliquer un remplissage à toutes les cellules
+Apply color to row cells : "Appliquer une couleur aux cellules d'une ligne"
+Select counter icon : Sélectionnez l'icône du compteur
+Select an application. : Sélectionnez une application.
+Mobile : Mobile
+Numeric : Numérique
+Names : Noms
+Reader : Reader
+Radio : Radio
+"Date/Time" : "Date/heure"
+Label : Label
+CText : CText
+Plain Text : Texte brut
+DOCOVA Editor : Editeur de DOCOVA
+Rich Text : Rich Text
+Button : Bouton
+Image : Image
+Menu : Menu 
+Tabs : Onglets
+Embedded View : Vue intégrée
+Chart : Graphique
+Subform : Sous-formulaire
+Attachments : Pièces jointes
+Section : Section
+Related Emails : Emails associés
+Barcode : Code à barre
+Google Map : Google Map
+Weather : Météo
+Counter Box : Comptoir
+Change Layout : Changer la disposition
+Deleted from archive log status. : "Supprimé de l'état du journal d'archive."
+"$$DOCOVA Script that returns the text string. 'Start Workflow' will be used if left blank." : "$$DOCOVA Script qui renvoie la chaîne de texte. 'Démarrer le flux de travail' sera utilisé s'il est laissé vide."
+Restrict Drafts : Limiter les brouillons
+When a new version is created : Quand une nouvelle version est créée
+Copy all attachments to the new version : Copier toutes les pièces jointes dans la nouvelle version
+Remove all attachments from the new version : Supprimer toutes les pièces jointes de la nouvelle version
+Prompt the user to select which attachments to remove : "Demander à l'utilisateur de sélectionner les pièces jointes à supprimer"
+"Custom hide when $$DOCOVA Script" : "Cacher personnalisé quand $$ DOCOVA Script"
+"$$DOCOVA Script that returns 1 or $$True (hide) or 0 or $$False (show)." : "$$DOCOVA Script renvoyant 1 ou $$True (masquer) ou 0 ou $$False (afficher)."
+Workflow Style : Style de flux de travail
+Basic : De base
+Contemporary : Contemporain
+Custom JS function on the start workflow button click : Fonction JS personnalisée au clic du bouton de flux de travail de démarrage
+Custom JS function on complete review button click : Fonction JS personnalisée en cliquant sur le bouton de vérification complète
+Custom JS function on approve button click : "Fonction JS personnalisée en cliquant sur le bouton d’approbation"
+Custom JS function on deny button click : Fonction JS personnalisée en cliquant sur le bouton de refus
+"$$DOCOVA Script that returns the text string. \"Release Document\" will be used if left blank." : "$$DOCOVA Script qui renvoie la chaîne de texte. \"Document de sortie\" sera utilisé s'il est laissé vide."
+JS Library Name : Nom de JS Library
+Enter a JavaScript file name. : Entrez un nom de fichier JavaScript.
+Insert frame left : Insérer le cadre à gauche
+Insert frame right : Insérer le cadre à droite
+Delete selected frame : Supprimer le cadre sélectionné
+Insert frame above : Insérer le cadre ci-dessus
+Insert frame below : Insérer le cadre ci-dessous
+Saving Layout. One moment : Enregistrer la mise en page. Un moment
+Please select a frame first. : "Veuillez d'abord sélectionner un cadre."
+Processing subscription request. One moment : "Traitement de la demande d'abonnement. Un moment"
+"Subscription(s) created." : Abonnement créé.
+"The Subscription(s) have been created successfully." : Les abonnements ont été créés avec succès.
+"Subscription(s) not created." : "Abonnement (s) non créé (s)."
+"The subscription(s) were not created successfully.<br>Try again or contact the Adminstrator." : "L'abonnement n'a pas été créé avec succès. <br>Réessayez ou contactez l'administrateur."
+Closing Layout : Disposition de clôture
+"Would you like to save the changes to this layout?" : Voulez-vous enregistrer les modifications apportées à cette mise en page?
+"To get started, select a layout from below." : "Pour commencer, sélectionnez une mise en page ci-dessous."
+"To update the properties of a frame within the layout, click on the section and update the properties below." : "Pour mettre à jour les propriétés d'un cadre dans la mise en page, cliquez sur la section et mettez à jour les propriétés ci-dessous."
+Apply : Appliquer
+Layout Properties : Propriétés de la mise en page
+Frame Properties : Propriétés du cadre
+Frameset Properties : Propriétés du jeu de cadres
+Alias : Alias
+Starting layout : Mise en page de départ
+Default layout for application : "Mise en page par défaut pour l'application"
+Frame Name : Nom du cadre
+Default target for links in frame : Cible par défaut pour les liens dans le cadre
+Allow frame resize : Autoriser le redimensionnement du cadre
+Allow frame scroll : Autoriser le défilement du cadre
+Select Content : Sélectionner le contenu
+"Open in tab?" : "Ouvrir dans l'onglet?"
+Tab title : Titre de l'onglet
+Frameset Border : Bordure de cadre
+3D Border : Border 3D
+No Border : Pas de Border
+Border Width : Largeur de la bordure
+"Enter Script/Value" : "Entrer le script/valeur"
+Clear Application. : "Effacer l'application."
+Move Panel : Déplacer le panneau
+Elements : Éléments
+Closing Page : Page de fermeture
+"Would you like to save the changes to this page?" : "Voulez-vous enregistrer les modifications apportées à cette page?"
+Closing Agent : Agent de fermeture
+Closing Scirpt Library : Fermeture de la bibliothèque de scripts
+Undo : Défaire
+Closing Subform : Sous-formulaire de clôture
+"Would you like to save the changes to this subform?" : "Voulez-vous enregistrer les modifications apportées à ce sous-formulaire?"
+Workflow Design Saved : Conception du flux de travail enregistrée
+The workflow design was saved. : La conception du flux de travail a été enregistrée.
+"Error: Please provide a Workflow Name" : "Erreur: Veuillez fournir un nom de flux de travail"
+A workflow with that name already exists. Please use a different name. : Un flux de travail portant ce nom existe déjà. Veuillez utiliser un nom différent.
+"Sorry, you cannot delete Start or Stop steps." : "Désolé, vous ne pouvez pas supprimer les étapes Démarrer ou Arrêter."
+"Sorry, you must have at least one workflow step." : "Désolé, vous devez avoir au moins une étape de workflow."
+Could not delete the workflow step. : "Impossible de supprimer l'étape de flux de travail."
+Save Workflow : Enregistrer le flux de travail
+Closing workflow : Flux de travail de fermeture
+"Would you like to save the changes to this workflow?" : "Souhaitez-vous enregistrer les modifications apportées à ce flux de travail?"
+Add Step : Ajouter une étape
+Delete Step : "Supprimer l'étape"
+Workflow Definition : Définition du flux de travail
+Workflow Name : Nom du flux de travail
+Workflow Description : Description du flux de travail
+Workflow Def Doc Key : Flux de travail Définition Doc Key
+Workflow Design Key : Clé de conception du flux de travail
+Target App : App cible
+Completed when processed by : Terminé lorsque traité par
+All participants : Tous les participants
+Any participant : Tout participant
+At least : Au moins
+"If the number is greater then the number of participants, all will have to complete." : "Si le nombre est supérieur au nombre de participants, tous devront être renseignés."
+"Allow approver to edit document?" : "Autoriser l'approbateur à modifier le document?"
+"Use Text in double quotes or $$DOCOVAScript that returns a text string. 'Complete Review' will be used if left blank." : "Utilisez du texte entre guillemets ou $$DOCOVAScript qui renvoie une chaîne de texte. 'Examen complet' sera utilisé s'il est laissé vide."
+"Use Text in double quotes or $$DOCOVAScript that returns a text string. 'Approve' will be used if left blank." : "Utilisez du texte entre guillemets ou $$DOCOVAScript qui renvoie une chaîne de texte. 'Approuver' sera utilisé s'il est laissé vide."
+"Use Text in double quotes or $$DOCOVAScript that returns a text string. 'Decline' will be used if left blank." : "Utilisez du texte entre guillemets ou $$DOCOVAScript qui renvoie une chaîne de texte. 'Déclin' sera utilisé s'il est laissé vide."
+"Use Text in double quotes or $$DOCOVAScript that returns a text string. 'Release Document' will be used if left blank." : "Utilisez du texte entre guillemets ou $$DOCOVAScript qui renvoie une chaîne de texte. Le 'document de sortie' sera utilisé s'il est laissé vide."
+"Custom hide when $$DOCOVAScript" : "Cacher personnalisé lorsque $$DOCOVAScript"
+"$$DOCOVAScript that returns 1 or $$True (hide) or 0 or $$False (show)" : "$$DOCOVAScript qui renvoie 1 ou $$True (masquer) ou 0 ou $$False (afficher)"
+Actions to perform when the step is being : "Actions à effectuer lorsque l'étape est en cours"
+Activated : Activé
+Stop workflow : Arrêter le flux de travail
+Return to selected step : Retour à l'étape sélectionnée
+Cancel workflow : Annuler le flux de travail
+Paused : En pause
+Cancelled : Annulé
+Delayed : Différé
+If not completed within further : Si non complété dans les prochaines
+Type a new entry or Select from the Names directory. : Tapez une nouvelle entrée ou sélectionnez dans le répertoire Noms.
+New Entry : Nouvelle entrée
+Type a new Role to add for this Application. : Tapez un nouveau rôle à ajouter pour cette application.
+New Role : Nouveau rôle
+"Role names can be alpha numeric with spaces, up to 15 characters." : "Les noms de rôle peuvent être alphanumériques avec des espaces allant jusqu'à 15 caractères."
+Select a Role to remove from the Application. : "Sélectionnez un rôle à supprimer de l'application."
+Roles : Rôles
+Type words here to search icons : Tapez des mots ici pour rechercher des icônes
+Selected Icon : Icône sélectionnée
+App Path : "Chemin de l'application"
+Import Status : Statut d'importation
+Instructions : Instructions
+"Select the path to an existing Lotus Notes/Domino application database in the field above." : "Sélectionnez le chemin d'accès à une base de données d'application Lotus Notes/Domino existante dans le champ ci-dessus."
+"Then, choose the Import button below to import the application to DOCOVA." : "Ensuite, cliquez sur le bouton Importer ci-dessous pour importer l'application dans DOCOVA."
+Import Notes : "Notes d'importation"
+Domino Settings : Paramètres Domino
+DOCOVA Settings : Paramètres DOCOVA
+Service URL : URL du service
+"Host Name/IP" : "Host Name/IP"
+Instance : Instance
+Database : Base de données
+Source App : App source
+Attachments Path : Chemin des pièces jointes
+Error retrieving design elements : Erreur lors de la récupération des éléments de conception
+Element Type : "Type d'élément"
+"Complete!" : "Compléter!"
+Failed to import data : "Échec de l'importation des données"
+Failed to index views : "Échec d'indexation des vues"
+Failed to import ACL : Échec de l'importation de la liste de contrôle d'accès
+Failed to build DocLinks : Échec de la construction de DocLinks
+Importing Data : Importation de données
+Indexing Views : Indexation des vues
+Importing ACL : Importer une ACL
+Building DocLinks : Construire DocLinks
+Select a Template below from which to inherit future design changes when updating the design of this application. : Sélectionnez un modèle ci-dessous duquel hériter des modifications de conception futures lors de la mise à jour de la conception de cette application.
+Select a Template from the above list. : Sélectionnez un modèle dans la liste ci-dessus.
+Pane name : Nom du volet
+Split into : Divisé en
+How many : Combien
+Scrollable : Scrollable
+"Resizable?" : "Redimensionnable?"
+Apply CSS : Appliquer le CSS
+Reset Text : Réinitialiser le texte
+Reset Icon : Icône de réinitialisation
+"Expandable/Collapsible Menu Entry" : "Entrée de menu extensible/pliable"
+"Sorry, you cannot clear the icon for a Menu Entry that is expandable/collapsible.  These items use the expand/collapse icons." : "Désolé, vous ne pouvez pas effacer l'icône d'une entrée de menu pouvant être étendue/réduite. Ces éléments utilisent les icônes Développer/Réduire."
+"Sorry, you cannot change the icon for a Menu Entry that is expandable/collapsible.  These items use the expand/collapse icons." : "Désolé, vous ne pouvez pas modifier l'icône d'une entrée de menu pouvant être étendue/réduite. Ces éléments utilisent les icônes Développer/Réduire."
+Reset : Réinitialiser
+No Menu Entry Selected : Aucune entrée de menu sélectionnée
+"Please select a menu item first, then try adding a new menu item." : "Veuillez d'abord sélectionner un élément de menu, puis essayez d'ajouter un nouvel élément de menu."
+"Please select a menu item first, then try inserting a new menu item" : "Veuillez d'abord sélectionner un élément de menu, puis essayez d'insérer un nouvel élément de menu."
+"Please select a menu item first, then try deleting the item." : "Sélectionnez d'abord un élément de menu, puis essayez de le supprimer."
+"Please select a menu item first, then indent it." : "Veuillez d'abord sélectionner un élément de menu, puis l'indenter."
+"Please select a menu item first, then outdent it." : "Veuillez d'abord sélectionner un élément de menu, puis le surpasser."
+"Please select a menu item first, then move it." : "Sélectionnez d'abord un élément de menu, puis déplacez-le."
+Closing menu : Menu de fermeture
+"Would you like to save the changes to this menu?" : "Voulez-vous enregistrer les modifications dans ce menu?"
+Add Entry : Ajouter une entrée
+Insert Entry : Insérer une entrée
+Delete Entry : Supprimer une entrée
+Indent Entry : Entrée en retrait
+Outdent Entry : Entrée sortante
+Current Menu : Menu actuel
+Menu Name : Nom du menu
+Menu Alias : Alias de menu
+Vertical : Verticale
+"Vertical - Cascade" : "Vertical - Cascade"
+"Vertical - Navigator" : "Vertical - Navigateur"
+"Horizontal - Cascade" : "Horizontal - Cascade"
+Show sub menu indicator : Afficher l'indicateur de sous-menu
+Container Alignment : Alignement du conteneur
+Justified : Justifié
+Menu Key : Touche menu
+Menu Style : Style de menu
+Themed : À thème
+Menu Background : Fond de menu
+Transparent : Transparent
+Menu Hover Color : Menu Hover Couleur
+Menu Border : Bordure de menu
+Menu Padding : Rembourrage De Menu
+Border Color : Couleur de la bordure
+Top : Haut
+Corner Radius : Rayon de coin
+Bottom : Bas
+"Header/Top-Level" : "En-tête/niveau supérieur"
+Sub Header : En-tête
+Font Color : Couleur de la police
+"Line-Height" : Hauteur de la ligne
+Font Size : Taille de la Police
+"Expand/Collapse Icon" : "Icône Développer/Réduire"
+Icon Placement : Placement d'icônes
+Icon Size : Taille de l'icône
+Menu Items : Articles de menu
+Separator Style : Style de séparateur
+Separator Color : Couleur du séparateur
+Menu CSS : Menu CSS
+Click the apply css button to apply any manual changes to the css below. : Cliquez sur le bouton Apply css pour appliquer les modifications manuelles au fichier css ci-dessous.
+Custom CSS : CSS personnalisé
+Style : Style
+HideShow : MasquerAfficher
+Compute Label : Compute Label
+"Label $$DOCOVAScript" : "Étiquette $$DOCOVAScript"
+"$$DOCOVAScript that returns a string" : "$$DOCOVAScript qui retourne une chaîne"
+Menu item type : "Type d'élément de menu"
+Menu Item : Élément du menu
+"Element/URL" : "Elément/URL"
+Use Javascript or DocovaScript : Utiliser Javascript ou DocovaScript
+Target frame : Cadre cible
+Initially selected : Initialement sélectionné
+Initially expanded : Initialement élargi
+Add : Ajouter
+Form Properties : Propriétés du formulaire
+Subform Properties : Propriétés du sous-formulaire
+Page Properties : Propriétés de la page
+Widget Properties : Propriétés du widget
+Subform Name : Nom du sous-formulaire
+Page Name : Nom de la page
+Widget Name : Nom du widget
+Form Alias : Alias du formulaire
+Subform Alias : Alias de sous-formulaire
+Page Alias : Alias de page
+Widget Alias : Widget Alias
+Form Style : Style de formulaire
+Page : Page
+Use Print Button : "Utiliser le bouton d'impression"
+Enable Comments : Activer les commentaires
+On Open Agent : "Sur l'agent ouvert"
+On Save Agent : "Sur l'agent de sauvegarde"
+Additional CSS : CSS supplémentaire
+Additional JS : JS supplémentaire
+Paragraph Element : Élément de paragraphe
+Label Text : "Texte de l'étiquette"
+Helper Text : "Texte d'assistance"
+Role : Rôle
+Editable : Éditable
+Computed : Calculé
+Computed for display : "Calculé pour l'affichage"
+Computed when composed : Calculé quand composé
+Text Align : Alignement du texte
+Max Characters : Max caractères
+Directory Lookup : Recherche dans l'annuaire
+Use look up button : Utilisez le bouton de recherche
+Is Required : Est requis
+Multi Value : Valeur Multi
+Allow multiple values : Autoriser plusieurs valeurs
+Separators : Séparateurs
+Space : Espace
+Comma : Virgule
+Semicolon : "Point-virgule"
+New Line : Nouvelle ligne
+Blank Line : Ligne blanche
+Default Value : Valeur par défaut
+"Enter $$DOCOVA Script that computes to a string." : "Entrez $$DOCOVA Script qui se calcule en une chaîne."
+Input Translation : "Traduction d'entrée"
+"Use $$DOCOVA Script that converts the value and returns a string." : "Utilisez $$DOCOVA Script pour convertir la valeur et renvoyer une chaîne."
+Number of Decimals : Nombre de décimales
+Formatting : Mise en forme
+Empty means current appliction : Vide signifie application actuelle
+get views : obtenir des vues
+Dynamic View Selection Script : Script de sélection de vue dynamique
+Restrict To Category : Restreindre à la catégorie
+Chart Type : Type de graphique
+Chart Title : Titre du graphique
+Horizontal Label : Étiquette horizontale
+Vertical Label : Étiquette verticale
+Data Source : La source de données
+"View/Agent Name" : "Vue/Nom de l'agent"
+"get views/agents" : "obtenir des vues/agents"
+Source Fields : Champs source
+"Legend (Series)" : "Légende (série)"
+"Axis (Categories)" : "Axe (Catégories)"
+Values : Valeurs
+Function Name : Nom de la fonction
+Do not print values on chart elements : Ne pas imprimer les valeurs sur les éléments de graphique
+Display Separator : "Séparateur d'affichage"
+"Enter choices (one per line)" : "Entrer des choix (un par ligne)"
+Lookup choices : Choix de recherche
+Formula : Formule
+"Key (Optional)" : "Clé (optionnel)"
+Display Columns : Colonnes d'affichage
+"Use $$DOCOVA Script that returns a string or an array of strings." : "Utilisez $$DOCOVA Script qui renvoie une chaîne ou un tableau de chaînes."
+Allow Values Not In List : Autoriser les valeurs non dans la liste
+Display date and time : "Afficher la date et l'heure"
+Display only time : "Afficher seulement l'heure"
+Display only date : "N'afficher que la date"
+"Use $$DOCOVA Script that converts the value and returns a date value" : "Utiliser $$DOCOVA Script qui convertit la valeur et retourne une valeur de date"
+Rich Text Editor : Éditeur de texte enrichi
+Plain Text Editor : Éditeur de texte brut
+Allow Text in Views : Autoriser le texte dans les vues
+"If Yes, text content will be limited to 32k in length" : "Si oui, le contenu du texte sera limité à 32k"
+Editor Settings : "Paramètres de l'éditeur"
+Hide Menu : Masquer le menu
+Hide Toolbar : Masquer la barre de tâches
+Hide Status Bar : "Masquer la barre d'état"
+Show Label : Afficher le libellé
+Left Icon : Icône de gauche
+Right Icon : Icône de droite
+Select Image : Sélectionner une image
+Select Outline : Sélectionner le contour
+Expand : Développer
+HTML Attributes : Attributs HTML
+Please type your HTML directly into the HTML container field above. : Veuillez saisir votre code HTML directement dans le champ conteneur HTML ci-dessus.
+Tab Actions : "Actions de l'onglet"
+Vertical Align : Alignement vertical
+Middle : Milieu
+"Expand / Collapse" : "Développer / Réduire"
+"Allow section to be expaneded/collapsed" : Autoriser la section à être développée / réduite
+Collapse Section On Open : Réduire la section sur Ouvrir
+Controlled Access : Accès contrôlé
+Enable controlled access to section : "Activer l'accès contrôlé à la section"
+"Access $$DOCOVA Script" : "Accéder au $$DOCOVA Script"
+Must evaluate to a name or role : Doit évaluer un nom ou un rôle
+Insertion Method : "Méthode d'insertion"
+Subform List : Liste de sous-formulaires
+"Computed $$DOCOVA Script" : "$$DOCOVA Script calculé"
+"Max # of Files" : Nombre maximal de fichiers
+Applicable Templates : Modèles applicables
+"Audit Log - Displays audit log entries on form/document when opened in an application" : "Journal d'audit - Affiche les entrées du journal d'audit sur le formulaire / le document lorsqu'il est ouvert dans une application."
+App Source Type : "Type de source d'application"
+Latitude : Latitude
+"Use $$DOCOVA Script that returns a float or integer." : "Utilisez $$DOCOVA Script qui renvoie un float ou un entier."
+Longitude : Longitude
+"Use $$DOCOVA Script that returns a float or integer value." : "Utilisez $$DOCOVA Script qui renvoie une valeur flottante ou entière."
+"Use $$DOCOVA Script that returns a string." : "Utilisez $$DOCOVA Script qui renvoie une chaîne."
+Barcode Type : Type de code à barres
+"Data\\Value" : "Données\\valeur"
+"Enter $$DOCOVA Script that computes to a string value" : "Entrez $$DOCOVA Script qui calcule une valeur de chaîne"
+Display Text : Texte affiché
+Text Location : Emplacement du texte
+Text Alignment : Alignement du texte
+Measure Units : Unités de mesure
+"Imperial (inches)" : "Impérial (pouces)"
+"Metric (meter)" : "Métrique (mètre)"
+Rendering Style : Style de rendu
+Canvas : Canevas
+Barcode Thickness Ratio : "Rapport d'épaisseur de code à barres"
+Fore Color : Couleur de premier plan
+Back Color : Couleur de fond
+Weather API Key : Clé API météo
+City : Ville
+Forecast : Prévoir
+Enable 5 days forecast : Activer les prévisions à 5 jours
+Temperature Unit : Unité de température
+"Standard (Kelvin)" : "Standard (Kelvin)"
+"Metric (Celsius)" : "Métrique (Celsius)"
+"Imperial (Fahrenheit)" : "Impérial (Fahrenheit)"
+"Use $$DOCOVA Script that returns numeric." : "Utilisez $$DOCOVA Script qui renvoie numérique."
+Count Up : "Compter jusqu'à"
+Count Down : Compte à rebours
+Top into View : Top dans la vue
+Bottom into View : En bas dans la vue
+Unit Symbol : "Symbole de l'unité"
+Unit Position : "Position de l'unité"
+Speed : Vitesse
+Frame : Cadre
+Show in Box : Afficher dans la boîte
+Tab Index : Index de tabulation
+Background Style : Style de fond
+Form Background Color : Couleur de fond du formulaire
+Margins : Marges
+Panels : Panneaux
+Horizontal Spacing : Espacement Horizontal
+Vertical Spacing : Espacement vertical
+Padding : Rembourrage
+Shadow Effect : Effet d'Ombre
+Border Type : Type de bordure
+Solid : Solide
+Dashed : Dashed
+Dotted : À pois
+Double : Double
+Groove : Rainure
+Inset : Encart
+Outset : Début
+Ridge : Crête
+Border Size : Taille de la bordure
+Button Style : Style de bouton
+Font Style : Style de police
+Normal : Ordinaire
+Oblique : Oblique
+Hover Color : Survoler la couleur
+Hover Font Color : Survolez la couleur de la police
+Hover Font Size : Survolez la taille de la police
+Hover Font Style : Survolez le style de police
+Tabbed Table Style : Style de tableau à onglets
+Header Background Color : "Couleur de fond de l'en-tête"
+Active Tab Background Color : "Couleur de fond de l'onglet actif"
+Active Tab Font Color : "Couleur de police de l'onglet actif"
+Active Tab Font Size : "Taille de police de l'onglet actif"
+Active Tab Font Style : "Style de police de l'onglet actif"
+InActive Tab Background Color : "Couleur de fond de l'onglet InActive"
+InActive Tab Font Color : Couleur de police des onglets inactifs
+InActive Tab Font Size : "Taille de police de l'onglet InActive"
+InActive Tab Font Style : Style de police des onglets inactifs
+Section Style : Style des Sections
+Section Header Background Color : "Couleur de fond de l'en-tête de section"
+Header Font Color : "Couleur de la police d'en-tête"
+Header Font Size : "Taille de la police d'en-tête"
+Weight : Poids
+Align : Aligner
+Additional Style : Style supplémentaire
+"Allow section to be expanded/collapsed" : "Autoriser la section à être développée/réduite"
+"This will convert your view columns to calendar style. Some column formatting may be lost.  Do you wish to continue?" : "Cela convertira vos colonnes de vue en style de calendrier. Certaines mises en forme de colonnes peuvent être perdues. Souhaitez-vous continuer?"
+"This will convert your view columns to gantt style. Existing column definitions will be lost.  Do you wish to continue?" : "Cela convertira vos colonnes de vue en style de Gantt. Les définitions de colonne existantes seront perdues. Souhaitez-vous continuer?"
+Delete Action : Supprimer action
+Preview : Aperçu
+Please save this view before trying to preview it. : "Veuillez enregistrer cette vue avant d'essayer de la prévisualiser."
+The view was saved. : La vue a été enregistrée.
+An error has occurred saving the form. Error Details : "Une erreur s'est produite lors de l'enregistrement du formulaire. Détails de l'erreur"
+"Save Failed!" : "Échec de la sauvegarde!"
+Please provide a view name : S'il vous plaît fournir un nom de vue
+"You have not selected an Icons from the list. <br><br> Please select an Icon or Cancel" : "Vous n'avez pas sélectionné d'icônes dans la liste. <br><br> Veuillez sélectionner une icône ou annuler"
+Closing view : Vue de clôture
+"Would you like to save the changes to this view?" : "Voulez-vous enregistrer les modifications apportées à cette vue?"
+"Column $$DOCOVAScript" : "Colonne $$DOCOVAScript"
+"Use $$script and field names that compute a value." : "Utilisez $$script et les noms de champs qui calculent une valeur."
+Show Responses : Afficher les réponses
+"Response $$DOCOVAScript" : "Réponse $$DOCOVAScript"
+Show Multiple Values As Separate Entries : Afficher plusieurs valeurs sous forme d'entrées séparées
+XML Node Name : Nom du nœud XML
+View Properties : Voir les propriétés
+Calendar Settings : Paramètres du calendrier
+Gantt Settings : Paramètres de Gantt
+View Javascript : Voir Javascript
+View Style : Style de vue
+View Name : Nom de la vue
+View Alias : Voir alias
+Select Documents : Sélectionner des documents
+Select Manually : Sélectionner des documents
+Personalized Content : Contenu personnalisé
+Content personal to each user : Contenu personnel à chaque utilisateur
+"Selection $$DOCOVAScript" : "Sélection $$DOCOVAScript"
+Show Responses In Hierarchy : Afficher les réponses dans la hiérarchie
+Response Colspan : Réponse Colspan
+Auto Collapse View : Affichage automatique
+Documents from view open  in edit mode : Documents de la vue ouverts en mode édition
+Allow Full Text Searching : Autoriser la recherche en texte intégral
+Enable Paging Support : Activer le support de pagination
+Number of documents per page : Nombre de documents par page
+View Type : Type de vue
+Standard : Norme
+Calendar : Calendrier
+Gantt : Gantt
+Show Weekends : Voir les week-ends
+First Day of Week : Premier jour de la semaine
+Use Theme : Utiliser le thème
+Day onClick Function Name : "Jour - Nom de la fonction onClick"
+Day onDblClick Function Name : "Jour - onDblClick Nom de la fonction"
+Event onClick Function Name : "Event - Nom de la fonction onClick"
+Event onDblClick Function Name : "Event - Nom de la fonction onDblClick"
+Event Background Colour : "Couleur de fond de l'événement"
+Event Text Colour : "Couleur du texte de l'événement"
+Form for New Tasks : Formulaire pour les nouvelles tâches
+Resource Assignment : Affectation de ressources
+Address Book : "Carnet d'adresses"
+Resources : Ressources
+"Resource $$DOCOVAScript" : "Ressource $$DOCOVAScript"
+Alternating Rows Color : Couleur alternée des rangées
+Header Column Separator Color : "Couleur du séparateur de colonne d'en-tête"
+View Row Separator Color : Couleur du séparateur de lignes de vue
+Header Padding : "Rembourrage d'en-tête"
+View Padding : Voir le rembourrage
+"Category Expand/Collapse Icon" : "Catégorie Développer/Réduire Icône"
+Category Icon Size : Catégorie Icône Taille
+Category Icon Color : Catégorie Icône Couleur
+View CSS : Voir CSS
+Action Properties : Propriétés de l'action
+"Hide/Show" : "Masquer/Afficher"
+Create New Document : Créer un nouveau document
+Form : Forme
+Show selection margin : Afficher la marge de sélection
+Paging : Pagination
+Enter Title : Entrez le titre
+Start Date : Date de début
+End Date : Date de fin
+"Row #" : "# de ligne"
+"Code/Short Name" : "Code/Nom abrégé"
+"Milestone (Start)" : "Jalon (Début)"
+Duration : Durée
+"Milestone (End)" : "Jalon (fin)"
+Progress : Le progrès
+My Saved Searches : Mes recherches sauvegardées
+No data received from server : Aucune donnée reçue du serveur
+Please provide a Perspective Name. : Veuillez fournir un nom de perspective.
+No Perspective Name. : Aucun nom de perspective.
+"Error: The perspective could not be created.  Please try again or contact your Administrator" : "Erreur: la perspective n'a pas pu être créée. Veuillez réessayer ou contactez votre administrateur."
+The Perspective you are trying to delete is a system perspective.  You do not have access to delete it. : "La perspective que vous essayez de supprimer est une perspective système. Vous n'avez pas accès pour le supprimer."
+Delete Perspective Options : Supprimer les options de perspective
+Please choose one of the options or Cancel the dialog. : "Veuillez choisir l'une des options ou Annuler la boîte de dialogue."
+No Option Selected : Aucune option sélectionnée
+The perspective was deleted. : La perspective a été supprimée.
+Perspective Deleted. : Perspective supprimée.
+"Error:  The perspective could not be deleted.  Please try again or contact the Administrator." : "Erreur: la perspective n'a pas pu être supprimée. Veuillez réessayer ou contacter l'administrateur."
+You are about to delete the current Saved Search : Vous êtes sur le point de supprimer la recherche sauvegardée en cours
+Document was added to your Favorites : Le document a été ajouté à vos favoris.
+"Error:  The document was not added to your favorites.  Please try again or contact the Administrator." : "Erreur: le document n'a pas été ajouté à vos favoris. Veuillez réessayer ou contacter l'administrateur."
+Column Properties : Propriétés de la colonne
+DOCOVA Plugin Not Running : DOCOVA Plugin ne fonctionne pas
+The DOCOVA Plugin is required for the bulk importing of files. : "Le plug-in DOCOVA est requis pour l'importation en bloc de fichiers."
+The DOCOVA Plugin is required for the bulk exporting of files. : "Le plug-in DOCOVA est requis pour l'exportation en bloc de fichiers."
+"Are you sure you want to delete the current %viewname% design element?" : "Êtes-vous sûr de vouloir supprimer l'élément de conception %viewname% actuel?"
+"Are you sure you want to delete the currently selected %viewname% design elements?" : "Êtes-vous sûr de vouloir supprimer les éléments de conception %viewname% actuellement sélectionnés?"
+Choose a Document : Choisissez un document
+Please select at least one document to release. : Veuillez sélectionner au moins un document à publier.
+"Are you sure that you want to Release the %elength% selected document(s)?" : "Êtes-vous sûr de vouloir libérer le %elength% document (s) sélectionné (s)?"
+You have not selected any documents to restore. Please select one or more documents to restore or Cancel : "Vous n'avez sélectionné aucun document à restaurer. Veuillez sélectionner un ou plusieurs documents à restaurer ou Annuler"
+"Restoring selected document(s). One moment" : "Restauration du ou des documents sélectionnés. Un moment"
+Documents Restored : Documents restaurés
+The selected documents were restored from the Archive. : "Les documents sélectionnés ont été restaurés à partir de l'archive."
+"Error: One or more documents were not restored.  Please try again or contact the Administrator." : "Erreur: un ou plusieurs documents n'ont pas été restaurés. Veuillez réessayer ou contacter l'administrateur."
+Please enter the recipient names. : Veuillez entrer les noms des destinataires.
+Please enter the subject : "S'il vous plaît entrer le sujet"
+Please enter a message : "S'il vous plaît entrer un message"
+"Error.  Message was not sent.  Please check error logs for more information." : "Erreur. Le message n'a pas été envoyé. Veuillez consulter les journaux d'erreurs pour plus d'informations."
+Forwarding message. Please wait : "Message de transfert. S'il vous plaît, attendez"
+Message Forwarded : Message transmis
+"Archive documents?" : "Documents d'archives?"
+The DOCOVA Plugin is required for the importing of messages from Outlook. : "Le plug-in DOCOVA est requis pour l'importation de messages à partir d'Outlook."
+Import Mail Messages : Importer des messages électroniques
+Import Selected : Importation sélectionnée
+Please select one or more emails to import. : Veuillez sélectionner un ou plusieurs emails à importer.
+Choose One or More Emails : Choisissez un ou plusieurs courriels
+Nothing highlighted : Rien surligné
+"To copy a document URL link, please highlight the document first." : "Pour copier le lien d’un document, veuillez tout d’abord surligner le document."
+Document Link URL : URL du lien de document
+DOCOVA Plugin is not running.  This functionality requires the use of the DOCOVA Plugin. : "DOCOVA Plugin n'est pas en cours d'exécution. Cette fonctionnalité nécessite l'utilisation du plug-in DOCOVA."
+Unable to get temporary folder.  Print cancelled : "Impossible d'obtenir le dossier temporaire. Imprimer annulé"
+"Error - Unable to retrieve a listing of attachments to print." : "Erreur - Impossible de récupérer une liste des pièces jointes à imprimer."
+All files have been sent to the printer. : "Tous les fichiers ont été envoyés à l’imprimante."
+Error - Unable to print one or more files.  Please check that all source files are undamaged. : "Erreur - Impossible d'imprimer un ou plusieurs fichiers. Veuillez vérifier que tous les fichiers source ne sont pas endommagés."
+"Are you sure you want to delete the current %etype% design element?" : "Êtes-vous sûr de vouloir supprimer l'élément de conception %etype% actuel?"
+"Are you sure you want to delete the currently selected %etype% design elements?" : "Etes-vous sûr de vouloir supprimer les éléments de conception %etype% actuellement sélectionné?"
+"New %vname%" : "Nouvel %vname%"
+Cannot delete Perspective. : Impossible de supprimer la perspective.
+New Agent : Nouvel agent
+New CSS : Nouvel CSS
+New Form : Nouvel Forme
+New Image : Nouvel Image
+New JS Library : Nouvelle bibliothèque JS
+New Layout : Nouvelle mise en page
+New Menu : Nouveau menu
+New Page : Nouveau page
+New Script Library : Nouvelle bibliothèque de scripts
+New Subform : Nouveau sous-formulaire
+New View : Nouvelle vue
+New Workflow : Nouveau flux de travail
+Import Agent : Agent d'importation
+Import Form : Forme d'importation
+Import Image : Image d'importation
+Import JS Library : Bibliothèque JS d'importation
+Import Layout : Mise en page d'importation
+Import Menu : Menu d'importation
+Import Page : Page d'importation
+Import Script Library : Bibliothèque de scripts d'importation
+Import Subform : Sous-formulaire d'importation
+Import View : Vue d'importation
+Import Workflow : Flux de travail d'importation
+Closing Form : Formulaire de clôture
+"Would you like to save the changes to this form?" : "Voulez-vous enregistrer les modifications dans ce formulaire?"
+"Form Hide/Show" : "Formulaire Masquer/Afficher"
+Form Events : Événements Formulaire
+Subform Style : Style de sous-formulaire
+"Subform Hide/Show" : "Sous-formulaire Masquer/Afficher"
+Subform Events : Événements de sous-formulaire
+Page Style : Style de page
+"Page Hide/Show" : "Page Masquer/Afficher"
+Page Events : Événements de page
+Last Modified : Dernière Modification
+Prohibit Update : Interdire mise à jour
+Last Modified By : Dernière Modification Par
+"Are you sure you want to delete the current Widget design element?" : "Êtes-vous sûr de vouloir supprimer l'élément de conception actuel du widget?"
+"Are you sure you want to delete the currently selected Widget design elements?" : "Êtes-vous sûr de vouloir supprimer les éléments de conception de widget actuellement sélectionnés?"
+New Widget : Nouveau widget
+"You don't have sufficient rights to edit this widget." : "Vous n'avez pas les droits suffisants pour éditer ce widget."
+Open Widget : Ouvrir un widget
+"The '%wtitle%' is a system widget and cannot be edited.<br><br>Widget Description" : "Le '%wtitle%' est un widget système et ne peut pas être édité.<br><br>Description du widget"
+Please select a widget first. : "Veuillez d'abord sélectionner un widget"
+Widget : Widget
+Toggle Widget Status : Basculer le statut du widget
+Home : Accueil
+You are about to remove this application from your App Builder : "Vous êtes sur le point de supprimer cette application de votre générateur d'applications."
+"Note: Please ensure you have closed all design elements before removing." : "Remarque: assurez-vous d'avoir fermé tous les éléments de conception avant de les supprimer."
+"Note: Removing an application does not delete it." : "Remarque: la suppression d'une application ne la supprime pas."
+Remove Application : Supprimer l'application
+The Application could not be removed from the App Builder. : "L'application n'a pas pu être supprimée du générateur d'applications."
+Custom Widgets : Widgets personnalisés
+System Widgets : Widgets système
+Widget Builder : Widget Builder
+The entry is blank.  Please enter a name or Cancel. : "L'entrée est vide. S'il vous plaît entrer un nom ou Annuler."
+This entry already exists. : Cette entrée existe déjà.
+Cannot Add Entry. : "Impossible d'ajouter une entrée."
+Please enter the path to source application with the security you wish to copy. : "Veuillez entrer le chemin d'accès à l'application source avec la sécurité que vous souhaitez copier."
+"This operation will overwrite the current application's security with the one from [%dbpath%].\n  Are you sure you wish to continue?" :  "Cette opération écrasera la sécurité de l'application actuelle par celle de [%dbpath%].\n Êtes-vous sûr de vouloir continuer?"
+"You cannot remove the -Default- entry!" : "Vous ne pouvez pas supprimer l'entrée -Default-!"
+Cannot remove entry. : "Impossible de supprimer l'entrée."
+You are about to remove access for : "Vous êtes sur le point de supprimer l'accès pour"
+Remove Entry. : "Supprimer l'entrée"
+"Error: Could not remove the Entry" : "Erreur: impossible de supprimer l'entrée"
+Error removing entry. : "Erreur lors de la suppression de l'entrée."
+The Role is blank.  Please enter a Role or Cancel. : Le rôle est vide. Veuillez entrer un rôle ou annuler.
+Add Role : Ajouter un rôle
+This Role already exists. : Ce rôle existe déjà.
+Cannot Add Role. : "Impossible d'ajouter un rôle."
+Remove Role : Supprimer le rôle
+"You are about to remove the %rdisplay% Role from this Application." : "Vous êtes sur le point de supprimer le rôle %rdisplay% de cette application."
+"Error: Could not remove the Role" : "Erreur: impossible de supprimer le rôle"
+Error removing Role. : Erreur lors de la suppression du rôle.
+Inherit Design from Application : "Hériter de la conception de l'application"
+"The application you have selection is invalid. An application cannot inherit from itself. <br><br> Please select a different Application, or Clear." : "L'application que vous avez sélectionnée n'est pas valide. Une application ne peut pas hériter d'elle-même. <br> <br> Veuillez sélectionner une autre application ou Effacer."
+"You are about to CLEAR the application this application inherits its design from.<br><br>Blank means this application will be updated from the general Master Template when updating its design.<br><br>Are you sure?" : "Vous êtes sur le point d'effacer l'application dont cette application hérite de sa conception. <br> <br> Blank signifie que cette application sera mise à jour à partir du modèle maître général lors de la mise à jour de sa conception. <br> <br> Etes-vous sûr?"
+Clear Design Inheritance : Héritage de conception clair
+Import Application : "Demande d'importation"
+Import Data : Importer des données
+Inherits Design From : Hérite de la conception de
+Global Search Title String : Titre de la recherche globale
+"Enter a field name or $$DOCOVAScript that returns a string to use in global search results." : "Entrez un nom de champ ou $$DOCOVAScript qui renvoie une chaîne à utiliser dans les résultats de la recherche globale."
+Security Settings : Les paramètres de sécurité
+"People, Groups" : "Personnes, groupes"
+User type : "Type d'utilisateur"
+Person : La personne
+Group : Groupe
+Access : Accès
+Editor : Éditeur
+No Access : Pas d'accès
+Create documents : Créer des documents
+Delete documents : Supprimer des documents
+Widget Style : Style de widget
+"Widget Hide/Show" : "Widget Cacher/Afficher"
+Widget Events : Événements de widget
+"You are about to save this %elabel%" : "Vous êtes sur le point de sauvegarder ce %elabel%"
+Warning : Attention
+App Elements : "Éléments d'application"

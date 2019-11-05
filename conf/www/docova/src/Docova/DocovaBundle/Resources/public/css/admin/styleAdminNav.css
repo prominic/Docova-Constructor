@@ -1,0 +1,41 @@
+html, body {
+	margin: 0; 
+	padding: 0; 
+	font : normal 8pt Verdana,  Arial, sans-serif;
+}
+.ui-menu {
+	width: 200px;
+}
+
+.ui-menu-item {
+	padding-left: 5px !important;
+	padding-right: 0 !important;
+	width: 193px !important;
+}
+
+.ui-widget-header {
+	padding: 2px 0 2px 5px;
+	height: 19px;
+}
+.ui-menu .ui-state-focus.ui-state-hover {
+	margin: 0px !important; 
+}
+.ui-menu .ui-state-focus:not(.ui-state-hover){
+	font-weight: normal !important;
+}
+li {
+	font-family: Verdana;
+	font-size: 8pt;
+	font-style: normal;
+	line-height: 20px;
+}
+
+.ui-widget-overlay {
+	opacity: .50 !important; /* Make sure to change both of these, as IE only sees the second one */
+	filter: Alpha(Opacity=50) !important;
+}
+
+.ui-dialog {
+	font-family: Arial, Verdana;
+	font-size: 10pt;
+}

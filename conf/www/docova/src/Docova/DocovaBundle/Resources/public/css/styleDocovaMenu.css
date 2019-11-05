@@ -1,0 +1,180 @@
+DIV.docova_menu_container {
+	background-color: #FFF;
+    position: absolute;
+    z-index: 1000;
+    padding: 20px;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+}
+DIV.docova_menu_container *:not(span) {
+	font-family: Verdana, Arial, sans-serif;
+	
+}
+DIV.docova_menu_container A {
+	/*padding: 12px 14px 12px 19px;*/
+	text-decoration: none;
+	/*display: inline-block;*/
+	color: inherit;
+	height: 100%;
+	width: 100%;
+	line-height:35px;
+	padding-left:6px;
+}
+DIV.docova_menu_container UL {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	list-style: none;
+}
+
+DIV.cMenuHeading {
+	font-size:1.1em;
+	font-weight: bold;
+	margin-bottom:20px;
+	color: #acadb3;
+}
+
+DIV.docova_menu_container UL LI {
+	/*display: inline-flex;*/
+/*	white-space: nowrap; */
+	margin: 0 3px 0 0;
+	width: 100%;
+	line-height:30px;
+	
+}
+
+DIV.docova_menu_container h3 {
+	/*display: inline-flex;*/
+/*	white-space: nowrap; */
+	margin:6px;
+	
+}
+
+DIV.docova_menu_container h4 {
+	/*display: inline-flex;*/
+/*	white-space: nowrap; */
+	margin:6px;
+	
+}
+
+DIV.docova_menu_container LI.d-ui-state-default{
+	border-bottom: 1px solid #efeaea;
+	font-size:12px;
+	font-weight:400;
+	color:#434a4a;
+}
+
+DIV.docova_menu_container LI.d-ui-state-default {
+	border-bottom: 1px solid #efeaea;
+	font-size:12px;
+	font-weight:400;
+	color:#434a4a;
+}
+
+DIV.docova_menu_container LI.d-ui-widget-header{
+	font-weight: 800;
+	font-size:12px;
+	color:#434a4a;
+}
+
+DIV.docova_menu_container LI.d-ui-state-hover{
+	background : lightgray;
+}
+
+DIV.docova_menu_container UL.docova_menu Ul.docova_menu {
+	box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+    padding: 20px;
+}
+
+SPAN.nicon {
+	
+	padding-right:4px;
+	height:100%;
+	vertical-align: middle;
+	padding-left:8px;
+}
+
+DIV.docova_menu_container LI SPAN.docova_chevron {
+	/*right: 5px;
+	left: auto;
+	top: 14px; */
+	float:right;
+	line-height:35px;
+	padding-right:4px;
+}
+UL.docova_menu, DIV.docova_menu_container LI {
+	position: relative;
+}
+UL.docova_menu UL {
+	top: -1px;
+	left: 100%;
+	position: absolute;
+	background: #FFF;
+}
+DIV.docova_menu_container UL.hidden { display: none; }
+DIV.docova_menu_container UL LI.ui-widget-header {
+	background-image: none;
+	font-weight: normal;
+	border: 0;
+}
+/**** CASCADE ****/
+DIV.docova_cascade UL LI {
+	
+	-o-transition:.5s;
+	-ms-transition:.5s;
+	-moz-transition:.5s;
+	-webkit-transition:.5s;
+	transition:.5s;
+}
+
+/**** DROPDOWN ****/
+DIV.docova_dropdown UL LI {
+	
+	box-sizing: border-box;
+}
+DIV.docova_dropdown A {
+	margin-bottom: 1px;
+	
+}
+/****** PANE ******/
+DIV.docova_pane {
+	width: 100vw;
+	display: flex;
+	padding: 12px 5px;
+	flex-direction: row;
+	-ms-flex-direction: row;
+	-webkit-flex-direction: row;
+	justify-content: space-between;
+	box-shadow: 2px 4px 3px rgba(0,0,0,0.2) !important;
+}
+DIV.docova_pane .flex {
+	
+	-webkit-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+}
+DIV.docova_pane LI.itmlist {
+	height: 21px;
+	padding: 7px 1px 5px 19px;
+	border-bottom: 1px dotted #DDD;
+}
+DIV.docova_pane H3,DIV.docova_pane H4,DIV.docova_pane H5,DIV.docova_pane H6 {
+	margin: 0;
+	padding: 7px 1px 5px 7px;
+}
+DIV.docova_pane UL LI:hover {
+	color: #FFF !important;
+	cursor: pointer;
+	background-color: #5C9CCC;
+}
+DIV.docova_pane A {
+	padding: 3px 14px 0px 7px;
+}
+DIV.docova_pane LI SPAN {
+	left: 10px;
+	top: 9px;
+}
+DIV.docova_pane .dm_pad2 { padding-left: 12px; }
+DIV.docova_pane .dm_pad3 { padding-left: 24px; }
+

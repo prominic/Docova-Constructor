@@ -1,0 +1,19 @@
+{% set box = 0 %}
+{% if panel.getPanelWidgets and panel.getPanelWidgets.count > 0 %}
+	{% for widget in panel.getPanelWidgets %}
+		{% if widget.getBoxNo == 1 %}
+		{% set box = widget.getWidget %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+	<tr>
+		<td tdtype="box" boxnum=1 style="height:100%; width:100%">
+			<div class="portlet">
+			{% if box %}
+				{% include 'DocovaBundle:Subform:' ~ box.getSubformName ~ '.html.twig' with {'widget' : box} %}
+			{% else %}
+				{% include 'DocovaBundle:Default:DefaultWidget.html.twig' %}
+			{% endif %}
+			</div>
+		</td>
+	</tr>

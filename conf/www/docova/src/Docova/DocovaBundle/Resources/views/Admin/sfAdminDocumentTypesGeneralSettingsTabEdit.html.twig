@@ -1,0 +1,75 @@
+				<table class="elmContainer" cellspacing="0">
+					<tr>
+						<td class="firstRw">{%trans%}Document Status{%endtrans%}:</td>
+						<td class="firstRw">
+							<label><input type="checkbox" name="disabled" value="true" {{document is not defined or document.getStatus ? '' : 'checked'}} /> {% trans %}Check to disable{% endtrans %}</label>
+						</td>
+					</tr>
+					<tr>
+						<td>{% trans %}General type{% endtrans %}:</td>
+						<td>
+							<select name="KeyType" class="text ui-widget-content ui-corner-all">
+								<option value="1"  {% if document is not defined or document.getKeyType ==  1 %}selected{% endif %}>{% trans %}Custom{% endtrans %}
+								<option value="2" {% if document is defined and document.getKeyType ==  2 %}selected{% endif %}>{% trans %}Standard document{% endtrans %}
+								<option value="3" {% if document is defined and document.getKeyType ==  3 %}selected{% endif %}>{% trans %}Mail memo{% endtrans %}
+								<option value="4" {% if document is defined and document.getKeyType ==  4 %}selected{% endif %}>{% trans %}File document{% endtrans %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>{% trans %}Name{% endtrans %}:</td>
+						<td><input type="text" name="DocumentType" value="{% if document is defined %}{{ document.getDocName }}{% endif %}" class="text ui-widget-content ui-corner-all"/></td>
+					</tr>
+					<tr>
+						<td>{% trans %}Purpose/Description{% endtrans %}:</td>
+						<td><input type="text" name="DocumentTypeDescription" value="{% if document is defined  %}{{ document.getDescription }}{% endif %}" class="text ui-widget-content ui-corner-all" /></td>
+					</tr>
+					<tr>
+						<td>{% trans %}Icon{% endtrans %}:</td>
+						<td>
+							<select name="DocIcon" class="text ui-widget-content ui-corner-all">
+					          <option value="AttachmentHS.png"  {% if document is defined %} {{ document.getDocIcon =="AttachmentHS.png"? "selected":"" }}{% endif %}>Attachment</option>
+					          <option value="AudioHS.png" {% if document is defined %} {{ document.getDocIcon =="AudioHS.png"? "selected":"" }}{% endif %}>Audio file</option>
+					          <option value="icn16-stddoc.gif" {% if document is defined %} {{ document.getDocIcon =="icn16-stddoc.gif"? "selected":"" }}{%else %}selected{% endif %}>Basic Document</option>
+					          <option value="Book_angleHS.png" {% if document is defined %} {{ document.getDocIcon =="Book_angleHS.png"? "selected":"" }}{% endif %}>Book (closed)</option>
+					          <option value="Book_openHS.png" {% if document is defined %} {{ document.getDocIcon =="Book_openHS.png"? "selected":"" }}{% endif %}>Book (open)</option>
+					          <option value="CalculatorHS.png" {% if document is defined %} {{ document.getDocIcon =="CalculatorHS.png"? "selected":"" }}{% endif %}>Calculator</option>
+					          <option value="Calendar_scheduleHS.png" {% if document is defined %} {{ document.getDocIcon =="Calendar_scheduleHS.png"? "selected":"" }}{% endif %}>Calendar</option>
+					          <option value="CommentHS.png" {% if document is defined %} {{ document.getDocIcon =="CommentHS.png"? "selected":"" }}{% endif %}>Comment</option>
+					          <option value="icn16-control_activity.gif" {% if document is defined %} {{ document.getDocIcon =="icn16-control_activity.gif"? "selected":"" }}{% endif %}>Control Activity</option>
+					          <option value="SaveAllHS.png" {% if document is defined %} {{ document.getDocIcon =="SaveAllHS.png"? "selected":"" }}{% endif %}>Disk (multiple)</option>
+					          <option value="SaveHS.png" {% if document is defined %} {{ document.getDocIcon =="SaveHS.png"? "selected":"" }}{% endif %}>Disk (single)</option>
+					          <option value="EnvelopeHS.png" {% if document is defined %} {{ document.getDocIcon =="EnvelopeHS.png"? "selected":"" }}{% endif %}>Envelope</option>
+					          <option value="FaxHS.png" {% if document is defined %} {{ document.getDocIcon =="FaxHS.png"? "selected":"" }}{% endif %}>Fax</option>
+					          <option value="Flag_blueHS.png" {% if document is defined %} {{ document.getDocIcon =="Flag_blueHS.png"? "selected":"" }}{% endif %}>Flag (blue)</option>
+					          <option value="Flag_greenHS.png" {% if document is defined %} {{ document.getDocIcon =="Flag_greenHS.png"? "selected":"" }}{% endif %}>Flag (green)</option>
+					          <option value="Flag_redHS.png" {% if document is defined %} {{ document.getDocIcon =="Flag_redHS.png"? "selected":"" }}{% endif %}>Flag (red)</option>
+					          <option value="GraphHS.png" {% if document is defined %} {{ document.getDocIcon =="GraphHS.png"? "selected":"" }}{% endif %}>Graph</option>
+					          <option value="HtmlPageHS.png" {% if document is defined %} {{ document.getDocIcon =="HtmlPageHS.png"? "selected":"" }}{% endif %}>Home page</option>
+					          <option value="HomeHS.png" {% if document is defined %} {{ document.getDocIcon =="HomeHS.png"? "selected":"" }}{% endif %}>Home</option>
+					          <option value="InsertHyperlinkHS.png" {% if document is defined %} {{ document.getDocIcon =="InsertHyperlinkHS.png"? "selected":"" }}{% endif %}>Hyperlink</option>
+					          <option value="icn16-Excel.gif" {% if document is defined %} {{ document.getDocIcon =="icn16-Excel.gif"? "selected":"" }}{% endif %}>MS Excel</option>
+					          <option value="icn16-PPT.gif" {% if document is defined %} {{ document.getDocIcon =="icn16-PPT.gif"? "selected":"" }}{% endif %}>MS Power Point</option>
+					          <option value="icn16-Word.gif" {% if document is defined %} {{ document.getDocIcon =="icn16-Word.gif"? "selected":"" }}{% endif %}>MS Word</option>
+					          <option value="NoteHS.png" {% if document is defined %} {{ document.getDocIcon =="NoteHS.png"? "selected":"" }}{% endif %}>Note</option>
+					          <option value="OrganizerHS.png" {% if document is defined %} {{ document.getDocIcon =="OrganizerHS.png"? "selected":"" }}{% endif %}>Organizer</option>
+					          <option value="OrgchartHS.png" {% if document is defined %} {{ document.getDocIcon =="OrgchartHS.png"? "selected":"" }}{% endif %}>Orgchart</option>
+					          <option value="DialHS.png" {% if document is defined %} {{ document.getDocIcon =="DialHS.png"? "selected":"" }}{% endif %}>Phone</option>
+					          <option value="InsertPictureHS.png" {% if document is defined %} {{ document.getDocIcon =="InsertPictureHS.png"? "selected":"" }}{% endif %}>Picture</option>
+					          <option value="PieChart3DHS.png" {% if document is defined %} {{ document.getDocIcon =="PieChart3DHS.png"? "selected":"" }}{% endif %}>Piechart</option>
+					          <option value="Book_StackOfReportsHS.png" {% if document is defined %} {{ document.getDocIcon =="Book_StackOfReportsHS.png"? "selected":"" }}{% endif %}>Report (multiple)</option>
+					          <option value="book_reportHS.png" {% if document is defined %} {{ document.getDocIcon =="book_reportHS.png"? "selected":"" }}{% endif %}>Report (single)</option>
+					          <option value="TableHS.png" {% if document is defined %} {{ document.getDocIcon =="TableHS.png"? "selected":"" }}{% endif %}>Table</option>
+					          <option value="TaskHS.png" {% if document is defined %} {{ document.getDocIcon =="TaskHS.png"? "selected":"" }}{% endif %}>Task</option>
+					          <option value="icn16-unknowndoc.gif" {% if document is defined %} {{ document.getDocIcon =="icn16-unknowndoc.gif"? "selected":"" }}{% endif %}>Unknown type</option>
+					          <option value="icn16-webpage.gif" {% if document is defined %} {{ document.getDocIcon =="icn16-webpage.gif"? "selected":"" }}{% endif %}>Web page</option>
+					          <option value="XMLFileHS.png" {% if document is defined %} {{ document.getDocIcon =="XMLFileHS.png"? "selected":"" }}{% endif %}>XML file</option>
+					          <option value="Zip File16-ZIP.gif" {% if document is defined %} {{ document.getDocIcon =="Zip File16-ZIP.gif"? "selected":"" }}{% endif %}>Zip File16-ZIP.gif</option>
+	        				</select>
+	        			</td>
+					</tr>
+					<tr>
+						<td>{% trans %}Type Key{% endtrans %}:</td>
+						<td><span id="idSpanDocKey">{% if document is defined %}{{ document.getId }}{% else %} &nbsp; {% endif %}</span></td>
+					</tr>
+				</table>

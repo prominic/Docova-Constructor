@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<title>Folder Import</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleViewDialogBase.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}" charset="UTF-8"></script>
+{% set date_format = settings.getDefaultDateFormat|replace({'MM' : 'm', 'DD' : 'd', 'YYYY' : 'Y'}) %}
+<script language="JavaScript" type="text/javascript">
+var info = {
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}", 
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"UserRoles" : "$$WebClient;[Administration]",
+	"IsSuperuser" : "",
+	"HTTP_Referer" : "",
+	"SystemKey" :  "{{ settings.getSystemKey }}",
+	"Query_String" : "OpenForm&ParentUNID={{ folder.getId }}",
+	"Query_String_Decoded" : "OpenForm&ParentUNID={{ folder.getId }}",
+	"Path_Info_Decoded" : "{{ path('docova_dlgfolderimport') }}?ParentUNID={{ folder.getId }}",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length -1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length-2] }}",
+	"Date" : "{{ 'now'|date(date_format) }}",
+	"DateTime" : "{{ 'now'|date('m/d/Y H:i:s A') }}",
+	"FolderID" : "{{ folder.getId }}",
+ 	"NoRefresh" : ""
+};
+function getinfovar(){
+   return info;
+}		
+
+function browseFolders(headermsg){
+	var folderpath = "";
+	/*
+	mystr ='Type objType = Type.GetTypeFromProgID("Shell.Application");'
+     mystr += 'dynamic shellobj = Activator.CreateInstance(objType);'
+     mystr += 'string retstr = "";'
+     mystr += ' dynamic folderobj = shellobj.BrowseForFolder(0, "' + headermsg + '", 3, 17); '
+     mystr += '      if ( folderobj != null ) { '
+     mystr += '          retstr = folderobj.Self.Path; '
+     mystr += '      }'
+     mystr += 'folderobj =null; shellobj = null; return retstr;'  
+	
+	var retval = DocovaExtensions.executeCode(mystr, false);
+	if ( retval.status == "SUCCESS" ){
+			folderpath = retval.results;
+	}
+	*/
+	
+	DocovaExtensions.SelectFolder({
+				title : headermsg,
+				onSuccess: function( foldername ){
+						var inputelem = document.getElementById("OutputFolder");
+						inputelem.value = foldername;
+				}
+	});
+	
+	return folderpath;
+	
+}
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no" onload="InitVars(info);">
+	<form method="post" action="{{ path('docova_dlgfolderimport') }}?OpenForm&ParentUNID={{ folder.getId }}&Seq=1" name="_dlgFolderImport">
+		<span style="display: none;">
+			<input name="Subject" value="" class="txFld" style="width: 382px;">
+			<input name="OFileNames" value=""> 
+			<input name="OFileDates" value="">
+			<input name="SyncCreate" value="">
+			<input name="SyncRemoveFile" value="">
+			<input name="SyncUnid" value="">
+			<input name="tmpAddedFiles" value="" id="tmpAddedFiles">
+			<input name="tmpEditedFiles" value="" id="tmpEditedFiles">
+		</span>
+		<div id="dlgContentNhs" style="padding: 10px 10px 10px 10px; font-size: 11px; font-family: verdana, arial, helvetica, sans-serif;">
+			<div style="font: bold 11px verdana, arial, helvetica, sans-serif; margin-bottom: 5px;">
+				{% trans %}Parent Folder{% endtrans %} : 
+				<IMG SRC="{{ asset('bundles/docova/images/folder-open.gif') }}" border=0 align="top" />
+				{{ folder.getFolderName }}
+			</div>
+			<!--------------------------------------------------------------------------------------------------------->
+			<table style="margin-top: 5px;" cellpadding="5" border="0" cellspacing="0">
+				<tr>
+					<td width="150px">
+						<span style="font-size: 11px; color: black; font-family: verdana, arial, helvetica, sans-serif;">Import Subfolders:</span>
+					</td>
+					<td>
+						<label> <input type="radio" name="IncludeSubfolders" value="1" checked>Yes</label>
+						<label> <input type="radio" name="IncludeSubfolders" value="0">No</label>
+					</td>
+				</tr>
+				<tr>
+					<td width="150px">
+						<span style="font-size: 11px; color: black; font-family: verdana, arial, helvetica, sans-serif;">Import as document type:</span>
+					</td>
+					<td>
+						<select name="DocumentTypeKey" id="DocumentTypeKey" style="width: 340px;">
+							<option value="N">----- Select Document Type -----
+							{% if doctypes|length %}
+								{% for item in doctypes %}
+							<option value="{{ item.getId }}">{{ item.getDocName }}</option>
+								{% endfor %}
+							{% endif %}
+						</select>
+					</td>
+				<tr>
+					<td width="150px"><b>Select Import Folder:</b></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input name="OutputFolder" value="" id="OutputFolder" class="txFldReadOnly" style="width: 300px;" readonly>&nbsp;
+						<input type="button" onclick="var folderpath = browseFolders('Select a destination folder:');" value="Browse" id="btnBrowse" class="txButton" name="Browse">
+					</td>
+				</tr>
+				</tr>
+			</table>
+			<!------------------ SUBFORM sfKillCache ------------>
+			<!------------------Microsoft suggestion to force no cacheing of documents------------>
+			<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+			</HEAD>
+			<!------------------END SUBFORM sfKillCache  ------------>
+	</form>
+</body>
+</html>

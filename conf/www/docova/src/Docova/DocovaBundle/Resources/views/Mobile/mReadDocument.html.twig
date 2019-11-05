@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+{{ f_SetIsMobile(true) }}
+	<!--  common javascript & CSS header -->
+	{% if app.request.query.get('type') == 'workflow' or app.request.query.get('type') == 'document' %}
+		{# Handle hide and when show below header only if document is opend by itself e.g workflow screen #}
+		{% include 'DocovaBundle:Mobile:mobileDocumentCommonScriptsHeader.html.twig'%}
+	{% endif %}
+	
+	<!-- common JS Header -->
+	{# Common shared Document JS header #}
+	{% include 'DocovaBundle:Mobile:mobileDocumentCommonJSHeader.html.twig'%}
+
+	{% if subforms %}
+		{% for subform in subforms %}
+			{% if subform['JSHeader'] != false %}
+			<script language="javascript" type="text/javascript" src="{% if subform['JSHeader'] starts with 'sfCustomSection-' %}{{ asset('upload/js/') }}{% else %}{{ asset('bundles/docova/js/custom/') }}{% endif %}{{ subform['JSHeader'] ~ '.js' }}" charset="UTF-8"></script>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+	{% if workflow_options|length > 0 %}
+		{% if workflow_options['JSHeader'] != false %}
+		<script language="javascript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/') ~ workflow_options['JSHeader'] ~ '.js' }}" charset="UTF-8"></script>
+		{% endif %}
+	{% endif %}
+</head>
+
+<!-- Body -->
+<body text="#000000" bgcolor="#FFFFFF">
+
+	<!-- docInfo var -->
+	{% include 'DocovaBundle:Mobile:mobileDocumentReadDocInfo.html.twig'%}
+
+		
+<!-- INLINE CSS -->		
+{% include 'DocovaBundle:Mobile:mobileDocumentCommInlineCSS.html.twig'%}
+
+
+{% if app.request.query.get('type') == 'workflow' or app.request.query.get('type') == 'document' %}
+<div  data-role="page">
+	<div data-role="content" data-theme="c">
+		<ul data-role="listview" data-inset="true" itemtype="document" data-theme="c">
+			<li>
+{% endif %}
+		<!-------------------- Top Section of Document -------------------------------------------->
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top" align="left">
+				<td>
+					<!-------------------- Document Heading -------------------------------------------->
+					<div id="mDocHead" style="float: left; display:;">
+						<h3 class="ui-li-heading">
+							<img src="{{ asset('bundles/docova/images/FIcon_GreenDoc.jpg') }}" />{{ document.getDocType.getDocName }}
+						</h3>
+					</div>
+				</td>
+				<td align="right">
+					<!-------------------- Form Buttons -------------------------------------------->
+					<div style="display: inline;">
+						<!-- standard form buttons start -->
+					{% if editable == true and bookmarked != true and document.getDocType.getDocName != 'Mail Memo' %}
+					<!-- Edit Document -->
+						<button class="pageBtns" data-role="none" id="btnEditDocument" onClick="if(CanModifyDocument()){HandleEditClick()};return false;">Edit Document</button>
+					{% endif %}
+					</div> 
+					<!-- workflow buttons -->
+					<div style="display: inline;">
+					{% if action_buttons|length > 0 %}
+						{% for button in action_buttons %}
+							{% if button['Label'] != 'Workflow' and button['Visible'] == true %}
+						<button class="pageBtns" data-role="none" id="btn{{ button['Label']|replace({' ' : ''}) }}"	onClick="{{ button['Script']|raw }}">{{ button['Label'] }}</button>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					</div>
+				</td>
+			</tr>
+		</table>
+		<!-------------------- Default Document Fields -------------------------------------------->
+		<div id="mDocBody" style="display:;">
+			<p>
+				<strong>{{ document.getDocType.getSubjectLabel }}:</strong> {{ document.getDocTitle }}
+			</p>
+			<p>
+				<strong>Status:</strong> {{ document.getDocStatus }}
+			</p>
+		</div>
+		<!-------------------- Hidden More Section Fields -------------------------------------------->
+		<div id="mDocMore" style="display: none;">
+			<table cellpadding="3" width="100%" border="0" cellspacing="0"
+				cellpadding="0">
+				<tr valign="top">
+					<td class="fieldLabelCell" width="15%">Author:</td>
+					<td class="fieldCell" width="85%">{% if document.getAuthor %}{{ document.getAuthor.getUsername }}{% endif %}</td>
+				</tr>
+
+				<tr valign="top">
+					<td class="fieldLabelCell" width="15%">Document Date:</td>
+					<td class="fieldCell" width="85%">{{ document.getDateCreated|date('d/m/Y') }}</td>
+				</tr>
+
+				<tr valign="top">
+					<td class="fieldLabelCell" width="15%">Description:</td>
+					<td class="fieldCell" width="85%">{{ document.getDescription }}&nbsp;</td>
+				</tr>
+
+				<tr valign="top">
+					<td class="fieldLabelCell" width="15%">Keywords:</td>
+					<td class="fieldCell" width="85%">{{ document.getKeywords }}&nbsp;</td>
+				</tr>
+
+				<tr valign="top">
+					<td class="fieldCell" width="15%">Review cycle:</td>
+					<td class="fieldCell" width="85%"></div> As per applicable policy.<br>
+					</td>
+				</tr>
+
+				<tr valign="top">
+					<td class="fieldCell" width="15%">Archiving:</td>
+					<td class="fieldCell" width="85%">As per applicable policy</td>
+				</tr>
+			</table>
+
+			<table cellpadding="3" width="100%" border="0" cellspacing="0"
+				cellpadding="0">
+				<tr valign="top">
+					<td class="fieldLabelCell" width="22%">Owner:</td>
+					<td class="fieldCell" width="78%">{{ document.getOwner.getUsername }}</td>
+				</tr>
+
+				<tr valign="top">
+					<td class="fieldLabelCell" width="22%">Additional Editors:</td>
+					<td class="fieldCell" width="78%">{% if doc_editors %}{{ doc_editors }}{% endif %}&nbsp;</td>
+				</tr>
+
+				<tr valign="top">
+					<td class="fieldLabelCell" width="22%">Restrict read access to:</td>
+					<td class="fieldCell" width="78%">{% if doc_readers %}{{ doc_readers }}{% endif %}&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		<!-------------------- Configurable content section: START -------------------------------------------->
+		<div id="mDocCustom" class=".ui-li-desc">
+			<!-- section 1 -->
+			{% if subforms %}
+				{% for subform in subforms %}
+				{{ subform['HTML']|raw }}
+				{% endfor %}
+			{% endif %}
+			<!-------------------- Configurable content section: END -------------------------------------------->
+		</div>
+		<!-------------------- Workflow section (default location) -------------------------------------------->
+		{% if workflows|length > 0 and (not workflow_options.isCreated or not workflow_options.isCompleted) and not document.getDocType.getHideWorkflow %}
+			{% for workflow in workflows %}
+				{{ workflow|raw }}
+			{% endfor %}
+		{% endif %}
+{% if app.request.query.get('type') == 'workflow' or app.request.query.get('type') == 'document' %}
+			</li>
+		</ul>
+	</div>
+</div> 
+<!-- end of JQM div page & content -->
+{% endif %}
+		<!-------------------- Default document security -------------------------------------------->
+</body>
+</html>

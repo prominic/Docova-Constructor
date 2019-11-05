@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{% trans %}Data View{% endtrans %}</title>
+	{% include 'DocovaBundle:Admin:sfWebAdminCommonScriptHeader.html.twig'%}
+	{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+		'document' : document, 
+		'view_name' : view_name, 
+		'view_title' : view_title, 
+		'mode' :mode,
+		'path_info' : path('docova_admin_readdocument', { 'view_name' : view_name, 'doc_id' : document.getId }) 
+	} %}
+</head>
+
+<body scroll="No">
+	<ul class="ui-widget-header actionBar hidetoload">
+		<a id="editBtn" href="{{ path('docova_admin_editdocument', { 'view_name' : view_name, 'doc_id' : document.getId }) }}" >{% trans %}Edit{% endtrans %}</a>
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+	</ul>
+	<div id="frmEmulator" class="hidetoload">
+		<div id="divFormContainer">
+		<table class="elmContainer" cellspacing="0">	
+			<tr>
+				<td colspan="2" class="firstRw"><h3 class="headings1">{% trans %}Data View Settings{% endtrans %}</h3></td>
+			</tr>		
+			<tr valign="top">
+				<td class="firstRw">{% trans %}Folder Link{% endtrans %}:</td>
+				<td class="firstRw">{{ document is defined ? ("<a target='_top' href='" ~ document.getFolderLink ~ "'>" ~ document.getFolderLink ~ "</a>")|raw : '' }}</td>
+			</tr>
+			
+			<tr valign="top">
+				<td>{% trans %}Data Source Name{% endtrans %}:</td>
+				<td>{{ document is defined ? document.getDataSourceName : ''}}</td>
+			</tr>
+			
+			<tr valign="top">
+				<td>{% trans %}Folder id{% endtrans %}:</td>
+				<td><font face="Verdana">{{ document is defined ? document.getFolderId }}</td></tr>
+				
+			<tr valign="top">
+				<td>{% trans %}Resource key{% endtrans %}:</td>
+				<td>{{ document is defined ? document.getId }}</td>
+			</tr>
+		</table>
+		</br>
+	</div>
+</div>
+</body>
+</html>

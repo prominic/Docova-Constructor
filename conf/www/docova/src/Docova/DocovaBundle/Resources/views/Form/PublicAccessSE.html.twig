@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<TITLE>DOCOVA</TITLE>
+<META charset="utf-8">
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+
+<script language = "javascript">
+function getQueryString() {
+  var result = {}, queryString = location.search.substring(1),
+      re = /([^&=]+)=([^&]*)/g, m;
+
+  while (m = re.exec(queryString)) {
+    result[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+  }
+  return result;
+}
+
+function isIE(){
+	var ua = window.navigator.userAgent;
+	var isie = false;
+    	var msie = ua.indexOf('MSIE ');
+    	if (msie > 0) {
+        // IE 10 or older => return version number
+       	isie = true;
+   	}
+
+    var trident = ua.indexOf('Trident/');
+    if (trident > 0) {
+        // IE 11 => return version number
+        isie = true;
+    }
+
+    var edge = ua.indexOf('Edge/');
+    if (edge > 0) {
+       // IE 12 => return version number
+       isie = true;
+    }
+
+    // other browser
+    return isie;
+}
+
+function handler(){
+	if (this.xmlhttpobj.readyState == 4 /* complete */) {
+        if (this.xmlhttpobj.status == 200) {
+			var cookieval = this.xmlhttpobj.responseText;
+			var exp = "";
+			if ( !isIE() )
+				exp = "expires=0;";
+			if ( cookieval != ""){
+				var cookiearray = cookieval.split(/=(.+)?/);
+				var cval= decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(cookiearray[0]).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+				 if ( !cval || cval == "" )
+					document.cookie =  cookiearray[0] + "=" + cookiearray[1] + "; " + exp + " path=/";
+			}
+			if ( typeof this.gotourl!= "undefined"  && this.gotourl != "")
+				document.location.href = decodeURIComponent(gotourl) ;
+			else
+				document.location.href = '{{ url('docova_homepage') }}?openPage{{ app.request.query.get('goto') ? '&goto='~app.request.query.get('goto') : '' }}{{ app.request.query.get('fullscreen') == 1 ? '&fullscreen=1' : '' }}';
+        }else{
+			if ( typeof this.gotourl!= "undefined"  && this.gotourl != "")
+				document.location.href = decodeURIComponent(gotourl) ;
+			else
+				document.location.href = "{{ url('docova_homepage') }}?openPage{{ app.request.query.get('goto') ? '&goto='~app.request.query.get('goto') : '' }}{{ app.request.query.get('fullscreen') == 1 ? '&fullscreen=1' : '' }}";
+		}
+    }
+}
+
+function getPluginURL(syskey)
+{
+	var isSSL = false;
+	if ( window.location.protocol == "https:")
+		isSSL = true;
+	if ( isSSL )
+		return "https://localhost.docova.com:50450/docova?systemKey=" + syskey + "&";
+	else
+		return "http://localhost:40451/docova?systemKey=" + syskey + "&";
+	
+}
+</script>
+<style type="text/css">
+body {margin:0px;}
+</style> 
+</head>
+<body>
+<script type="text/javascript">
+	var url = this.location.href;
+	var finalurl = "";
+	var cookieName = "DomAuthSessId";
+	var sessid ="";
+	if(url.lastIndexOf(".nsf") == -1) {
+		finalurl = "{{ url('docova_homepage') }}";
+	} else {
+		finalurl = url.substr(0, url.lastIndexOf(".nsf")+4);
+	}
+
+	var cookArray=["DomAuthSessId", "LtpaToken", "LtpaToken2", "SMSESSION" ]
+	for ( var p =0; p < cookArray.length; p ++ )
+	{
+		sessid = getQueryString()[cookArray[p]];
+		if ( typeof sessid != "undefined"  && sessid != "")
+		{	
+			cookieName = cookArray[p];
+			break;
+		}
+	}
+
+	var gotourl = getQueryString()["gotourl"];	
+	if ( typeof sessid != "undefined"  && sessid != "")
+	{		
+		var exp = ( !isIE() ? "expires=0;" : "");
+		document.cookie = cookieName + "=" + sessid + "; " + exp +" path=/";
+		document.location.href= decodeURIComponent(gotourl);
+
+	}else{
+		var systemkey = "{{ settings.getSystemKey }}";
+		
+		var surl = getPluginURL(systemkey);
+		surl += "action=docovaLogin";
+		//surl += "&homeUrl=" + encodeURIComponent(finalurl);
+		var xmlhttpobj;
+		if (window.XMLHttpRequest)
+		{// code for IE7+, Firefox, Chrome, Opera, Safari
+		  xmlhttpobj=new XMLHttpRequest();
+		}
+		else
+		{// code for IE6, IE5
+		  xmlhttpobj=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		try{
+			xmlhttpobj.open("GET", surl , true);
+			xmlhttpobj.timeout = 5000;
+			xmlhttpobj.onreadystatechange = function() {
+				handler.call(self);
+			};
+			xmlhttpobj.send();
+		}catch(e){
+			if(e.message == "Access is denied.\r\n" && isIE()){
+				alert("This web site appears to be running in Compatibility View mode. Please try removing the site from the compatibility view list and refreshing the page.");				
+			}else{
+				handler.call(self);
+			}
+		}
+	}
+	
+</script>
+</body>
+</html>

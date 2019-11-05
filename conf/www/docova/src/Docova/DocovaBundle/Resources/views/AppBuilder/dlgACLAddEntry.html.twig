@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<title>ACL Add Entry Dialog</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleAdministration.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/autoCompleteNamePicker.css') }}" type="text/css" />
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/autoCompleteNamePicker.js') }}"></script>
+<script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+	$("#btnACLEntryName").button({
+		text : false
+	}).click(function(event) {
+		window.top.Docova.Utils.showAddressDialog({
+			fieldname : "ACLEntryName",
+			dlgtype : "single",
+			sourcedocument : document
+		});
+		event.preventDefault();
+	});
+
+	$('#ACLEntryName').autoComplete({
+		url : '{{ path('docova_usernamelookup_json') }}',
+		shortName : true,
+		typeContainer : 'ACLEntryType',
+		type: 'single'
+	});
+})
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no">
+	<div id="dlgContentNh" class="ui-widget" style="width: 100%;">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td width="100%" colspan="2"><font color="#808080">{% trans %}Type a new entry or Select from the Names directory.{% endtrans %}</font></td>
+			</tr>
+			<tr valign="top">
+				<td width="22%">{% trans %}New Entry{% endtrans %}:</td>
+				<td width="78%">
+					<input name="ACLEntryName" value="" id="ACLEntryName">&nbsp;&nbsp; 
+					<input type="hidden" name="ACLEntryType" id="ACLEntryType" value="" />
+					<button id="btnACLEntryName" class="ui-icon-single"></button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

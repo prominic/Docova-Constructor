@@ -1,0 +1,82 @@
+parameters:
+    docova.security.user.provider.class: Docova\DocovaBundle\Security\User\UserProvider
+    docova.security.user.oauthprovider.class: Docova\DocovaBundle\Security\User\OauthProvider
+    docova.security.user.oauthenticator.class: Docova\DocovaBundle\Security\User\OauthKeyAuthenticator
+
+services:
+    docova.security.user.provider:
+        class: "%docova.security.user.provider.class%"
+        arguments: ["@doctrine.orm.default_entity_manager", null, {ldap_username: '%ldap_username%', ldap_password: '%ldap_password%', ldap_domain: '%ldap_domain%', ldap_adkey: '%ldap_adkey%' }]
+
+    docova.security.user.oauthprovider:
+        class: "%docova.security.user.oauthprovider.class%"
+        arguments: ["@doctrine.orm.default_entity_manager", {ldap_username: '%ldap_username%', ldap_password: '%ldap_password%', ldap_domain: '%ldap_domain%', ldap_adkey: '%ldap_adkey%'}]
+
+    docova.security.user.oauthenticator:
+        class: "%docova.security.user.oauthenticator.class%"
+        arguments: [{client_id: '%client_id%', client_secret: '%client_secret%'}, "@doctrine.orm.default_entity_manager"]
+
+    docova.security.authentication.provider:
+        class: Docova\DocovaBundle\Security\User\LdapProvider
+        arguments: ["@security.user_checker", '', '', {ldap_username: '%ldap_username%', ldap_password: '%ldap_password%', ldap_domain: '%ldap_domain%', ldap_adkey: '%ldap_adkey%' }]
+
+    docova.security.authentication.success_handler:
+        class: Docova\DocovaBundle\Security\User\AuthenticationSuccessHandler
+        arguments: ["@security.http_utils", {login_path: '%d.login_path%',check_path: '%d.check_path%',default_target_path: '%d.default_target_path%'}, "@doctrine.orm.default_entity_manager", "@session"]
+    
+    docova.security.logout_success_handler:
+        class: Docova\DocovaBundle\Security\User\AfterLogoutRedirect
+        arguments: ["@router"]
+
+    docova.docovaservice:
+        class: Docova\DocovaBundle\ObjectModel\Docova
+        arguments: ["@service_container"]
+
+    docova.objectmodel:
+        class: Docova\DocovaBundle\ObjectModel\ObjectModel
+        arguments: ["@docova.docovaservice"]
+
+    docova.locale_listener:
+        class: Docova\DocovaBundle\EventListener\LocaleListener
+        arguments: ["%kernel.default_locale%"]
+        tags:
+            - { name: kernel.event_subscriber }
+    docova.libcontroller:
+        class: Docova\DocovaBundle\Controller\LibraryController
+
+    docova.workflowservices:
+        class: Docova\DocovaBundle\Extensions\WorkflowServices
+        arguments: ["@doctrine.orm.default_entity_manager", "@service_container"]
+
+    docova.workflowprocess:
+        class: Docova\DocovaBundle\Extensions\WorkflowProcess
+        arguments: ["@docova.docovaservice"]
+
+    docova.docova_extension:
+       class: Docova\DocovaBundle\Twig\DocovaExtension
+       arguments: ["@docova.objectmodel"]
+       public: false
+       tags:
+           - { name: twig.extension }
+
+    docova.docovaconcat_extension:
+        class: Docova\DocovaBundle\Twig\DocovaConcatExtension
+        public: false
+        tags:
+           - { name: twig.extension }
+
+    docova.docovatwig_extension:
+        class: Docova\DocovaBundle\Twig\DocovaTwigExtension
+        public: false
+        tags:
+           - { name: twig.extension }
+
+           
+
+#parameters:
+#    docova.example.class: Docova\DocovaBundle\Example
+
+#services:
+#    docova.example:
+#        class: %docova.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,151 @@
+<!doctype html><html>
+<head>
+<title>{% trans %}Release Document{% endtrans %}</title>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}" ></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/custom/sfDocSection-DialogsJavaScript.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script type="text/javascript">
+var info = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "UserRoles" : "{{ user.getRoles|join(';') }}",
+  "HTTP_Referer" : "",
+  "Query_String" : "",
+  "Query_String_Decoded" : "",
+  "Path_Info_Decoded" : "{{ path('docova_releasedialog') }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}"
+};
+function getinfovar() {
+	return info;
+}
+
+var parentWin = window.top.Docova.GlobalStorage["divDlgWorkflowDocRelease"].sourcewindow;
+var params = parentWin.dlgParams;
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	//Global variables for convenience
+	dlgDoc = document;
+	InitVars(info);
+
+	var availVersionListArray = params[0].split(",");
+	var availCount = availVersionListArray.length;
+	var curVerArray = availVersionListArray[0].split(".");
+	var strictversioning = params[3];
+	
+	if(strictversioning){
+		initStrictOptions(dlgDoc, availVersionListArray, availCount, curVerArray);
+	}else{
+		initRegularOptions(dlgDoc, availVersionListArray, availCount, curVerArray);
+	}
+}
+
+function initRegularOptions(dlgDoc, availVersionListArray, availCount, curVerArray){
+	$("#VersionSelectMajor").val(availVersionListArray[0]);
+	//$("#VersionSelectMajor").attr("checked", (availCount ==1) || (params[1] == availVersionListArray[0]));
+	$("#VersionSelectMajor").attr("checked", true);//first radio button is always selected
+	$("#VersionSelectTextMajor").text(availVersionListArray[0]);
+	//----------------------------
+	$("#MajorVersion").val(curVerArray[0]);
+	$("#MinorVersion").val(curVerArray[1]);
+	$("#Revision").val(curVerArray[2]);
+	//----------------------------
+	if(availCount > 1){
+		$("#VersionSelectMinor").css("display", "");
+		$("#VersionSelectTextMinor").css("display", "");
+		$("#VersionSelectMinor").val(availVersionListArray[1]);		
+		$("#VersionSelectMinor").attr("checked", (params[1] == availVersionListArray[1]));
+		$("#VersionSelectTextMinor").text(availVersionListArray[1]);
+		}
+	if(availCount > 2){
+		$("#VersionSelectRevision").css("display", "");
+		$("#VersionSelectTextRevision").css("display", "");
+		$("#VersionSelectRevision").val(availVersionListArray[2]);
+		$("#VersionSelectRevision").attr("checked", (params[1] == availVersionListArray[2]));
+		$("#VersionSelectTextRevision").text(availVersionListArray[2]);
+		}
+	// check if it is an initial version
+	(params[2])? $("#VersionEditOption").css("display", "") : $("#VersionSelectOption").css("display", "");
+	
+	$("#Comment").focus();
+}
+
+function initStrictOptions(dlgDoc, availVersionListArray, availCount, curVerArray){
+	$("#VersionSelectMajor").val(availVersionListArray[0]);
+	$("#VersionSelectMajor").attr("checked", true);
+	$("#VersionSelectTextMajor").text(availVersionListArray[0]);
+	//----------------------------
+	$("#MajorVersion").val(curVerArray[0]);
+	$("#MajorVersion").prop("disabled", true);
+	$("#MinorVersion").val(0);
+	$("#MinorVersion").prop("disabled", true);
+	$("#Revision").val(0);
+	$("#Revision").prop("disabled", true);
+	//----------------------------
+	if(availCount > 1){
+		$("#VersionSelectMinor").css("display", "");
+		$("#VersionSelectTextMinor").css("display", "");
+		$("#VersionSelectMinor").val(availVersionListArray[1]);
+		$("#VersionSelectTextMinor").text(availVersionListArray[1]);
+		$("#VersionSelectMinor").prop("disabled", true);
+		}
+	if(availCount > 2){
+		$("#VersionSelectRevision").css("display", "");
+		$("#VersionSelectTextRevision").css("display", "");
+		$("#VersionSelectRevision").val(availVersionListArray[2]);			
+		$("#VersionSelectTextRevision").text(availVersionListArray[2]);
+		$("#VersionSelectRevision").prop("disabled", true);
+	}
+	// check if it is an initial version
+	(params[2])? $("#VersionEditOption").css("display","") : $("#VersionSelectOption").css("display","");
+
+	$("#Comment").focus();
+}
+</script>
+</head>
+<body class="dlgBody" SCROLL="no" onload="initDialog();">
+	<form method="post" action="{{ path('docova_releasedialog') }}?OpenForm&amp;Seq=1" name="_dlgWorkflowDocRelease"></form>
+	<div id="dlgContentNh" style="width:100%;">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td width="100%">
+					<span class="frmLabel">{% trans %}Release as version{% endtrans %}:</span>&nbsp&nbsp&nbsp
+					<span id="VersionSelectOption" style="display:none;">
+						<input name="VersionSelect" id="VersionSelectMajor" type="radio" value=""><span class="frmLabel" name="VersionSelectText" id="VersionSelectTextMajor"></span>
+						<input name="VersionSelect" id="VersionSelectMinor" type="radio" value="" style="display:none;"/><span class="frmLabel"  name="VersionSelectText" id="VersionSelectTextMinor" style="display:none;"></span>
+						<input name="VersionSelect" id="VersionSelectRevision" type="radio" value="" style="display:none;"/><span class="frmLabel" name="VersionSelectText" id="VersionSelectTextRevision" style="display:none;"></span>
+					</span>
+					<span id="VersionEditOption" style="display:none;">
+						<input name="MajorVersion" value="0" size="2" maxlength="3" onchange="this.value = formatNum(this.value, 0)" id="MajorVersion" class="txFld" style="width:20px;"><b>. </b>
+						<input name="MinorVersion" value="0" size="2" maxlength="3" onchange="this.value = formatNum(this.value, 0)" id="MinorVersion" class="txFld" style="width:20px;"><b>. </b>
+						<input name="Revision" value="0" size="2" maxlength="3" onchange="this.value = formatNum(this.value, 0)" id="Revision" class="txFld" style="width:20px;">
+					</span>
+				</td>
+			</tr>
+		</table>
+		<span id="FieldLabel" class="txFldLabel" style="width:100%; margin-top:6px;">{% trans %}Please describe changes to be included in the revision sheet{% endtrans %}:</span>
+		<textarea style="width:420px;" class="txFld" id="Comment" name="Comment" rows = "5"></textarea><br/>
+		<span id="FieldLabel" class="txFldLabel" style="width:100%; margin-top:6px;font-weight:bold">{% trans %}Earlier, unreleased drafts superseded by this version will be discarded.{% endtrans %}</span>
+	</div>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+
+</body>
+</html>

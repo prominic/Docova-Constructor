@@ -1,0 +1,401 @@
+<!doctype html><html>
+<head>
+<title>{% trans %}Discussion Topic{% endtrans %}</title>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/docova/css/uploader.css') }}">
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-Attachments.js') }}"></script>
+
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.ui.widget.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.fileupload.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.iframe-transport.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src ="{{ asset('bundles/docova/jquery/jQueryFileDownload.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src ="{{ asset('bundles/docova/js/Uploader.js') }}"></script>
+<style type="text/css">
+.frmText { font-size: 12px !important; }
+</style>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+{% set date_format = settings.getDefaultDateFormat|replace({'MM' : 'm', 'DD' : 'd', 'YYYY' : 'Y'}) %}
+<script language="JavaScript" type="text/javascript">
+var info = {
+  "DocID" : "{{ discussion ? discussion.getId : '' }}",
+  "DocKey" : "{{ discussion ? discussion.getId : '' }}",
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ user.getUserProfile.getDisplayName }}",
+  "UserRoles" : "$$WebClient;[Administration]",
+  "isNewDoc" : "{{ discussion ? '' : 'true' }}",
+  "isDocBeingEdited" : "true",
+  "isEditor" : "",
+  "isReader" : "",
+  "IsSuperuser" : "",
+  "Mode" : "{{ app.request.query.get('mode') }}",
+  "HTTP_Referer" : "{% if discussion %}{{ url('docova_opentopic', { 'topic' : discussion.getId }) }}{% else %}{{ url('docova_readdocument', { 'doc_id' : document.getId() }) }}?ParentUNID={{ document.getFolder.getId }}{% endif %}",
+  "Query_String" : "{% if discussion %}Topic={{ discussion.getId }}{% else %}ParentUNID={{ document.getId }}{% endif %}",
+  "Query_String_Decoded" : "{% if discussion %}Topic={{ discussion.getId }}{% else %}ParentUNID={{ document.getId }}{% endif %}",
+  "Path_Info" : "",
+  "Path_Info_Decoded" : "{{ path('docova_discussion') }}{% if discussion %}?EditDocument&Topic={{ discussion.getId }}{% else %}?ParentUNID={{ document.getId }}{% endif %}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "ThreadKey" : "{{ document.getId }}",
+  "ThreadParentKey" : "{{ discussion and discussion.getParentDiscussion ? discussion.getParentDiscussion.getId : '' }}",
+  "ThreadParentId" : "{{ discussion and discussion.getParentDiscussion ? discussion.getParentDiscussion.getId : '' }}",
+  "ThreadParentFolder" : "{{ document.getFolder.getId }}",
+  "HasResponses" : ""
+};
+
+function getinfovar(){
+	return info;
+}		
+
+$(document).ready(function(){  
+	$( "button" ).button().click(function( event ) {
+		event.preventDefault();
+	});
+
+	$('#tdActionBar a').each(function(index,element) {
+   		$(element).button({
+			text: true,
+			label: $.trim($(this).text()),
+		});
+	});
+});
+
+function SaveAndClose()
+{
+	DLIUploader1.Submit({
+		Navigate: false,
+		onOk: function() {
+			if (  docInfo.ThreadParentKey  )
+				var parentUrl = "/" + docInfo.NsfName + "/ReadDocument/" + docInfo.ThreadKey + "?ParentUNID=" + docInfo.ThreadParentFolder;
+		    else
+				var parentUrl = "/" + docInfo.NsfName + "/ReadDocument/" + docInfo.ThreadKey + "?ParentUNID=" + docInfo.DocKey;
+
+			document.location.href = parentUrl;
+		}
+	});
+}
+
+function deleteThread(){
+
+	if(docInfo.HasResponses == "true") {
+		alert("{% trans %}This Discussion Topic has responses which must be deleted first{% endtrans %}");
+		return false;
+	}
+	
+	if(!window.confirm("{% trans %}Delete this Discussion Topic?{% endtrans %}")) {return false;}
+	
+	var docid = "<Unid>" + docInfo.DocID + "</Unid>";
+	
+	var request = "<Request><Action>REMOVERELATED</Action><UserName>" + docInfo.UserNameAB + "</UserName>";
+	request += docid;
+	request += "</Request>";
+	//send the request to server
+	var processUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/LibraryServices?OpenAgent";
+	jQuery.ajax({
+		type: "POST",
+		url: processUrl,
+		data: request,
+		cache: false,
+		async: false,
+		dataType: "xml",
+		success: function(xml){
+			var xmlobj = $(xml)
+			var statustext = $(xmlobj).find("Result").first().text();
+			if(statustext == "OK"){
+				alert("{% trans %}The requested discussion item was deleted.{% endtrans %}");
+			}
+		},
+		error: function(){
+			alert("{% trans %}Error: Unable to delete discussion document.{% endtrans %}");
+		}		
+	})
+	CloseDocument();
+}
+
+function LoadDiscussionThread()
+{
+	var oXsl = null;
+	var oXml = null;
+	var xmlBaseUrl = "/" + NsfName + "/discussionbyparent.xml?OpenView&RestricttoCategory=" + docInfo.ThreadKey;
+	var xslBaseUrl = "/" + NsfName +  "/discussionthread.xsl?openpage"
+	var processor = new XSLTProcessor();
+	
+	//---Get the discussion thread xml	
+	jQuery.ajax({
+		type: "GET",
+		url: xmlBaseUrl,
+		cache: false,
+		async: false,
+		dataType: "xml", //"xml" returns the xml DOM object.  "text" returns the xml text for which you would then need to parse to an xml DOM with DOMParser
+		success: function(xml){
+			oXml = xml
+		},
+		error: function(){
+			alert("{% trans %}Error: Could not retrieve the discussion XML{% endtrans %}");
+		}
+	})
+
+	//---Get the discussion thread xsl stylesheet xml
+	jQuery.ajax({
+		type: "GET",
+		url: xslBaseUrl,
+		cache: false,
+		async: false,
+		dataType: "xml", //"xml" returns the xml DOM object.  "text" returns the xml text for which you would then need to parse to an xml DOM with DOMParser
+		success: function(xml){
+			processor.importStylesheet(xml);
+		},
+		error: function(){
+			alert("Error:  Could not retrieve the XSL stylesheet XML")
+		}
+	})
+
+	var discThread = processor.transformToFragment(oXml, document);	
+	$("#divThreadContent").html("");
+	$("#divThreadContent").append(discThread)
+	$("#divThreadContainer").css("display", "");
+}
+
+
+function OpenTopic(obj)
+{
+if(obj)
+	{
+		var topicUrl = "/" + NsfName +  "/0/" + $(obj).prop("id") + "?OpenDocument";
+		topicUrl += (docInfo.Mode)? "&mode=" + docInfo.Mode : "";
+		location.href = topicUrl;
+	}
+}
+
+function HighlightCurrent()
+{
+	var curTopic = docInfo.DocID;
+	var obj = $("#" + curTopic)
+	var imgsrc = $(obj).find("IMG").prop("src");
+	if(imgsrc == null){
+		return false;
+	}
+	var newimgsrc = imgsrc.replace("discchatbw", "discchat")
+	$(obj).find("IMG").prop("src", newimgsrc)
+	$(obj).prop("className", "discitemhighlight")
+}
+
+function HighlightTopic(obj)
+{
+	var imgsrc = $(obj).find("IMG").prop("src")
+	var newimgsrc = imgsrc.replace("discchatbw", "discchat")
+	$(obj).find("IMG").prop("src", newimgsrc)
+	$(obj).prop("className", "discitemhighlight")
+}
+
+function NormalTopic(obj)
+{
+	var imgsrc = $(obj).find("IMG").prop("src")
+	var newimgsrc = imgsrc.replace("discchat", "discchatbw")
+	$(obj).find("IMG").prop("src", newimgsrc)
+	$(obj).prop("className", "discitem")
+}
+
+function CloseDocument()
+{
+	var parentUrl = "/" + docInfo.NsfName + "/ReadDocument/" + docInfo.ThreadKey + "?ParentUNID=" + docInfo.ThreadParentFolder;
+	location.href = parentUrl;	
+	
+	window.location.href = parentUrl ;
+}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" SCROLL="no" onload="InitVars(info); LoadDiscussionThread(); HighlightCurrent();">
+	<form method="post" action="{{ path('docova_discussion') }}{% if discussion %}?EditDocument&Topic={{ discussion.getId }}{% else %}?ParentUNID={{ document.getId }}{% endif %}{% if parent_thread %}&ParentThread={{ parent_thread }}{% endif %}" enctype="multipart/form-data" name="_DiscussionTopic">
+		<div id="FormHeader" style="padding:3px 0 3px 3px; height: 25px; border-top: 1px solid #a6c9e2; border-bottom: 1px solid #CCC;">
+			<table border=0 cellspacing=0 cellpadding=0 width=100%>
+				<tr valign="top">
+					<td id="tdActionBar">
+						<a onclick="SaveAndClose(); return false;" href="">{% trans %}Save and Close{% endtrans %}</a>
+						<a onclick="CloseDocument(); return false;" href="">{% trans %}Close{% endtrans %}</a>
+					</td>
+				</tr>
+			</table>
+		</div>		
+
+		<div id=divContentSection class="ui-widget" style="font: 11px verdana; width: 100%; position:absolute; padding: 15px; ">
+			<fieldset style="padding: 4px; width:95%;">
+				<legend><span style="font: bold 12px verdana;">{% trans %}Discussion Topic{% endtrans %}</span>&nbsp;</legend>
+				<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr valign="top">
+						<td class="frmText" width="20%" bgcolor="#FFFFFF">{% trans %}From{% endtrans %}:</td>
+						<td class="frmText" width="80%" bgcolor="#FFFFFF">{{ user.getUserNameDnAbbreviated }} {% trans %}on{% endtrans %}: {{ 'now'|date(date_format) }}</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmText" width="20%" bgcolor="#FFFFFF">{% trans %}Related to{% endtrans %}:</td>
+						<td class="frmText" width="80%" bgcolor="#FFFFFF">
+							<a href="{{ path('docova_readdocument', { 'doc_id' : document.getId }) }}?ParentUNID={{ document.getFolder.getId }}">{{ document.getDocTitle }}</a>
+						</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmText" width="20%" bgcolor="#FFFFFF">{% trans %}Subject{% endtrans %}:</td>
+						<td class="frmText" width="80%" bgcolor="#FFFFFF"><input name="Subject" value="{{ discussion ? discussion.getSubject : '' }}" style="width: 300px;">&nbsp;<br><br></td>
+					</tr>
+					<tr valign="top">
+						<td class="frmLabel" width="20%" bgcolor="#FFFFFF"><b>{% trans %}Comments{% endtrans %}:</b></td>
+						<td class="frmText" width="80%" bgcolor="#FFFFFF"></td>
+					</tr>
+					<tr valign="top">
+						<td class="frmText" bgcolor="#FFFFFF" colspan="2">
+							<div id="divRTContent" style="width: 100%;background-color: white"> 
+								<textarea name="Body" style="border: 1 solid #cccccc; width:85%;" rows="5" rows="7" >{{ discussion ? discussion.getBody : '' }}</textarea>
+							</div>
+						</td>
+					</tr>
+					<tr valign="top">
+						<td class="frmLabel" width="20%" bgcolor="#FFFFFF">{% trans %}Attachments{% endtrans %}:</td>
+						<td width="80%" bgcolor="#FFFFFF"></td>
+					</tr>
+					<tr valign="top">
+						<td width="100%" bgcolor="#FFFFFF" colspan="2">
+							<input type=hidden id="tmpMode" name="tmpMode" value=""/>
+							<ul id="listmenu" style="display:none;width:100px;position:absolute;z-index:100;">
+							  <li id="menu-1-I">{% trans %}Icons{% endtrans %}</li>
+							  <li id="menu-1-R">{% trans %}Details{% endtrans %}</li>
+							</ul>
+							<script language="javascript" type="text/javascript">
+							function HandleScanClick()
+							{
+								EZTwainScanImages();
+							}
+							</script>
+							<div id="uploaderSTD" style="display:none">
+								<div style="display:none"><input id="fileAttach" type="file" name="Uploader_DLI_Tools[]"></div>
+								<div id="printAttach" style = "display:none" ></div>
+								<div id="divAttachmentSection" style="border-bottom:1px solid gray; padding-top:10px">
+									<span style="font:11px Verdana, Arial;"></span>
+									<div align=right id="divUploaderButtons-1" style="right: 20px; top: 5px; font:11px Verdana, Arial; z-index:1;">
+										<span align=left style="padding-right: 20px" id="uploaderMode" >
+											{% trans %}Mode{% endtrans %} : 
+											<span id="upmode" style="font-weight:normal">{% trans %}Basic{% endtrans %}</span>
+										</span>
+										<button id="btn-1-attach-std"></button>
+										<button id="btn-1-liststd" menu="listmenu"></button>
+									</div>
+									<div class="ui-widget ui-widget-content itemcontainer" id="attachDisplay" ></div>
+								</div>
+							</div>
+{% set attachments = '' %}
+{% set attachments_length = '' %}
+{% if discussion and discussion.getAttachments.count > 0 %}
+	{% for att in discussion.getAttachments %}
+		{% set attachments = attachments ~ att.getFileName ~ ',' %}
+		{% set attachments_length = attachments_length ~ att.getFileSize ~ ',' %}
+	{% endfor %}
+	{% set attachments = attachments|length > 1 ? attachments[:attachments|length - 1] : attachments %}
+	{% set attachments_length = attachments_length|length > 1 ? attachments_length[:attachments_length|length - 1] : attachments_length %}
+{% endif %}
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	//Handle uploader without any controls installed
+	DLIUploader1= new Docova.Uploader({ 
+		divId : "attachDisplay",
+		AttachmentNames : "{% if attachments %}{{ attachments[:(attachments|length-1)]|raw }}{% endif %}",
+		AttachmentLengths:  "{% if attachments_length %}{{ attachments_length[:(attachments_length|length-2)] }}{% endif %}",
+		AttachmentDates: "",
+		ListType: "L",
+		Height: "110px",
+		{% if discussion %}
+		onBeforeDownload: function(filename) { return UploaderRedirectDownload(filename); },
+		{% endif %}
+		onBeforeLaunch: function(filename) { return UploaderRedirectDownload(filename); /* UploaderOnBeforeLaunch(filename); */ },
+	});
+			
+	DLIUploader1.init();
+	$("#listmenu").menu();
+	//-----list button
+	$( "#btn-1-liststd" )
+	.button({
+		text:false,
+		label: "{% trans %}Views{% endtrans %}.",
+		icons: {primary: "ui-icon-triangle-1-s"}
+	})
+	.click(function( event ) {
+		event.preventDefault();
+		var menu = $("#" + $(this).attr("menu"));
+		menu.show().position({
+			my: "left top",
+			at: "left bottom",
+			of: this
+		});
+		$(document).one("click", function(){
+			menu.hide();
+		})
+		return false;
+	});
+	//-----list dropdown menu click events
+	//-----Icons view
+	$("#menu-1-I").click(function(event){
+		event.preventDefault();
+		UmenuClick(this, "STD");
+	});
+	//-----Report or "Details" view
+	$("#menu-1-R").click(function(event){
+		event.preventDefault();
+		UmenuClick(this, "STD");
+	});
+	//---------------------------Header Buttons -------------------------------------
+	//-----attach button
+	$( "#btn-1-attach-std" )
+	.button({
+		text:true,
+		label: "{% trans %}Attach a file.{% endtrans %}",
+		icons: {primary: "ui-icon-document"}
+	})
+	.click(function( event ) {
+		event.preventDefault();
+		DLIUploader1.AddFile();
+	});	
+	//Scan  button
+	$( "#btn-1-scan" )
+	.button({
+		text:true,
+		label: "{% trans %}Scan a file.{% endtrans %}",
+		icons: {primary: "ui-icon-copy"}
+	})
+	.click(function( event ) {
+		event.preventDefault();
+		HandleScanClick();
+	});
+			
+	$("#uploaderSTD").show();
+});
+</script>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			<fieldset ID="divThreadContainer" style="width: 95%; display:none;">
+				<legend style="margin-bottom: 10px;">{% trans %}Related Discussion{% endtrans %}&nbsp;</legend>
+				<DIV ID="divThreadContent">{% trans %}Please wait while loading discussionn thread{% endtrans %}...</DIV>
+			</filedset>
+		</div>
+		<!------------------ SUBFORM sfKillCache ------------>
+		<!------------------Microsoft suggestion to force no cacheing of documents------------>
+		<HEAD>
+			<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+			<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+			<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+		</HEAD>
+		<!------------------END SUBFORM sfKillCache  ------------>
+	</form>
+</body>
+</html>

@@ -1,0 +1,78 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    acl:
+        connection: default
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+    
+    encoders:
+        Docova\DocovaBundle\Entity\UserAccounts: plaintext
+
+    providers:
+        chain_provider:
+            chain:
+                providers: [docova_second, docova_main, docova_third]
+        docova_main:
+            id: docova.security.user.provider
+        docova_second:
+            entity: { class: 'DocovaBundle:UserAccounts', property: 'username' }
+        docova_third:
+            id: docova.security.user.oauthprovider
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+       
+        public_access:
+            pattern: ^/Docova/publicAccess$
+            anonymous: true
+
+        docova_login:
+            pattern: ^/((Docova/login)|(Docova/loggedOut)|(Docova/DeployServices)|(Docova/oauth))$
+            anonymous: true
+
+        mobile_auth:
+            pattern: ^/Docova/auth/mobile
+            form_login:
+                provider: chain_provider
+                login_path: '%m.login_path%'
+                check_path: '%m.check_path%'
+                require_previous_session: false
+                success_handler: docova.security.authentication.success_handler
+            anonymous: true
+            context: my_docova
+            docova: true
+
+        docova:
+            pattern: ^/Docova
+            provider: chain_provider
+            form_login:
+                login_path: '%d.login_path%'
+                check_path: '%d.check_path%'
+                default_target_path: '%d.default_target_path%'
+                success_handler: docova.security.authentication.success_handler
+            simple_preauth:
+                authenticator: docova.security.user.oauthenticator
+            logout:
+                path:   /Docova/logout
+                target: /Docova
+                success_handler: docova.security.logout_success_handler
+            security: true
+            context: my_docova
+            docova: true
+
+    access_control:
+        - { path: /Docova/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: /Docova/loggedOut, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: /Docova/DeployServices, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        - { path: /Docova/auth/mobile/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: /Docova/oauth, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: /Docova/publicAccess, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/Docova, roles: ROLE_USER }
+        - { path: ^/Docova, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

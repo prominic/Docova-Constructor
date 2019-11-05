@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<script language="JavaScript" type="text/javascript">
+loadaction="{{ action_name }}"; 
+libid=""; 
+fldid=""; 
+docid="{{ document_id }}"; 
+srcWindow = null; 
+</script>
+<script language="JavaScript" type="text/javascript">
+//------------ progress bar
+//progress bar vars
+var w3c=(document.getElementById)?true:false;
+var ie=(document.all)?true:false;
+var N=-1;
+var bars=new Array();
+function createBar(w,h,bgc,brdW,brdC,blkC,speed,blocks){
+	if(ie||w3c){
+		var t='<div style="position:relative; overflow:hidden; width:'+w+'px; height:'+h+'px; background-color:'+bgc+'; border-color:'+brdC+'; border-width:'+brdW+'px; border-style:solid; font-size:1px;">';
+		t+='<span id="blocks'+(++N)+'" style="left:-'+(h*2+1)+'px; position:absolute; font-size:1px">';
+		for(i=0;i<blocks;i++){
+			t+='<span style="background-color:'+blkC+'; left:-'+((h*i)+i)+'px; font-size:1px; position:absolute; width:'+h+'px; height:'+h+'px; ';
+			t+=(ie)?'filter:alpha(opacity='+(100-i*(100/blocks))+')':'-Moz-opacity:'+((100-i*(100/blocks))/100);
+			t+='"></span>';
+		}
+		t+='</span></div>';
+		document.write(t);
+		var bA=(ie)?document.all['blocks'+N]:document.getElementById('blocks'+N);
+		bA.blocks=blocks;
+		bA.w=w;
+		bA.h=h;
+		bars[bars.length]=bA;
+		setInterval('startBar('+N+')',speed);
+	}
+}
+
+function startBar(bn){
+	var t=bars[bn];
+	t.style.left=((parseInt(t.style.left)+t.h+1-(t.blocks*t.h+t.blocks)>t.w)? -(t.h*2+1) : parseInt(t.style.left)+t.h+1)+'px';
+}
+
+function showBar()
+{
+	var msgDiv = document.all.divWaitMsg;
+	msgDiv.style.display="";
+}
+
+function hideBar()
+{
+	var msgDiv = document.all.divWaitMsg;
+	msgDiv.style.display="none";
+}
+//=========================
+
+function IsValidParent()
+{
+	try	{
+		srcWindow = window.parent.fraContentTop;
+		if(srcWindow.ViewLoadDocument){return true;}
+		}
+	catch (e) {
+		return false;
+		}
+	return false;
+}
+
+function DoLoadAction()
+{
+	var validParent = IsValidParent();
+	
+	if(loadaction=="reloaddoc" && validParent){
+			srcWindow.ViewReloadRecord(docid);
+	}
+	else if(loadaction=="reloadview" && validParent){
+		//srcWindow.ViewReload(docid);
+		srcWindow.ViewUnloadDocument(true, docid);
+	}
+	else if(loadaction=="closedoc" && validParent)	{
+		srcWindow.ViewUnloadDocument(false, docid);
+	}
+	else if(loadaction=="close")	{
+		window.close();
+	}
+}
+
+DoLoadAction();
+</script>
+</head>
+<body text="#000000" bgcolor="#E8E8DB" topmargin=4 bottommargin=4 leftmargin=0 rightmargin=0 marginheight=4 marginwidth=0>
+	<form action="">
+		<div id="divWaitMsg" style="width: 100%; font: normal 11px verdana, arial, sans-serif; color: #0000ff; text-align: center; display: none;">
+			<br> <br> <br> <br>&nbsp;{% trans %}Retrieving data. Please wait{% endtrans %}...<br>
+			<div style="padding: 5px 0px 0px 5px;">
+				<script type="text/javascript">
+createBar(300,10,'white',1,'#6CAFD3','#6CAFD3',85,10);
+				</script>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

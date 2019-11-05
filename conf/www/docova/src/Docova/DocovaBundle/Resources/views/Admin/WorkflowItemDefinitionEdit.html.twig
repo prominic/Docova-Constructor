@@ -1,0 +1,574 @@
+{% if workflow_item is defined %}
+	{% set path_info = path('docova_admin_editdocument', { 'view_name' : 'wAdminWorkflow', 'doc_id' : workflow_item.getId }) ~ '?wfitem=true' %}
+{% else %}
+	{% set path_info = path('docova_admin_workflowitem') ~ '?OpenForm&ParentUNID=' ~ workflow.getId %}
+{% endif %}
+
+{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+	'document' : (workflow_item is defined ? workflow_item: ''), 
+	'view_name' : 'wAdminWorkflow', 
+	'view_title' : 'Workflow Item Process', 
+	'path_info' : path_info,
+	'mode' : 'edit' 
+} %}
+<script type="text/javascript">
+$(function() {
+	$('form').height($(window).height() - 46);
+	$('#divFormContainer').accordion({
+		heightStyle: "content",
+		collapsible: true
+	});
+
+	$('#authorParticipant').click(function() {
+		if ($(this).prop('checked')) {
+			$('.single').addClass('hidden');
+		}
+		else if (!$('input[name="wfType"][value="Parallel"]').prop('checked')) {
+			$('.single').removeClass('hidden');
+		}
+	});
+
+	$('select[name="wfDeclineAction"]').on('change', function() {
+		if ($(this).val() == 2) {
+			$('#returnStep').removeClass('hidden');
+		}
+		else {
+			$('#returnStep').addClass('hidden');
+		}
+	});
+})
+</script>
+<style type="text/css">
+.topHdr {
+	border-bottom: 2px #FFF solid;
+}
+.ui-icon-group {
+	background-image: url('{{ asset('bundles/docova/images/icons/vwicn004.gif') }}') !important;
+	background-position: center;	
+}
+</style>
+</head>
+<body scroll="no">
+	<ul class="ui-widget-header actionBar hidetoload">
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+		<li id="saveAndCloseBtn">{% trans %}Save and Close{% endtrans %}</li>
+	</ul>
+	<form method="post" class="hidetoload" action="{% if workflow_item is defined %}{% else %}{{ path('docova_admin_workflowitem') }}?OpenForm&amp;ParentUNID={{ workflow.getId }}&amp;Seq=1{% endif %}" autocomplete="off" name="_WorkflowDefinitionItem">
+		<h3 class="adjusted headings1">{% trans %}Workflow Step Settings{% endtrans %}</h3>
+		<div id="divFormContainer">
+			<h3>{% trans %}General Settings{% endtrans %}</h3>
+			<div>
+				<table class="elmContainer" cellspacing="0">
+					<tr>
+						<td class="firstRw">{% trans %}Step name{% endtrans %}:</td>
+						<td class="firstRw"><input type="text" name="wfTitle" class="text ui-widget-content ui-corner-all" value="{% if workflow_item is defined %}{{ workflow_item.getStepName }}{% endif %}"></td>
+					</tr>
+					<tr>
+						<td>{% trans %}Step type{% endtrans %}:</td>
+						<td>
+							<label><input type="radio" name="wfAction" class="hideShow" hide="review approve end common rpcommon apencommon" value="Start" {% if workflow_item is defined and workflow_item.getStepType == 1 %}checked{% endif %}> {% trans %}Start{% endtrans %}</label>
+							<label><input type="radio" name="wfAction" class="hideShow" show="review common rpcommon" hide="start approve end apencommon" value="Review" {% if workflow_item is defined and workflow_item.getStepType == 2 %}checked{% endif %}> {% trans %}Review{% endtrans %}</label>
+							<label><input type="radio" name="wfAction" class="hideShow" show="approve common rpcommon apencommon" hide="review start end" value="Approve" {% if workflow_item is defined and workflow_item.getStepType == 3 %}checked{% endif %}> {% trans %}Approve{% endtrans %}</label>
+							<label><input type="radio" name="wfAction" class="hideShow" show="end common apencommon" hide="review approve rpcommon start" value="End" {% if workflow_item is defined and workflow_item.getStepType == 4 %}checked{% endif %}> {% trans %}End{% endtrans %}</label>
+						</td>
+					</tr>
+					<tr>
+						<td>{% trans %}Step ID{% endtrans %}:</td>
+						<td>{% if workflow_item is defined %}DK{{ workflow_item.getId }}{% endif %}</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="innerTblContainer" colspan="2">
+							<table class="elmContainer" cellspacing="0">
+								<tr>
+									<td>{% trans %}Document Status{% endtrans %}:</td>
+									<td><input type="text" name="wfDocStatus" class="text ui-widget-content ui-corner-all" value="{% if workflow_item is defined %}{{ workflow_item.getDocStatus }}{% endif %}" ></td>
+								</tr>
+								<tr>
+									<td>{% trans %}Position{% endtrans %}:</td>
+									<td>
+										<input type="text" name="wfOrder" class="text ui-widget-content ui-corner-all" value="{% if workflow_item is defined %}{{ workflow_item.getPosition }}"> {% trans %}of{% endtrans %} {{ workflow_item.getWorkflow.getSteps.count - 1 }}{% else %}{{ workflow.getSteps.count }}"> {% trans %}of{% endtrans %} {{ workflow.getSteps.count  }}{% endif %} 
+										<span class="elNote">{% trans %}First position index of 0, not 1.{% endtrans %}</span>
+									</td>
+								</tr>
+								<tr>
+									<td>{% trans %}Distribution{% endtrans %}:</td>
+									<td>
+										<label><input type="radio" name="wfType" class="hideShow" show="single" hide="multi completeBy atLeastAmount" value="Serial" {% if workflow_item is defined %}{% if workflow_item.getDistribution == 1 %}checked{% endif %}{% else %}checked{% endif %} > {% trans %}Serial{% endtrans %}</label>
+										<label><input type="radio" name="wfType" class="hideShow" show="multi completeBy" hide="single" value="Parallel" {% if workflow_item is defined and workflow_item.getDistribution == 2 %}checked{% endif %}> {% trans %}Parallel{% endtrans %}</label>
+									</td>
+								</tr>
+								<tr>
+									<td>{% trans %}Participants{% endtrans %}:</td>
+									<td>
+										<label><input type="checkbox" name="wfEnableAuthorParticipant" id="authorParticipant"" 
+										{% if (workflow_item is defined and (workflow_item.getParticipants == 1 or workflow_item.getParticipants == 3) or (not (workflow_item is defined))) %}checked{% endif %} value="1"> {% trans %}Document author{% endtrans %} </label>
+									</td>
+								</tr>
+								<tr class="single{%  if ( (workflow_item is defined and (workflow_item.getDistribution == 2 or workflow_item.getParticipants == 1 or workflow_item.getParticipants == 3) ) or not( workflow_item is defined) ) %} hidden{% endif %}">
+									{% set participants = '' %}
+									{% if workflow_item is defined and workflow_item.getOtherParticipantGroups|length > 0 %}
+										{% set participants = ',' ~ workflow_item.getOtherParticipantGroups|join(',') ~ participants %}
+									{% endif %}
+									{% if workflow_item is defined and workflow_item.getOtherParticipant.count > 0 %}
+										{% for item in workflow_item.getOtherParticipant %}
+											{% set participants = ',' ~ item.getUserNameDnAbbreviated ~ participants %}
+										{% endfor %}
+									{% endif %}
+									{% set participants = participants|length > 0 ? participants[1:] : '' %}
+									<td class="firstRw"></td>
+									<td class="firstRw">
+										{% trans %}or{% endtrans %}<br />
+										<textarea class="text ui-widget-content ui-corner-all" name="tmpwfReviewerApproverListSingle" readonly="true">{{ participants }}</textarea>
+										<button class="namepicker" single="true" field="tmpwfReviewerApproverListSingle"></button>
+									</td>
+								</tr>
+								<tr class="multi{% if workflow_item is not defined or workflow_item.getDistribution == 1 %} hidden{% endif %}">
+									<td class="firstRw"></td>
+									<td class="firstRw">
+										{% trans %}and/or{% endtrans %}:<br />
+										<textarea class="text ui-widget-content ui-corner-all" name="tmpwfReviewerApproverListMulti" readonly="true">{{ participants }}</textarea>
+										<button class="namepicker" field="tmpwfReviewerApproverListMulti"></button>
+									</td>
+								</tr>
+								<tr>
+									<td class="firstRw"></td>
+									<td class="firstRw"> 
+										<label><input type="checkbox" name="wfReviewerApproverSelect" value="1" {% if workflow_item is defined and workflow_item.getParticipants > 1 %}checked{% endif %}> {% trans %}Allow author to modify participant names{% endtrans %}</label>
+									</td>
+								</tr>
+								<tr class="completeBy{% if workflow_item is not defined or workflow_item.getDistribution != 2 %} hidden{% endif %}">
+									<td>{% trans %}Completed when processed by{% endtrans %}:</td>
+									<td>
+										<label><input type="radio" name="wfCompleteAny" value="0" class="hideShow" hide="atLeastAmount" {% if workflow_item is not defined or workflow_item.getCompleteBy == 0 %}checked{% endif %} >{% trans %}All participants{% endtrans %} </label>
+										<label><input type="radio" name="wfCompleteAny" value="1" class="hideShow" hide="atLeastAmount" {% if workflow_item is defined and workflow_item.getCompleteBy == 1 %}checked{% endif %} >{% trans %}Any participant{% endtrans %} </label>
+										<label><input type="radio" name="wfCompleteAny" value="2" class="hideShow" show="atLeastAmount" {% if workflow_item is defined and workflow_item.getCompleteBy > 1 %}checked{% endif %} >{% trans %}At least{% endtrans %}... </label>
+									</td>
+								</tr>
+								<tr class="atLeastAmount{% if workflow_item is not defined or workflow_item.getDistribution != 2 or workflow_item.getCompleteBy <= 1 %} hidden{% endif %}">
+									<td class="firstRw"></td>
+									<td class="firstRw">
+										<input type="text" name="wfCompleteCount" class="text ui-widget-content ui-corner-all" value="{% if workflow_item is defined and workflow_item.getCompleteBy > 1 %}{{ workflow_item.getCompleteBy - 2 }}{% else %}0{% endif %}"> {% trans %}participant(s){% endtrans %}
+										<span class="elNote">{% trans %}If the number is greater then the number of participants, all will have to complete.{% endtrans %}</span>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr class="approve{% if workflow_item is not defined or workflow_item.getStepType != 3 %} hidden{% endif %}">
+						<td>{% trans %}Allow approver to edit{% endtrans %}</td>
+						<td>
+							<label><input type="radio" name="wfApproverEdit" value="Yes" {% if workflow_item is defined and workflow_item.getApproverEdit == true %}checked{% endif %}> {% trans %}Yes{% endtrans %}</label>
+							<label><input type="radio" name="wfApproverEdit" value="No" {% if workflow_item is not defined or not workflow_item.getApproverEdit %}checked{% endif %}> {% trans %}No{% endtrans %}</label>
+						</td>
+					</tr>
+					<tr class="rpcommon{% if workflow_item is not defined or workflow_item.getStepType not in [2,3] %} hidden{% endif %}">
+						<td>{% trans %}Optional Review/Approve comments?{% endtrans %}</td>
+						<td>
+							<label><input type="checkbox" name="wfOptionalComments" value="1" {% if workflow_item is defined and workflow_item.getOptionalComments == true %}checked{% endif %}> {% trans %}Yes{% endtrans %}</label>
+						</td>
+					</tr>
+					<tr class="review{% if workflow_item is not defined or workflow_item.getStepType != 2 %} hidden{% endif %}">
+						<td>{% trans %}Complete Review button label{% endtrans %}:</td>
+						<td>
+							{% trans %}Custom button label{% endtrans %}:</br>
+							<textarea name="wfCustomReviewButtonLabel" class="text ui-widget-content ui-corner-all">{{ workflow_item is defined ? workflow_item.getCustomReviewButtonLabel : '' }}</textarea>
+							<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Complete Review" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+						</td>
+					</tr>
+					<tr class="approve{% if workflow_item is not defined or workflow_item.getStepType != 3 %} hidden{% endif %}">
+						<td>{% trans %}Approve button label{% endtrans %}:</td>
+						<td>
+							{% trans %}Custom button label{% endtrans %}:<br />
+							<textarea name="wfCustomApproveButtonLabel" class="text ui-widget-content ui-corner-all">{{ workflow_item is defined ? workflow_item.getCustomApproveButtonLabel : '' }}</textarea>
+							<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Approve" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+						</td>
+					</tr>
+					<tr class="apencommon{% if workflow_item is not defined or workflow_item.getStepType not in [3,4] %} hidden{% endif %}">
+						<td>{% trans %}Decline button label{% endtrans %}:</td>
+						<td>{% trans %}Custom button label{% endtrans %}:</br>
+							<textarea name="wfCustomDeclineButtonLabel" class="text ui-widget-content ui-corner-all">{{ workflow_item is defined ? workflow_item.getCustomDeclineButtonLabel : '' }}</textarea>
+							<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Decline" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+						</td>
+					</tr>
+					<tr class="end{% if workflow_item is not defined or workflow_item.getStepType != 4 %} hidden{% endif %}">
+						<td>{% trans %}Release button label{% endtrans %}:</td>
+						<td>{% trans %}Custom button label{% endtrans %}:</br>
+							<textarea name="wfCustomReleaseButtonLabel" class="text ui-widget-content ui-corner-all">{{ workflow_item is defined ? workflow_item.getCustomReleaseButtonLabel : '' }}</textarea>
+							<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a string. "Release Document" will be used if left blank. Available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td>{% trans %}Workflow buttons visibility{% endtrans %}:</td>
+						<td>
+							{% trans %}Hide workflow buttons when{% endtrans %}: 
+							<label><input type="checkbox" name="wfHideButtons[]" value="R" {% if workflow_item is defined and workflow_item.getHideReading == true %}checked{% endif %}> {% trans %}Reading{% endtrans %}</label>
+							<label><input type="checkbox" name="wfHideButtons[]" value="E" {% if workflow_item is defined and workflow_item.getHideEditing == true %}checked{% endif %}> {% trans %}Editing{% endtrans %}</label>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<h3>{% trans %}Actions{% endtrans %}</h3>
+			<div>
+				<table class="elmContainer" cellspacing="0">
+					<tr>
+						<td colspan="2" class="hdr topHdr">{% trans %}When the step is being{% endtrans %}...</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td colspan="2" class="hdr">{% trans %}Activated{% endtrans %}</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw exc">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw">
+							<label><input type="checkbox" name="wfEnableActivateMsg" value="1" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSendMessage == true %}checked{% endif %} class="inpRadioChkbox"> {% trans %}Send{% endtrans %} </label> 
+							<select name="wfActivateMsg" class="text ui-widget-content ui-corner-all">
+								<option {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getMessage.getMessageName == 'DEFAULT_ACTIVATE' and step_actions['ACTIVATE'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="ACTIVATE">{% trans %}Default{% endtrans %}
+								{% if system_messages|length > 0 %}
+								{% for msg in system_messages %}
+								<option value="{{ msg.getId }}" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+								{% endfor %}
+								{% endif %}
+							</select> {%  trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw exc"></td>
+						<td class="firstRw exc">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" name="wfActivateNotifyParticipants[]" value="P" {% if step_actions['ACTIVATE'] is defined and (step_actions['ACTIVATE'].getToOptions == 3 or step_actions['ACTIVATE'].getToOptions == 1) %}checked{% endif %} class="inpRadioChkbox"> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" name="wfActivateNotifyParticipants[]" value="A" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getToOptions > 1 %}checked{% endif %} class="inpRadioChkbox"> {% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw exc"></td>
+						<td class="firstRw exc">
+							{% trans %}and/or{% endtrans %}: </br>
+							{% set nameslist = '' %}
+							{% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['ACTIVATE'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSendTo.count > 0 %}
+								{% for item in step_actions['ACTIVATE'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% set nameslist = nameslist|length > 0 ? nameslist[1:] : '' %}
+							<textarea name="wfActivateNotifyList" class="text ui-widget-content ui-corner-all" readonly="true">{{ nameslist }}</textarea>
+							<button class="namepicker" field="wfActivateNotifyList"></button>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" class="hdr">{% trans %}Completed{% endtrans %}</td>
+					</tr>
+					<tr>
+						<td class="exc firstRw">{% trans %}Actions{% endtrans %}:</td>
+						<td class="exc firstRw">
+							<label> <input type="checkbox" name="wfEnableCompleteMsg" value="1" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSendMessage == true %}checked{% endif %} > {% trans %}Send{% endtrans %} </label> 
+							<select name="wfCompleteMsg" class="text ui-widget-content ui-corner-all">
+								<option {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getMessage.getMessageName == 'DEFAULT_COMPLETE' and step_actions['COMPLETE'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="COMPLETE">{% trans %}Default{% endtrans %}
+								{% if system_messages|length > 0 %}
+								{% for msg in system_messages %}
+								<option value="{{ msg.getId }}" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+								{% endfor %}
+								{% endif %}
+							</select> 
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}:
+							<label><input type="checkbox" name="wfCompleteNotifyParticipants[]" value="P" {% if step_actions['COMPLETE'] is defined and (step_actions['COMPLETE'].getToOptions == 3 or step_actions['COMPLETE'].getToOptions == 1) %}checked{% endif %} > {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" name="wfCompleteNotifyParticipants[]" value="A" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getToOptions > 1 %}checked{% endif %} > {% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr>
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: </br>
+							{% set nameslist = '' %}
+							{% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['COMPLETE'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSendTo.count > 0 %}
+								{% for item in step_actions['COMPLETE'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% set nameslist = nameslist|length > 0 ? nameslist[1:] : '' %}
+							<textarea name="wfCompleteNotifyList" class="text ui-widget-content ui-corner-all" readonly="true">{{ nameslist }}</textarea>
+							<button class="namepicker" field="wfCompleteNotifyList"></button>
+						</td>
+					</tr>
+					<tr class="apencommon{% if workflow_item is not defined or workflow_item.getStepType <= 2 %} hidden{% endif %}">
+						<td colspan="2" class="hdr">{% trans %}Declined{% endtrans %}</td>
+					</tr>
+					<tr class="apencommon{% if workflow_item is not defined or workflow_item.getStepType <= 2 %} hidden{% endif %}">
+						<td class="firstRw exc">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw exc">
+							<table cellspacing="0" width="100%">
+								<tr>
+									<td class="firstRw">
+										<select name="wfDeclineAction" class="text ui-widget-content ui-corner-all mdCombo">
+											<option value="1" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getDeclineAction == 1 %}selected{% endif %}>{% trans %}Stop workflow{% endtrans %}
+											<option value="2" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getDeclineAction == 2 %}selected{% endif %}>{% trans %}Return to selected step{% endtrans %}...
+											<option value="3" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getDeclineAction == 3 %}selected{% endif %}>{% trans %}Cancel workflow{% endtrans %}
+										</select>
+									</td>
+									<td class="firstRw">
+										<div id="returnStep" class="{% if step_actions['DECLINE'] is not defined or step_actions['DECLINE'].getDeclineAction != 2 %}hidden{% endif %}">
+											{% trans %}Step{% endtrans %}: 
+											<select name="wfDeclineBacktrack" class="text ui-widget-content ui-corner-all mdCombo">
+												{% if workflow_item is defined %}
+													{% for item in workflow_item.getWorkflow.getSteps %}
+														{% if item.getPosition < workflow_item.getPosition %}
+												<option {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getBackTrackStep and step_actions['DECLINE'].getBackTrackStep.getId == item.getId %}selected{% endif %} value="{{ item.getId }}">({{ item.getPosition }}) {{ item.getStepName }}
+														{% endif %}
+													{% endfor %}
+												{% elseif workflow is defined %}
+													{% for item in workflow.getSteps %}
+												<option value="{{ item.getId }}">({{ item.getPosition }}) {{ item.getStepName }}
+													{% endfor %}
+												{% endif %}
+											</select>
+										</div>
+									</td>
+								</tr>	
+							</table>
+						</td>
+					</tr>
+
+					<tr class="apencommon{% if workflow_item is not defined or workflow_item.getStepType <= 2 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw"> 
+							<label><input type="checkbox" name="wfEnableDeclineMsg" value="1" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendMessage == true %}checked{% endif %} > {% trans %}Send{% endtrans %}</label> 
+							<select name="wfDeclineMsg" class="text ui-widget-content ui-corner-all">
+								<option 
+								{% if step_actions['DECLINE'] is defined and (not step_actions['DECLINE'].getMessage is null or  ( not step_actions['DECLINE'].getMessage is null and step_actions['DECLINE'].getMessage.getMessageName == 'DEFAULT_DECLINE' and step_actions['DECLINE'].getMessage.getSystemic == true ) ) %}selected="selected"{% endif %} value="DECLINE">{% trans %}Default{% endtrans %}
+								{% if system_messages|length > 0 %}
+								{% for msg in system_messages %}
+								<option value="{{ msg.getId }}" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+								{% endfor %}
+								{% endif %}
+							</select> 
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr class="apencommon{% if workflow_item is not defined or workflow_item.getStepType <= 2 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" name="wfDeclineNotifyParticipants[]" value="P" {% if step_actions['DECLINE'] is defined and (step_actions['DECLINE'].getToOptions == 3 or step_actions['DECLINE'].getToOptions == 1) %}checked{% endif %}> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" name="wfDeclineNotifyParticipants[]" value="A" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getToOptions > 1 %}checked{% endif %}> {% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr class="apencommon{% if workflow_item is not defined or workflow_item.getStepType <= 2 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}:<br> 
+							{% set nameslist = '' %}
+							{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['DECLINE'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendTo.count > 0 %}
+								{% for item in step_actions['DECLINE'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% set nameslist = nameslist|length > 0 ? nameslist[1:] : '' %}
+							<textarea name="wfDeclineNotifyList" class="text ui-widget-content ui-corner-all" readonly="true">{{ nameslist }}</textarea>
+							<button class="namepicker" field="wfDeclineNotifyList"></button>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td colspan="2" class="hdr">{% trans %}Paused{% endtrans %}</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw">
+							<label><input type="checkbox" name="wfEnablePauseMsg" value="1" {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getSendMessage == true %}checked="checked"{% endif %}> {% trans %}Send{% endtrans %} </label> 
+							<select name="wfPauseMsg" class="text ui-widget-content ui-corner-all">
+								<option {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getMessage.getMessageName == 'DEFAULT_PAUSE' and step_actions['PAUSE'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="PAUSE">{% trans %}Default{% endtrans %}
+								{% if system_messages|length > 0 %}
+								{% for msg in system_messages %}
+								<option value="{{ msg.getId }}" {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+								{% endfor %}
+								{% endif %}
+							</select> 
+							{%trans%}message{%endtrans%}
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{%trans%}to{%endtrans%}: 
+							<label><input type="checkbox" name="wfPauseNotifyParticipants[]" value="P" {% if step_actions['PAUSE'] is defined and (step_actions['PAUSE'].getToOptions == 3 or step_actions['PAUSE'].getToOptions == 1) %}checked{% endif %} > {% trans %}participants{% endtrans %}</label>
+							<label><input type="checkbox" name="wfPauseNotifyParticipants[]" value="A" {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getToOptions > 1 %}checked{% endif %} class="inpRadioChkbox">{% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: <br>
+							{% set nameslist = '' %}
+							{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['DECLINE'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendTo.count > 0 %}
+								{% for item in step_actions['DECLINE'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% set nameslist = nameslist|length > 0 ? nameslist[1:] : '' %}
+							<textarea name="wfPauseNotifyList" class="text ui-widget-content ui-corner-all" readonly="true">{{ nameslist }}</textarea>
+							<button class="namepicker" field="wfPauseNotifyList"></button>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td colspan="2" class="hdr">{% trans %}Cancelled{% endtrans %}</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw">
+							<label><input type="checkbox" name="wfEnableCancelMsg" value="1" {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSendMessage == true %}checked{% endif %}> {% trans %}Send{% endtrans %} </label> 
+							<select name="wfCancelMsg" class="text ui-widget-content ui-corner-all">
+								<option {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getMessage.getMessageName == 'DEFAULT_CANCEL' and step_actions['CANCEL'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="CANCEL">{% trans %}Default{% endtrans %}
+								{% if system_messages|length > 0 %}
+								{% for msg in system_messages %}
+								<option value="{{ msg.getId }}" {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+								{% endfor %}
+								{% endif %}
+							</select> 
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" name="wfCancelNotifyParticipants[]" value="P" {% if step_actions['CANCEL'] is defined and (step_actions['CANCEL'].getToOptions == 3 or step_actions['CANCEL'].getToOptions == 1) %}checked{% endif %}> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" name="wfCancelNotifyParticipants[]" value="A" {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getToOptions > 1 %}checked{% endif %}> {% trans %}Author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: <br>
+							{% set nameslist = '' %}
+							{% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['CANCEL'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSendTo.count > 0 %}
+								{% for item in step_actions['CANCEL'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% set nameslist = nameslist|length > 0 ? nameslist[1:] : '' %}
+							<textarea name="wfCancelNotifyList" class="text ui-widget-content ui-corner-all" readonly="true">{{ nameslist }}</textarea>
+							<button class="namepicker" field="wfCancelNotifyList"></button>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td colspan="2" class="hdr">{% trans %}Delayed{% endtrans %}</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw">{% trans %}Actions{% endtrans %}:</td>
+						<td class="firstRw">{% trans %}If not completed within{% endtrans %}: 
+							<input type="text" name="wfDelayCompleteThreshold" class="text ui-widget-content ui-corner-all numeric" value="{% if step_actions['DELAY'] is defined %}{{ step_actions['DELAY'].getDueDays }}{% else %}3{% endif %}"> {% trans %}day(s){% endtrans %}
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							<label><input type="checkbox" name="wfEnableDelayMsg" value="1" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSendMessage == true and step_actions['DELAY'].getToOptions != 0 %}checked{% endif %} class="inpRadioChkbox"> {% trans %}send{% endtrans %} </label> 
+							<select name="wfDelayMsg" class="text ui-widget-content ui-corner-all">
+								<option {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getMessage.getMessageName == 'DEFAULT_DELAY' and step_actions['DELAY'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="DELAY">{% trans %}Default{% endtrans %}
+								{% if system_messages|length > 0 %}
+								{% for msg in system_messages %}
+								<option value="{{ msg.getId }}" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+								{% endfor %}
+								{% endif %}
+							</select> 
+							{% trans %}message{% endtrans %}
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" name="wfDelayNotifyParticipants[]" value="P" {% if step_actions['DELAY'] is defined and (step_actions['DELAY'].getToOptions == 3 or step_actions['DELAY'].getToOptions == 1) %}checked="checked"{% endif %} class="inpRadioChkbox"> {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" name="wfDelayNotifyParticipants[]" value="A" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getToOptions > 1 %}checked="checked"{% endif %} class="inpRadioChkbox"> {% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: <br>
+							{% set nameslist = '' %}
+							{% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['DELAY'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSendTo.count > 0 %}
+								{% for item in step_actions['DELAY'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% set nameslist = nameslist|length > 0 ? nameslist[1:] : '' %}
+							<textarea name="wfDelayNotifyList" class="text ui-widget-content ui-corner-all" readonly="true">{{ nameslist }}</textarea>
+							<button class="namepicker" field="wfDelayNotifyList"></button>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td></td>
+						<td>	
+							{% trans %}If not completed within further{% endtrans %}: 
+							<input type="text" name="wfDelayEsclThreshold" class="text ui-widget-content ui-corner-all numeric" value="{% if step_actions['DELAYESCL'] is defined %}{{ step_actions['DELAYESCL'].getDueDays }}{% else %}3{% endif %}"> {% trans %}day(s){% endtrans %}
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							<label><input type="checkbox" name="wfEnableDelayEsclMsg" value="1" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSendMessage == true and step_actions['DELAYESCL'].getToOptions != 0 %}checked="checked"{% endif %}> {% trans %}send{% endtrans %} </label> 
+							<select name="wfDelayEsclMsg" class="text ui-widget-content ui-corner-all">
+								<option {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getMessage.getMessageName == 'DEFAULT_DELAYESCL' and step_actions['DELAYESCL'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="DELAYESCL">{% trans %}Default{% endtrans %}
+								{% if system_messages|length > 0 %}
+								{% for msg in system_messages %}
+								<option value="{{ msg.getId }}" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+								{% endfor %}
+								{% endif %}
+							</select> 
+							{% trans %}escalation message{% endtrans %}
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}to{% endtrans %}: 
+							<label><input type="checkbox" name="wfDelayEsclNotifyParticipants[]" value="P" {% if step_actions['DELAYESCL'] is defined and (step_actions['DELAYESCL'].getToOptions == 3 or step_actions['DELAYESCL'].getToOptions == 1) %}checked{% endif %} > {% trans %}participants{% endtrans %} </label>
+							<label><input type="checkbox" name="wfDelayEsclNotifyParticipants[]" value="A" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getToOptions > 1 %}checked{% endif %} class="inpRadioChkbox">{% trans %}author{% endtrans %} </label>
+						</td>
+					</tr>
+					<tr class="common{% if workflow_item is defined and workflow_item.getStepType == 1 %} hidden{% endif %}">
+						<td class="firstRw"></td>
+						<td class="firstRw">
+							{% trans %}and/or{% endtrans %}: <br>
+							{% set nameslist = '' %}
+							{% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSenderGroups|length > 0 %}
+								{% set nameslist = ',' ~ step_actions['DELAYESCL'].getSenderGroups|join(',') ~ nameslist %}
+							{% endif %}
+							{% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSendTo.count > 0 %}
+								{% for item in step_actions['DELAYESCL'].getSendTo %}
+									{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+								{% endfor %}
+							{% endif %}
+							{% set nameslist = nameslist|length > 0 ? nameslist[1:] : '' %}
+							<textarea name="wfDelayEsclNotifyList" class="text ui-widget-content ui-corner-all" readonly="true">{{ nameslist }}</textarea>
+							<button class="namepicker" field="wfDelayEsclNotifyList"></button>
+						</td>
+					</tr>					
+				</table>
+			</div>
+		</div>
+	</form>
+</body>

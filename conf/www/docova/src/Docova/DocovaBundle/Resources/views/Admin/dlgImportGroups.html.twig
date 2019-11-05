@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>{% trans %}Import LDAP Groups{% endtrans %}</title>
+	<link type="text/css" rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+	<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+	<script type="text/javascript">
+var docInfo = {
+  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+  "SearchGroupUrl" : "{{ path('docova_grouplookup') }}",
+  "Path_Info_Decoded" : "{{ path('docova_importgroups') }}",
+  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+  "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}"
+};
+$(document).on("contextmenu", function(){ return false; });
+$(function() {
+	$("#search").button({
+		text: false,
+		icons: {
+			primary: "ui-icon-search"
+		}
+	})
+	.click(function() {
+		var search_for = $.trim($('#txtSearch').val());
+		$.ajax({
+			type : 'POST',
+			url : docInfo.SearchGroupUrl,
+			async : false,
+			data : { 
+				"searchfor" : encodeURIComponent(search_for) 
+			}
+		}).done(function(response) {
+			$('select option').remove();
+			if (response && response.count) {
+				var groups = response.results;
+				for (var x = 0; x < groups.length; x++) {
+					$('select').append('<option value="' + groups[x].DisplayName + '">' + groups[x].DisplayName + '</option>');
+				}
+			}
+		});
+	
+	});
+
+	$('button').button().first().click(function() {
+		window.returnValue = true;
+		window.close();
+	})
+	.next().click(function() {
+		if (!$('select option:selected').length)
+		{
+			alert('{% trans %}Please select a group.{% endtrans %}');
+			return false;
+		}
+		$.ajax({
+			url : docInfo.ServerUrl + docInfo.PortalWebPath + '/GroupServices',
+			type : 'POST',
+			data : { 'Action' : 'IMPORTGROUP', 'CommonName' : $('select option:selected').val(), 'DisplayName' : $('select option:selected').text() }
+		})
+		.done(function(response) {
+			if (response.Status == 'OK') {
+				window.returnValue = true;
+			}
+			else {
+				alert("{% trans %}Operation was not complete.{% endtrans %}\n" + response.ErrMsg);
+				window.returnValue = false;
+			}
+			window.close();
+		})
+		.fail(function() {
+			alert('{% trans %}Could not complete importing group; contact admin for details.{% endtrans %}');
+		});
+	});
+
+	$('#txtSearch').keyup(function(e) {
+		delay(function(){
+			$('#search').click();
+		}, 500 );		
+	});
+});
+
+var delay = (function(){
+	var timer = 0;
+	return function(callback, ms){
+		clearTimeout (timer);
+		timer = setTimeout(callback, ms);
+	};
+})();
+
+function handleOkClick() 
+{
+	if (!$('select option:selected').length)
+	{
+		alert('{% trans %}Please select a group.{% endtrans %}');
+		return false;
+	}
+	postdata = { 'Action' : 'IMPORTGROUP', 'CommonName' : $('select option:selected').val(), 'DisplayName' : $('select option:selected').text() };
+	
+	$.ajax({
+		url : docInfo.ServerUrl + docInfo.PortalWebPath + '/GroupServices',
+		type : 'POST',
+		data : postdata,
+		async : false
+	})
+	.done(function(response) {
+		if (response.Status == 'OK') {
+			window.returnValue = true;
+			return true;
+		}
+		else {
+			alert("{% trans %}Operation was not complete.{% endtrans %}\n" + response.ErrMsg);
+			return;
+		}
+		window.close();
+	})
+	.fail(function() {
+		alert('{% trans %}Could not complete importing group; contact admin for details.{% endtrans %}');
+		return;
+	});
+}
+
+function handleCancelClick() 
+{
+	return false;
+}
+	</script>
+	<style type="text/css">
+* {
+	font-family: Verdana, Arial, serif;
+	font-size: 12px;
+}
+BODY {
+	padding: 0;
+	margin: 0;
+}
+#desc {
+	padding-bottom: 3px;
+	font-size: 11px !important;
+	display: block;
+}
+DIV {
+	width: 100%;
+	display: block;
+	padding-top: 0px;
+}
+SELECT {
+	width: 295px;
+	height: 391px;
+	display: block;
+	margin: 5px auto;
+}
+#txtSearch {
+	margin-left: 12px;
+	width: 190px;
+}
+A { width: 20px !important; height: 20px !important; }
+.btn { padding-right: 40px; }
+	</style>
+</head>
+<body scroll="no">
+	<span id="desc">{% trans %}Type to search for a group and select one to import.{% endtrans %}</span>
+	<div>
+		<input id="txtSearch" type='text' class="text ui-widget-content ui-corner-all" name="searchGroup" value="" />
+		<a href="#" id="search"></a>
+		<select multiple="multiple" class="text ui-widget-content ui-corner-all">
+		{% if groups|length > 0 %}
+			{% for gp in groups %}
+			<option value="{{ gp.DisplayName }}">{{ gp.DisplayName }}</option>
+			{% endfor %}
+		{% endif %}
+		</select>
+	</div>
+</body>
+</html>

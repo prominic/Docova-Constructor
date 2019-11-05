@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>{% trans %}Designer Container{% endtrans %}</title>
+</head>
+	<frameset  COLS="220,*" FRAMESPACING="2" FRAMEBORDER="1" BORDER="2px">
+			<!--  left navigation frame -->
+			<frame FRAMEBORDER="0" SCROLLING="no" style="border-right:2px solid #6CAFD3" id="fraLeftFrame" name="fraLeftFrame" SRC="{{ path('docova_designer_leftnav') }}" />
+			<!-- right frame set -->
+			<frame TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0"	id="fraDesignerContainer" name="fraDesignerContainer" src="{{ path('docova_designer_init') }}" />
+	</frameset>
+	
+</html>

@@ -1,0 +1,64 @@
+{% set box = [] %}
+{% if panel.getPanelWidgets and panel.getPanelWidgets.count > 0 %}
+	{% for widget in panel.getPanelWidgets %}
+		{% set box = box|merge({ ('b' ~ widget.getBoxNo) : widget.getWidget }) %}
+	{% endfor %}
+{% endif %}
+	<tr>
+		<td tdtype="box" boxnum=1 style="height: 50%;">
+			<div class="portlet">
+				{% if box['b1'] is defined %}
+					{% include 'DocovaBundle:Subform:' ~ box['b1'].getSubformName ~ '.html.twig' with {'widget' : box['b1']} %}
+				{% else %}
+					{% include 'DocovaBundle:Default:DefaultWidget.html.twig' %}
+				{% endif %}
+			</div>
+		</td>
+		<td tdtype="box" boxnum=2 style="height: 50%;">
+			<div class="portlet">
+				{% if box['b2'] is defined %}
+					{% include 'DocovaBundle:Subform:' ~ box['b2'].getSubformName ~ '.html.twig' with {'widget' : box['b2']} %}
+				{% else %}
+					{% include 'DocovaBundle:Default:DefaultWidget.html.twig' %}
+				{% endif %}
+			</div>
+		</td>
+		<td tdtype="box" boxnum=3 style="height: 50%;">
+			<div class="portlet">
+				{% if box['b3'] is defined %}
+					{% include 'DocovaBundle:Subform:' ~ box['b3'].getSubformName ~ '.html.twig' with {'widget' : box['b3']} %}
+				{% else %}
+					{% include 'DocovaBundle:Default:DefaultWidget.html.twig' %}
+				{% endif %}
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td tdtype="box" boxnum=4 style="height: 50%;">
+			<div class="portlet">
+				{% if box['b4'] is defined %}
+					{% include 'DocovaBundle:Subform:' ~ box['b4'].getSubformName ~ '.html.twig' with {'widget' : box['b4']} %}
+				{% else %}
+					{% include 'DocovaBundle:Default:DefaultWidget.html.twig' %}
+				{% endif %}
+			</div>
+		</td>
+		<td tdtype="box" boxnum=5 style="height: 50%;">
+			<div class="portlet">
+				{% if box['b5'] is defined %}
+					{% include 'DocovaBundle:Subform:' ~ box['b5'].getSubformName ~ '.html.twig' with {'widget' : box['b5']} %}
+				{% else %}
+					{% include 'DocovaBundle:Default:DefaultWidget.html.twig' %}
+				{% endif %}
+			</div>
+		</td>
+		<td tdtype="box" boxnum=6 style="height: 50%;">
+			<div class="portlet">
+				{% if box['b6'] is defined %}
+					{% include 'DocovaBundle:Subform:' ~ box['b6'].getSubformName ~ '.html.twig' with {'widget' : box['b6']} %}
+				{% else %}
+					{% include 'DocovaBundle:Default:DefaultWidget.html.twig' %}
+				{% endif %}
+			</div>
+		</td>
+	</tr>

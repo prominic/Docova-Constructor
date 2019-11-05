@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% trans %}Name Lookup{% endtrans %}</title>
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+	<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}"></script>
+	<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+	<style type="text/css">
+*, HTML {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+}
+BODY {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+DIV { display: block; overflow:hidden; }
+{% if app.request.query.get('type') == 'multi' %}
+TABLE { table-layout: fixed; }
+{% else %}
+TABLE { width: 251px; table-layout: fixed; }
+{% endif %}
+SELECT { width: 220px; height: 325px; }
+TD { text-align: center; }
+#picked_names { height: 365px; }
+#directories_container label { float: left; margin-left: 3px; }
+#directories_container label:FIRST-CHILD { padding-top: 3px; }
+#search_for { float: left; width: 180px; margin: auto 2px auto 7px; }
+#search { height: 19px !important; }
+#ldapnote { color: #777; font-size: 11px; text-align: left; }
+#arrows_container { width: 100px; vertical-align: middle; }
+#arrows_container BUTTON { margin-top: 2px; width: 85px; }
+#action_buttons { padding-top: 5px; }
+#navigation { float: left; display: inline; width: 170px; height: 20px; }
+#navigation button { height: 19px !important; }
+#loading { position: fixed; height: 100%; width: 100%; top: 0; left: 0; background-color: #000; opacity: .50 !important; filter: Alpha(Opacity=50) !important; z-index: 10000; }
+#loading img { display: block; margin: 22% auto; }
+.ui-tabs .ui-tabs-panel { padding: 0.4em; }
+</style>
+<script type="text/javascript">
+var search_url = '{{ url('docova_usernamelookup') }}';
+var	total = {{ total_count }};
+var	dlgType = '{{ app.request.query.get('type') == 'multi' ? 'multi' : 'single' }}';
+var	showShortName = {{ settings.getUserDisplayDefault ? 'true' : 'false' }};
+var	page = 1;
+var	sourceFieldName = "{{ app.request.query.get('parentfield') }}";
+var	sourceField = '';
+var	sourceList = '';
+var	mvsep = "{{ app.request.query.get('separator') ? app.request.query.get('separator') : ':' }}";
+var	visibleBox = 'names_list';
+
+mvsep = mvsep.split(" ")[0];
+if (mvsep == 'semicolon') {
+	mvsep = ';';
+}else if (mvsep == 'comma') {
+	mvsep = ',';
+}else if (mvsep == 'newline' || mvsep == 'blankline') {
+	mvsep = '\n';
+}else if (mvsep == 'space') {
+	mvsep = ' ';
+}	
+
+$(document).on('contextmenu', function() { return false; });
+$(document).select(function() { return false; });
+$(function() {
+	$( "#tabs" ).tabs();
+});
+
+$(document).ready(function() {
+
+	setTimeout(function() { $('#search_for').focus(); }, 100);
+	
+	populateSelected();
+	
+	if(sourceList && sourceList != "")
+	{
+		var tmpArray = multiSplit(sourceList, ":");
+		for(var i=0 ; i< tmpArray.length; i++)
+		{
+			$('#picked_names').append('<option value="' + tmpArray[i] + '">' + tmpArray[i] + '</option>');
+		}
+	}
+
+	$('input[name=search_directory]').click(function() {
+		$('#ldnames_list option').remove();
+		$('#names_list option').remove();
+		$('#groups_list option').remove();
+		if ($(this).val() == 2 && $(this).prop('checked')) {
+			$('#navigation, #docova_directory').hide();
+			$('#ldap_directory').show();
+			$('#ldapnote').show();
+			visibleBox = 'ldnames_list';
+		}
+		else {
+			visibleBox = 'names_list';
+			$('#search').click();
+			$('#navigation, #docova_directory').show();
+			$('#ldap_directory').hide();
+			$('#ldapnote').hide();
+		}
+	});
+
+	$('#names_list').dblclick(function() {
+		$('#add').click();
+	});
+
+	$('#groups_list').dblclick(function() {
+		$('#add').click();
+	});
+
+	$('#ldnames_list').dblclick(function() {
+		$('#add').click();
+	});
+	
+	$('#picked_names').dblclick(function() {
+		$('#remove').click();
+	});
+
+	$('#search_for').keyup(function(e) {
+		if (e.keyCode == 13) {
+			$('#search').click();
+		}
+	});
+
+	$('#search_for').keyup(function(e) {
+		delay(function(){
+			$('#search').click();
+		}, 500 );		
+	});
+
+	$('#search').button({
+		icons : {
+			primary : 'ui-icon-search'
+		},
+		text : false
+	})
+	.click(function() {
+		var search_for = $.trim($('#search_for').val());
+		$.ajax({
+			type : 'POST',
+			url : search_url,
+			async : false,
+			data : { 
+				"searchfor" : encodeURIComponent(search_for), 
+				"directory" : $('input[name=search_directory]:checked').val() 
+			}
+		}).done(function(response) {
+			$('#ldnames_list option').remove();
+			$('#names_list option').remove();
+			$('#groups_list option').remove();
+			if (visibleBox == 'ldnames_list') { 
+				if (response.count) 
+				{
+					$.each(response.users, function(index, node) {
+						$('#ldnames_list').append(
+							'<option value="' + node.UserNameDnAbbreviated + '">' + (showShortName === true ? (node.DisplayName + ' - ['+ node.UserNameDnAbbreviated +']') : (node.UserNameDnAbbreviated + ' ['+ node.DisplayName +']')) + '</option>'
+						);
+					});
+				}
+			}
+			else {
+				if (response.pcount) 
+				{
+					$.each(response.users, function(index, node) {
+						$('#names_list').append('<option value="' + node.UserNameDnAbbreviated + '">' + (showShortName === true ? (node.DisplayName + ' - ['+ node.UserNameDnAbbreviated +']') : (node.UserNameDnAbbreviated + ' ['+ node.DisplayName +']')) + '</option>');
+					});
+				}
+				if (response.gcount) 
+				{
+					$.each(response.groups, function(index, node) {
+						$('#groups_list').append('<option value="' + node.GroupName + '">' + node.GroupName + '</option>');
+					});
+				}
+			}
+		}).fail(function(jqXHR, status) {
+			alert(status);
+		});
+	});
+
+	$('#add').button({
+		icons : {
+			secondary : 'ui-icon-triangle-1-e'
+		},
+		label : "Add"
+	})
+	.click(function() {
+		if ($('#'+ visibleBox +' option:selected').length == 0) 
+		{
+			alert('{% trans %}Please select name(s) to add.{% endtrans %}');
+			return false;
+		}
+
+		$('#'+ visibleBox +' option:selected').each(function() {
+			if (!$('#picked_names option[value="'+ $(this).val() +'"]').length) 
+			{
+				$('#picked_names').append('<option value="'+ $(this).val() +'">'+ $(this).text() +'</option>');
+			}
+		});
+	});
+
+	$('#remove').button({
+		icons : {
+			primary : 'ui-icon-triangle-1-w'
+		},
+		label : "Remove"
+	})
+	.click(function() {
+		if ($('#picked_names option:selected').length == 0) 
+		{
+			alert('{% trans %}Please select name(s) from right pane to remove.{% endtrans %}');
+			return false;
+		}
+
+		$('#picked_names option:selected').each(function() {
+			$(this).remove();
+		});
+	});
+
+	$('#first').button({
+		icons : {
+			primary : 'ui-icon-seek-first'
+		},
+		text : false,
+		disabled : true
+	})
+	.click(function() {
+		navigateTo(1);
+	});
+
+	$('#previous').button({
+		icons : {
+			primary : 'ui-icon-seek-prev'
+		},
+		text : false,
+		disabled : true
+	})
+	.click(function() {
+		navigateTo(page - 1);
+	});
+
+	$('#next').button({
+		icons : {
+			primary : 'ui-icon-seek-next'
+		},
+		text : false,
+		disabled : (total > 25 ? false : true)
+	})
+	.click(function() {
+		navigateTo(page + 1);
+	});
+
+	$('#last').button({
+		icons : {
+			primary : 'ui-icon-seek-end'
+		},
+		text : false,
+		disabled : (total > 25 ? false : true)
+	})
+	.click(function() {
+		navigateTo(Math.ceil(total / 25));
+	});
+
+	$('.toptabs').click(function() {
+		page = 1;
+		if (1 < Math.ceil(total / 25)) {
+    		$('#navigation button').button('option', 'disabled', true);
+    		$('#navigation button:gt(1)').button('option', 'disabled', false);
+		}
+		else {
+    		$('#navigation button').button('option', 'disabled', true);
+		}
+		if ($(this).text() == 'Individual') {
+			visibleBox='names_list';
+		}
+		else {
+			visibleBox='groups_list';
+		}
+	});
+});
+
+var delay = (function(){
+	var timer = 0;
+	return function(callback, ms){
+		clearTimeout (timer);
+		timer = setTimeout(callback, ms);
+	};
+})();
+
+function navigateTo(page_no)
+{
+	$('#search_for').val('');
+	if (page_no > 0 && page_no <= Math.ceil(total / 25))
+	{
+		$.ajax({
+			type : 'POST',
+			url : search_url,
+			async : false,
+			data : { 
+				"page" : encodeURIComponent(page_no),
+				"directory" : (visibleBox == 'groups_list' ? 'group' : 'users') 
+			}
+		}).done(function(response) {
+			if (visibleBox == 'groups_list') {
+				$('#groups_list option').remove();
+			}
+			else {
+				$('#names_list option').remove();
+			}
+			if (response.count) {
+				if (visibleBox == 'groups_list') {
+					$.each(response.groups, function(index, node) {
+						$('#groups_list').append(
+							'<option value="'+ node.GroupName + '">' + node.GroupName + '</option>'
+						);
+					});
+				}
+				else {
+					$.each(response.users, function(index, node) {
+						$('#names_list').append(
+							'<option value="' + node.UserNameDnAbbreviated + '">' + (showShortName === true ? (node.DisplayName + ' - ['+ node.UserNameDnAbbreviated +']') : (node.UserNameDnAbbreviated + ' ['+ node.DisplayName +']')) + '</option>'
+						);
+					});
+				}
+			}
+			if ((page_no + 1) > Math.ceil(total / 25)) {
+				$('#first').button("option", "disabled", false);
+				$('#previous').button("option", "disabled", false);
+				$('#next').button("option", "disabled", true);
+				$('#last').button("option", "disabled", true);
+			}
+			else if (page_no - 1 < 1) {
+				$('#first').button("option", "disabled", true);
+				$('#previous').button("option", "disabled", true);
+				$('#next').button("option", "disabled", false);
+				$('#last').button("option", "disabled", false);
+			}
+			else {
+				$('#first').button("option", "disabled", false);
+				$('#previous').button("option", "disabled", false);
+				$('#next').button("option", "disabled", false);
+				$('#last').button("option", "disabled", false);
+			}
+			page = page_no;
+		}).fail(function(jqXHR, status) {
+			alert(status);
+		});
+	}
+	else {
+		alert('{% trans %}Selected page is out of range!{% endtrans %}');
+	}
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: populateSelected
+ * Populates selected values in dialog from either a specified field in the source document or from a
+ * defaultvalues global parameter
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+function populateSelected()
+{
+	var dlgDivContainerName = "dlgAddress";
+	var defaultvalues = "";
+
+	if(sourceFieldName && sourceFieldName != ""){
+		var srcDoc = null;
+		var divIFrame = "{{ app.request.query.get('dlgDiv') ? app.request.query.get('dlgDiv') ~ 'IFrame' : '' }}";
+		if(window.top.Docova.GlobalStorage[dlgDivContainerName]){
+			srcDoc = window.top.Docova.GlobalStorage[dlgDivContainerName].sourcedocument;
+		}
+
+		//first look fo the txtFieldName for the multivalue separator
+		sourceField = $("#" + sourceFieldName, srcDoc);
+		if ( sourceField.length > 0){
+			var mvsepattr = (sourceField.attr("mvdisep") || "");
+			if (mvsepattr == 'semicolon') {
+				mvsepattr = ';';
+			}else if (mvsepattr == 'comma') {
+				mvsepattr = ',';
+			}else if (mvsepattr == 'newline' || mvsepattr == 'blankline') {
+				mvsepattr = '\n';
+			}else if (mvsepattr == 'space') {
+				mvsepattr = ' ';
+			}			
+			if ( mvsepattr && mvsepattr != "" ){
+				var valarr = multiSplit(sourceField.val(), mvsepattr);
+				defaultvalues = valarr.join(":");
+			}else{
+				if(sourceField.val().replace(" ", "") != ""){
+					defaultvalues = sourceField.val();			
+				}
+			}
+			
+		}
+	}
+
+	if(window.top.Docova && window.top.Docova.GlobalStorage && window.top.Docova.GlobalStorage[dlgDivContainerName] && window.top.Docova.GlobalStorage[dlgDivContainerName].defaultvalues){
+		var tempvals = window.top.Docova.GlobalStorage[dlgDivContainerName].defaultvalues; 
+		if(tempvals != ""){
+			if(defaultvalues != ""){
+				defaultvalues += ':';
+			}
+			defaultvalues += tempvals;
+		}
+	}
+
+	sourceList = defaultvalues;
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: handleOkClick
+ * Called by Ok button to store or return values
+ * Returns: selected value(s) or false
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+function handleOkClick()
+{
+	var result = '';
+	
+	var dlgDivContainerName = "dlgAddress";
+		
+	if(window.top.Docova && window.top.Docova.GlobalStorage && window.top.Docova.GlobalStorage[dlgDivContainerName]){
+		srcDoc = window.top.Docova.GlobalStorage[dlgDivContainerName].sourcedocument;
+	}
+
+	var strNames = "";
+	var strNamesDisp = "";
+	if(sourceFieldName != ""){
+		sourceField = srcDoc.getElementsByName(sourceFieldName)[0];
+	}
+
+	if(dlgType == "single") //single selection dialog
+	{
+		if($('#names_list option:selected').val())
+		{
+			strNames = $('#names_list option:selected').val();
+		}
+		else if($('#groups_list option:selected').val()) {
+			strNames = $('#groups_list option:selected').val();
+			if (sourceField) {
+				$(sourceField).parent().find('input[name=ACLEntryType]').val('group');
+			}
+		}
+		else if($('#ldnames_list option:selected').val()) {
+			strNames = $('#ldnames_list option:selected').val();
+		}
+	}
+	else //multiple selection dialog
+	{
+		if ($('#picked_names option').length > 0) {
+			$('#picked_names option').each(function() {
+				strNames += (strNames=="") ? $(this).val() : mvsep + $(this).val();
+
+				strNamesDisp += '<span>'+$(this).val()+'<i class="far fa-times removename"></i></span>';
+			});
+		}
+	}	
+	if(strNames != ""){
+		result = strNames;
+	}
+	if(sourceField){
+		try //parent window may be closed
+		{
+			sourceField.value = result;
+
+			if (dlgType != "single" && $("#slContainer" + sourceFieldName.toLowerCase(), srcDoc).length)
+			{
+				$("#slContainer" + sourceFieldName.toLowerCase(), srcDoc).html(strNamesDisp);
+			}
+			else if (dlgType != "single"){
+				var html = $('<em class="slContainer" id="slContainer' + sourceFieldName.toLowerCase() + '">' + strNamesDisp + '</em>');
+				$(sourceField).parent().append(html);
+			}
+			
+		}
+		catch(e)
+		{
+			alert(e.message);
+			alert("{% trans %}Error writing selected names. Parent document might be closed.{% endtrans %}");
+		}
+	}	
+	return result;
+}//--end handleOkClick
+
+
+function handleNewEntryClick()
+{
+	if(dlgType=="multi")
+	{
+		addName();
+	}
+	else //double click on single selection name should conclude the selection
+	{
+		var btn = jQuery("#dlgAddress", window.parent.document).closest("div[role=dialog]").find("button>span:contains('OK')").parent();
+		if(btn && btn.length == 1){
+			btn.click();
+		}
+
+	}
+}
+
+function handleCancelClick()
+{
+	return false;
+}
+
+	</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" SCROLL="no">
+	<div id="directories_container">
+		<label>{% trans %}Directories{% endtrans %}: </label>
+		<label><input type="radio" name="search_directory" value="1" checked="checked">DOCOVA</label>
+		{% if isLdapEnabled %}
+		<label>
+			<input type="radio" name="search_directory" value="2">{% trans with {'%ldapname%' : settings.getLdapDirectoryName} %}All %ldapname%{% endtrans %} <br />
+		</label>
+		{% endif %}
+	</div>
+	<div>
+		<input type="text" name="search_for" tabindex="1" id="search_for" value="" maxlength="100">
+		<button id="search"></button>
+	</div>
+	<table style="padding-top: 7px;">
+		<tr>
+			<td id="docova_directory">
+				<div id="tabs">
+					<ul>
+						<li><a class="toptabs" href="#people">{% trans %}Individual{% endtrans %}</a></li>
+						<li><a class="toptabs" href="#groups">{% trans %}Groups{% endtrans %}</a></li>
+					</ul>
+					<div id="people">
+						<select name="names_list" id="names_list" size="20" {% if app.request.query.get('type') == 'multi' %}multiple="multiple"{% endif %}>
+						{% if users_list %}
+							{% for item in users_list %}
+							<option value="{{ item.getUserNameDnAbbreviated }}">{{ settings.getUserDisplayDefault ? (item.getUserProfile.getDisplayName ~ ' - ['~ item.getUserNameDnAbbreviated ~']') : (item.getUserNameDnAbbreviated ~ ' - [' ~ item.getUserProfile.getDisplayName ~']') }}</option>
+							{% endfor %}
+						{% endif %}
+						</select>
+					</div>
+					<div id="groups">
+						<select name="groups_list" id="groups_list" size="20" {% if app.request.query.get('type') == 'multi' %}multiple="multiple"{% endif %}>
+						{% if groups %}
+							{% for item in groups %}
+							<option value="{{ item.getDisplayName ~ (item.getGroupType ? '' : '/DOCOVA') }}">{{ item.getDisplayName ~ (item.getGroupType ? '' : '/DOCOVA') }}</option>
+							{% endfor %}
+						{% endif %}
+						</select>
+					</div>
+				</div>
+			</td>
+			<td id="ldap_directory" style="display: none;">
+				<span id="ldapnote" style="display: none;">{% trans %}Start typing in search box.{% endtrans %}</span><br />
+				<select name="ldnames_list" id="ldnames_list" size="20" {% if app.request.query.get('type') == 'multi' %}multiple="multiple"{% endif %}></select>
+			</td>
+			{% if app.request.query.get('type') == 'multi' %}
+			<td id="arrows_container">
+				<button class="addremove" id="add"></button><br>
+				<button class="addremove" id="remove"></button>
+			</td>
+			<td>
+				<select name="picked_names" id="picked_names" multiple="multiple"></select>
+			</td>
+			{% endif %}
+		</tr>
+		
+	</table>
+	<div>
+		<div id="action_buttons" style="width:98%" align="right">
+			<div id="navigation">
+				<button id="first" value="{% trans %}First{% endtrans %}"></button>
+				<button id="previous" value="{% trans %}Previous{% endtrans %}"></button>
+				<button id="next" value="{% trans %}Next{% endtrans %}"></button>
+				<button id="last" value="{% trans %}Last{% endtrans %}"></button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

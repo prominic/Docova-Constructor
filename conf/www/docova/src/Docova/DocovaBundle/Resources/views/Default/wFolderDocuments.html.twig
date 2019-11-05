@@ -1,0 +1,211 @@
+<!DOCTYPE html><html>
+<head>
+<META content="0" http-equiv="expires"><META content="0" http-equiv="cache-control"><META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var info = {
+	  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 1] }}"
+};
+function getinfovar() {
+	return info;
+}
+var DocumentList = new xmlDataIsland();
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: InitDialog
+ * Initializes data island content for the form
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+ function InitDialog(){
+	$("#btnFTSearch").button({
+		text: false,	
+		icons: { primary: "ui-icon-search"}
+	}).click(function(event){
+		ViewFTSearch();
+	})
+	$("#btnAdvancedSearch").button({
+		text: false,
+		icons: { primary: "ui-icon-zoomin"}
+	}).click(function(event){
+		AdvancedSearch();
+	})
+	$("#btnFTClear").button({
+		text: false,
+		disabled: true,
+		icons: { primary: "ui-icon-arrowrefresh-1-e"}
+	}).click(function(event){
+		ViewFTClear();
+	});
+ 	InitVars(info);     
+ 	
+	DocumentList.id = "DocumentList";
+	DocumentList.setTemplateName("otblDocumentList");
+ 	var xmlText = jQuery("#ResultData").html();
+	var xmlDom = jQuery.parseXML(xmlText);
+	DocumentList.oxml = xmlDom;
+	DocumentList.XMLDocument = xmlDom;
+ 	DocumentList.process();
+}//--end InitDialog
+
+
+
+
+function gup( name )
+{
+  
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name.toUpperCase() +"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href.toUpperCase() );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: ViewFTSearch
+ * Performs a search in the folder content
+ * Inputs: customQuery - string (optional) - custom query string
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+ function ViewFTSearch(customQuery){
+	var query=(customQuery)? customQuery : jQuery("#inpQuery").val();
+	if(trim(query)== ""){
+	  	jQuery("#btnFTClear").button("disable");
+		return;
+	}
+	var url =  docInfo.ServerUrl + "/" + docInfo.NsfName + "readfolderdataview.xml?folderid=" + gup( 'FolderID' ) + "&nodes=summary&search=" + query;
+  	DocumentList.setSrc(url);
+  	jQuery("#btnFTClear").button("enable");
+}//--end ViewFTSearch
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: ViewFTClear
+ * Reloads the base folder content
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+function ViewFTClear(){
+	jQuery("#inpQuery").val("");
+	var xmlText = jQuery("#ResultData").html();
+	var xmlDom = jQuery.parseXML(xmlText);
+	DocumentList.oxml = xmlDom;
+	DocumentList.XMLDocument = xmlDom;
+  	DocumentList.setSrc("");	
+  	jQuery("#btnFTClear").button("disable");	
+}//--end ViewFTClear
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: HandleKeyPress
+ * Traps for enter key within the search field
+ * Inputs: e - event that triggered the key press
+ * Returns: boolean - false if the key is trapped/handled
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+ function HandleKeyPress(e){	
+	var key=e.keyCode || e.which;
+	if (key==13){
+		ViewFTSearch();
+		return false;
+	}
+}//--end HandleKeyPress
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------- 
+ * Function: AdvancedSearch
+ * Displays advanced search dialog for specifying additional search criteria
+ *------------------------------------------------------------------------------------------------------------------------------------------- */
+ function AdvancedSearch()	{
+	var dlgUrl = docInfo.ServerUrl + docInfo.PortalWebPath + "/dlgCustomSearch?OpenForm&edit=false&folder=true";
+	
+	var srchdlg = window.top.Docova.Utils.createDialog({
+		id: "divDlgAdvancedSrch", 
+		url: dlgUrl,
+		title: "Advanced Search",
+		height: 420,
+		width: 650, 
+		useiframe: true,
+		sourcewindow : window,
+		defaultButton: 1,
+		buttons: {
+        	"Search": function() {
+        		var returnValue = jQuery("#" + this.id + "IFrame", this).get(0).contentWindow.CompleteWizard();
+				if(returnValue){
+				}
+        	},				
+        	"Close": function() {
+				srchdlg.closeDialog();
+        	}
+      	}
+	});		
+}
+</script>
+<style>
+body{
+	overflow: hidden;
+}
+#divHeaderSection{
+	border-bottom: groove 2px;
+	height: 60px;
+}
+#divHeadingTitle{
+	font-size: 12px;
+	color: #0050D1;
+	font-weight: bold;
+}
+#lblSearch{
+	width: 74px;
+}
+#inpQuery {
+	width: 200px;
+	height:18px;
+}
+#divContent{
+	height: 397px;
+	overflow: auto;
+}
+#tblDocumentList{
+	border-collapse: collapse;
+}
+#tblDocumentList td{
+	border-bottom: 1px solid #CFCFCF;
+	width: 100%;
+}
+#tblDocumentList td.selection{
+	vertical-align: top;
+	border-right: 1px solid #CFCFCF;
+	width: 25px;
+}
+</style>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" onload="InitDialog()">
+<script id="ResultData"  type="text/xml">{{ related_doc_xml|raw }}</script>
+<div style="margin:5px;" id="divHeaderSection" >
+	<div id="divHeadingTitle">{% trans %}Folder{% endtrans %}: {{ folder.getFolderName }}</div>
+	<span id="lblSearch">{% trans %}Search for{% endtrans %}:</span>
+	
+	<input name="inpQuery" placeholder="{% trans %}Use AND, OR, <, >, = , >=, <= and wildcards like *, ?{% endtrans %}" id="inpQuery" type="text" onkeypress="return HandleKeyPress(event,this.form)" style="width: 300px;" tabindex="1" />&nbsp;
+	<button id="btnFTSearch" tabindex="2">{% trans %}Full-text Search (incl. Attachments){% endtrans %}</button>&nbsp;
+	<button id="btnAdvancedSearch" tabindex="3">{% trans %}Advanced Search{% endtrans %}</button>&nbsp;
+	<button id="btnFTClear" tabindex="5">{% trans %}Clear Search{% endtrans %}</button>&nbsp;	
+</div>
+<div id="divContent">
+	<table id="tblDocumentList" datasrc="#DocumentList">
+	<tbody id="otblDocumentList">
+		<tr>
+			<td class="selection"><input type="checkbox" name="docSelect" id="docSelect" datafld="selected"/></td>	
+			<td class="info"><span datafld="Summary" dataformatas="html"></span></td>
+		</tr>
+	</tbody>
+	</table>
+</div>
+</body>
+</html>

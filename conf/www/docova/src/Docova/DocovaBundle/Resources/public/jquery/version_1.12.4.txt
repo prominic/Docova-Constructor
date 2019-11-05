@@ -1,0 +1,3 @@
+jQuery version
+Note: if renaming jquery source files be sure to edit jquery.min.map file to point to correct min/source files
+ 

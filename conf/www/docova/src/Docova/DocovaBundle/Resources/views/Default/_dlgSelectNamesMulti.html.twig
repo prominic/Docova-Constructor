@@ -1,0 +1,26 @@
+<table style="width: 100%; border: 1px solid gray;">
+	<tr>
+		<td style="width: 45%;">
+			<div id="divSourceList" style="height: 400px; border: 1px solid gray; overflow: auto;">
+				<table>
+					{% for names in usersList %}
+					<tr>
+						<td><input type="checkbox" name="namelist" value="{{ names.getUserNameDnAbbreviated }}"> {{	names.getUserProfile.getDisplayName }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</td>
+		<td style="width: 10%; text-align: center;">
+			<button id="btn-AddNames" class="ui-widget-header ui-corner-all"></button>
+			<button id="btn-RemoveNames" class="ui-widget-header ui-corner-all"></button>
+		</td>
+		<td style="width: 45%;">
+			<div id="divTargetList" style="height: 400px; border: 1px solid gray; overflow: auto;">
+				<table>
+					<tr>&nbsp</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>

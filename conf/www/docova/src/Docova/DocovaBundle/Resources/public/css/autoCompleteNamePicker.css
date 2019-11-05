@@ -1,0 +1,68 @@
+#autoCompleteContainer {
+	width: 380px;
+	z-index:1000;
+	background: #FFF;
+	border: 1px solid #AAA; 
+	position: absolute !important; 
+}
+#autoCompleteContainer UL {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+#autoCompleteContainer LI {
+	list-style: none;
+	display: block;
+	height: 19px;
+	margin-top: 1px;
+	padding: 1px 0 1px 2px;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 100%;
+}
+#autoCompleteContainer SAMP {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	padding-left: 14px;
+	display: inline-block;
+	color: inherit;
+}
+#autoCompleteContainer .person {
+	background: transparent url('../images/icons/vwicn003.gif') left no-repeat;
+}
+#autoCompleteContainer .group {
+	background: transparent url('../images/icons/vwicn004.gif') left no-repeat;
+}
+#autoCompleteContainer .hidden, DIV.slContainer .hidden {
+	display: none;
+}
+#autoCompleteContainer .highlight {
+	background-color: #567AE8;
+	color: #FFF;
+}
+
+EM.slContainer {
+	display: block !important;
+	margin-top: 5px;
+	margin-bottom: 1px !important;
+	font-style: normal;
+	overflow: hidden;
+}
+EM.slContainer SPAN {
+	float: left;
+	margin-left: 2px;
+	padding: 5px 7px 5px 5px;
+	border: 1px #CCC solid;
+	border-radius: 12px;
+}
+EM.slContainer SPAN > I {
+	cursor: pointer;
+	visibility: hidden;
+	padding-left: 5px;
+}
+EM.slContainer SPAN:hover {
+	background: #EBF4FA;
+	border: 1px #EBF4FA solid;
+}
+EM.slContainer SPAN:hover > I { visibility: visible; }

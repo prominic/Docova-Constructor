@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{% trans %}Activity{% endtrans %}</title>
+{% include 'DocovaBundle:Admin:sfWebAdminCommonScriptHeader.html.twig'%}
+{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+	'document' : document, 
+	'view_name' : view_name, 
+	'view_title' : view_title, 
+	'mode' :mode,
+	'path_info' : path('docova_admin_readdocument', { 'view_name' : view_name, 'doc_id' : document.getId }) 
+} %}
+</head>
+
+<body scroll="no"> 
+	<ul class="ui-widget-header actionBar hidetoload">
+		<a id="editBtn" href="{{ path('docova_admin_editdocument', { 'view_name' : view_name, 'doc_id' : document.getId }) }}" >{% trans %}Edit{% endtrans %}</a>
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+	</ul>
+	<div id="frmEmulator" class="hidetoload">
+		<div id="divFormContainer">
+			<table class="elmContainer" cellspacing="0">
+				<tr>
+					<td colspan="2" class="firstRw"><h3 class="headings1">{% trans %}Activity Definition{% endtrans %}</h3></td>
+				</tr>
+				<tr>
+					<td class="firstRw">{% trans %}Activity Action{% endtrans %}:</td>
+					<td class="firstRw">{{ document.getActivityAction }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Assignee Obligation{% endtrans %}:</td>
+					<td>
+			        	{% if document.getActivityObligation == 2 %}{% trans %}Response Required{% endtrans %}
+			        	{% elseif document.getActivityObligation == 1 %}{% trans %}Acknowledgement Required{% endtrans %}
+			        	{% else %}{% trans %}No Action Required{% endtrans %}
+			        	{% endif %}
+						<span class="elNote">{% trans %}The Activity can be completed without input from the Assignee.{% endtrans %}</span>
+			        </td>
+				</tr>
+				<tr>
+					<td>{% trans %}Email Notification{% endtrans %}:</td>
+			        <td>
+						{{ document.getActivitySendMessage ? 'Yes'|trans : 'No'|trans }}
+						<span class="elNote">{% trans %}Email notification is in addition to an icon that will alert assignees they have pending activities when they open the document. Pending activities will also be displayed in the Activities widget.{% endtrans %}</span>
+					</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Default Subject{% endtrans %}: </td>
+					<td>{{ document.getActivitySubject }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Default message/instruction{% endtrans %}:</td>
+			        <td>{{ document.getActivityInstruction }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}NOTE{% endtrans %}:</td>
+			        <td><span class="elNote">{% trans %}A reserved field called ActivityRecipients is available via a custom subform and can be used to set the default Recipient list in a new Activity. Set the field to a comma delimited list of User Names and/or Groups by way of a custom onload script.{% endtrans %}</span></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

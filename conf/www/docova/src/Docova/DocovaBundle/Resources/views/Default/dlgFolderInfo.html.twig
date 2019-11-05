@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{% trans %}Folder Information{% endtrans %}</title><META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}" type="text/css" />
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<style type="text/css">
+BODY {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-variant: normal;
+}
+</style>
+<script language="JavaScript" type="text/javascript">
+var statusWin; // progress message status window
+var srcWindow = null;
+var info = {
+	"LibraryKey" : "{{ folder.getLibrary.getId }}",
+	"LibraryTitle" : "{{ folder.getLibrary.getLibraryTitle }}",
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"HTTP_Referer" : "{{ url('docova_allbydockey', {'key' : folder.getId }) }}?OpenDocument",
+	"Query_String" : "OpenForm&ParentUNID={{ folder.getId }}",
+	"Query_String_Decoded" : "OpenForm&ParentUNID={{ folder.getId }}",
+	"Path_Info_Decoded" : "{{ path('docova_folderinfo') }}?OpenForm&ParentUNID={{ folder.getId }}",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"LogNsfName" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"ArchiveNsfName" : "",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"FolderID" : "{{ folder.getId }}",
+	"FolderName" : "{{ folder.getFolderName }}",
+	"FolderAncestors" : "{{ folder.getFolderPath|replace({'/' : ''}) }}",
+	"FolderPath" : "{{ folder.getFolderPath }}"
+};
+function getinfovar() {
+	return info;
+}
+
+function IsValidParent()
+{
+	try	{
+		srcWindow = window.parent.fraContentTop;
+		if(srcWindow.ViewLoadDocument){return true;}
+		}
+	catch (e) {
+		return false;
+		}
+	return false;
+}
+
+$(document).ready(function(){
+	var tabs = $( "#divContentSection" ).tabs({ heightStyle: "auto", active: 0});
+});
+</script>
+</head>
+<body text="#000000" class="ui-widget-content" SCROLL="no">
+
+<form method="post" action="{{ path('docova_folderinfo') }}!OpenForm&amp;ParentUNID={{ folder.getId }}&amp;Seq=1" name="_wFolderInfo">
+<script language="javascript" type="text/javascript">InitVars(info);</script>
+<div id="divContentSection" style="border:0">
+	<ul>
+		<li><a href="#tabs-1">{% trans %}Folder Information{% endtrans %}</a></li>
+		<li><a href="#tabs-2">{% trans %}Security{% endtrans %}</a></li>
+		<li><a href="#tabs-3">{% trans %}Audit Log{% endtrans %}</a></li>
+	</ul>
+	<div id="tabs-1">
+		<table cellpadding="3" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="fieldLabelCell" width="20%">{% trans %}Folder Name{% endtrans %}:</td>
+				<td class="fieldCell" width="80%">{{ folder.getFolderName }}&nbsp;</td>
+			</tr>
+		
+			<tr valign="top">
+				<td class="fieldLabelCell" width="20%">{% trans %}Description{% endtrans %}:</td>
+				<td class="fieldCell" width="80%">{{ folder.getDescription }}&nbsp;</td>
+			</tr>
+		
+			<tr valign="top">
+				<td class="fieldLabelCell" width="20%">{% trans %}Created by{% endtrans %}:</td>
+				<td class="fieldCell" width="80%">{{ folder.getCreator.getUserNameDnAbbreviated }} on {{ folder.getDateCreated|date('m/d/Y h:i A') }}</td>
+			</tr>
+		
+			<tr valign="top">
+				<td class="fieldLabelCell" width="20%">{% trans %}Last Modified by{% endtrans %}:</td>
+				<td class="fieldCell" width="80%">{% if folder.getUpdator %}{{ folder.getUpdator.getUserNameDnAbbreviated }} on {{ folder.getDateUpdated|date('m/d/Y h:i A') }}{% else %}{{ folder.getCreator.getUserNameDnAbbreviated }} on {{ folder.getDateCreated|date('m/d/Y h:i A') }}{% endif %}</td>
+			</tr>
+		</table>
+	</div>
+	<div id="tabs-2">
+		<table cellpadding="3" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td class="fieldLabelCell" width="14%">{% trans %}Managers{% endtrans %}:</td>
+				<td class="fieldCell" width="86%">{{ managers }}&nbsp;</td>
+			</tr>
+		
+			<tr valign="top">
+				<td class="fieldLabelCell" width="14%">{% trans %}Authors{% endtrans %}:</td>
+				<td class="fieldCell" width="86%">{{ authors }}&nbsp</td>
+			</tr>
+		
+			<tr valign="top">
+				<td class="fieldLabelCell" width="14%">{% trans %}Readers{% endtrans %}:</td>
+				<td class="fieldCell" width="86%">{{ readers }}&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div id="tabs-3">
+		<table style="border: 1px ridge;" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr class="ui-widget-header ui-state-hover">
+				<td width="70"><b>{% trans %}Date{% endtrans %}</b></td>
+				<td width="70"><b>{% trans %}Time{% endtrans %}</b></td>
+				<td width="140"><b>{% trans %}Who{% endtrans %}</b></td>
+				<td><b>{% trans %}Details{% endtrans %}</b></td>
+			</tr>
+		</table>
+		<div style="width: 100%; height: 200px; overflow: auto;">
+			<table class="tblFields" id="tblAuditLogData" datasrc="#AuditLogData" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="frmText" width="100"><span datafld="logdate"></span>&nbsp;</td>
+				<td class="frmText" width="100"><span datafld="logtime"></span>&nbsp;</td>
+				<td class="frmText" width="100"><span datafld="logauthor"></span>&nbsp;</td>
+				<td class="frmText"><span datafld="logdetails"></span>&nbsp;</td>
+			</tr>
+			</table>
+		</div>
+		<script>
+			var AuditLogData= new xmlDataIsland();
+			AuditLogData.setSrc ( "{{ path('docova_folderlogs', {'folder' : folder.getId}) }}?{{ 'now'|date('m-d-Y H:i:s') }}" ) ;
+			AuditLogData.id = "AuditLogData";
+			AuditLogData.setTemplateName( "tblAuditLogData");
+			AuditLogData.ondatasetcomplete = function() { ""; }
+			AuditLogData.process();
+		</script>
+	</div>
+</div>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+	<HEAD>
+		<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+		<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+	</HEAD>
+	<!------------------END SUBFORM sfKillCache  ------------>
+</form>
+</body>
+</html>

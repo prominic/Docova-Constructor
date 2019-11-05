@@ -1,0 +1,26 @@
+	{% set section_properties = '' %}
+	{% for subform in document.getDocTypeSubform %}
+		{% if subform.getSubform.getFormName == 'Web bookmark' %}
+			{% set section_properties = subform.getPropertiesXML(true) %}
+		{% endif %}
+	{% endfor %}
+	{% if section_properties != '' %}
+	<table cellspacing="0" class="elmContainer">
+		<tr>
+			<td class="firstRw">{% trans %}Label{% endtrans %}:</td>
+			<td class="firstRw">{{ section_properties['Interface']['BookmarkLabel'] }}</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Preview Height{% endtrans %}:</td>
+			<td>{{ section_properties['Interface']['PreviewHeightValue'] }} px</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Visibility{% endtrans %}:</td>
+            <td>
+            	{% trans %}Hide Web bookmark section when{% endtrans %}
+				{% if section_properties['Interface']['HideOnReading'] == 1 %}{% trans %}Reading{% endtrans %}{% endif %}
+				{% if section_properties['Interface']['HideOnEditing'] == 1 %}{% trans %}Editing{% endtrans %}{% endif %}
+			</td>
+          </tr>
+	</table>
+    {% endif %}

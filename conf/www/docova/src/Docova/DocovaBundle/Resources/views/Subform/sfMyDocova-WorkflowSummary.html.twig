@@ -1,0 +1,52 @@
+<script type="text/javascript" src="{{ asset('bundles/docova/js/custom/' ~ widget.getSubformName ~ '.js') }}"></script>
+<div class="portlet-header">
+	<span class="arial twelve bold">{{ widget.getWidgetName }}</span>
+	<button id="wfsmRefresh" class="btn-Refresh"></button>
+	<button class="btn-RemoveWidget"></button>
+	<button class="btn-AddWidget"></button>
+</div>
+<span id="wfSummaryItems" style="display: none">
+{{ render(controller('DocovaBundle:Default:getSubscribedLibrariesFolders')) }}
+</span>
+<div style="height: 1.8em; margin-bottom: 5px">
+	<span>{% trans %}Library{% endtrans %} 
+		<select name="LibraryName" id="LibraryName" onchange="updateSummary(true)">
+			<option ></option>
+			{{ render(controller("DocovaBundle:User:getSubscribedLibraries", {'output': 'html'})) }}
+		</select>
+	</span>
+	<span style="padding-left: 10px">{% trans %}Folder{% endtrans %} 
+		<select name="FolderName" id="FolderName" onchange="updateSummary()"></select>
+	</span>
+</div>
+
+<!--- Embedded view perspective----->
+<script id="xmlwfSummary" type="text/xml" encoding="UTF-8"><viewperspective><type>system</type><id>system_default_folder</id><Unid/><name>Built-in perspective</name><description/><createdby/><createddate/><modifiedby/><modifieddate/><autocollapse>0</autocollapse><viewsettings><viewproperties><showSelectionMargin/><allowCustomization>1</allowCustomization><extendLastColumn>1</extendLastColumn><isSummary/><isThumbnails/><categoryBorderStyle>border-bottom : solid 2px #aaccff;</categoryBorderStyle></viewproperties><columns><column><title></title><xmlNodeName>blank</xmlNodeName><totalType>2</totalType><width>25</width><colorT>navy</colorT><hasCustomSort/></column><column><title>{% trans %}Workflow Title{% endtrans %}</title><xmlNodeName>wftitle</xmlNodeName><sortOrder>ascending</sortOrder><isCategorized>1</isCategorized><width>100</width></column><column><title>{% trans %}Pending For{% endtrans %}</title><xmlNodeName>wfDispReviewerApproverList</xmlNodeName><sortOrder>ascending</sortOrder><width>80</width></column><column><title>{% trans %}Title{% endtrans %}</title><xmlNodeName>subject</xmlNodeName><sortOrder>ascending</sortOrder><width>100</width></column></columns></viewsettings></viewperspective></script>
+
+<!--- BEGIN Embedded view event capture---->
+<div id="divwfSummaryCapture" class="capturediv">
+
+	<!--- BEGIN Embedded view contents---->
+	<div id="divwfSummary" style="display: none; background-color: white; width: 100%; padding: 0px; margin: 0px; overflow: auto; overflow-x: hidden;"></div>
+	<!--- END Embedded view contents----->
+
+<!--- END Embedded view event capture---->
+</div>
+
+<!--- Empty Embedded view message----->
+<div id="nodivwfSummary" style="display: none; padding: 5px;">{% trans %}No workflow items found.{% endtrans %}</div>
+
+<script language="javascript">InitwfSummary();</script>
+<script>
+	$( "#wfsmRefresh" )
+		.button({
+			text:false,
+			label: "{% trans %}Refresh{% endtrans %}",
+			icons: {primary:  "ui-icon-refresh"}
+		})
+		.click(function( event ) {
+			wfSummaryView.objEmbView.Refresh(true,false,true); 
+			wfSummaryView.objEmbView.ResetHighlight();
+			wfSummaryView.EmbViewReload();
+	});
+</script>

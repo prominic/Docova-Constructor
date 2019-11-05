@@ -1,0 +1,199 @@
+<div id="advance_container">
+	<ul>
+		<li><a href="#tab1">{% trans %}Document Opening{% endtrans %}</a></li>
+		<li><a href="#tab2">{% trans %}Document Viewing{% endtrans %}</a></li>
+		<li><a href="#tab3">{% trans %}Document Saving{% endtrans %}</a></li>
+		<li><a href="#tab4">{% trans %}Other Actions{% endtrans %}</a></li>
+	</ul>
+	<div id="tab1">
+		<table class="elmContainer" cellspacing="0">
+			<tr>
+				<td class="firstRw">{% trans %}HTML Head{% endtrans %}:</td>
+				<td class="firstRw">
+					<textarea name="CustomHTMLHead" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getCustomHtmlHead : '' }}</textarea>
+					<span class="elNote">{% trans %}HTML String(s) to include extra header tags like external javascript/css files.{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}WebQueryOpen event{% endtrans %}:</td>
+				<td>
+					{% trans %}Custom agent to run{% endtrans %}:<br />
+					<textarea disabled="disabled" name="CustomWQOAgent" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getCustomWqoAgent : '' }}</textarea>
+					<span class="elNote">{% trans %}String of PHP files to be included before opening document (COMING SOON).{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Edit Document button{% endtrans %}:</td>
+				<td>
+					{% trans %}Custom button label{% endtrans %}:<br />
+					<input type="text" name="CustomEditButtonLabel" value="{{ document is defined ? document.getCustomEditButtonLabel : '' }}" maxlength="255" class="text ui-widget-content ui-corner-all" />
+				</td>
+			</tr>
+			<tr>
+				<td class="firstRw"></td>
+				<td class="firstRw">
+					{% trans %}Custom JS function to run{% endtrans %}:<br />
+					<textarea name="CustomEditJS" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getEditDocumentCustomJS : '' }}</textarea>
+					<span class="elNote">{% trans %}Custom JavaScript code(s) to be run. Default function will run if left blank.{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="firstRw"></td>
+				<td class="firstRw">
+					{% trans %}Custom hide when PHP script{% endtrans %}:<br />
+					<textarea name="CustomEditButtonHideWhen" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getCustomEditButtonHideWhen : '' }}</textarea>
+					<span class="elNote">{% trans %}PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a true (hide) or false (show). Combined with the built-in hide criteria. Available objects are $docova and $user.{% endtrans %}<br />
+					{% trans %}e.g.{% endtrans %} <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="purple">true</span> : <span class="purple">false</span>; <span class="red">?&gt;</span></span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Initial cursor focus field{% endtrans %}:</td>
+				<td>
+					<input type="text" name="CursorFocusField" value="{{ document is defined ? document.getCursorFocusField : 'Subject' }}" class="text ui-widget-content ui-corner-all" />
+					<span class="elNote">{% trans %}Name of the html field to place the cursor in when document is opened for editing.{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}OnLoad JavaScript event{% endtrans %}:</td>
+				<td>
+					{% trans %}Custom JS function to run{% endtrans %}:<br />
+					<textarea name="CustomOnLoadJS" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getOnLoadCustomJS : '' }}</textarea>
+					<span class="elNote">{% trans %}Custom JavaScript codes to be run on load.{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}OnUnLoad JavaScript event{% endtrans %}:</td>
+				<td>
+					{% trans %}Custom JS function to run{% endtrans %}:<br />
+					<textarea name="CustomOnUnLoadJS" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getOnUnLoadCustomJS : '' }}</textarea>
+					<span class="elNote">{% trans %}Custom JavaScript codes to be run on unload.{% endtrans %}</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="tab2">
+		<table class="elmContainer" cellspacing="0">
+			<tr>
+				<td class="firstRw">{%  trans %}Restrict Printing{% endtrans %}:</td>
+				<td class="firstRw">
+					<textarea name="CustomRestrictPrinting" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getCustomRestrictPrinting : '' }}</textarea>
+					<span class="elNote">{% trans %}PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a true (disable) or false (enabled). Default is false. Available objects are $docova and $user.{% endtrans %}<br />
+					{% trans %}e.g.{% endtrans %} <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="purple">true</span> : <span class="purple">false</span>; <span class="red">?&gt;</span></span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Print event{% endtrans %}:</td>
+				<td>
+					{% trans %}Custom JS function to run{% endtrans %}:<br />
+					<textarea name="CustomPrintJS" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getPrintCustomJS : '' }}</textarea>
+					<span class="elNote">{% trans %}JavaScript code(s) as Print event.{% endtrans %}</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="tab3">
+		<table class="elmContainer" cellspacing="0">
+			<tr>
+				<td class="firstRw">{% trans %}Save and Close button{% endtrans %}</td>
+				<td class="firstRw">
+					{% trans %}Custom button label{% endtrans %}: <br />
+					<input type="text" name="CustomSaveButtonLabel" value="{{ document is defined ? document.getCustomSaveButtonLabel : '' }}" class="text ui-widget-content ui-corner-all" />
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					{% trans %}Custom JS function to run{% endtrans %}:<br />
+					<textarea name="CustomSaveJS" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getSaveCloseCustomJS : '' }}</textarea>
+					<span class="elNote">{% trans %}Custom JavaScript code(s) to run. Default function will run if left blank. Your script should submit the document by calling the built-in SaveAndClose() function.{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					{% trans %}Custom hide when PHP script{% endtrans %}:<br />
+					<textarea name="CustomSaveButtonHideWhen" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getSaveButtonHideWhen : '' }}</textarea>
+					<span class="elNote">{% trans %}PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a true (hide) or false (show). Combined with the built-in hide criteria. Available objects are $docova and $user.{% endtrans %}<br />
+					{% trans %}e.g.{% endtrans %} <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="purple">true</span> : <span class="purple">false</span>; <span class="red">?&gt;</span></span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}OnBeforeRelease Javascript event{% endtrans %}:</td>
+				<td>
+					{% trans %}Custom JS function to run{% endtrans %}: <br />
+					<textarea name="CustomOnBeforeReleaseJS" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getBeforeReleaseCustomJS : '' }}</textarea>
+					<span class="elNote">{% trans %}Custom JavaScript code(s) to be run before release.{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Field validation{% endtrans %}:</td>
+				<td>
+					{% trans %}Use{% endtrans %} 
+					<select name="ValidateChoice" id="ValidateChoice" class="text ui-widget-content ui-corner-all">
+						<option value="0" {% if document is not defined or document.getValidateChoice == 0 %}selected{% endif %}>{% trans %}none{% endtrans %}</option>
+						<option value="1" {% if document is defined and document.getValidateChoice == 1 %}selected{% endif %}>{% trans %}built-in field validation{% endtrans %}</option>
+						<option value="2" {% if document is defined and document.getValidateChoice == 2 %}selected{% endif %}>{% trans %}custom JavaScript function{% endtrans %}</option>
+					</select>
+				</td>
+			</tr>
+			<tr class="builtIn{{ document is defined and document.getValidateChoice == 1 ? '' : ' hidden' }}">
+				<td colspan="2" class="firstRw exc">
+					<table cellspacing="2">
+						<tr>
+							<td class="firstRw exc">
+								{% trans %}Names of fields to validate{% endtrans %}<br />
+								<span class="elNote">{% trans %}Case sensitive, separate entries with carriage return{% endtrans %}</span>
+							</td>
+							<td class="firstRw">{% trans %}Optional, matching data types ("text", "number" or "date"). blank enties are treated as text.{% endtrans %}</td>
+							<td class="firstRw">{% trans %}Optional, friendly field labels to be included in error message (field name will be user if blank).{% endtrans %}</td>
+						</tr>
+						<tr>
+							<td class="firstRw exc">
+								<textarea name="ValidateFieldNames" class="text ui-widget-content ui-corner-all cube">{{ document is defined and document.getValidateChoice == 1 ? document.getValidateFieldNames|replace({';' : '\n'}) : 'Subject' }}</textarea>
+							</td>
+							<td class="firstRw">
+								<textarea name="ValidateFieldTypes" class="text ui-widget-content ui-corner-all cube">{{ document is defined and document.getValidateChoice == 1 ? document.getValidateFieldTypes|replace({';' : '\n'}) : 'text' }}</textarea>
+							</td>
+							<td class="firstRw">
+								<textarea name="ValidateFieldLabels" class="text ui-widget-content ui-corner-all cube">{{ document is defined and document.getValidateChoice == 1 ? document.getValidateFieldLabels|replace({';' : '\n'}) : 'Document Title/Subject' }}</textarea>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="customValidation{{ document is defined and document.getValidateChoice == 2 ? '' : ' hidden' }}">
+				<td class="firstRw"></td>
+				<td class="firstRw">
+					{% trans %}Custom JS function to run{% endtrans %}:<br />
+					<textarea name="CustomValidateJS" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getCustomValidateJs : '' }}</textarea>
+					<span class="elNote">{% trans %}Custom JavaScript which returns true or false for validation.{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}WebQuerySave event{% endtrans %}:</td>
+				<td>
+					{% trans %}Custom agent to run{% endtrans %}:<br />
+					<textarea disabled="disabled" name="CustomWQSAgent" class="text ui-widget-content ui-corner-all">{{ document is defined ? document.getCustomWqsAgent : '' }}</textarea>
+					<span class="elNote">{% trans %}String of PHP files to be included before save section (COMING SOON).{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<label><input type="checkbox" name="UpdateFtIndex" value="1" {{ document is defined and document.getUpdateFullTextIndex ? 'checked' : '' }} /> {% trans %}Update full text index when file import is completed{% endtrans %}</label>
+				</td>
+			</tr>			
+		</table>
+	</div>
+	<div id="tab4">
+		<table class="elmContainer" cellspacing="0">
+			<tr>
+				<td class="firstRw">{%  trans %}Filter Attachments Script Name{% endtrans %}:</td>
+				<td class="firstRw">
+					<input name="filterAttachments" class="text ui-widget-content ui-corner-all" type="text" value="{{ document is defined ? document.getFilterAttachmentScript : '' }}" />
+					<span class="elNote">{% trans %}Name of the filter attachments php script class to apply filtering on print from folder, export from folder, forward email and send emal notification.{% endtrans %}</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

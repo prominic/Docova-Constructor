@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{%trans%}Archive Policy{%endtrans%}</title>
+{% include 'DocovaBundle:Admin:sfWebAdminCommonScriptHeader.html.twig'%}
+{% set path_info = path('docova_admin_editdocument', { 'view_name' : view_name, 'doc_id' : document.getId }) %}
+
+{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+	'document' : document is defined ? document : '', 
+	'view_name' : view_name, 
+	'view_title' : view_title, 
+	'mode' : mode,
+	'path_info' : path_info
+} %}
+</head>
+
+<body scroll="no">
+	<ul class="ui-widget-header actionBar hidetoload">
+		<a id="editBtn" href="{{ path('docova_admin_editdocument', { 'view_name' : view_name, 'doc_id' : document.getId }) }}" >{% trans %}Edit{% endtrans %}</a>
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+	</ul>
+	<div id="frmEmulator" class="hidetoload">
+		<div id="divFormContainer">
+			<table class="elmContainer" cellspacing="0">
+				<tr>
+					<td colspan="2" class="firstRw"><h3 class="headings1">{% trans %}Archive Policy Settings{% endtrans %}</h3></td>
+				</tr>
+	            <tr>
+					<td class="firstRw">{%trans%}Policy Name{%endtrans%}:</td>
+					<td class="firstRw">{{ document.getPolicyName }}</td>
+				</tr>
+				<tr>
+	                <td>{%trans%}Description{%endtrans%}:</td>
+					<td>{{ document.getDescription }}</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Status{%endtrans%}:</td>
+					<td>{{ document.getPolicyStatus ? 'Active'|trans : 'Inactive'|trans }}</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Priority{%endtrans%}:</td>
+					<td>
+						{% if document.getPolicyPriority == 3 %}{%trans%}Low{%endtrans%}
+						{% elseif document.getPolicyPriority == 2  %}{%trans%}Med{%endtrans%}
+						{% else %}{%trans%}High{%endtrans%}
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Applicable Libraries{%endtrans%}:</td>
+					<td>{{ document.getLibraries.count == 0 ? 'All'|trans : 'Selected'|trans }}</td>
+				</tr>
+				{% if document.getLibraries.count > 0 %}
+				<tr>
+					<td class="firstRw"></td>
+					<td class="firstRw">
+					{% for libDoc in document.getLibraries %}
+						{{ libDoc.getLibraryTitle }}{% if not loop.last %}, {% endif %}
+					{% endfor %}
+					</td>
+				</tr>
+				{% endif %}
+				<tr>
+					<td>{%trans%}Applicable Document Types{%endtrans%}:</td>
+					<td>{{ document.getDocumentTypes.count == 0 ? 'All'|trans : 'Selected'|trans }}</td>
+				</tr>
+				{% if document.getDocumentTypes.count > 0 %}
+				<tr>
+					<td class="firstRw"></td>
+					<td class="firstRw">
+					{% for docType in document.getDocumentTypes %}
+						{{ docType.getDocName }}{% if not loop.last %}, {% endif %}
+					{% endfor %}
+					</td>
+				</tr>
+				{% endif %}
+				<tr>
+					<td>{%trans%}Selection criteria{%endtrans%}:</td>
+					<td>
+					{% if document.getEnableDateArchive %}{%trans%}Documents that were{%endtrans%}
+						{% if document.getArchiveDateSelect =='DateCreated' %}{%trans%}created{%endtrans%}
+						{% elseif document.getArchiveDateSelect =='DateModified'  %}{%trans%}last modified{%endtrans%}
+						{% elseif document.getArchiveDateSelect =='ReleasedDate' %}{%trans%}released{%endtrans%}
+						{% endif %}
+	                    {% trans with {'%delay%' : document.getArchiveDelay} %}more than %delay% day(s) ago.{%endtrans%}
+	                {% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td class="firstRw"></td>
+					<td class="firstRw">
+              			{%trans%}and satisfy the following custom formula{%endtrans%}:<br />
+						{{ document.getArchiveCustomFormula|raw }}
+						<span class="elNote">{%trans%}Optional Doctrine DQL where clause for a select from document table. "D" refers to Document; "CU" refers to Creator; "AU" refers to Authors.{%endtrans%}</span>
+						<span class="elNote">{%trans%}e.g. "D.Doc_Title = 'my_value' AND (CU.userNameDnAbbreviated = 'DLI Tools/DOCOVA' OR AU.userNameDnAbbreviated = 'DLI Tools/DOCOVA')"{%endtrans%}</span>
+					</td>
+				</tr>
+				<tr>
+					<td>{%trans%}Exemptions{%endtrans%}:</td>
+					<td>{% if document.getArchiveSkipWorkflow %}{%trans%}Do not archive documents with active workflow{%endtrans%}{% endif %}</td>
+				</tr>
+				<tr>
+					<td class="firstRw"></td>
+					<td class="firstRw">{% if document.getArchiveSkipDrafts %}{%trans%}Do not archive active draft documents{%endtrans%}{% endif %}</td>
+				</tr>
+				<tr>
+					<td class="firstRw"></td>
+					<td class="firstRw">
+					{% if document.getArchiveSkipVersions %}
+						{%trans%}Keep latest{%endtrans%} {{ document.getVersionCount }} 
+						{%trans%}releases in the version stream (discarded drafts are not counted){%endtrans%}
+					{% endif %}
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<style>
+.dTool {
+    cursor:pointer;    
+    border:solid 3 #EFEFEF;
+}
+.selTool {
+    background-color:silver;
+    cursor:pointer;
+    border:solid 3 silver;
+}
+.ToolBar {
+    background-color:#EFEFEF;
+    width:100%;
+    height:26px;
+    padding-top:2px;
+    padding-bottom:2px;
+	padding-left:2px;
+	border: 1 solid silver;
+}
+.editArea {
+	width: 100%;
+	height: 50px;
+	border-style:groove;
+	border-width:2;
+	background-color:white;  
+	padding:2px;  
+	font-family:Verdana, Arial;
+	font-size:11px;
+}
+.DropDown {
+    font-family:Verdana, Arial;
+	font-size:8pt;
+}
+</style>
+<script language="Javascript">
+helpText = "<span onclick='document.ParentWindow.closeHelp();' style='position:absolute; top:0px; left:285px; border: 1px solid gray;line-height:10px;font:normal 10px sans-serif; cursor:pointer'>&nbsp;X&nbsp;</span><span style='font : normal 11px Verdana,  Arial, sans-serif'><p><center><strong>Docova Rich Text Editor - {% trans %}Tips & Tricks{% endtrans %}</strong></center></p><ul><li>{% endtrans %}When you press Enter, a new paragraph is started. Use Shift+Enter to enter a carriage return only.{% trans %}</li><li>{% trans %}To create a bulleted or numbered list, it's best to select the bullet or number list icon first{% endtrans %}</li><li>{% trans %}Standard windows shortcut keys work as well as the toolbar for the following{% endtrans %}:</li><ul><li>{% trans %}Ctrl+b for Bold{% endtrans %}</li><li>{% trans %}Ctrl+i for Italic{% endtrans %}</li><li>{% trans %}Ctrl+u for Underline{% endtrans %}</li><li>{% trans %}Ctrl+c for Copy{% endtrans %}</li><li>{% trans %}Ctrl+x for Cut{% endtrans %}</li><li>{% trans %}Ctrl+v for Paste{% endtrans %}</li><li>{% trans %}Ctrl+z for Undo{% endtrans %}</li></ul></span>";
+loadDocovaEditor = false;
+document.all.info.TextContentType = "TEXT";  //required to allow Acquire from Email to work against this form
+</script>
+<p><download id="dwn" style="behavior:url(#default#download)" />
+<p>{{ properties['folder'].getFolderName }}<br>
+<br>
+<b><font size="4">{{ data['Title']['Value'] }}</font></b><br>
+<br>{{ data['ItemDescription']['Value']|raw }}
+<p><b>{% trans %}Syntax{% endtrans %}</b>:<br>{{ data['Syntax']['Value']|raw }}
+<p><b>{% trans %}Parameters{% endtrans %}</b>:<br>{{ data['Parameters']['Value']|raw }}
+<p><b>{% trans %}Retrun Value{% endtrans %}</b>:<br>{{ data['ReturnValue']['Value']|raw }}
+<p><b>{% trans %}Usage{% endtrans %}</b>:<br>{{ data['Usage']['Value']|raw }}
+<p><b>{% trans %}Example{% endtrans %}</b>:<br>{{ data['Example']['Value']|raw }}
+<p><b>{% trans %}Related Information{% endtrans %}</b>:<br>{{ data['Related']['Value']|raw }}
+<p><script language=Javascript>
+   loadIcons(0);
+   loadIcons(1);
+   loadIcons(2);
+   loadIcons(3);
+   loadIcons(4);
+   loadIcons(5);
+   loadIcons(6);
+</script>

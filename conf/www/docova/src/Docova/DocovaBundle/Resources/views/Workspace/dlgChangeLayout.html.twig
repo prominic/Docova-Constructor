@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<title>{% trans %}Change Workspace Layout{% endtrans %}</title>
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}"	type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript">
+var parentWin = window.top.Docova.GlobalStorage["divDlgChangeLayout"].sourcewindow;
+var params = parentWin.dlgParams;
+$(function(){
+	$('#Username').val(params[0]);
+	$('input[name=panellayout]').each(function(){
+		if ($(this).val() == params[1]) {
+			$(this).prop('checked', true);
+			return false;
+		}
+	});
+});
+</script>
+</head>
+<body>
+	<table>
+		<tr>
+			<td><span style="padding: 5px 5px 5px 5px;">{% trans %}Owner{% endtrans %}:</span></td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<div><input id="Username" name="Username" value="" style="width: 250px;" disabled="disabled"></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding: 5px 5px 5px 5px;">
+				<span class="verdana twelve bold">{% trans %}Change the layout style{% endtrans %}:</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding: 5px 5px 5px 5px;">
+				<span>{% trans %}The currently selected widgets will remain intact if you change the layout.{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px; width: 100px;">
+				<span class="txt04">1 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L1-1"><img src="{{ asset('bundles/docova/images/L1-1.jpg') }}">
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="txt04">2 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L2-1"><img src="{{ asset('bundles/docova/images/L2-1.jpg') }}">
+				<input type="radio" name="panellayout" value="L2-2"><img src="{{ asset('bundles/docova/images/L2-2.jpg') }}">
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="txt04">3 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L3-1"><img src="{{ asset('bundles/docova/images/L3-1.jpg') }}">
+				<input type="radio" name="panellayout" value="L3-2"><img src="{{ asset('bundles/docova/images/L3-2.jpg') }}">
+				<input type="radio" name="panellayout" value="L3-3"><img src="{{ asset('bundles/docova/images/L3-3.jpg') }}">
+			</td>
+		</tr>
+		<tr>
+			<td style="padding: 5px 5px 5px 5px;">
+				<span class="txt04">4 {% trans %}Area{% endtrans %}</span>
+			</td>
+			<td style="padding: 5px 5px 5px 5px;">
+				<input type="radio" name="panellayout" value="L4-1" checked="checked"><img src="{{ asset('bundles/docova/images/L4-1.jpg') }}">
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

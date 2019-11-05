@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+<title>{% trans %}Folder Archive{% endtrans %}</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleAdministration.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}" ></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+document.oncontextmenu=stopContextMenu;
+var restoredDocs=false;
+var info = {
+	"FolderID" : "{{ folder.getId }}",
+	"LibraryKey" : "{{ folder.getLibrary.getId }}",
+	"ViewScope" : "",
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"UserRoles" : "$$WebClient;[Administration]",
+	"isSuperuser" : "",
+	"isEditMode" : "",
+	"HTTP_Referer" : "",
+	"Query_String" : "OpenForm&parentUNID={{ folder.getId }}C&viewscope=",
+	"Query_String_Decoded" : "OpenForm&parentUNID={{ folder.getId }}&viewscope=",
+	"Path_Info_Decoded" : "{{ path('docova_archiveddocuments') }}?parentUNID={{ folder.getId }}&viewscope=",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"DefaultPerspective" : "",
+	"CanRestore" : "true"
+};
+function getinfovar() {
+	return info;
+}
+
+document.oncontextmenu=stopContextMenu;
+
+function stopContextMenu()
+{
+return false;
+}
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function initDialog()
+{
+	InitVars(info);
+	if(!docInfo.CanRestore){
+		window.top.$(".ui-dialog-buttonpane button:contains('{% trans %}Restore Selected Documents{% endtrans %}')").button("disable");
+	}
+}
+
+function ArchiveLoaded(){
+	var xobj = ArchiveData.XMLDocument;
+	var nodes = xobj.selectSingleNode("documents/document");
+	if(nodes == null){
+		$("#NoArchiveDataMsg").css("display", "");
+		$("#divArchiveDataDisplay").css("display", "none");
+	}else{
+		$("#NoArchiveDataMsg").css("display", "none");
+		$("#divArchiveDataDisplay").css("display", "");	
+	}
+}
+function OpenArchivedDocument(recNo)
+{
+	var rs = ArchiveData.recordset;
+	rs.AbsolutePosition(recNo);
+	//-------------------------------------------------------
+	var docTypeKey = rs.Fields("DocumentTypeKey").getValue();
+	var docUnid = rs.Fields("docid").getValue();
+	//-------------------------------------------------------
+	var dlgUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/ReadDocument/" + docUnid + "?ReadForm&ParentUNID=" + docInfo.FolderID + "&mode=preview";
+	dlgUrl += "&typekey=" + docTypeKey + "&datadocsrc=A&datadoc=" + docUnid;
+
+	//-------------------------------------------------------
+	var openHeight = $(window.top).height() - 100;
+	var openWidth = $(window.top).width() - 100;
+	var strWindowFeatures = "menubar=no,location=no,resizable=no,scrollbars=yes,status=no, height=" + openHeight + ", width=" + openWidth;
+	window.open(dlgUrl, "Viewing archived document.", strWindowFeatures)
+}
+
+function SetRowColor(obj, mode){
+	if (mode == true){
+		$(obj).css("background-color", "#dfefff");
+		$(obj).attr("title", "Double click to open.");
+	}else{
+		$(obj).css("background-color", "");
+		$(obj).attr("title", "");
+	}	
+}
+
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="ui-widget" SCROLL="no" onload="initDialog();">
+	<table class="DlgTable" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+			<td class="DlgContentCell" width="100%">
+				<div id="dlgContentNh" class="ui-widget">
+					<div style="font: bold 11px verdana,arial;margin-bottom:4px;">{% trans with {'%foldername%' : folder.getFolderName } %}Documents archived from %foldername% folder {% endtrans %}:</div><br>
+					<table  class="tblFields" style="border: 1px ridge; background-color:#efefff;" width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+						     <td class="frmLabel" width="30">&nbsp;</td>
+						     <td class="frmLabel" width="140"><b>{% trans %}Type{% endtrans %}</b></td>
+						     <td class="frmLabel" width="70"><b>{% trans %}Version{% endtrans %}</b></td>
+						     <td class="frmLabel" width="70"><b>{% trans %}Archived{% endtrans %}</b></td>
+						     <td class="frmLabel"><b>{% trans %}Subject{% endtrans %}</b></td>
+						</tr>
+					</table>
+					<div id="NoArchiveDataMsg" style="display:none; font: 11px verdana;border:1px solid #CCC;padding:5px;margin-top:5px;">There are currently no archived documents for this folder.</div>
+					<div id="divArchiveDataDisplay" style="display:none; width: 100%; height: 380px; overflow-y: auto; overflow-x: hidden;">
+						<table class="tblFields" id="tblArchiveData" datasrc="#ArchiveData" width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr ondblclick="OpenArchivedDocument(this.rowIndex);" onMouseOver="SetRowColor(this, true)" onMouseOut="SetRowColor(this, false)">
+								<td class="frmText" width="30" onclick="window.event.cancelBubble = true;"><input type="checkbox" datafld="Selected"/></td>
+								<td class="frmText"  width="140"><span datafld="DocumentType"></span>&nbsp;</td>
+								<td class="frmText"  width="70"><span datafld="FullVersion"></span>&nbsp;</td>
+								<td class="frmText"  width="70"><span datafld="ArchivedDate"></span>&nbsp;</td>
+								<td class="frmText" ><span datafld="Subject"></span>&nbsp;</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+<script>
+	var myval = "my val";
+	var ArchiveData= new xmlDataIsland();
+	ArchiveData.setSrc ( "{{ path('docova_folder_archivedocs') }}?RestrictToCategory={{ folder.getId }}&{{ 'now'|date('U') }}" ) ;
+	ArchiveData.id = "ArchiveData";
+	ArchiveData.setTemplateName( "tblArchiveData");
+	ArchiveData.ondatasetcomplete = function() { ArchiveLoaded(); }
+//	ArchiveData.process();
+</script>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+	<HEAD>
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+	</HEAD>
+	<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

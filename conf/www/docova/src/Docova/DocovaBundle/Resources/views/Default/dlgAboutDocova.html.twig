@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+<title>About DOCOVA</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDialogBase.css') }}"	type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript">
+var info = {
+	"UserName" : "",
+	"UserNameAB" : "",
+	"UserNameCN" : "",
+	"UserRoles" : "",
+	"HTTP_Referer" : "",
+	"Query_String" : "OpenForm",
+	"Query_String_Decoded" : "OpenForm",
+	"Path_Info_Decoded" : "",
+	"ServerName" : "",
+	"NsfName" : "",
+	"ServerUrl" : "",
+	"PortalWebPath" : "",
+	"PortalNsfName" : ""
+};
+function getinfovar() {
+	return info;
+}
+InitVars(info);
+$(document).ready(function(){
+	$( "#btnDownloadDOE" )
+		.button({
+			text: true,
+			icons: {primary: "ui-icon-circle-arrow-s"}
+		})
+		.click(function( event ) {
+			window.location.href = location.protocol + "//www.docova.com/download/" + encodeURI("Setup Docova Explorer - x64.exe");
+			event.preventDefault();
+	});
+	
+	$( "#btnDownloadDOE32" )
+		.button({
+			text: true,
+			icons: {primary: "ui-icon-circle-arrow-s"}
+		})
+		.click(function( event ) {
+			window.location.href = location.protocol + "//www.docova.com/download/" + encodeURI("Setup Docova Explorer - x32.exe");
+			event.preventDefault();
+	});	
+});
+
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no">
+	<div id="divContentSection" class="ui-widget">
+		<table class="tblFields" width="100%" border="0" cellspacing="0"
+			cellpadding="0">
+			<tr valign="top">
+				<td width="50%"><img src="{{ asset('bundles/docova/images/DocovaLogo.png') }}"><br> <br></td>
+				<td width="50%"><div>
+						<span class="frmText" style="font-size: 40px;">V 5.5.0</span><br>
+						<span class="frmLabel"><a href="https://www.docova.com" target="_blank">www.docova.com</a></span>
+					</div>
+					<br>
+					<div class="ten">Licensed To:<br><span class="frmLabel">{% if settings is defined %}{{ settings.getCompanyName}}{% endif %}</span><br></div>
+				</td>
+			</tr>
+		</table>
+
+		<table class="tblFields" width="100%" border="0" cellspacing="0"
+			cellpadding="0">
+			<tr valign="top">
+				<td width="24%"><img style="width: 200px;" src="{{ asset('bundles/docova/images/login.jpg') }}"><br></td>
+				<td width="76%">
+                    <span class="verdana fourteen bold">Did you know?</span><br>
+                    <br>
+                    <span class="verdana twelve">By installing DOCOVA's Plug-in, you can extend the power and functionality of your DOCOVA Applications by integrating Desktop Applications, FileSync capabilities and much more.</span><br><br>
+                    <span class="verdana twelve bold">To get started, download and run the DOCOVA Plug-in.</span><br>
+                    <button id="btnDownloadDOE">Download DOCOVA Plug-in<br>(64bit version for Windows&#174;)</button><br><br>
+                    <button id="btnDownloadDOE32">Download DOCOVA Plug-in<br>(32bit version for Windows&#174;)</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!------------------ SUBFORM sfKillCache ------------>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</form>
+</body>
+</html>

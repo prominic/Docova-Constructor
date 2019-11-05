@@ -1,0 +1,49 @@
+<input type="hidden" id="AutoNotify" value="{{ properties['NotificationTrigger'] }}">
+{% set recip = properties['NotifyAuthor'] ? 1 : 0 %}
+{% set recip = properties['NotifyParticipants'] ? (recip + 2) : recip %}
+<input type="hidden" id="AutoNotifyRecip" value="{{ recip }}">
+<style>
+#divAdvCommentsContainer TD.listheader { background-color: transparent; }
+</style>
+<div id="divAdvCommentsContainer" style="{% if properties['is_read'] == true %}{% if properties['HideOnReading'] == 1 %}display:none{% endif %}{% else %}{% if properties['HideOnEditing'] == 1 %}display:none{% endif %}{% endif %}">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+			<td width="50%" valign="bottom">
+				<span class="frmLabel">{{ properties['CommentsLabel']|trans }}</span>
+			</td>
+			<td width="50%" valign="bottom">
+				{% if properties['can_edit'] %}
+				<!--- Button Bar - Delete is hidden if document cannot be edited by current user, Create always available -->
+				{% endif %}
+				{% if properties['document'] %}
+				<div id="divButtonBar" style="float:right;">
+					<button id="btnAddComment"></button>
+					{% if properties['can_edit'] %}
+					<button id="btnDeleteComment"></button>
+					{% endif %}
+				</div>
+				{% endif %}
+			</td>
+		</tr>
+	</table>
+	<!--- Embedded view perspective----->
+	<script id="xmlAdvComments"  type="text/xml"><?xml version="1.0" encoding="UTF-8"?><viewperspective><type>system</type><id>system_default_folder</id><Unid/><name>Built-in perspective</name><description/><createdby/><createddate/><modifiedby/><modifieddate/><autocollapse>0</autocollapse><viewsettings><viewproperties><showSelectionMargin/><allowCustomization>1</allowCustomization><extendLastColumn/><isSummary/><isThumbnails/><categoryBorderStyle>border-bottom : solid 2px #aaccff;</categoryBorderStyle></viewproperties><columns><column><title>Comment</title><xmlNodeName>comment</xmlNodeName><width>400</width></column><column><title>Type</title><xmlNodeName>commentype</xmlNodeName><width>80</width></column><column><title>Date Created</title><xmlNodeName>commentdate</xmlNodeName><dataType>date</dataType><sortOrder>descending</sortOrder><customSortOrder>descending</customSortOrder><width>160</width></column><column><title>Posted By</title><xmlNodeName>createdby</xmlNodeName><width>150</width></column></columns></viewsettings></viewperspective></script>
+	
+	<!--- BEGIN Embedded view event capture---->
+	<div id="divAdvCommentsCapture">
+		<!--- BEGIN Embedded view contents---->
+		<div id="divAdvComments" style="display:none; background-color:white;width: 99.5%; height:17px ; padding: 0px; margin:2px 0px;overflow: auto; overflow-x: hidden;" ></div>
+		<!--- END Embedded view contents----->
+	<!--- END Embedded view event capture---->
+	</div>
+	
+	<!--- Empty Embedded view message----->
+	<div id="nodivAdvComments" style="display: none ; font: 10px verdana, arial; padding:5px;width:98.6%; display:none; border: 1px solid silver; background-color:white;">
+		{% if not properties['document'] %}{% trans %}No comments. To add comments, first save the document.{% endtrans %}{% endif %}
+	</div>
+</div>
+<script language="javascript">
+prmptMessages.msgAC001 = "{% trans %}Notification message sent.{% endtrans %}";
+prmptMessages.msgAC002 = "{% trans %}Logging comment. Please wait{% endtrans %}...";
+InitAdvComments();
+</script>

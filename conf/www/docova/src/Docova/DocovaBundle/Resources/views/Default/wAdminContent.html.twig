@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Workflow Processes</title>
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+HTML {
+	height: 100%;
+}
+BODY {
+	font-family: Vardana, Arial, sans-serif;
+	font-size: 12px;
+	height: 100%;
+}
+#main {
+	background-color: #FEFEFE;
+}
+#left-column {
+	float: left;
+	min-height: 600px;
+	height: 100%;
+	width: 180px;
+	margin-right: 7px;
+	background-color: #c7ddfa;
+	background: -ms-linear-gradient(top, #C7DDFA 0%,#FEFEFE 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c7ddfa', endColorstr='#FEFEFE', GradientType=1);
+}
+#left-column H4 {
+	margin: 5px auto 0 auto;
+	padding: 3px 0 2px 0;
+	display:block;
+	width: 95%;
+	color: #0042C3;
+	text-align: center;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	background-color: #D8DF11;
+	background: -ms-linear-gradient(top, #D8DF11 0%,#F8FABC 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#D8DF11', endColorstr='#F8FABC', GradientType=1);
+}
+#left-column UL {
+	width: 95%;
+	margin: 0 auto;
+	display: block;
+	padding: 3px 0px;
+	border: 1px #D8DF11 solid;
+	border-left: 0;
+	border-right: 0;
+	background-color: #FFF;
+}
+#left-column UL LI {
+	margin-top: 1px;
+	padding: 5px 0 3px 8px;
+}
+#left-column UL LI.selected {
+	color: grey;
+	background: -ms-linear-gradient(right, #E8ECEF 0%,#B2CBD7 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E8ECEF', endColorstr='#B2CBD7', GradientType=1);
+}
+#left-column UL LI:NOT(.selected):HOVER {
+	cursor: pointer;
+	background-color: #E1EDF2;
+}
+#right-column {
+	overflow: hidden;
+	padding-top: 5px;
+}
+#content_container {
+	width: 100%;
+	padding:5px;
+	border: 1px #CCC solid;
+	border-radius: 5px;
+	border-collapse: 0; 
+	border-spacing: 1px;
+}
+#content_container TH {
+	height: 20px;
+	border-bottom: 1px #BDBDBD solid;
+	background: -ms-linear-gradient(top, #BDBDBD 0%,#FFFFFF 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#BDBDBD', endColorstr='#FFFFFF');
+}
+#content_container TD {
+	height: 19px;
+	padding-left: 5px;
+}
+#content_container .d_frame {
+	border-left: 1px #CCC solid;
+	border-top: 0;
+}
+.hidden { display: none; }
+.expand, .collapse { cursor:pointer }
+.even { background-color: #DAF5FB }
+.odd { background-color: #FEFFDD }
+.s { width: 25px; }
+.m { width: 60px; }
+.l { width: 120px; }
+.xl { width: 240px; }
+
+/****************************** DETAILS *********************************/
+.d_tabs {
+	width: 100%;
+	height: 22px;
+	list-style: none;
+	margin-top: 3px;
+	padding-left: 3px;
+	position: relative;
+}
+.d_tabs LI:not(.btn) {
+	width: 150px;
+	height: 18px;
+	color: #333;
+	z-index: 10000;
+	position: absolute;
+	padding-top: 4px;
+	margin-top: -1px;
+	text-align: center;
+	border: 1px #B6CFF1 solid;
+	font-weight: bold;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	background: -ms-linear-gradient(top, #E9EAED 0%,#FFFFFF 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E9EAED', endColorstr='#FFFFFF');
+}
+.d_tabs LI:nth-child(2) {
+	margin-left: 153px;
+}
+.d_tabs LI:not(.active):not(.btn) {
+	cursor: pointer;
+	background: -ms-linear-gradient(top, #DBE7F8 0%,#FFFFFF 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DBE7F8', endColorstr='#FFFFFF');
+}
+.d_tabs LI.active {
+	border-bottom: 1px #F3F5F9 solid;
+}
+#edit_btn {
+	width: 80px;
+	right: 10px;
+	height: 17px;
+	color: #FFFFFF;
+	cursor: pointer;
+	padding-top: 2px;
+	position: absolute;
+	text-align: center;	
+	border-radius: 4px;
+	background-color: #C14975;
+}
+#content_container .container {
+	width: 100%;
+	margin-bottom: 5px;;
+	background-color: #FEFEFE;
+	border: 1px #B6CFF1 solid;
+	border-spacing: 0;
+}
+#content_container .container TD {
+	vertical-align: top;
+	padding: 1px 0 0 5px;
+}
+#content_container .container TR TD:FIRST-CHILD {
+	background-color: #F3F5F9;
+}
+</style>
+<script type="text/javascript" language="javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#content_container tbody").on("click", ".expand", function() {
+		var row_container = $(this).parent().parent(),
+			img_container = $(this);
+		img_container.removeClass("expand");
+		img_container.attr("src", "{{ asset('bundles/docova/images/load.gif') }}");
+		img_container.addClass("collapse");
+		var uri = '{{ path('docova_workflowitemread') }}?step_id=' + encodeURIComponent($(this).attr("id"));
+		$.get(uri, function(data) {
+			if (data) {
+				row_container.after('<tr><td class="d_frame" colSpan="6"><div style="display:none" class="detail_container">'+ data +'</div></td></tr>')
+				.parent().find('.detail_container').slideDown(2000);
+				img_container.attr("src", "{{ asset('bundles/docova/images/chkrbrdsmopened.gif') }}");
+			}
+		});
+	});
+
+	$("#content_container tbody").on("click", ".collapse", function() {
+		var row_container = $(this).parent().parent().next(),
+			img_container = $(this);
+		img_container.removeClass("collapse");
+		row_container.find('.detail_container').slideUp(1500, function() {
+			img_container.attr("src", "{{ asset('bundles/docova/images/chkrbrdsmclosed.gif') }}");
+			$(this).parent().parent().remove();
+		});
+		img_container.addClass("expand");
+	});
+
+	$("#content_container tbody").on("click", ".d_tabs LI:not(.active)", function() {
+		$(this).parents(".d_tabs").find("LI").removeClass('active');
+		$(this).addClass("active");
+		$(this).parents(".detail_container").find("TABLE.selected").fadeOut(10, function() {
+			$(this).parents(".detail_container").find("TABLE:not(.selected)").fadeIn("slow", function() {
+				$(this).addClass("selected");
+			});
+			$(this).removeClass("selected");
+		});
+	});
+});
+</script>
+</head>
+
+<body>
+	<div id="main">
+		<div id="left-column">
+			<h4>Application Settings</h4>
+			<ul>
+				<li><a>Global Settings</a></li>
+				<li><a>Libraries</a></li>
+				<li><a>Document Types</a></li>
+				<li class="selected"><a>Workflow Processes</a></li>
+				<li><a>Review Policies</a></li>
+				<li><a>Archive Policies</a></li>
+				<li><a>File Templates</a></li>
+				<li><a>View Columns</a></li>
+				<li><a>Custom Search Fields</a></li>
+				<li><a>System Messages</a></li>
+				<li><a>HTML Resources</a></li>
+				<li><a>Event Logs</a></li>
+				<li><a>Activities</a></li>
+			</ul>
+			<h4>User Settings</h4>
+			<ul>
+				<li><a>User Profiles</a></li>
+				<li><a>Checked Out Files</a></li>
+				<li><a>Subscribed Libraries</a></li>
+			</ul>
+		</div>
+		
+		<div id="right-column">
+			<table id="content_container">
+				<thead>
+				<tr>
+					<th class="s">&nbsp;</th>
+					<th>Workflow Name</th>
+					<th>Title</th>
+					<th class="l">Type</th>
+					<th class="l">Distribution</th>
+					<th class="l">Participants</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% if workflows|length > 0 %}
+				{% for wf in workflows %}
+					<tr class="wf">
+						<td></td>
+						<td colspan="5">{{ wf.getWorkflowName }}</td>
+					</tr>
+					{% if wf.getSteps|length > 0 %}
+					{% set count = 0 %}
+					{% for step in wf.getSteps %}
+					<tr class="{% if count % 2 == 0 %}even{% else %}odd{% endif %}">
+						<td><img id="{{ step.getId }}" class="expand" src="{{ asset('bundles/docova/images/chkrbrdsmclosed.gif') }}" alt="open" title="Item details" /></td><td></td>
+						<td><a href="{{ path('docova_adminwfstep', { 'step' : step.getId }) }}" alt="{{ step.getStepName }}" >{{ step.getStepName }}</a></td>
+						<td>{{ step.getStepType(1) }}</td>
+						<td>{% if not step.getDistribution or step.getDistribution == 1 %}Serial{% else %}Parallel{% endif %}</td>
+						{% set others = '' %}
+						{% if step.getOtherParticipant.count > 0 %}
+						{% for item in step.getOtherParticipant %}
+							{% set others = others ~ ',' ~ item.getUserNameDnAbbreviated %}
+						{% endfor %}
+						{% endif %}
+						<td>{% if step.getParticipants == 1 or step.getParticipants == 3 %}[Author]{% endif %}{% if others != '' %}{{ others }}{% endif %}</td>
+					</tr>
+					{% set count = count + 1 %}
+					{% endfor %}
+					{% endif %}
+				{% endfor %}
+				{% endif %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

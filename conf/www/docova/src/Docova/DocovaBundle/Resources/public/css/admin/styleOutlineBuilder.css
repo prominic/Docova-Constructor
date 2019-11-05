@@ -1,0 +1,161 @@
+
+HTML, BODY { height: 100% }
+BODY {
+	font : normal 12px Verdana,  Arial, sans-serif;
+	margin: 0;
+	overflow:hidden;
+	background: white !important;
+}
+
+#divOutlineBuilder {
+	border: 1px solid #808080;
+	margin: auto;
+	width:300px;
+	height:50vh;
+	padding:20px;
+	z-index:1;
+	font-family: Verdana, Arial, Sans Serif ;
+	overflow:auto;
+}
+
+#tdActionBar LI { padding-left:0.1em; padding-right:0.1em;}
+
+.isSelected {
+	border: 2px dashed black !important;
+}
+
+.btn-Standard {
+	height: 2.4em !important;
+}
+
+.iconpicker-item{
+	float:left;
+	width:14px;
+	height:14px;
+	padding:12px;
+	margin:0 12px 12px 0;
+	text-align:center;
+	cursor:pointer;
+	border-radius:3px;
+	font-size:14px;
+	box-shadow:0 0 0 1px #ddd;
+	color:inherit
+}
+
+.iconpicker {
+	width:210px;
+	height:200px;
+	border: 1px solid black;
+	overflow: auto;
+}
+
+.iconpicker-selected{
+	background-color: #C0C0C0;
+}
+
+ul { list-style-type: none;  padding: 0; }
+ul li { padding: 0.4em; text-align:left;  }
+ul li span { display: inline-block;}
+ul li div {display: inline; }
+
+.d-ui-widget-header{
+	border: 0px;
+	color:black;
+	backgorund-color:#fff;
+}
+
+.d-ui-state-default{
+	color:black;
+	backgorund-color:#fff;
+}
+
+.expandable { height:100%; vertical-align: middle }
+
+[emenuitemtype="M"] {
+    line-height:28px;
+}
+
+ .itemlabel {
+	padding-left:0.5em;
+}
+
+
+.selectWizard{
+	position: absolute;
+    right: 100px;
+    top: 120px;
+    height: 70%;
+    box-shadow: 1px 1px 15px 3px rgba(90, 79, 79, 0.5);
+    width: 60%;
+    background: #fff;
+    padding: 20px;
+    font-size:11px;
+    /* border-radius: 5px; */
+    /* overflow: hidden; */
+    z-index: 3;
+    /* border: 1px solid darkgray; */
+}
+
+.MenuSampleContainer{
+	
+	 height: 90%;
+    overflow: auto;
+    padding-right: 10px;
+}
+
+.MenuExample {
+	margin-bottom: 20px;
+    overflow: hidden;
+    padding: 20px;
+    display: block;
+    background: #f0f1f3;
+    border-radius: 10px;
+}
+
+.MenuExample h3 {
+	margin-top:8px;
+	margin-bottom:8px;
+	font-size:1.4em;
+}
+
+
+.MenuImage {
+	display: flex;
+    overflow: auto;
+    padding: 10px;
+    border: 1px solid #d4d8d4;
+    background: #fafbfb;
+}
+
+.MenuImage img.vertical {
+	width: 100px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.MenuImage img.horizontal {
+	width: 280px;
+   
+    object-fit: contain;
+}
+
+.MenuImageThemeText {
+
+	font-size: 10px;
+    color: #848498;
+    margin-top: 8px;
+    text-align:center;
+}
+
+.mtheme {
+    box-shadow: 0px 0px 7px 0px rgba(177, 181, 197, 0.5);
+    background: white;
+    margin: 10px;
+    margin-right: 20px;
+    padding:8px;
+    border: 1px solid lightgray;
+}
+
+.curseltheme {
+	background : #e0dfa2;
+}

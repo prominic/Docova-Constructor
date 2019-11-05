@@ -1,0 +1,164 @@
+	{% set selected_section = '' %}
+	{% set section_properties = '' %}
+	{% if document is defined and 'ATT' in document.getContentSections %}
+ 		{% for subform in document.getDocTypeSubform %}
+ 			{% if subform.getSubform.getFormName == 'Attachments' %}
+ 				{% set selected_section = subform %}
+ 				{% set section_properties = subform.getPropertiesXML(true) %}
+ 			{% endif %}
+ 		{% endfor %}
+ 	{% endif %}
+	<table cellspacing="0" class="elmContainer {{ selected_section != '' ? '' : 'hidden' }}">
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">
+				<label><input type="checkbox" name="AttachmentsReadOnly" value="1" {{ section_properties|length > 0 and section_properties['Interface']['AttachmentReadOnly'] == 1 ? 'checked' : '' }} /> {% trans %}Read Only{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Label{% endtrans %}: </td> 
+			<td><input type="text" name="lblAttachments" value="{{ section_properties|length > 0 ? section_properties['Interface']['AttachmentLabel'] : 'Attachments' }}" class="text ui-widget-content ui-corner-all" /></td>
+		</tr>
+		<tr>
+			<td class="fieldCell">{% trans %}Height{% endtrans %}: </td> 
+			<td class="fieldCell">
+				<input type="text" name="AttachmentsHeightValue" value="{{ section_properties|length > 0 ? section_properties['Interface']['AttachmentsHeight'] : '100' }}" class="text ui-widget-content ui-corner-all" /> 
+				<span>px</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="fieldCell">{% trans %}Maximum number of files{% endtrans %}: </td> 
+			<td class="fieldCell">
+				<input type="text" name="MaxFiles" value="{{ section_properties|length > 0 ? section_properties['MaxFiles'] : '0' }}" class="text ui-widget-content ui-corner-all" />
+				<span>({% trans %}0 for unlimited{% endtrans %})</span>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Generate Thumbnails{% endtrans %}:</td> 
+			<td>
+				<label><input type="radio" name="GenerateThumbnails" value="1" {{ section_properties|length > 0 and section_properties['Interface']['GenerateThumbnails'] == 1 ? 'checked' : '' }} /> {% trans %}Yes{% endtrans %}</label>
+				<label><input type="radio" name="GenerateThumbnails" value="0" {{ section_properties|length == 0 or section_properties['Interface']['GenerateThumbnails'] == '' ? 'checked' : '' }} /> {% trans %}No{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Thumbnail Width{% endtrans %}:</td> 
+			<td>
+				<input type="text" name="ThumbnailWidth" value="{{ section_properties|length > 0 ? section_properties['Interface']['ThumbnailWidth'] : '' }}" class="text ui-widget-content ui-corner-all" /> 
+				<span>px</span>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Thumbnail Height{% endtrans %}:</td> 
+			<td>
+				<input type="text" name="ThumbnailHeight" value="{{ section_properties|length > 0 ? section_properties['Interface']['ThumbnailHeight'] : '' }}" class="text ui-widget-content ui-corner-all" />
+				<span>px</span>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Allowed file extensions{% endtrans %}:</td> 
+			<td>
+				<input type="text" name="AllowedFileExtensions" value="{{ section_properties|length > 0 ? section_properties['Interface']['AllowedFileExtensions'] : '' }}" class="text ui-widget-content ui-corner-all" />
+				<span>({% trans %}blank for any{% endtrans %})</span>
+				<span class="elNote">{% trans %}Comma separated list of acceptable file extensions, blank for any.{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<label><input type="checkbox" name="EnableFileViewLogging" value="1" {{ section_properties|length > 0 and section_properties['Interface']['EnableFileViewLogging'] == 1 ? 'checked' : '' }} /> {% trans %}Audit log when Users view files{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<label><input type="checkbox" name="EnableFileDownloadLogging" value="1" {{ section_properties|length > 0 and section_properties['Interface']['EnableFileDownloadLogging'] == 1 ? 'checked' : '' }} class="inpRadioChkbox" />{% trans %}Audit log when Users download files{% endtrans %}</label>
+				<span class="elNote">{% trans %}File edits and check in/out are automatically logged.{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<label><input type="checkbox" name="EnableLocalScan" value="1" {{ section_properties|length > 0 and section_properties['Interface']['EnableLocalScan'] == 1 ? 'checked' : '' }} /> {% trans %}Enable access to local scanner{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Custom Scan JS function{% endtrans %}:</td>
+			<td>
+				<textarea name="CustomScanJS" class="text ui-widget-content ui-corner-all">{{ section_properties|length > 0 ? section_properties['Interface']['CustomScanJS'] : '' }}</textarea>
+                <span class="elNote">{% trans %}Default scan function called if left blank.{% endtrans %}</span>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<label><input type="checkbox" name="EnableFileCIAO" value="1" {{ section_properties|length > 0 and section_properties['Interface']['EnableFileCIAO'] == 1 ? 'checked' : '' }} /> {% trans %}Enable file check in and out tracking{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Default List Type{% endtrans %}:</td>
+			<td>
+				<label><input type="radio" name="ListType" value="I" {{ section_properties|length == 0 or section_properties['Interface']['ListType'] == 'I' ? 'checked' : '' }} /> {% trans %}Icons{% endtrans %}</label>
+				<label><input type="radio" name="ListType" value="L" {{ section_properties|length > 0 and section_properties['Interface']['ListType'] == 'L' ? 'checked' : '' }} /> {% trans %}List{% endtrans %}</label>
+				<label><input type="radio" name="ListType" value="R" {{ section_properties|length > 0 and section_properties['Interface']['ListType'] == 'R' ? 'checked' : '' }} /> {% trans %}Details{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<label><input type="checkbox" name="HideAttachButtons" value="1" {{ section_properties|length > 0 and section_properties['Interface']['HideAttachButtons'] == 1 ? 'checked' : '' }} /> {% trans %}Hide attachment section buttons{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				{% trans %}Hide attachment section when{% endtrans %}: 
+				<label><input type="checkbox" name="HideAttachments[]" value="R" {{ section_properties|length > 0 and section_properties['Interface']['HideOnReading'] == 1 ? 'checked' : '' }} /> {% trans %}Reading{% endtrans %}</label>
+				<label><input type="checkbox" name="HideAttachments[]" value="E" {{ section_properties|length > 0 and section_properties['Interface']['HideOnEditing'] == 1 ? 'checked' : '' }} /> {% trans %}Editing{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				{% trans %}Has multiple attachment sections{% endtrans %}:
+				<label><input type="radio" name="HasMultiAttachmentSections" value="1" {{ section_properties|length > 0 and section_properties['Interface']['HasMultiAttachmentSection'] == 1 ? 'checked' : '' }} /> {% trans %}Yes{% endtrans %}</label>
+				<label><input type="radio" name="HasMultiAttachmentSections" value="0" {{ section_properties|length > 0 and section_properties['Interface']['HasMultiAttachmentSection'] == 0 ? 'checked' : '' }} /> {% trans %}No{% endtrans %}</label>
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Associated template files{% endtrans %}:</td>
+            <td>
+            	{% trans %}Template type{% endtrans %}: 
+	            <select name="TemplateType" id="TemplateType" class="text ui-widget-content ui-corner-all">
+					<option {{ section_properties|length == 0 or section_properties['TemplateType'] == 'None' ? 'selected' : '' }} value="None">{% trans %}None{% endtrans %}</option>
+					<option {{ section_properties|length > 0 and section_properties['TemplateType'] == 'All' ? 'selected' : '' }} value="All">{% trans %}All{% endtrans %}</option>
+					{% if templates is defined %}
+		              	{% set tmp_types = [] %}
+		              	{% for tmp in templates %}
+		              		{% set tmp_types = tmp_types|merge({ (tmp.getTemplateType): tmp.getTemplateType}) %}
+		              	{% endfor %}
+		              	{% for tmp in tmp_types %}
+		              	<option value="{{ tmp }}" {{ section_properties|length > 0 and section_properties['TemplateType'] == tmp ? 'selected' : '' }}>{{ tmp }}</option>
+		              	{% endfor %}
+					{% endif %}
+				</select> 
+			</td>
+		</tr>
+		<tr class="templateList {{ section_properties|length == 0 or section_properties['TemplateType'] == 'None' ? 'hidden' : '' }}">
+			<td class="firstRw">{% trans %}Applicable templates{% endtrans %}:</td>
+			<td class="firstRw">
+				<select name="TemplateList[]" id="TemplateList" multiple="multiple">
+              	{% if templates is defined and section_properties|length > 0 and section_properties['TemplateType'] != 'None' %}
+              		{% for tmp in templates if (section_properties['TemplateType'] == 'All' or tmp.getTemplateType == section_properties['TemplateType']) %}
+              		<option value="{{ tmp.getId }}" {{ section_properties|length > 0 and tmp.getId in (section_properties['TemplateKey']|split(',')) ? 'selected="selected"' : '' }} >{{ tmp.getTemplateName }}</option>
+                  	{% endfor %}
+              	{% endif %}
+				</select>
+			</td>
+		</tr>
+		<tr class="autoLoadTemp {{ section_properties|length == 0 or section_properties['TemplateType'] == 'None' ? 'hidden' : '' }}">
+			<td class="firstRw"></td>
+			<td class="firstRw">
+                <label><input type="checkbox" name="TemplateAutoAttach" value="1" {{ section_properties|length == 0 or section_properties['TemplateAutoAttachment'] == 1 ? 'checked' : '' }} /> {% trans %}Auto attach template on document creation{% endtrans %}</label>
+			</td>
+		</tr>		
+	</table>

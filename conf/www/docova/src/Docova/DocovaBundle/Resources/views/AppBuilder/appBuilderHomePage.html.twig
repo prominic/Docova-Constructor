@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<TITLE>DOCOVA : DLI Standards Inc.</TITLE>
+<META charset="utf-8">
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<style type='text/css'>
+body {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	overflow: hidden;
+}
+</style>
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness-flat/jquery-ui.css') }}">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript">
+var redirect = false;
+var info = {
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"isAppSettingsExist" : "",
+	"isAppSettingsUnidExist" : "true",
+	"systemKey" : "{{ settings.getSystemKey }}",
+	"redirectMobileReader" : "No",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"browserType" : "{{ 'Firefox' in app.request.server.get('HTTP_USER_AGENT') ? 'FireFox' : ('Chrome' in app.request.server.get('HTTP_USER_AGENT') ? 'Chrome' : 'Microsoft') }}",
+	"mobileUrl" : "{{ path('docova_mobile') }}",
+	"finalUrl" : "{{ path('docova_homepage') }}",
+	"expired" : "{{ settings.getExpiryDate ? (settings.getExpiryDate.diff(date('now')).format('%R%a')|number_format >= 0 ? 'true' : '') : '' }}",
+	"license" : "{{ settings.getLicenseCode }}",
+	"CanCreateApps" : "{{ user.getUserProfile.getCanCreateApp ? 'Yes' : '' }}",
+	"UserRoles" : "{{ is_granted('ROLE_ADMIN') ? '[Administration]' : '' }}"
+};
+function getinfovar() {
+	return info;
+}
+var docInfo = info;
+$(document).ready(function() {
+	$("#newApp").button().click(function(event) {
+		event.preventDefault();
+		ABCreateNewApp();
+	});
+
+	$("#openApp").button().click(function(event) {
+		event.preventDefault();
+		ABOpenApp()
+	});
+});
+function ABCreateNewApp() {
+	var cancreateapps = false;
+	if (docInfo.CanCreateApps == "Yes" | (docInfo.UserRoles).indexOf("[Administration]") != -1) { //if can create apps is on for user, or is Admin
+		cancreateapps = true;
+	}
+
+	if (cancreateapps == false) {
+		window.top.Docova.Utils
+				.messageBox({
+					title : "{% trans %}Insufficient Access{% endtrans %}",
+					prompt : "{% trans %}Sorry, you have insufficient access to create applications.{% endtrans %}",
+					icontype : 1,
+					msgboxtype : 0,
+					width : 300
+				});
+		return;
+	}
+	var dlgUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/dlgCreateApp?OpenForm";
+	var dlgCreateApp = window.top.Docova.Utils.createDialog({
+		id : "divDlgCreateApp",
+		url : dlgUrl,
+		title : "{% trans %}Create a New Application{% endtrans %}",
+		height : 450,
+		width : 500,
+		useiframe : true,
+		sourcewindow : window,
+		sourcedocument : document,
+		buttons : {
+			"{% trans %}Create{% endtrans %}" : function() {
+				var dlgDoc = window.top.$("#divDlgCreateAppIFrame")[0].contentWindow.document;
+				var appType = "A";
+				var appTitle = $("#Title", dlgDoc).val();
+				var appDesc = $("#Description", dlgDoc).val();
+				var appIcon = $("#AppIcon", dlgDoc).val();
+				var appIconColor = $("#AppIconColor", dlgDoc).val();
+				var appTemplatePath = $("#AppTemplatePath", dlgDoc).val();
+				var appCopyOption = $("[name=CopyOption]:checked", dlgDoc).val();
+				var appInherit = $("#InheritOption", dlgDoc).is(":checked");
+				var isApp = $("#IsApp", dlgDoc).val();
+
+				//-----App title cannot be blank
+				if ($.trim(appTitle) == "") {
+					window.top.Docova.Utils.messageBox({
+						title : "{% trans %}Application Title Empty{% endtrans %}",
+						prompt : "{% trans %}The Application Title cannot be blank.  Please provide a Title{% endtrans %}",
+						icontype : 1,
+						msgboxtype : 0,
+						width : 400
+					});
+					return;
+				}
+				//-----App description cannot be blank
+				if ($.trim(appDesc) == "") {
+					window.top.Docova.Utils.messageBox({
+						title : "{% trans %}Application Description Empty{% endtrans %}",
+						prompt : "{% trans %}The Application Description cannot be blank.  Please provide a Description{% endtrans %}",
+						icontype : 1,
+						msgboxtype : 0,
+						width : 400
+					});
+					return;
+				}
+				
+				window.top.Docova.Utils.showProgressMessage("Creating Application....one moment.");
+				//-----Submit the request to the server
+				var agentName = "WorkspaceServices";
+				var request = "<Request><Action>CREATEAPP</Action><UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+				request += "<Document>";
+				request += "<AppType><![CDATA[" + appType + "]]></AppType>";
+				request += "<Title><![CDATA[" + appTitle + "]]></Title>";
+				request += "<Description><![CDATA[" + appDesc + "]]></Description>";
+				request += "<IsApp>" + isApp + "</IsApp>";
+				request += "<AppIcon>" + appIcon + "</AppIcon>";
+				request += "<AppIconColor>" + appIconColor + "</AppIconColor>";
+				request += "<AppTemplatePath>" + appTemplatePath + "</AppTemplatePath>";
+				request += "<AppCopyOption>" + appCopyOption + "</AppCopyOption>";
+				request += "<AppInherit>" + appInherit + "</AppInherit>";
+				request += "</Document>";
+				request += "</Request>";
+
+				var resulttext = ABSubmitRequest(request, agentName);
+				if (resulttext == "FAILED") {
+					window.top.Docova.Utils.hideProgressMessage();
+					alert("{% trans %}The Application could not be created.{% endtrans %}");
+					return;
+				}
+				if (resulttext == "DBEXISTS") {
+					window.top.Docova.Utils.hideProgressMessage();
+					alert("{% trans %}An Application with this name already exists.  Please provide a different Application Filename.{% endtrans %}");
+					return;
+				}
+
+				//-----Add app key to User profile and refresh left nav in app builder
+				window.top.Docova.Utils.hideProgressMessage();
+				var appUnid = resulttext;
+				var appDocKey = resulttext;
+				ABAddApp(appDocKey); //Add app to App Builder left nav
+				dlgCreateApp.closeDialog();
+			},
+			"{% trans %}Cancel{% endtrans %}" : function() {
+				dlgCreateApp.closeDialog();
+			}
+		}
+	});
+}
+function ABOpenApp() {
+	//Add dialog to pick the application to add then update left nave
+	var dlgUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/dlgAddExistingApp?OpenForm";
+	var dlgAddApp = window.top.Docova.Utils.createDialog({
+		id : "divDlgAddApp",
+		url : dlgUrl,
+		title : "{% trans %}Add an Application{% endtrans %}",
+		height : 450,
+		width : 500,
+		useiframe : true,
+		sourcewindow : window,
+		sourcedocument : document,
+		buttons : {
+			"{% trans %}Add{% endtrans %}" : function() {
+				var dlgDoc = window.top.$("#divDlgAddAppIFrame")[0].contentWindow.document;
+				var appUnid = $("#AppUnid", dlgDoc).text();
+				var appDocKey = $("#AppDocKey", dlgDoc).text();
+
+				if (appUnid == "") {
+					window.top.Docova.Utils.messageBox({
+						title : "{% trans %}Nothing Selected{% endtrans %}",
+						prompt : "{% trans %}You have not selected an Application from the list. <br><br> Please select and Application.{% endtrans %}",
+						icontype : 1,
+						msgboxtype : 0,
+						width : 400
+					});
+					return;
+				}
+				ABAddApp(appDocKey);
+				dlgAddApp.closeDialog();
+			},
+			"{% trans %}Cancel{% endtrans %}" : function() {
+				dlgAddApp.closeDialog();
+			}
+		}
+	});
+}
+function ABAddApp(appUnid) {
+	//Saves the new app id to the users profile
+	var agentName = "WorkspaceServices";
+	var request = "<Request><Action>ADDTOAPPLIST</Action><UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Document>";
+	request += "<AppID>" + appUnid + "</AppID>";
+	request += "</Document>";
+	request += "</Request>";
+
+	var result = ABSubmitRequest(request, agentName);
+	if (result == "FAILED") {
+		window.top.Docova.Utils.hideProgressMessage();
+		alert("{% trans %}The Application could not be opened in App Builder.{% endtrans %}")
+		return;
+	}
+
+	window.top.Docova.GlobalStorage['appBuilderOpenApp'] = appUnid;
+	var findAppFrame = $("#iFrameMain", window.top.document).contents().find("#fraAppBuilder");
+	var AppFrameDoc = findAppFrame[0].contentWindow.document;
+	var leftFrameSrc = $("#fraLeftFrame", AppFrameDoc).attr("src");
+	$("#fraLeftFrame", AppFrameDoc).attr("src", leftFrameSrc);
+	return;
+}
+function ABSubmitRequest(request, agentName) {
+	//send the request to server
+	var processUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" + agentName + "?OpenAgent";
+	var result;
+	var resulttext;
+	$.ajax({
+		type : "POST",
+		url : processUrl,
+		data : request,
+		cache : false,
+		async : false,
+		dataType : "xml",
+		success : function(xml) {
+			result = true;
+			var xmlobj = $(xml);
+			var statustext = xmlobj.find("Result").first().text();
+			if (statustext == "OK") {
+				resulttext = xmlobj.find("Result[ID=Ret1]").text();
+			}
+		},
+		error : function() {
+			result = false
+			resulttext = "FAILED"
+			//provide an error message
+		}
+	})
+	return resulttext;
+}
+</script>
+</head>
+<body>
+	<div style="width: 100%; text-align: center; padding-top: 40px">
+		<button id="newApp">{% trans %}Create New Application{% endtrans %}</button>
+		<button id="openApp">{% trans %}Open Existing Application{% endtrans %}</button>
+	</div>
+	<table width="100%" height="90%">
+		<tr>
+			<td align="center" valign="top">
+				<div style="margin: 10px;">
+					<img src="{{ asset('bundles/docova/images/login.jpg') }}" alt=""><br />
+					<br /> <span style="color: #6699ff; font-size: 24px; font-family: Verdana, Arial;"><BR />
+					<b>{% trans %}Docova App Builder{% endtrans %}</b><br /></span>
+					<span style="color: #000000; font-size: 16px; font-family: Verdana, Arial;">
+						{% trans %}To create a new application, start by clicking the "Create New Application" button. To open an existing application that does not appear in the list, click the "Open Existing App" button.{% endtrans %}
+					</span>
+				</div>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

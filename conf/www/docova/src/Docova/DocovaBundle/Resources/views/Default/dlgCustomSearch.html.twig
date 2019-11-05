@@ -1,0 +1,1088 @@
+<!doctype html><html>
+<head>
+<title>{% trans %}Advanced Search{% endtrans %}</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/multiselect.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleViewDialogBase.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/autoCompleteNamePicker.css') }}" type="text/css" />
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/autoCompleteNamePicker.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/multiselect.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<style>
+th, td {
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+input {height: 13px }
+</style>
+<script language="JavaScript" type="text/javascript">
+var info = {
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}", 
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"UserRoles" : "$$WebClient;[Administration]", 
+	"isSuperuser" : "",
+	"HTTP_Referer" : "",
+	"Query_String" : "OpenForm&edit={{ app.request.query.get('edit') }}&folder={{ app.request.query.get('folder') }}",
+	"Query_String_Decoded" : "OpenForm&edit={{ app.request.query.get('edit') }}&folder={{ app.request.query.get('folder') }}",
+	"Path_Info_Decoded" : "{{ path('docova_customsearch') }}",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}", 
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"SessionDateFormat" : "{{ date_format|replace({'yyyy': 'yy'}) }}",
+	"BrowserVersion" : ""
+};
+
+function getinfovar() {
+	return info;
+}
+InitVars(info);
+
+var srcWindow = window.top.Docova.GlobalStorage["divDlgAdvancedSrch"].sourcewindow;
+document.oncontextmenu = stopContextMenu;
+var rowCount = 8; 
+var isDocListModified = false;
+var isFolderSearch = false;
+
+$(document).ready(function(){
+	
+	$("#divAdvSearchTabs").tabs();
+	
+	$("#docTypeOption").buttonset();
+	
+	$(".Q").multiselect({
+		multiple: false,
+		header: false,
+		noneSelectedText: "",
+		selectedList: 1,
+		height: "auto",
+		position: {my: 'top left', at: 'bottom left', collision: 'fit'},		
+		minWidth: 15
+	})
+	
+	$(".F").multiselect({
+		multiple: false,
+		header: false,
+		noneSelectedText: "",
+		selectedList: 1,
+		height: 200,
+		minWidth: 200,
+		position: {my: 'top left', at: 'bottom left', collision: 'fit'},
+		initHidden: true
+	})
+	$("#F_0btn").toggle();
+	
+	$(".P").multiselect({
+		multiple: false,
+		header: false,
+		noneSelectedText: "",
+		selectedList: 1,
+		height: "auto",
+		minWidth: 130,
+		position: {my: 'top left', at: 'bottom left', collision: 'fit'},		
+		initHidden: true
+	})	
+	$("#P_0btn").hide();
+	
+	SetDocumentTypeList(document.getElementById("DocumentTypeOption"));
+	InitDialog();
+	
+	$(".Q").multiselect("refresh")
+	$(".F").multiselect("refresh")
+	$(".P").multiselect("refresh")
+
+	$('input:text')
+ 		.button()
+		.css({
+			'font' : 'inherit',
+			'color' : 'inherit',
+			'text-align' : 'left',
+			'outline' : 'none',
+			'cursor' : 'text',
+			'background' : '#ffffff',			
+			'padding' : '.3em 1em'
+	}).off('keydown');
+	$('input:text').hover( function() {$('input:text').css("background", "#ffffff")})
+
+});	
+
+// -------------------------- OnLoad initialization ----------------------------------------------
+function InitDialog()
+{
+	if(IsFolderSearch()){
+		SyncDocumentTypesWithFolder();
+	}
+	LoadSearchFieldLists();
+	try{
+		var inpQuery = Docova.Utils.getField("inpQuery", srcWindow.document);
+		if(inpQuery){
+			Docova.Utils.setField({ field: "F_0", value: "DTXT" });
+			Docova.Utils.setField({ field: "V_0", value: inpQuery });
+		}
+	}
+	catch(e) {}
+	var fieldObj = document.getElementById("F_0");
+	SetQueryRowCriteria(fieldObj)
+	
+	//check qstring for 'edit' and 'folder' flags.
+	//if edit = true then PopulateQueryFields() function to populate the dialog with the saved search field criteria
+	//if folder = true then in CompleteWizard do not call GetSelectedLibraries.
+	var qsArr = (docInfo.Query_String).split("&");
+	if(qsArr[1].split("=")[1] == "true"){	//edit
+		PopulateQueryFields();
+	}
+	if(qsArr.length > 1 ) {
+		if(qsArr[2].split("=")[1] == "true"){ //folder
+			isFolderSearch = true;
+		}
+	}
+}
+
+//--------- Search button click handler
+function CompleteWizard()
+{
+	if(!isFolderSearch) {
+		if(!srcWindow.GetSelectedLibraries()) {
+			Docova.Utils.messageBox({ title: "Library Selection Required", prompt: "Please select at least one library to search.", width: 350});
+			return false;
+		}
+	}
+	var queryString = GetQueryString();
+	if(!queryString){
+		Docova.Utils.messageBox({ title: "Search Required", prompt: "Please specify search criteria.", width: 350});	
+		return false;
+	}
+	var errorMsg = ValidateQueryData();
+	if(errorMsg){
+		Docova.Utils.messageBox({ title: "Error", prompt: errorMsg });
+		return false;
+	}
+	srcWindow.ViewFTSearch(queryString)
+	return false;
+}
+
+function SetQueryInfo(){		
+	
+	var queryString = GetQueryString();
+	if(!queryString){
+		Docova.Utils.messageBox({ title: "Search Required", prompt: "Please specify search criteria.", width: 350});	
+		return false;
+	}
+
+	var queryfields = "";
+	var Q, F, P, V;
+	var QVal, FVal, PVal, VVal;
+
+	queryfields += Docova.Utils.getField("DocumentTypeOption") + "^" + Docova.Utils.getField({ field: "DocumentType[]", separator: "," }) + "~"
+	var k = 0;
+	for(k=0;k<=7; k++){
+		Q = "Q_" + k;
+		F = "F_" + k;
+		P = "P_" + k;
+		V = "V_" + k;
+		if (k==0){ //to skip Q_0 as there is no Q_0 field
+			FVal = Docova.Utils.getField(F);
+			PVal = Docova.Utils.getField(P);
+			VVal = Docova.Utils.getField(V);
+			if (Object.prototype.toString.call(VVal) === '[object Date]') {
+				VVal = Docova.Utils.convertDateFormat(VVal);
+				VVal = VVal.indexOf(' ') > -1 ? VVal.substring(0, VVal.indexOf(' ')+1) : VVal;
+			}
+			queryfields += FVal + "^" + PVal + "^" + VVal + "~";
+		}else{
+			QVal = Docova.Utils.getField(Q);
+			FVal = Docova.Utils.getField(F);
+			PVal = Docova.Utils.getField(P);
+			VVal = Docova.Utils.getField(V);
+			if (Object.prototype.toString.call(VVal) === '[object Date]') {
+				VVal = Docova.Utils.convertDateFormat(VVal);
+				VVal = VVal.indexOf(' ') > -1 ? VVal.substring(0, VVal.indexOf(' ')+1) : VVal;
+			}
+			queryfields += QVal + "^" + FVal + "^" + PVal + "^" + VVal + "|";
+		}
+	}
+	srcWindow.document.getElementById("divSearchQuery").innerHTML = queryString;
+	srcWindow.document.getElementById("divQueryFields").innerHTML = queryfields;
+	return true;
+}
+
+//----------------- controls the visibility of the query row
+function SetQueryRow(qObj)
+{
+	var suffixNo = qObj.name.split("_")[1];
+	var qValue = qObj.options[qObj.selectedIndex].value;
+	var fieldObj = doc["F_" + suffixNo];
+	if(qValue=="N"){
+		fieldObj.style.display = "none";
+		doc["P_" + suffixNo].style.display = "none";
+		doc["V_" + suffixNo].style.display = "none";
+		doc["B_" + suffixNo].style.display = "none";
+		$("#F_" + suffixNo + "btn").hide();
+		$("#P_" + suffixNo + "btn").hide();
+		$("#V_" + suffixNo + "btn").hide();
+	}
+	else{
+		//fieldObj.style.display = "";
+		$("#F_" + suffixNo + "btn").show();
+		SetQueryRowCriteria(fieldObj);
+	}
+
+}
+
+//---------------------- sets query row criteria based on selected field name
+function SetQueryRowCriteria(fieldObj)
+{
+	var suffixNo = fieldObj.name.split("_")[1];
+	var fieldNodeID = Docova.Utils.getField(fieldObj.name);
+	var fieldNode = GetFieldNodeByID(fieldNodeID);
+	if(!fieldNode) {
+		document.getElementById("P_" + suffixNo).style.display = "none";
+		document.getElementById("V_" + suffixNo).style.display = "none";
+		document.getElementById("B_" + suffixNo).style.display = "none";	
+		return;
+	}
+	//-----------------------------
+	var dataType = fieldNode.selectSingleNode("DataType").textContent ? fieldNode.selectSingleNode("DataType").textContent : fieldNode.selectSingleNode("DataType").text;
+	var fieldName = fieldNode.selectSingleNode("FieldName").textContent ? fieldNode.selectSingleNode("FieldName").textContent : fieldNode.selectSingleNode("FieldName").text;
+	var entryType = fieldNode.selectSingleNode("TextEntryType").textContent ? fieldNode.selectSingleNode("TextEntryType").textContent : fieldNode.selectSingleNode("TextEntryType").text;
+	var selectValues = fieldNode.selectSingleNode("SelectValues").textContent ? fieldNode.selectSingleNode("SelectValues").textContent : fieldNode.selectSingleNode("SelectValues").text;
+	//-----------------------------
+	SetPredicateOptions(suffixNo, fieldName, dataType);
+	//document.getElementById("P_" + suffixNo).style.display = "";
+	$("#P_" + suffixNo + "btn").css("display", "");
+	$("#P_" + suffixNo).multiselect("refresh");
+	SetValueField(suffixNo, entryType, selectValues);
+	var obj = document.getElementById("V_" + suffixNo);
+	obj.style.display = "";
+	SetValueSelectButton(suffixNo, dataType, entryType);	
+	$('input:text')
+ 		.button()
+		.css({
+			'font' : 'inherit',
+			'color' : 'inherit',
+			'text-align' : 'left',
+			'outline' : 'none',
+			'cursor' : 'text',
+			'background' : '#ffffff',			
+			'padding' : '.3em 1em'
+	}).off('keydown');
+	$('input:text').hover( function() {$('input:text').css("background", "#ffffff")})	
+	if(obj.type.indexOf("select") > -1) {
+	 	$("#V_" + suffixNo).multiselect({
+			multiple: false,
+			header: false,
+			noneSelectedText: "",
+			selectedList: 1,
+			height: 200		
+		});
+		$("#V_" + suffixNo + "btn").css("width", "100%");
+		$("#V_" + suffixNo + "menu").css("width", $("#V_" + suffixNo + "btn").css("width"));	
+	}
+	if(obj.type == "text") {
+		$("#V_" + suffixNo + "btn").hide();
+	}
+}
+
+//--------------- sets value field type and options based on the field data entry settings
+function SetValueField(suffixNo, entryType, selectValues, defaultValue)
+{
+	var fieldObj = document.getElementById("V_" + suffixNo);
+	var currentValue = Docova.Utils.getField("V_" + suffixNo);
+	if(entryType == "S"){
+		fieldObj.outerHTML = '<select id="' + "V_" + suffixNo + '" name="' + "V_" + suffixNo + '" style="display:none;"></select>';
+ 		fieldObj = document.getElementById("V_" + suffixNo);
+ 		AddValueOptionsFromTextList(fieldObj, selectValues);
+ 		Docova.Utils.setField({ field: "P_" + suffixNo, value: "I" });
+	}
+	else{
+		fieldObj.outerHTML='<input id="' + "V_" + suffixNo + '" type="text" name="' + "V_" + suffixNo + '" style="display:none;width:100%" value=""/>';
+ 		fieldObj = document.getElementById("V_" + suffixNo);
+	}
+ 	if(currentValue){
+ 			Docova.Utils.setField({ field: "V_" + suffixNo, value: currentValue });
+ 		}	
+ 	else if(defaultValue){
+ 			Docova.Utils.setField({ field: "V_" + suffixNo, value: defaultValue });
+ 		}
+}
+
+
+//----- controls display of the document type list
+function SetDocumentTypeList(radioButton)
+{
+	var val = radioButton ? radioButton.value : "";
+	if(val=="S")	{
+			$(".txField").attr('disabled', false);
+			$("#spanTypeSelect").css("background-color", "white");
+		}
+	else{
+			$(".txField").attr('disabled', true);
+			$("#spanTypeSelect").css("background-color", "#EFEFEF");
+		}	
+	isDocListModified=true;	
+}
+
+//----- prepares the choice of predicates based on the data type of the selected field
+function SetPredicateOptions(suffixNo, fieldName, dataType){
+
+	var predicateSelect = document.getElementById("P_" + suffixNo);
+	var currentValue = Docova.Utils.getField("P_" + suffixNo);
+	
+	var newOpt=null;
+	
+	RemoveOptions(predicateSelect)
+	if(fieldName=="DTXT"){
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = "{% trans %}contains{% endtrans %}" ; 
+		newOpt.value = "C"; 
+	}
+	else if(dataType=="text" || dataType=="names"){
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = "{% trans %}contains{% endtrans %}" ; 
+		newOpt.value = "C"; 
+		newOpt = document.createElement ("OPTION" );
+  		predicateSelect.options.add (newOpt);
+  		newOpt.text = "{% trans %}does not contain{% endtrans %}";
+  		newOpt.value = "NC";
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = "{% trans %}is{% endtrans %}" ; 
+		newOpt.value = "I"; 		
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = "{% trans %}starts with{% endtrans %}" ; 
+		newOpt.value = "S"; 
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = "{% trans %}ends with{% endtrans %}" ; 
+		newOpt.value = "E"; 			
+	}
+	else if (dataType=="number" || dataType=="date"){
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = "=" ; 
+		newOpt.value = "="; 
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = ">" ; 
+		newOpt.value = ">"; 
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = "<" ; 
+		newOpt.value = "<"; 		
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = ">=" ; 
+		newOpt.value = ">="; 	
+		newOpt = document.createElement ("OPTION"); 
+		predicateSelect.options.add (newOpt ); 
+		newOpt.text = "<=" ; 
+		newOpt.value = "<="; 		
+	}
+	if(currentValue){
+		Docova.Utils.setField({ field: "P_" + suffixNo, value: currentValue });
+		}
+}
+
+//---------- shows/hides value select button
+function SetValueSelectButton(suffixNo, dataType, entryType)
+{
+	var valueSelectButton = document.getElementById("B_" + suffixNo);
+
+	if (dataType=="names" || entryType=="B") {
+		valueSelectButton.style.display = "";
+		$("#B_" + suffixNo).toggleClass('ui-icon-contact', entryType!="B");
+		$("#B_" + suffixNo).toggleClass('ui-icon-circle-triangle-s', entryType=="B");
+		$("#V_" + suffixNo).css("width", "85%"); 
+		if (dataType == "names") {
+			$('#V_' + suffixNo).autoComplete({
+				url : '{{ path('docova_usernamelookup_json') }}',
+				shortName : false,
+				type: 'single'
+			});
+		}
+	} else if (dataType=="date") {
+		valueSelectButton.style.display="none";
+		$( "#" + 'V_' + suffixNo).datepicker({
+			dateFormat: docInfo.SessionDateFormat,
+			changeMonth: true,
+			changeYear: true
+		});
+		$("#V_" + suffixNo).css("width", "100%");
+	} else {
+		valueSelectButton.style.display="none";
+	}
+}
+
+//----------- if select button is used calls function to populate query value
+function SelectValue(buttonObj){
+
+	var suffixNo = buttonObj.id.split("_")[1];
+	var fieldNodeID=Docova.Utils.getField("F_" + suffixNo);
+	var fieldNode = GetFieldNodeByID(fieldNodeID);
+	if(!fieldNode) {
+		return;
+	}
+	//-----------------------------
+	var dataType = fieldNode.selectSingleNode("DataType").textContent ? fieldNode.selectSingleNode("DataType").textContent : fieldNode.selectSingleNode("DataType").text;
+	var fieldName = fieldNode.selectSingleNode("FieldName").textContent ? fieldNode.selectSingleNode("FieldName").textContent : fieldNode.selectSingleNode("FieldName").text;
+	var entryType = fieldNode.selectSingleNode("TextEntryType").textContent ? fieldNode.selectSingleNode("TextEntryType").textContent : fieldNode.selectSingleNode("TextEntryType").text;
+	var selectValues = fieldNode.selectSingleNode("SelectValues").textContent ? fieldNode.selectSingleNode("SelectValues").textContent : fieldNode.selectSingleNode("SelectValues").text;
+
+	if(dataType=="names") {
+		window.top.Docova.Utils.showAddressDialog({ fieldname: 'V_' + suffixNo, dlgdivname: "divDlgAdvancedSrch", sourcedocument: document });
+	} else if(entryType=="B") {
+		SelectValueFromList(suffixNo, selectValues, buttonObj);
+	}
+}
+
+function PopulateQueryFields(){
+//----- This function is to populate the fields when initializing the dialog with the current advanced search information
+	var queryfields = srcWindow.document.getElementById("divQueryFields").innerHTML;
+	var queryfieldsArr = new Array();
+	var tab1fieldsArr = new Array();
+	var tab2row1fieldsArr = new Array();
+	var tab2fieldsArr = new Array();
+	var Q, F, P, V;
+	var fieldObj;
+	queryfieldsArr = queryfields.split("~");
+
+	var tab1fields = queryfieldsArr[0]
+	tab1fieldsArr = tab1fields.split("^")
+	Docova.Utils.setField({ field: "DocumentTypeOption", value: tab1fieldsArr[0] })
+	if(tab1fieldsArr[0] == "S"){ 
+		$("#spanTypeSelect").css("background-color", "white");
+		$(".txField").attr('disabled', false);
+		Docova.Utils.setField({ field: "DocumentType[]", value:tab1fieldsArr[1], separator:',' });
+	}
+	else {
+		$(".txField").attr('disabled', true);
+		$("#spanTypeSelect").css("background-color", "#EFEFEF");
+		$('#spanTypeSelect input[name="DocumentType[]"]').each(function() {
+			$(this).prop('checked', false);
+		});
+	}
+	
+	var tab2row1fields = queryfieldsArr[1]  //row 1 is special because it has no Q_0 field
+	tab2row1fieldsArr = tab2row1fields.split("^")	
+	
+	var tab2fields = queryfieldsArr[2]
+	var rowfieldsArr = new Array()
+	rowfieldsArr = tab2fields.split("|")
+	
+	//Set second tab, first row fields
+	Docova.Utils.setField({ field: "F_0", value: tab2row1fieldsArr[0] });
+	fieldObj=doc["F_0"];
+	SetQueryRowCriteria(fieldObj);
+	Docova.Utils.setField({ field: "P_0", value: tab2row1fieldsArr[1].replace(/&gt;/gi,'>').replace(/&lt;/gi,'<') });
+	Docova.Utils.setField({ field: "V_0", value: tab2row1fieldsArr[2] });
+
+	var rowdataArr = new Array();
+	for(var k=0; k<=6;k++){
+		rowdataArr = rowfieldsArr[k].split("^");
+		rowSuffix = k + 1;
+		Q = "Q_" + rowSuffix;
+		F = "F_" + rowSuffix;
+		P = "P_" + rowSuffix;
+		V = "V_" + rowSuffix;
+		Docova.Utils.setField({ field: Q, value: rowdataArr[0] });
+		if(rowdataArr[0] != "N"){
+			Docova.Utils.setField({ field: F, value: rowdataArr[1] });
+			fieldObj=doc[F];
+			SetQueryRow(fieldObj);
+			rowdataArr[2] = rowdataArr[2].replace(/&gt;/gi, '>');
+			rowdataArr[2] = rowdataArr[2].replace(/&lt;/gi, '<');
+			Docova.Utils.setField({ field: P, value: rowdataArr[2] });
+			Docova.Utils.setField({ field: V, value: rowdataArr[3] });	
+		}			
+	}
+}
+
+//-------------------- complete query string builder -----------
+
+function GetQueryString()
+{
+	var docQueryString = GetDocumentTypeQuery();
+	var queryString = "";
+	for(var k=0; k<rowCount; k++){
+		queryString += GetRowQuery(k, queryString);
+	}
+	if(!queryString && !docQueryString){return "";}
+	if (!queryString) { queryString = '{ALLDOCS}'; }
+	return docQueryString + queryString;
+}
+
+//-------- gets document type query------
+function GetDocumentTypeQuery()
+{
+	if(Docova.Utils.getField("DocumentTypeOption")=="A"){return "";}
+	var docTypeList = Docova.Utils.getField("DocumentType[]");
+	if(!docTypeList){return "";}
+	var docTypeArray = docTypeList.split(";");
+	var docTypeQuery="";
+	for(var k=0; k<docTypeArray.length; k++){
+		docTypeQuery +=(docTypeQuery=="")? "" : " OR ";
+		docTypeQuery +='{[DocumentTypeKey] CONTAINS "'+ docTypeArray[k] + '"}';
+	}
+	return docTypeQuery + " AND ";
+}
+
+//-------- builds the query string for a single row ------
+function GetRowQuery(rowNo, currentQuery)
+{
+	var rowPredicate = (rowNo>0)? Docova.Utils.getField("Q_" + rowNo) : "";
+	if(rowPredicate=="N") {return "";}
+
+	var fieldNodeID = Docova.Utils.getField("F_" + rowNo);
+	var fieldNode = GetFieldNodeByID(fieldNodeID);
+	if(!fieldNode) {
+		return "";
+	}
+	//-----------------------------
+	var dataType = Sarissa.getText(fieldNode.selectSingleNode("DataType"));
+	var fieldName = Sarissa.getText(fieldNode.selectSingleNode("FieldName"));
+	var searchValue = Docova.Utils.getField("V_" + rowNo)
+	if (Object.prototype.toString.call(searchValue) === '[object Date]') {
+		searchValue = Docova.Utils.convertDateFormat(searchValue);
+		searchValue = searchValue.indexOf(' ') > -1 ? searchValue.substring(0, searchValue.indexOf(' ')+1) : searchValue;
+	}
+	if(!Docova.Utils.allTrim(searchValue)|| fieldName=="BLANK" ) {return "";}
+
+	var valuePredicate=Docova.Utils.getField("P_" + rowNo);
+	//-------------------------------------------------
+	var rowQuery="{";
+	rowQuery += (fieldName=="DTXT")? "" : "[" + fieldName + "] ";
+
+	if(fieldName=="DTXT"){
+		searchValue = searchValue.indexOf('"') == -1 ? '"'+ searchValue +'"' : searchValue;
+		rowQuery+= searchValue;	
+	}	
+	else if(valuePredicate=="S"){
+		rowQuery+= 'CONTAINS "' + searchValue + '%"';
+	}
+	else if(valuePredicate=="E"){
+		rowQuery+= 'CONTAINS "%' + searchValue + '"';
+	}
+	else if(valuePredicate=="C"){
+		rowQuery+= 'CONTAINS "%' + searchValue + '%"';	
+	}
+	else if(valuePredicate=="I"){
+		rowQuery+= '= "' + searchValue + '"';	
+	}	
+	else if (valuePredicate =="NC") {
+  		rowQuery += 'NOT CONTAINS "%' + searchValue + '%"';
+  	}
+	else{
+		rowQuery+= valuePredicate + ' "' + searchValue + '"';
+	}
+	
+	rowQuery +="} ";
+	
+	if(rowNo==0 || !currentQuery){
+		return rowQuery;
+	}
+	else{
+		return rowPredicate + " " + rowQuery;
+	}
+	
+}
+
+function ValidateQueryData()
+{
+	var rowPredicate = "";
+	var dataType="";
+	var fieldName = "";
+	var fieldDescription="";
+	var searchValue = "";
+	var errorMsg="";
+	for(var k=0; k<rowCount; k++){
+		rowPredicate = (k>0)? Docova.Utils.getField("Q_" + k) : "";
+		searchValue = Docova.Utils.getField("V_" + k);
+		var fieldNodeID=Docova.Utils.getField("F_" + k);
+		
+		if(Docova.Utils.allTrim(searchValue) && fieldNodeID !="BLANK"  && rowPredicate !="N") {
+			var fieldNode = GetFieldNodeByID(fieldNodeID);
+			if(!fieldNode) {
+				errorMsg += "{% trans with {'%fieldId%' : '" + fieldNodeID + "'} %}Error in search dialog code. Field with node id %fieldId% could not be located.{% endtrans %}\r" ;
+				break;
+			}
+			//-----------------------------
+			var dataType = Sarissa.getText(fieldNode.selectSingleNode("DataType"));
+			fieldDescription = Sarissa.getText(fieldNode.selectSingleNode("FieldDescription"));
+		
+			if(dataType == "number" &&  !isNumeric(Docova.Utils.allTrim(searchValue))){
+				errorMsg += fieldDescription + " {% trans %}search value must be a number.{% endtrans %}\r";
+			}
+			else if(dataType == "date" &&  !Docova.Utils.checkDate(searchValue)){
+				errorMsg += fieldDescription + " {% trans %}search value must be a valid date. Please use date selection buton next to the field.{% endtrans %}\r";
+			}
+		}
+	}
+	return errorMsg;
+}
+
+/* using GetSelectedLibraries from wSearch form instead
+function HasSelectedLibraries()
+{
+	if(!srcWindow.LibraryData){return true;} //no library list - folder search
+	var rs = srcWindow.LibraryData.recordset
+	var libUnidList = ""
+	//----- Get the library keys for the libraries the user has selected -----
+	rs.MoveFirst;
+	while (rs.EOF == false){
+		if (rs.Fields("Selected").Value != "0"){
+			if (libUnidList == ""){
+				libUnidList += rs.Fields("Unid").Value;
+			}else{
+				libUnidList += "," + rs.Fields("Unid").Value;
+			}
+		}
+		rs.MoveNext;
+	}
+
+	//---- Return blank if no library has been selected for searching -----
+	if(libUnidList == ""){
+				alert("{% trans %}Please select at least one library to search.{% endtrans %}");
+				return false; 
+	}
+	return true;
+}
+*/
+//------------------- clears options from the dropdown field -------
+function RemoveOptions(fieldObj)
+{
+	if(!fieldObj.options){return;}
+	for(var k=fieldObj.options.length-1; k>=0; k--){
+		fieldObj.remove(k);
+	}
+}
+
+//---------- adds field names to the list from xml node list
+function AddFieldOptionsFromNodeList(fieldObj, fieldNodeList, selectValue)
+{
+	if(fieldNodeList.length==0){return;}
+	//----- ad first, blank option and document text selection
+	AddBaseFieldOptions(fieldObj, selectValue);
+ 
+	//--- add fields list with references
+	for(var k=0; k<fieldNodeList.length; k++){
+		AddFieldOptionFromNode(fieldObj, fieldNodeList.item(k), selectValue)
+	}
+}
+
+//---------- adds field names to the list from field ID text list
+function AddFieldOptionsFromTextList(fieldObj, fieldIDList, selectValue)
+{
+	if(fieldIDList == ""){return;}
+
+	//----- add first, blank option and document text selection
+	AddBaseFieldOptions(fieldObj, selectValue);
+	var xml = document.getElementById("xmlFieldList").innerHTML;	
+	var parser = new DOMParser();
+  	var fieldListXml = parser.parseFromString(xml,"text/xml");	
+	if(Sarissa.getParseErrorText(fieldListXml) != Sarissa.PARSED_OK){  
+  		var errorText = Sarissa.getParseErrorText(fieldListXml);
+		Docova.Utils.messageBox({ title: "Error", prompt: "Error parsing xsl: " + errorText });
+		fieldListXml = null;
+		return;
+	} 
+	
+	//--- add fields list with references
+	var fieIdIDArray = fieldIDList.split(";");
+	for(var k=0; k<fieIdIDArray.length; k++){
+		AddFieldOptionFromNode(fieldObj, fieldListXml.selectSingleNode("Fields/Field[DocKey='" + fieIdIDArray[k] + "']"), selectValue)
+	}
+}
+
+function AddBaseFieldOptions(fieldObj, selectValue)
+{
+	var newOpt = document.createElement ("OPTION"); 
+	fieldObj.options.add (newOpt ); 
+	newOpt.text= "-- {% trans %}select criteria{% endtrans %} --"; 
+	newOpt.value = "BLANK"; 
+}
+
+function AddFieldOptionFromNode(fieldObj, fieldNode, selectValue)
+{
+	if(!fieldObj || !fieldNode){return;}
+	var newOpt = document.createElement ("OPTION"); 
+	fieldObj.options.add (newOpt ); 
+	var oNode = fieldNode.selectSingleNode("FieldDescription");
+	newOpt.text = Sarissa.getText(oNode);	
+	var oNode = fieldNode.selectSingleNode("DocKey");
+	newOpt.value = Sarissa.getText(oNode);
+	if(selectValue==newOpt.value){
+		newOpt.selected=true;
+	}
+}
+
+//------ based on document type selection, returns a list of related field IDs
+function GetFieldIDList()
+{
+	var xml = document.getElementById("xmlFieldList").innerHTML; 
+	var parser = new DOMParser();
+  	var fieldListXml = parser.parseFromString(xml,"text/xml");	
+	fieldListXml.setProperty("SelectionLanguage", "XPath");
+	//-----------------------------------------
+	var typeOptionSelect = Docova.Utils.getField("DocumentTypeOption");
+	if(typeOptionSelect == "A") {
+		var fieldNodes = fieldListXml.selectNodes("Fields/Field/DocKey");
+		if(fieldNodes.length==0) { return ""; } 
+		return Docova.Utils.unique({ inputstr: NodeListToTextList(fieldNodes) }); 
+	} 
+
+	var typeKeyList = NodeListToTextList(fieldListXml.selectNodes("Fields/Field/DocKey[../RelatedDocType='A']"));
+
+	$('#spanTypeSelect input[name="DocumentType[]"]').each(function() {
+		if($(this).checked) {
+			typeKeyList += ";" + NodeListToTextList(fieldListXml.selectNodes("Fields/Field/DocKey[contains(../DocKypeKey,'" + $(this).val() + "')]"));
+		}
+	});
+
+	return Docova.Utils.unique({ inputstr: typeKeyList });
+}
+
+function NodeListToTextList(nodeList, customSeparator)
+{
+	if(nodeList.length==0) {return "";}
+	var separator = (!customSeparator)? ";" : customSeparator;
+	var textList = "";
+	var itemText = "";
+	for(var k=0; k<nodeList.length; k++){
+		itemText = nodeList.item(k).textContent ? nodeList.item(k).textContent : nodeList.item(k).text;
+		textList += (textList)? separator + itemText : itemText;
+	}
+	return textList;
+}
+
+//---------- adds value selections for multi value search field
+function AddValueOptionsFromTextList(fieldObj, selectionList)
+{
+	//----- ad first, blank option
+	var newOpt = document.createElement ("OPTION"); 
+	fieldObj.options.add (newOpt ); 
+	newOpt.text= "-- {% trans %}select value{% endtrans %} --"; 
+	newOpt.value = ""; 
+	
+	if(selectionList==""){return;}
+	var selectionArray = selectionList.split(";");
+	var optionValues;
+	//--- add selection values and aliases
+	for(var k=0; k<selectionArray.length; k++){
+		newOpt = document.createElement ("OPTION"); 
+		fieldObj.options.add (newOpt ); 
+		optionValues=selectionArray[k].split("|");
+		newOpt.text= optionValues[0]; 
+		newOpt.value = (optionValues.length>1)? optionValues[1] : optionValues[0];   
+	}
+}
+
+//----- present choice list when field button is clicked
+function SelectValueFromList(sufixNo, selectionList, obj)
+{
+	var defaultValue = Docova.Utils.getField("V_" + sufixNo);
+	parent.Docova.Utils.selectKeyword({ 
+		choicelist: selectionList,  
+		delimiterin: ";", 
+		delegate: obj,
+		windowtitle: "{% trans %}Select search value{% endtrans %}", 
+		defaultvalues: defaultValue,
+		oncomplete: function(data) { Docova.Utils.setField({ field: "V_" + sufixNo, value: data }); }
+	});
+}
+
+//----- selects the field node given field id ------
+function GetFieldNodeByID(fieldNodeID)
+{
+	if(fieldNodeID == "" || fieldNodeID == "BLANK"){
+		return false;
+	}
+	var xml = document.getElementById("xmlFieldList").innerHTML;  
+	var parser = new DOMParser();
+  	var fieldListXml = parser.parseFromString(xml,"text/xml");	
+	fieldListXml.setProperty("SelectionLanguage", "XPath");
+	return fieldListXml.selectSingleNode("Fields/Field[DocKey='" + fieldNodeID + "']");
+}
+
+//------- populates search field selections with appropriate fields---- 
+function LoadSearchFieldLists(keepSelections)
+{
+	var fieldIDList = GetFieldIDList();
+	var fieldObj;
+	var selectedValue = "";
+	for(var k=0; k<rowCount; k++) {
+		fieldObj = document.getElementById("F_" + k);
+		selectedValue = (keepSelections)? Docova.Utils.getField("F_" + k) : "";
+		RemoveOptions(fieldObj);
+		AddFieldOptionsFromTextList(fieldObj, fieldIDList, selectedValue)
+	}
+}
+
+
+function IsFolderSearch()
+{
+	try{
+			if(srcWindow.docInfo.DocumentTypeOption){
+				return true;
+			}
+		}
+		catch(e){
+			return false;
+		}
+	return false;
+}
+
+function SyncDocumentTypesWithFolder()
+{
+	if(srcWindow.docInfo.DocumentTypeOption!="S"){return;}
+	var folderDocTypes = srcWindow.docInfo.DocumentType.split(", ");
+	Docova.Utils.setField({ field: "DocumentTypeOption", value: "S" });
+	$(".txField").attr('disabled', false);
+	$("#spanTypeSelect").css("background-color", "#FFFFFF");
+	
+	for(var i=0; i<folderDocTypes.length; i++){
+		$('#spanTypeSelect input[name="DocumentType[]"][value=' + folderDocTypes[i] + ']').prop('checked', true);
+	}
+
+}
+
+function stopContextMenu() {
+	return false;
+}
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no">
+	<form method="post" action="{{ path('docova_customsearch') }}?Seq=1&edit={{ app.request.query.get('edit') }}&folder={{ app.request.query.get('folder') }}" name="_dlgCustomSearch"></form>
+	<script id = "xmlFieldList" type="text/xml"><Fields><Field><DocKey>DTXT</DocKey><FieldDescription>Document text</FieldDescription><FieldName>DTXT</FieldName><DataType>text</DataType><TextEntryType>E</TextEntryType><SelectValues></SelectValues><RelatedDocType>A</RelatedDocType><DocKypeKey></DocKypeKey></Field>{{ custom_search_fields_xml|raw }}</Fields></script>
+	<div id="divAdvSearchTabs">
+		<ul>
+			<li><a href="#divTabCriteria"><span>{% trans %}Search Criteria{% endtrans %}</span></a></li>
+			<li><a href="#divTabDocType"><span>{% trans %}Document Types{% endtrans %}</span></a></li>
+		</ul>
+		<div id="dlgContentNh" style="width:98%;">
+			<div id="divTabCriteria">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr valign="top">
+						<td width="42" valign="middle"><img width="1" height="1" src="{{ asset('bundles/docova/images/icons/ecblank.gif') }}" border="0" alt=""></td>
+						<td width="192" valign="middle">
+							<select name="F_0" onchange="SetQueryRowCriteria(this)" id="F_0" class="F">
+								<option value="BLANK" selected>-- {% trans %}select criteria{% endtrans %} --</option>
+							</select>
+						</td>
+						<td width="106" valign="middle">
+							<select name="P_0" id="P_0" class="P" style="display:none;"></select>
+						</td>
+						<td width="254" valign="middle">
+							<input name="V_0" value="" id="V_0" style="display:none;width:100%;">
+						</td>
+						<td width="34" valign="middle">
+							<span id='B_0' style="cursor:pointer; display:none" onclick='SelectValue(this);' class='ui-icon ui-icon-contact'></span>
+						</td>
+					</tr>
+
+					<tr valign="top">
+						<td width="42" valign="middle">
+							<select name="Q_1" onchange="SetQueryRow(this)" id="Q_1" class="Q">
+								<option value="N" selected>----
+								<option value="AND">{% trans %}and{% endtrans %}
+								<option value="OR">{% trans %}or{% endtrans %}
+							</select>
+						</td>
+						<td width="192" valign="middle">
+							<select name="F_1" onchange="SetQueryRowCriteria(this)" id="F_1" class="F" style="display:none;">
+								<option value="BLANK" selected>-- {% trans %}select criteria{% endtrans %} --</option>
+							</select>
+						</td>
+						<td width="106" valign="middle">
+							<select name="P_1" id="P_1" class="P" style="display:none;"></select>
+						</td>
+						<td width="254" valign="middle">
+							<input name="V_1" value="" id="V_1" style="display:none;width:100%;">
+						</td>
+						<td width="34" valign="middle">
+							<span id='B_1' style="cursor:pointer; display:none" onclick='SelectValue(this);' class='ui-icon ui-icon-contact'></span>
+						</td>
+					</tr>
+
+					<tr valign="top">
+						<td width="42" valign="middle">
+							<select name="Q_2" onchange="SetQueryRow(this)" id="Q_2" class="Q">
+								<option value="N" selected>----
+								<option value="AND">{% trans %}and{% endtrans %}
+								<option value="OR">{% trans %}or{% endtrans %}
+							</select>
+						</td>
+						<td width="192" valign="middle">
+							<select name="F_2" onchange="SetQueryRowCriteria(this)" id="F_2" class="F" style="display:none;">
+								<option value="BLANK" selected>-- {% trans %}select criteria{% endtrans %} --</option>
+							</select>
+						</td>
+						<td width="106" valign="middle">
+							<select name="P_2" id="P_2" class="P" style="display:none;"></select>
+						</td>
+						<td width="254" valign="middle">
+							<input name="V_2" value="" id="V_2" style="display:none;width:100%;">
+						</td>
+						<td width="34" valign="middle">
+							<span id='B_2' style="cursor:pointer; display:none" onclick='SelectValue(this);' class='ui-icon ui-icon-contact'></span>
+						</td>
+					</tr>
+
+					<tr valign="top">
+						<td width="42" valign="middle">
+							<select name="Q_3" onchange="SetQueryRow(this)" id="Q_3" class="Q">
+								<option value="N" selected>----
+								<option value="AND">{% trans %}and{% endtrans %}
+								<option value="OR">{% trans %}or{% endtrans %}
+							</select>
+						</td>
+						<td width="192" valign="middle">
+							<select name="F_3" onchange="SetQueryRowCriteria(this)" id="F_3" class="F" style="display:none;">
+								<option value="BLANK" selected>-- {% trans %}select criteria{% endtrans %} --</option>
+							</select>
+						</td>
+						<td width="106" valign="middle">
+							<select name="P_3" id="P_3" class="P" style="display:none;"></select>
+						</td>
+						<td width="254" valign="middle">
+							<input name="V_3" value="" id="V_3" style="display:none;width:100%;">
+						</td>
+						<td width="34" valign="middle">
+							<span id='B_3' style="cursor:pointer; display:none" onclick='SelectValue(this);' class='ui-icon ui-icon-contact'></span>
+						</td>
+					</tr>
+
+					<tr valign="top">
+						<td width="42" valign="middle">
+							<select name="Q_4" onchange="SetQueryRow(this)" id="Q_4" class="Q">
+								<option value="N" selected>----
+								<option value="AND">{% trans %}and{% endtrans %}
+								<option value="OR">{% trans %}or{% endtrans %}
+							</select>
+						</td>
+						<td width="192" valign="middle">
+							<select name="F_4" onchange="SetQueryRowCriteria(this)" id="F_4" class="F" style="display:none;">
+								<option value="BLANK" selected>-- {% trans %}select criteria{% endtrans %} --</option>
+							</select>
+						</td>
+						<td width="106" valign="middle">
+							<select name="P_4" id="P_4" class="P" style="display:none;"></select>
+						</td>
+						<td width="254" valign="middle">
+							<input name="V_4" value="" id="V_4" style="display:none;width:100%;">
+						</td>
+						<td width="34" valign="middle">
+							<span id='B_4' style="cursor:pointer; display:none" onclick='SelectValue(this);' class='ui-icon ui-icon-contact'></span>
+						</td>
+					</tr>
+
+					<tr valign="top">
+						<td width="42" valign="middle">
+							<select name="Q_5" onchange="SetQueryRow(this)" id="Q_5" class="Q">
+								<option value="N" selected>----
+								<option value="AND">{% trans %}and{% endtrans %}
+								<option value="OR">{% trans %}or{% endtrans %}
+							</select>
+						</td>
+						<td width="192" valign="middle">
+							<select name="F_5" onchange="SetQueryRowCriteria(this)" id="F_5" class="F" style="display:none;">
+								<option value="BLANK" selected>-- {% trans %}select criteria{% endtrans %} --</option>
+							</select>
+						</td>
+						<td width="106" valign="middle">
+							<select name="P_5" id="P_5" class="P" style="display:none;"></select>
+						</td>
+						<td width="254" valign="middle">
+							<input name="V_5" value="" id="V_5" style="display:none;width:100%;">
+						</td>
+						<td width="34" valign="middle">
+							<span id='B_5' style="cursor:pointer; display:none" onclick='SelectValue(this);' class='ui-icon ui-icon-contact'></span>
+						</td>
+					</tr>
+
+					<tr valign="top">
+						<td width="42" valign="middle">
+							<select name="Q_6" onchange="SetQueryRow(this)" id="Q_6" class="Q">
+								<option value="N" selected>----
+								<option value="AND">{% trans %}and{% endtrans %}
+								<option value="OR">{% trans %}or{% endtrans %}
+							</select>
+						</td>
+						<td width="192" valign="middle">
+							<select name="F_6" onchange="SetQueryRowCriteria(this)" id="F_6" class="F" style="display:none;">
+								<option value="BLANK" selected>-- {% trans %}select criteria{% endtrans %} --</option>
+							</select>
+						</td>
+						<td width="106" valign="middle">
+							<select name="P_6" id="P_6" class="P" style="display:none;"></select>
+						</td>
+						<td width="254" valign="middle">
+							<input name="V_6" value="" id="V_6" style="display:none;width:100%;">
+						</td>
+						<td width="34" valign="middle">
+							<span id='B_6' style="cursor:pointer; display:none" onclick='SelectValue(this);' class='ui-icon ui-icon-contact'></span>
+						</td>
+					</tr>
+
+					<tr valign="top">
+						<td width="42" valign="middle">
+							<select name="Q_7" onchange="SetQueryRow(this)" id="Q_7" class="Q">
+								<option value="N" selected>----
+								<option value="AND">{% trans %}and{% endtrans %}
+								<option value="OR">{% trans %}or{% endtrans %}
+							</select>
+						</td>
+						<td width="192" valign="middle">
+							<select name="F_7" onchange="SetQueryRowCriteria(this)" id="F_7" class="F" style="display:none;">
+								<option value="BLANK" selected>-- {% trans %}select criteria{% endtrans %} --</option>
+							</select>
+						</td>
+						<td width="106" valign="middle">
+							<select name="P_7" id="P_7" class="P" style="display:none;"></select>
+						</td>
+						<td width="254" valign="middle">
+							<input name="V_7" value="" id="V_7" style="display:none;width:100%;">
+						</td>
+						<td width="34" valign="middle">
+							<span id='B_7' style="cursor:pointer; display:none" onclick='SelectValue(this);' class='ui-icon ui-icon-contact'></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="divTabDocType">{% trans %}Search in{% endtrans %}: 
+				<label><input type="radio" name="DocumentTypeOption" value="A" checked onclick="SetDocumentTypeList(this)">{% trans %}All{% endtrans %}</label>
+				<label><input type="radio" name="DocumentTypeOption" value="S" onclick="SetDocumentTypeList(this)">{% trans %}Selected document types{% endtrans %}</label><br/>
+				<div id="spanTypeSelect" style="background-color:white; border: 1px solid #CFCFCF; width:100%; height:157px; overflow-y: auto; overflow-x: hidden; margin: 3px 2px 3px 0px; padding: 4px;"> 
+				{% if document_types|length > 0 %}
+					{% for item in document_types %}
+					<label><input type="checkbox" name="DocumentType[]" size="20" value="{{ item.getId }}" onclick="isDocListModified=true;" class="txField">{{ item.getDocName }}</label><br>
+					{% endfor %}
+				{% endif %} 
+				</div>
+			</div>
+		</div>
+	</div>
+	<!------------------Microsoft suggestion to force no cacheing of documents------------>
+	<HEAD>
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+	</HEAD>
+	<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

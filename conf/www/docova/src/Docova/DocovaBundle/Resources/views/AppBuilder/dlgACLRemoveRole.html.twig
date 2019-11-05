@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<title>Remove ACL Role Dailog</title>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleAdministration.css') }}" type="text/css" />
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}"></script>
+<script language="JavaScript" type="text/javascript">
+var info = {
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"UserRoles" : "",
+	"HTTP_Referer" : "",
+	"Query_String" : "openform&mode=dialog&dialogid=dlgACLRemoveRole",
+	"Query_String_Decoded" : "openform&mode=dialog&dialogid=dlgACLRemoveRole",
+	"Path_Info_Decoded" : "{{ path('docova_dlgaclremoverole') }}?openform&mode=dialog&dialogid=dlgACLRemoveRole",
+    "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+    "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+    "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+    "PortalWebPath" : "{{ url('docova_homepage') }}",
+    "PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"isUIDoc" : true
+};
+function getinfovar() {
+	return info;
+}
+
+var docInfo;
+$(document).ready(function() {
+	docInfo = info;
+	var uidoc = Docova.getUIDocument();
+	var parentDoc = uidoc.getParentDocument({
+		formname : "dlgACLRemoveRole"
+	});
+	var parentWin = uidoc.getParentWindow({
+		formname : "dlgACLRemoveRole"
+	});
+
+	var RoleListHTML = "<ul id='ACLRoleList' style='list-style-type:none;margin:0px;padding:0px;'>";
+	$("[name=RolesList", parentDoc).each(function() {
+		RoleListHTML += "<li class='aclrole' style='border:1px solid white; border-bottom:1px solid gray; margin:0px 0px 0px 0px; padding:0.4em; padding-left:1.5em; text-align:left;'"
+					+ " actual_value='"+ $(this).val() + "' >" + $(this).next().text() + "</li>";
+	});
+	RoleListHTML += "</ul>";
+	$("#RoleList").html(RoleListHTML);
+//	console.log("rolelist: " + RoleListHTML);
+
+	//Set on hover css
+	$(".aclrole").hover(function() {
+		$(this).addClass("hoverborder-1");
+	}, function() {
+		$(this).removeClass("hoverborder-1");
+	}).click(function() {
+		$(".selectedbg-1").removeClass("selectedbg-1");
+		$(this).addClass("selectedbg-1");
+		parentWin.retValues[0] = $(this).attr('actual_value'); //sets the parent window retValues array variable
+		parentWin.retValues[1] = $(this).text();
+	})
+
+	//Select first role by default
+	$(".aclrole:first").click(); //gets the first ACL name entry and its properties
+});
+</script>
+</head>
+<body text="#000000" bgcolor="white" class="dlgBody" SCROLL="no">
+	<div id="dlgContentNh" class="ui-widget" style="width: 100%;">
+		<table class="tblFields" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr valign="top">
+				<td width="100%" colspan="2"><font color="#808080">{% trans %}Select a Role to remove from the Application.{% endtrans %}</font></td>
+			</tr>
+			<tr valign="top">
+				<td width="22%">{% trans %}Roles{% endtrans %}:</td>
+				<td width="78%">
+					<div id="RoleList" style="max-height: 200px; max-width: 300px; overflow: auto; border: 1px solid gray;"></div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<!------------------ SUBFORM sfKillCache ------------>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

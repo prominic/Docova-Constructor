@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel='stylesheet' href='{{ asset('bundles/docova/css/styleActionBar.css') }}' type='text/css' />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/stylePageBase.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/counterbox.css') }}" type="text/css">
+{% if custcss %}
+{% set cssFile = page.getPageName|replace({'/':'-', '\\':'-'})|replace({' ':''}) %}
+<link rel="stylesheet" type='text/css' href="{{ asset('bundles/docova/css/custom/'~ app.request.query.get('AppID') ~'/PAGE/' ~ cssFile ~ '.css?'~random() ) }}" />
+{% endif %}
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/viewObjects.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/embeddedViewObjects.js') }}" charset="UTF-8"></script>
+<script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/js/AppFormJS.js') }}'></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/js/FormulaLanguage.js') }}" charset="UTF-8"></script>
+<script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/js/Chart.js/Chart.bundle.js') }}'></script>
+<script language='JavaScript' type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-counterbox.js') }}"></script>
+
+
+<script type="text/javascript" src="{{ asset('bundles/docova/gridstack/loadash.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('bundles/docova/gridstack/gridstack.min.css') }}" />
+<script type="text/javascript" src="{{ asset('bundles/docova/gridstack/gridstack.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/gridstack/gridstack.jQueryUI.min.js') }}"></script>
+
+
+
+<style>
+body {
+	margin: 0px;
+	padding: 0px;
+}
+form {
+	margin: 0px;
+	padding: 0px;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+</style>
+
+
+<script language="JavaScript" type="text/javascript">
+{{ f_SetApplication(appId) }}{{ f_SetUser(user) }}
+var info = {
+	"AppID" : "{{ appId }}",
+	"LibraryKey": "{{ appId }}",
+	"UserName" : "{{ user.getUsername }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ user.getUserProfile.getDisplayName }}",
+	"UserNamesList" : "",
+	"UserRoles" : "[{{ user.getRolesDisplay(appId)|join("]:[")}}]",
+	"HTTP_Referer" : "",
+	"DocAccessLevel": "{{acl.isManager ? 6 : 0}}",
+	"Query_String" : "openDocument",
+	"Query_String_Decoded" : "openDocument",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length -1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length-2] }}",
+	"HomePageWeb" : "{{ path('docova_homepage') }}",
+	"SSLState" : "OFF",
+	"isMobile" : {{ ismobile ? "true" : "false" }}
+};
+function getinfovar() {
+	return info;
+}
+InitVars(info);
+
+function setOutlineTrigger(iframeObj){
+
+	if(iframeObj == null || iframeObj == "undefined"){
+		return;
+	}
+		
+	$(iframeObj).contents().find("body").mousedown(function(event) {
+		switch (event.which) {
+			case 1:
+				iframeObj.click();
+				break;
+			default:
+				break;
+		}
+	});	
+}
+
+$(document).ready(function(){
+	$('#tdActionBar a').each(function(index,element) {
+   		$(element).button({
+			text: $.trim($(this).text()) && $(this).attr('btntext') == 1 ? true : false,
+			label: $.trim($(this).text()),
+			icons: {
+		 		primary: ($.trim($(this).attr('primary'))) ? $(this).attr('Primary') : null,
+				secondary: ($.trim($(this).attr('secondary'))) ? $(this).attr('secondary') : null
+			}
+		});
+	});
+
+
+	
+
+  	$('#loading_msg').hide();
+	try{window.parent.hideLoadingMessage();}catch(e){}
+});	
+
+
+</script>
+{% if fileexist %}
+{% set jsFile = page.getPageName|replace({'/':'-', '\\':'-'})|replace({' ':''}) %}
+<script language="JavaScript" type="text/javascript" charset="UTF-8" src="{{ asset('bundles/docova/js/custom/'~ app.request.query.get('AppID') ~'/PAGE/' ~ jsFile ~ '.js' ) }}"></script>
+{% endif %}
+</head>
+<body text="#000000" bgcolor="{{ page and page.getBackgroundColor ? page.getBackgroundColor : '#FFFFFF' }}">
+	<form action="">
+	{% include 'DocovaBundle:DesignElements:' ~ appId ~ '/pages/' ~ page.getPageName|replace({' ':'', '\\': '-', '/':'-'}) ~ (ismobile ? "_m" : "") ~ '.html.twig' %}
+	</form>
+</body>
+</html>

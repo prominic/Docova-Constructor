@@ -1,0 +1,32 @@
+/* This package has been customized from the original source
+   Modified by DLI.tools Inc. 
+   Modified on Feb 2019
+
+
+	\phpword\src\PhpWord\
+		TemplateProcessor.php:
+		 	replaceBookmark:
+		 	setBookmarkForPart:
+		 		- added functions to allow updating of bookmark elements
+ 
+	\phpword\src\PhpWord\Shared\
+		Html.php:
+			addHtml:
+				- changed loadXML to loadHTML to allow for unclosed elements
+				
+			parseStyle:
+				- trapped non numeric error in line height
+				- trap for percentage width values with decimal
+				- added support for font style which combines a number of font attributes into one
+				- added support for background attribute
+				
+			parseLink:
+				- added call to clean_text
+			
+			parseText:
+				- added call to clean_text
+				
+			clean_text:
+				- added function
+ 
+*/

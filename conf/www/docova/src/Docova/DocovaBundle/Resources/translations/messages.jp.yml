@@ -1,0 +1,1567 @@
+"'More' section label" : 「詳細表示」セクションのラベル
+"Activate version?" : "バージョンをアクティブにしますか ?"
+"Add users/groups here to restrict who can delete documents in this folder." : このフォルダを削除できるユーザー/グループを追加する
+"All Authors can delete by default (blank)." : すべての編集者がにして、デフォルトの（空白）を削除することができます。
+"All Document Types contain a reserved field called ActivityRecipients, a text field that can accept a comma delimited list of User Names and/or Groups which will be used as the default Recipient list in a new Activity." : "すべてのドキュメントタイプと呼ばれる ActivityRecipients 予約されたフィールドには、ユーザー名および / または新しいアクティビティでは、デフォルトの受信者をリストとして使用されます。グループをコンマで区切ったリストをそのまま使用することができるテキストフィールドが含まれています。"
+"All LDAP/AD" : "すべての LDAP / AD"
+"All versions (exclude drafts)" : すべてのバージョン（下書きを除く）
+"All versions (including drafts)" : "すべてのバージョン ( 下書きも含む )"
+"Allow approver to edit?" : 承認者を編集できるように許可する
+"and/or" : "および / または"
+"Answer/Response" : "応答 / 応答"
+"Archiving documents?" : "ドキュメントのアーカイブしていますか？"
+"Are you sure to delete this subform?" : "このサブフォームを削除してよろしいですか？"
+"Are you sure to replace with current element?" : "現在のエレメントに交換しています。よろしいですか ?"
+"Choose 'Yes' if User must acknowledge that they have completed the action of this Activity." : "ユーザーは、このアクティビティのアクションが完了したことを認めなければならない場合、「はい」を選択します。"
+"Choose 'Yes' if User should provide a response for the Activity like answering a question." : "ユーザが質問の回答をする場合など、アクティビティに返答する場合は、「はい」を選択します。"
+"Custom JavaScript code(s) to be run. Default function will run if left blank." : "カスタムの JavaScript コードを実行する必要があります。 空白のままにした場合、デフォルトの関数が実行されます。"
+"Date/Time/Who" : "日付 / 時間 / 人"
+"day(s) after the document is permanently deleted." : 一日、または数日後にドキュメントが永久的に削除されます。
+"day(s) ago." : 一日、数日前
+"day(s) ahead of due date" : 締め切り日を翌日に控えた
+"day(s) of document release." : ドキュメントのリリース日
+"day(s)" : 日
+"Disable Cut/Copy/Paste" : "切り取り / コピー / 貼り付けを無効にする"
+"e.g. &quot;D.Doc_Title = 'my_value' AND (CU.userNameDnAbbreviated = 'DLI Tools/DOCOVA' OR AU.userNameDnAbbreviated = 'DLI Tools/DOCOVA')&quot;" : "e.g. &quot;D.Doc_Title = 'my_value' AND (CU.userNameDnAbbreviated = 'DLI Tools/DOCOVA' OR AU.userNameDnAbbreviated = 'DLI Tools/DOCOVA')&quot;" 
+"eg: Server/ABC (use Abbreviated format)" : "例 : サーバ / ABC （省略形式を使用します )"
+"enter a list of extensions separated by comma. eg. doc,docx, docm" : "カンマで区切った拡張子のリストを入力します。例 doc, docx, docm"
+"enter file path for exact match, or file path followed by * to match the path and any sub folder" : 完全に一致する、またはファイルのパスを、パスと任意のサブフォルダーに試合に続いて、ファイルのパスを入力します。
+"Error: InitVars - info parameter is undefined" : "エラーが発生しました : InitVars - 情報パラメータが定義されていません"
+"Error: No attachments section found or attachment section not initialized properly." : "エラー : 添付ファイルセクションが見つかりませんでしたまたは添付ファイルセクションが適切に初期化されていません。"
+"Error: Printer %printername% could not be selected as the default printer." : "エラー : プリンターの %printername% は、デフォルトのプリンタとして選択できませんでした。"
+"Error: Printer" : "エラー : プリンターの"
+"Error: Unable to launch folder browse window." : "エラー: フォルダの参照ウィンドウを起動できません、エラーが発生しました 。"
+"Error: Unable to set default printer. No printer specified." : "エラー : デフォルトのプリンタを設定することができません。 プリンタが指定されていません。"
+"Error: Unable to set default printer. No printer specified." : "エラー : デフォルトのプリンタを設定することができません。 プリンタが指定されていません。"
+"Exporting files. : Please wait" : "ファイルをエクスポートします。 しばらくお待ちください。"
+"For example: authenticate your internal users with LDAP/AD and external users with DOCOVA." : "例；内部ユーザは、 LDAP / AD と DOCOVA 外部ユーザーは、DOCOVA を認証する"
+"In all cases, PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns true (allowed) or false (not allowed). Default is true. Available objects are $docova and $user." : "In all cases, PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns true (allowed) or false (not allowed). Default is true. Available objects are $docova and $user." 
+"Incorrect credential!" : "クレデンシャルが正しくありません !"
+"No http:// or https:// is required." : "No http:// or https:// is required." 
+"Note: The profile picture must be 180x180 pixels." : "注意：プロフィールの写真は 180 x 180 ピクセルです。"
+"Note: When checked the user credentials will be emailed to the user along with a link to DOCOVA." : "注記 : チェックアウトされたユーザのクレデンシャルは、DOCOVAのリンクと共にユーザーへメールが送信されます"
+"Operation did not succeed successfully!" : "操作が正常に成功しませんでした!"
+"Password Do Not Match!" : "パスワードが一致しません。!"
+"Password Match!" : "パスワードが一致します!"
+"PDF Conversion Failed!" : "PDF への変換に失敗しました !"
+"PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a true (disable) or false (enabled). Default is false. Available objects are $docova and $user." : "PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a true (disable) or false (enabled). Default is false. Available objects are $docova and $user." 
+"PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a true (hide) or false (show). Combined with the built-in hide criteria. Available objects are $docova and $user." : "PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a true (hide) or false (show). Combined with the built-in hide criteria. Available objects are $docova and $user." 
+"Previously published, replaced by another version." : 以前公開されたものを別のバージョンに置き換えられています
+"Published documents." : 公開された文書です。
+"Search for: ( Use AND, OR, and wildcards like *, ? To search for exact phrase use &quot; )" : "検索用：（ AND 、 OR 、および * のようにワイルドカードの＊などを使用してますか？ 正確なフレーズを使用して、＆quot； を検索する )"
+"Selected page is out of range!" : "選択されたページは範囲外です!"
+"Separate values with carriage return. If required, include value aliases separated by &quot;|&quot; character (Example: Choice Text|Field Value)." : "復帰値を分離します。 必要な場合 で区切った値のエイリアス、 quot;|&quot; character ( 例 : 選択テキスト | フィールドの値 ) が含まれています。"
+"String value or PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a text string; available objects are $docova and $user.<br>e.g. <span class=\"red\">&lt;?</span> <span class=\"purple\">return</span> $docova->isNew() ? <span class=\"blue\">'Enter Subject'</span> : <span class=\"blue\">''</span>; <span class=\"red\">?&gt;</span>" : "String value or PHP script enclosed in \"<span class=\"red\">&lt;? ?&gt;</span>\" that returns a text string; available objects are $docova and $user.<br>e.g. <span class=\"red\">&lt;?</span> <span class=\"purple\">return</span> $docova->isNew() ? <span class=\"blue\">'Enter Subject'</span> : <span class=\"blue\">''</span>; <span class=\"red\">?&gt;</span>" 
+"Tasks: document review items, escalation email notifications." : "タスク : ドキュメントのレビュー項目は、エスカレーションメール通知します。"
+"Tasks: library archiver." : "タスク : ライブラリのアーカイバ。"
+"Tasks: trash deletion, expired log deletion, expired archive deletion." : "タスク : ゴミ箱の削除、ログ、アーカイブの有効期限が終了したものの削除。"
+"The Server Web Path should not have any forward '/' slashes nor 'http://' in it." : サーバーの Web のパスには、前方に「 / 」スラッシュも http も必要ありません
+"Warning: An existing draft or pending version of this document,\ncreated by %hasdraft%, was found.\n\nIf you continue it will be discarded.\n\nContinue?" : "警告 : 既存のドキュメントや保留中のドキュメントは、  % hasdraft ％で作成される、が見つかりました。 \n\n が続行と破棄されることをします。 \n\n続行しますか ?"
+"When Adding Subscribers, only pick individual's names, not groups" : ユーザを追加する際、グループ名ではなく個人名を選択してください
+"You have reached the maximum number of Document Types allowed for this edition of DOCOVA." : "DOCOVA edition が許可するドキュメントタイプが最大量に達しました"
+"You must select the major or minor version increment." : メジャーバージョンまたはマイナーバージョンの増分を選択する必要があります。
+'A log file was found, indicating you have recoverable attachments,\rhowever the corresponding files could not be found on your local PC.' : '「ログファイルがみつかりした。回復可能な添付ファイルが示されます、 \rhowever の対応するファイルをローカル PC 上に見つかりませんでした'
+'Could not initialize %currentObject% object.\rError' : '「 % currentObject ％オブジェクトを初期化できませんでした。 \ rError 」'
+'Could not locate user''s manager profile. Check to see if the manager''s profile exists and the manager field  under the work tab for this user is populated.' : '「ユーザ」のマネージャのプロファイルを検索できませんでした。 マネージャのプロファイルが存在して、このユーザのワーク タブの下にあるマネージャのフィールドが自動的に設定されているかどうかを確認してください'
+'Could not open the template file: ''%filename%'' it may be already opened.' : 「テンプレートファイルを開くことができませんでした
+'Email Address %emailaddress% already exists. Please choose a different email address.' : '「電子メールアドレス %emailaddress% がすでに存在しています。 別の電子メールアドレスを選択してください。'
+'File %filename% is currently checked out by %person%. Please see document log for more details' : '「ファイルの %filename% は、 %person%によって現在チェックアウトされています。 詳細についてはドキュメントログを参照してください。'
+'Include in the "Add Panel" list' : "[パネルの追加]リストに含める"
+'No documents with a subject starting with %subject% were found' : '%subject%から始まる件名のドキュメントはみつかりませんでした'
+'Only files with %allowedextension% extensions are allowed.' : '%allowedextension%ファイルのみ 拡張が許可されています。'
+'Operation did not complete.\rError: No data received from server.' : '操作を完了できませんでした\rエラー'
+'The %simplefile% file is currently open in %assocapp%.  Please save and close that file before trying to Save this document.' : 'の%simplefile% ファイルは%assocapp%で現在に開いています。 この文書を保存しようとしています。保存する前にファイルを閉じてください。'
+'The file %filename% has been checked out by %person% on %checkoutdate% .\rYou can replace this file once it is checked in.' : '%filename%のファイルは : %person% によって% checkoutdate ％されています。 \ チェックインした後、このファイルを置き換えることができます。」'
+'The file %filename% has been checked out by %person% on %checkoutdate%.\rYou can only download this file and edit it locally. Once the file is checked in you will be able to edit it in-place.' : '「 %filename% ファイルは : %person%によって %checkoutdate%. \ 亮このファイルをローカルで編集だけをダウンロードすることができます。 このファイルは、チェックボックスをオンにした後は、場所を編集することができます。」'
+'The log file will be removed.\r\rFile(s) not found' : '「ログファイルが削除されます。 \r\rファイルは見つかりませんでした'
+'This document type can contain only %maxfiles% attachment(s).' : 'このドキュメントタイプのみ％ maxfiles ％添付ファイルが含まれています'
+'User ID %username% already exists. Please choose a different user ID.' : '「ユーザー ID : %username%がすでに存在しています。 別のユーザ ID を選択してください。'
+(enter a list of extensions separated by comma. Eg. doc,docx,docm : （複数の場合はカンマで区切った拡張子のリストを入力します。 例えば、doc 、docx 、 docm)
+0 for unlimited : 無制限の場合は 0
+A copy of the file : ファイルのコピー
+A target field for the returned date has not been provided. : 返される日付のターゲットフィールドが提供されていません。
+Account Type : アカウントの種類
+Acknowledge Required : 承認が必要
+Acknowledged : 認識した
+Acquire : 取得する
+Acquire from email : メールから取得
+Acquire from scanner : スキャナからの取得
+Acquire Mail Content : メールのコンテンツを取得する
+Action 1 : アクション 1
+Action 2 : アクション 2
+Action 3 : アクション 3
+Action default instruction : アクションはデフォルトの命令
+Action option : アクションオプション
+Actions - 'Send' selected but no recipients defined : アクションの終了を選択したが、受信者が定義されていません
+Actions : アクション
+Activate discarded : 破棄されたものを復元
+Active : アクティブ
+Activities : アクティビティ
+Activities created. : アクティビティが作成されます。
+Activities were created for all Recipients. : アクティビティは、すべての受信者用に作成されました
+Activity Action : アクティビティの実行
+Activity Complete. : アクティビティを完了します。
+Activity Definition : アクティビティの定義
+Activity Instruction : アクティビティの説明
+Activity was successfully completed. : アクティビティが正常に完了しました。
+Add a Panel : パネルを追加する
+Add an available panel. : 使用可能なパネルを追加する
+Add Archive Policy : アーカイブ・ポリシーを追加する
+Add Comment : コメントを追加する
+Add Document Type : ドキュメントタイプを追加する
+Add Files : ファイルを追加する
+Add Files : ファイルを追加する
+Add Group : グループを追加する
+Add Library : ライブラリを追加する
+Add New Activity : 新しいアクティビティを追加する
+Add New Column : 新しい列を追加する
+Add New Field : 新しいフィールドを追加する
+Add New HTML Resource : 新しい HTML リソースを追加する
+Add New System Message : 新しいシステムメッセージを追加する
+Add New Template : 新しいテンプレートを追加する
+Add Panel : パネルを追加する
+Add Review Policy : 確認ポリシーを追加する
+Add Selected Names : 選択した名前を追加する
+Add to favorites : お気に入りに追加する
+Add to Favorites : お気に入りに追加する
+Add User : ユーザを追加する
+Add Workflow : ワークフローを追加する
+Add Workflow Step : ワークフローステップを追加する
+Adding Files : ファイルの追加
+Additional Editors : 編集者を追加する
+Additional Editors entered on the document : 追加された編集者がドキュメントに参加
+Additional style CSS text : 追加のスタイル CSS テキスト
+Address Bar : アドレスバー
+Address Book Override : アドレスブックを上書き
+Admin : 管理
+Administration : 管理
+Administrator : 管理者
+Advanced : 高度な
+Advanced Options : 高度なオプション
+Advanced Search : 高度な検索
+After being deleted, this perspective will no longer be available in related folders.\rDo you want to continue? : 削除された後も、この観点では、関連するフォルダでは利用できなくなります。 \ r続行しますか ?
+Alignment : 位置合わせ
+All : すべての
+All Apps : すべてのアプリ
+All on start up : すべての上で起動
+All Tags : すべてのタグ
+All versions (exclude drafts) : すべてのバージョン（下書きの除外）
+All versions (include drafts) : すべてのバージョン（下書きが含まれます）
+All versions : すべてのバージョン
+Allow author to modify participant names : 参加者の名前を変更できるように許可する
+Allow authors to create revisions of documents they have not authored : 作成者が作成してないドキュメントにリビションすることを許可する
+Allow custom sort by clicking column heading : 列をクリックして、カスタムソートできるようにします
+Allow document author to customize this process : この文書の作成者は、プロセスをカスタマイズできるように許可する
+Allow Forwarding : 転送を許可する
+Allow Retract : リトラクトすることを許可する
+Allow retractions of Released documents under Strict Version control. : 厳密なバージョン管理の下でリリースされたドキュメントの取り消しを許可する
+Allow to create discussion threads : ディスカッションスレッドを作成することを許可する
+Allow to release bypassing workflow : ワークフローのバイパスをリリースできるように許可する
+Allowed Document Types : 許可されているドキュメントのタイプ
+Allowed file extensions : ファイル拡張子を許可する
+Always : 常に
+Always open the latest version : 常に最新バージョンを開く
+Always open the linked version : リンクされたバージョンが常に開く
+An empty list means share with everybody. : 空白のリストは全員と共有できます
+An error has been encountered : エラーが発生しました
+An error has occurred in the copyFileToTempLocation function. : copyFileToTempLocation 機能でエラーが発生しました。
+An error occured while subscribing new users columns, check event logs for error. : 新しいユーザーのコラムをサブスクライブした際にエラーが発生しました。イベントログでエラーをチェックしてください
+An error occurred retrieving data from the server. : サーバーからのデータの取得の際にエラーが発生しました
+and : および
+and satisfy the following custom formula : 以下のカスタム計算式を満たす
+App-Builder : アプリケーションビルダ
+App Builder : アプリケーションビルダ
+App Properties : アプリのプロパティ
+Appearance : 外観
+Append : 追加
+Append column : 列を追加する
+Append Version Information : バージョン情報を添える
+Applicable Custom Perspectives : 該当するカスタムの視点
+Applicable Document Types : 該当するドキュメントの種類
+Applicable document types : 該当するドキュメントの種類
+Applicable in multi server environment : マルチサーバ環境に該当する
+Applicable Libraries : 該当するライブラリ
+Applicable Review Policies : 該当する確認ポリシー
+Applicable workflows : 該当するワークフロー
+Application Builder : アプリケーションビルダ
+Application Integration : アプリケーションの統合
+Application Settings : アプリケーションの設定
+Application title : アプリケーションのタイトル
+Application Workspace : アプリケーションのワークスペース
+Application Logo : アプリケーションのロゴ
+Applications : アプリケーション
+Apply Changes : 変更を適用する
+Approve : 承認
+Approve button : ボタンを承認
+Approve button label : ボタンのラベルを承認
+Apps & Libraries : アプリケーションとライブラリ
+Apr : 4月
+Archive document : ドキュメントのアーカイブ
+Archive on : アーカイブ
+Archive Policies : ポリシーのアーカイブ
+Archive retention : アーカイブの保存
+Archive Selected : 選択されたアーカイブ
+Archive Selected Documents : 選択したドキュメントをアーカイブする
+Archived : アーカイブされた
+Archived documents log status. : アーカイブされたドキュメントのログのステータス
+Archiving : アーカイブしている
+Archiving document? : アーカイブドキュメントですか？
+Archiving documents? : アーカイブドキュメントですか？
+Archiving policies : ポリシーをアーカイブしています。
+Are you sure to delete this subform? : このサブフォームを削除してもよろしいですか？
+Are you sure to replace with current element? : 現在の要素で置き換えてもよろしいですか？
+Are you sure you want to delete the %currentfolder% folder? : "%currentfolder%フォルダを削除してもよろしいですか？"
+Are you sure? : 実行してよろしいですか ?
+Area : エリア
+As per applicable policy : 該当するポリシーごとに
+Ascending : 昇順
+Associated template files : 関連付けられているテンプレートファイル
+At least 1 file is still open in an application. : 少なくとも 1 つのファイルがアプリケーションでまだ開かれてます
+Attach Profile Picture : プロフィール画像を添付
+Attachment Handling : 添付ファイルの処理
+attachments(s). : 添付ファイル
+Attribute : 属性
+Attributes : 属性
+Audit Log : 監査ログ
+Audit log when Users download files : ユーザーがファイルをダウンロードした際、ログを監査する。
+Audit log when Users view files : ユーザはファイルを表示したときにログを監査する
+Aug : 08 月
+author : 作成者
+Author : 作成者
+Authors : 作成者ら
+Authors can edit each others draft documents : 作成者らは、他人の下書きを編集することができます
+Authors can not create folders : 作成者らは、フォルダを作成できません
+Authors can not create sub-folders : 作成者らはサブフォルダーを作成できません
+Authors have been restricted from creating sub-folders in this folder. : 作成者はこのフォルダにサブフォルダを作ったことにより制限されています
+Auto : 自動
+Auto attach template on document creation :  ドキュメント作成にテンプレートを自動的に添付する
+Auto launch linked files : リンクされたファイルを自動起動す
+Automatic : 自動
+Automatically install components : コンポーネントを自動的にインストールする
+Automatically open linked file attachments. : 自動的にリンクされている添付ファイルを開く
+Available Libraries : 使用可能なライブラリ
+Average : 平均
+Background : 背景
+Background color : 背景色
+Background Processing : バックグラウンド処理
+Basic Options : 基本的なオプション
+Basics : 基本
+Before you can complete this workflow step you must check in any files you have checked out : ワークフローを完了する前に、チェックアウトされているすべてのファイルにチェックインする必要があります
+Before you can complete your Approval step you must check in any files you have checked out : 自分が承認する前に、チェックアウトされているすべてのファイルにチェックインする必要があります
+Before you can complete your workflow step you must check in any files you have checked out : ワークフローを完了する前に、チェックアウトされているすべてのファイルにチェックインする必要があります
+Before you can release this document you must check in any files you have checked out : このドキュメントをリリースする前にチェックアウトしたファイルを確認してください。
+Before you can start the workflow you must check in any files you have checked out : ワークフローを始める前にチェックアウトされているすべてのファイルをチェックインする必要があります
+Before you decline this workflow step you must check in any files you have checked out : このワークフローステップを拒否する前に、チェックアウトされているすべてのファイルをチェックインする必要があります
+blank for any : 任意の空白
+Body : ボディ
+Body content : 本文の内容
+Bold : 太字
+Bookmark created in selected folder. : 選択したフォルダ内にブックマークが作成されました。
+Bookmark documents will be updated to the latest released version of a document. : ブックマークしたドキュメントは、ドキュメントの最新のリリースされたバージョンに更新されます。
+Bookmark successfully created in chosen folder. : 選択されたフォルダ内で正常にブックマークが作成されました。
+Bottom Banner : 一番下のバナー
+Browse : 参照
+Browser layout : ブラウザのレイアウト
+Building view. Please wait : 建物を表示します。 しばらくお待ちください
+Built In : 内蔵されて
+built-in field validation : フィールド検証の組み込み
+Button visibility : ボタンを表示 / 非表示
+By : によって
+By default the label will be "Comments" : デフォルトでは、ラベルは「コメント」
+By default, notify : デフォルトでは、通知
+Cancel : キャンセル
+Cancel : キャンセル
+Case sensitive, separate entries with carriage return : 大文字と小文字が区別され、キャリッジ・リターン別のエントリ
+Categorize : 分類
+Categorized : 分類された
+Cell Properties : セルのプロパティ
+Cells : セル
+Center : センター
+Central Locking : セントラルロッキングシステム
+Change a Panel : パネルを変更する
+Change Additional Editors : その他のエディタを変更する
+Change current panel. : 現在の変更パネル を変更する
+Change Doc Type : Doc Typeを変更する
+Change Doc Type : DocTypeを変更する
+Change document author : ドキュメントの作成者を変更する
+Change Document Type : 変更するドキュメントのタイプ
+Change Owner : オーナーを変更する
+Change Panel : パネルを変更する
+Change panel denied. : パネルの変更が拒否されました。
+Change Restrict read access to : 読み取り権限を変更する
+Change the layout style : レイアウトを変更する
+Change this panel. Modify the options below and change the layout on the right. : この変更パネル ] を変更する。 以下のオプションを変更して、右側のレイアウトを変更する
+Change widget denied. : 変更ウィジェットが拒否されました。
+Change widget : ウィジェットを変更する
+Change Widgets Layout : ウィジェットレイアウトの変更
+Check in files : ファイルをチェックインする
+Check out files : ファイルをチェックアウトする
+Check to disable : 無効を選択する
+Check to hide : 非表示を選択する
+Checkbox : チェックボックス
+Checkbox Properties : チェックボックスのプロパティー
+Checked Out Files : ファイルの確認
+Checkout failed : チェックアウトに失敗しました
+Checkout Files : チェックアウトされたファイルを表示
+Choose 'Yes' if User must acknowledge that they have completed the action of this Activity. : ユーザーがこのアクティビティのアクションを完了したことを確認する必要がある場合は、「はい」を選択します。
+Choose 'Yes' if User should provide a response for the Activity like answering a question. : 質問に答えるのと同じように、ユーザーがアクティビティの回答を提供する必要がある場合は「はい」を選択します。
+Clear : クリア
+Click + button above : 上記の＋ボタンをクリックします。
+Click the + button above to add a widget. : 上記の＋ボタンをクリックしてウィジェットを追加する
+Close : 閉じる
+Close All Tabs : すべてのタブを閉じる
+Close review : レビューを閉じる
+Closing Document : ドキュメントを閉じる
+Cloud : クラウド
+Collapse all : すべて折りたたむ
+Collapse All : すべて折りたたむ
+Collapse when first opened : 最初に開いたときに折りたたむ
+Collecting file information from selected documents : 選択したドキュメントからファイル情報を収集する
+Color : カラー
+Column : 列
+Column Status : コラムのステータス
+Column Title : コラムのタイトル
+Column Type : コラムの種類
+Columns : 一覧
+Combo box : コンボボックス
+Comma separated list of acceptable file extensions, blank for any. : カンマの使用可能なファイルの拡張子は、任意の空白区切りのリストで指定します。
+Commentaries : 注釈
+Comments : コメント
+Community : コミュニティ
+Compare Documents : ドキュメントの比較
+Comparing documents : ドキュメントの比較しています。
+Comparison results will be displayed in Word and printing will not be controlled. : 比較結果は Word で表示され、印刷は制御されていません。
+Complete Review button : レビュー完了ボタン
+Complete Review button label : レビューが完了したボタンのラベル
+Completed : 完了しました
+Component installer package : コンポーネントインストーラパッケージ
+Contact the owner (%paneleditor%) to request changes. : 所有者（％ paneleditor％ ) の変更を依頼してください
+contains : ～が含まれています
+Content : コンテンツ
+Content Paging : コンテンツのページング
+Content Settings : コンテンツの設定
+Converting comparison results to PDF : PDF への比較結果の変換
+Converting to PDF : PDF への変換しています。
+Copy : コピー
+Copy App : アプリをコピーする
+Copy Folder : フォルダをコピーする
+Copy Folder Link : フォルダのリンクをコピーする
+Copy Link : リンクのコピー
+Copy Selected : 選択コピー
+could not be deleted. Please check that the file is not currently open or locked by some other process. : 削除できませんでした。 ファイルが現在開かれていないか、ほかのプロセスにより機能がブロックされてないか確認してください
+could not be selected as the default printer. : プリンターをデフォルトとして選択できませんでした。
+Could not complete adding user to the group. Contact Admin for details. : ユーザーをグループに追加する操作を完了できませんでした。 詳細については、管理者に連絡してください。
+Could not complete deleting selected user(s). Contact Admin for details. : 削除選択したユーザ ( 複数可 ) を完了できませんでした。 詳細については、管理者に連絡してください。
+Could not complete importing group; contact admin for details. : グループのインポートを完了できませんでした。詳細については、管理者に連絡してください。
+Could not complete the request; due to the following error : 要求を完了できませんでした。次のエラーが発生したため、
+Could not convert file to html.\rError : ファイルを HTML に変換することができませんでした。 \ rError
+Could not create filter : フィルタを作成することができませんでした
+Could not delete the selected subform. Contact Admin for details. : 選択したサブフォームを削除できませんでした。 詳細については、管理者に連絡してください。
+Could not launch MS Excel : MS Excel を起動できませんでした。
+Could not locate the source library for selected entry. : 選択したエントリのソースライブラリを見つけることができませんでした。
+Could not locate the source library for this document. : このドキュメントのソースライブラリを見つけることができませんでした。
+Could not located requested User Name. : 要求されたユーザ名がありませんでした
+Could not log that file was downloaded. Exiting. : そのファイルをダウンロードされましたことをログに記録できませんでした。終了しています。
+Could not log that file was viewed. Exiting. : そのファイルを表示されましたことをログに記録できませんでした。終了しています。
+Could not open the file : ファイルを開くことができませんでした
+Could not process spreadsheet data. Error : スプレッドシートのデータを処理できませんでした。 エラーが発生しました
+Could not save subform because of the following issues : 次の問題のためのサブフォームを保存できませんでした。
+Could not save the file.\rError : ファイルを保存できませんでした。 \ rError
+Create a dynamic panel layout. Complete the options below and select a layout on the right. : ダイナミックパネルのレイアウトを作成します。 完了するには、以下のオプションを選択し、右側のレイアウトを選択します。
+Create a Panel : パネルを作成する
+Create actions : アクションを作成する
+Create an Activity : アクティビティを作成する
+Create and assign a review action item to : レビューアクションアイテムを作成して割り当てる
+Create Application : アプリケーションの作成
+Create Bookmark : ブックマークをを作成する
+Create Bookmark? : ブックマークを作成しますか？
+Create Document : ドキュメントを作成する
+Create Library : ライブラリを作成する
+Create new folder in folder : フォルダ内の新しいフォルダを作成する
+Create new panel. : 新しいパネルを作成する
+Create Panel : パネルを作成する
+Create Shortcut : ショートカットを作成する
+created : 作成された
+Created By : 作成されたことで
+Created Date : 作成された日付
+Creating New Document : 新しいドキュメントを作成する
+Creation of documents is limited/restricted in this edition of DOCOVA. : ドキュメントの作成が制限されているこの DOCOVA edition の制限されています。
+Cross link : クロスリンク
+Current Subscribers : 現在の加入者
+Current versions : 現在のバージョン
+Currently, you have no checked out items. : 現在チェックアウトしたアイテムはありません
+Custom : カスタム
+custom : カスタム
+Custom agent to run : カスタムエージェントを実行します。
+Custom button label : カスタムボタンのラベル
+Custom edit function could not be executed due to the following error : カスタムを編集する機能は次のエラーのために実行されませんでした
+Custom hide when PHP script : PHP スクリプトの場合カスタムを非表示にする
+Custom JavaScript code(s) to be run before release. : カスタムの JavaScript コードリリースする前に実行する必要があります。
+Custom JavaScript code(s) to be run. Default function will run if left blank. : 実行するカスタムJavaScriptコード。空白のままにすると、デフォルトの関数が実行されます。
+Custom JavaScript codes to be run on load. : カスタムの JavaScript コードのロードを実行する必要があります。
+Custom JavaScript codes to be run on unload. : カスタム JavaScript を実行するにはアンロードが必要です
+custom JavaScript function : カスタム JavaScript の機能
+Custom JS function on button click : カスタム JS 機能は上のボタンをクリックしてください
+Custom JS function to run : カスタム JS 機能を実行する
+Custom onLoad function could not be executed due to the following error : カスタム onLoad 機能は次のエラーのために実行されませんでした
+Custom onUnLoad function could not be executed due to the following error : カスタムの onUnLoad 機能は次のエラーのために実行されませんでした
+Custom print function could not be executed due to the following error : カスタム印刷機能には、次のエラーが発生したため、実行できませんでした
+Custom save function could not be executed due to the following error : カスタム機能を保存し、次のエラーが発生したため、実行できませんでした
+Custom Scan JS function : カスタムスキャンの JS 機能
+Custom Search Fields : カスタム検索フィールド
+Custom selection criteria : カスタムの選択基準
+Cut : カット
+Cut Folder : フォルダを切り取り
+D = day(s); W = week(s); M = month(s); Y = year(s) : D = 日、 W = 週、（ M ） = 月 ; Y = 年
+Dashboard : ダッシュボード
+Data column : データ列
+Data could not be retrieved from the server. : データをサーバから取得できませんでした。
+Data could not be returned from the server when attempting to get Author's ability to create sub-folders flag.\n In function : 著者のサブフォルダフラグを作成する機能を取得しようとしたときに、データサーバから返されることができませんでした。 \ n機能
+Data entry error : データ入力中にエラーが発生しました
+Data Query : データの質問
+Data Sources : データソース
+Data Type : データのタイプ
+Data Views : データビュー
+Date : 日付
+date : 日付
+Date field : 日付フィールド
+Date Field Properties : 日付フィールドのプロパティ
+Date Modified : 変更日
+Date/Time/Who : 日付/時間/人
+day(s) : 日々）
+day(s) after the document is permanently deleted. : 書類が恒久的に削除された日。
+day(s) ago. : 数日前。
+day(s) ahead of due date : 期日よりも前の日
+day(s) of document release. : 文書リリースの日。
+Dec : 12 月
+Decimal places : 小数点以下の桁数
+Decline button label : ボタンラベルを拒否する
+Default : デフォルトする
+Default Column Title : 列のタイトルをデフォルトする
+Default document type : ドキュメントタイプをデフォルトする
+Default List Type : デフォルトのリストタイプで
+Default new documents to include Authors as additional editors : 追加の編集者としての作成者を含むに新規ドキュメントをデフォルトする
+Default Open mode : [ 既定の開くモード ]
+Default Perspective : 遠近をデフォルトする
+Default scan function called if left blank. : デフォルトの空白のままにした場合と呼ばれるスキャン機能があります。
+Default sender for system messages : デフォルトのシステムメッセージの送信者
+Default sort : デフォルトの並べ替え
+Default style : デフォルトのスタイル
+Default value : デフォルトの値
+Default Width : デフォルトの幅
+Default workflows will apply if none selected : "[ なし ] を選択した場合は、デフォルトのワークフローが適用されます"
+Defaults to "Subject/Title". : "「件名／タイトル」がデフォルトになります。"
+Delayed Actions (Escalation) - 'Send' selected but no recipients defined : 遅延アクション（エスカレーション）の終了を選択したが、受信者が定義されていません
+Delayed Actions - 'Send' selected but no recipients defined : 遅延アクションの終了を選択したが、受信者が定義されていません
+Delayed actions : 遅延アクション
+Delete : 削除
+Delete App : アプリを削除
+Delete column : 列を削除する
+Delete Dashboard Panel? : ダッシュボードのパネルを削除しますか？
+Delete Element : 構成要素を削除する
+Delete files locally after successful upload to DOCOVA : ローカル DOCOVA に成功したアップロードした後にファイルを削除する
+Delete from archive log status. : アーカイブからログのステータスを削除します。
+Delete options : オプションを削除する
+Delete Panel : パネルを削除する
+Delete Perspective : パースペクティブを削除
+Delete Perspective? : 観点を削除しますか？
+Delete Rights : 権限を削除する
+Delete Saved Search : 保存した検索を削除する
+Delete Selected : 選択した項目を削除する
+Deleted : 削除された
+Deleted Users : 削除されたユーザー
+Deny button : 拒否ボタン
+Department : 部門
+Descending : 降順
+Description : 説明
+Deselect all : すべての選択を解除く
+Deselect All : 選択した範囲をすべて解除
+Design Elements : 設計要素
+Designer : デザイナー
+Details : 詳細
+Detecting records managed documents. Please wait : 管理対象のレコードを検出しドキュメント化します。 しばらくお待ちください
+Directories : ディレクトリ
+Directory Integration : ディレクトリ統合
+Directory name presented to users : ユーザに表示されるディレクトリの名前
+Disable Activities : アクティビティを無効にする
+Disable Cut/Copy/Paste : カット/コピー/ペーストを無効にする
+Disable Toolbar - Create Bookmark : ツールバーを無効にする - ブックマークを作成
+Disabled : 無効になっている
+Discarded : 廃棄された
+Discarded drafts that are kept in library. : ライブラリに保存されている破棄された下書き
+Discuss : について説明
+Display Embedded Form 1 in "More" section : 「詳細」セクションには、組み込みのフォームを表示する
+Display Name : 表示名
+Display Related Documents in "More" section : 「詳細」セクションには、関連するドキュメントを表示する
+Display Subject and Status in "More" section : 「もっと見る」セクションに 件名とステータスを表示する
+Display Title : タイトルを表示する
+Display workflow actions list in "More" section : 「詳細」セクションには、ワークフローアクションのリストを表示する
+Distribution : 配布
+Do not add "background-color" attribute. : 「背景色」の属性を追加しないでください。
+Do not Archive : アーカイブをしないでください
+Do not archive active draft documents : 有効な下書きをドキュメントにアーカイブしないでください
+Do not archive documents with active workflow : アクティブなワークフローでドキュメントをアーカイブしないでください
+Do you want to leave the page without saving changes? : 変更を保存せずにページを退出しますか ?
+Doc compare file source : Doc ファイルのソースを比較
+Doc Specific Open Mode : Docを開いている特定のモード
+DOCOVA Application Settings : DOCOVA アプリケーションの設定
+DOCOVA base DN : DOCOVA ベース DN
+DOCOVA base dn e.g. "/DOCOVA" : "DOCOVA ベース dn 　例 : '/DOCOVA'"
+Docova Component setup files : DOCOVA コンポーネントセットアップのファイル
+DOCOVA Environment : DOCOVA 環境
+DOCOVA Home Database : DOCOVA ホームデータベース
+Docova Home Tabs : Docova ホームタブ
+Docova Install : インストール Docova
+DOCOVA(Internal) : DOCOVA ( 内部 )
+Document : ドキュメント
+Document Activities : ドキュメントのアクティビティ
+Document added to favorites. : ドキュメントが [ お気に入り ] に追加されました。
+Document archived from : ～からドキュメントをアーカイブされました。
+document author / all reviewers named above : ドキュメントの作成者 / 上記のすべての名前付きのレビュー
+Document author : ドキュメントの作成者
+document author and/or : ドキュメントの作成者および / または
+Document cannot be deleted once workflow starts : ドキュメントはワークフローが開始されると削除できません
+Document Cannot Be Opened : ドキュメントを開くことはできません。
+Document Date : ドキュメントの日付
+Document Deleted : ドキュメントが削除されました
+Document Details : ドキュメントの詳細
+Document Details Tab : ドキュメントの詳細タブ
+Document has been deleted : ドキュメントは削除されました。
+Document is not available. : ドキュメントは使用可能ではありません。
+Document Log retention : ドキュメントログの保持
+Document not yet saved. : ドキュメントがまだ保存されていません。
+Document save was cancelled, Removing any linked documents. : ドキュメントの保存がキャンセルされた場合、リンクされた任意のドキュメントを削除します。
+Document shortcut was added to your desktop. : ドキュメントのショートカットをデスクトップに追加しました
+Document Status : ドキュメントのステータス
+Document Type : ドキュメントのタイプ
+Document type determines the fields and content sections available within the document. : ドキュメントタイプはドキュメント内のフィールド、およびコンテンツのセクションで利用できるかを決定します。
+Document type determines the fields and content sections available within the document. : ドキュメントタイプはドキュメント内のフィールド、およびコンテンツのセクションで利用できるかを決定します。
+Document Type Settings : ドキュメントの種類の設定
+Document Types : ドキュメントの種類
+Document Url cannot be located. : ドキュメントの URL がありません。
+Document Versioning : ドキュメントのバージョン管理
+Document Workflow : ドキュメントワークフロー
+document(s). Are you sure? : ドキュメントを 実行してよろしいですか ?
+Documents 0 to 0 of 0 : ドキュメントの 0 の 0 を 0
+Documents : ドキュメント
+Documents that were : されたドキュメント
+does not contain : が含まれていません
+Does not require review : レビューしてもらう必要がない
+Done : 完了
+Draft : 下書き
+Draft/Not Released : 下書き / リリースされていません
+Dropdown : ドロップダウン
+Dropdown Properties : ドロップダウンのプロパティ
+Duplicate Panel. : 重複したパネル。
+Duplicate widget. : 重複したウィジェット。
+During workflow all user prompted comments will also be tracked in this section. : ワークフローの実行時にすべてのユーザープロンプトが表示されコメントもこのセクションに追跡されます。
+Dutch : オランダの
+e.g. : 例
+Earlier, unreleased drafts superseded by this version will be discarded. : 以前は、このバージョンで置き換えられます。リリースされていない下書きは破棄されます。
+Edit : 編集
+Edit Document button : ドキュメントのボタンを編集する
+Edit in New Window :  新しいウィンドウで編集する
+Edit/Save Perspective : パースペクティブを編集 / 保存する
+Editable field : 編集可能なフィールド
+Editable with selection : 選択範囲の編集
+Edited Attachment Recovery : 編集した添付ファイルのリカバリ
+Editing : 編集している
+Editors : 編集者
+Element ID : 要素 ID
+Element Name : 要素の名前
+Email Address : 電子メールアドレス
+Email event to Administrators : 管理者へイベントをメールにする
+Email Notification : 電子メール通知
+Empty Recycle Bin : ゴミ箱を空く
+Empty Widget : 空のウィジェット
+Enable access to local scanner : ローカルのスキャナへのアクセスを有効にする
+Enable acquiring content from user's email : ユーザーの電子メールからコンテンツを取得を有効にする
+Enable centralized document locking : 一元管理されたドキュメントのロックを有効にする
+Enable Content Paging : コンテンツのページングを有効にする
+Enable cross linking : クロスリンクを有効にする
+Enable document lifecycle : ドキュメントライフサイクルを有効にする
+Enable document versioning : ドキュメントのバージョン管理を有効にする
+Enable document workflow : ドキュメントワークフローをイネーブルにする
+Enable file check in and out tracking : 追跡ファイルのチェックを有効にする
+Enable File Sync : ファイルの同期を有効にする
+Enable Filtering : フィルタリングを有効にする
+Enable filtering will allow users to click on the column headers of this folder/view to filter content. : フィルタリングを有効にし、ユーザーがこのフォルダ / ビューの列ヘッダーのコンテンツのフィルタリングをクリックできるようになります
+Enable Folder Filtering : フォルダのフィルタリングを有効にする
+Enable linked files : リンクされたファイルを有効にする
+Enable Records Manager Express Integration : Records Manager Express との統合を有効にする
+Enabled : 有効になっている
+End : 終了
+ends with : で終わる
+English : 英語
+Enter a field name for Review Period - custom frequency : レビュー期間の頻度のカスタムフィールドの名前を入力します。
+Enter a field name for Review Period - custom starting date : レビュー期間のカスタム開始日フィールドの名前を入力します。
+enter a list of extensions separated by comma. eg. doc,docx, docm : コンマで区切った拡張子のリストを入力します。例えば。 doc、docx、docm
+enter file path for exact match, or file path followed by * to match the path and any sub folder : 正確に一致するファイルパスを入力するか、ファイルパスに続けて*を入力して、パスとサブフォルダに一致させます
+Enter new folder name : 新しいフォルダの名前を入力する
+Enter the name of a field on the document that will determine the frequency of the review period. : レビュー期間の頻度を確認するには、ドキュメント上のフィールドの名前を入力します。
+Enter users participating in the file sync. : ファイルの同期に参加するユーザーを入力する
+Enter your comments below : 以下にコメントを入力します。
+Error - Unable to download file %filename% to %filepath%. \n\nPlease check that the source file is present and undamaged. \n\n Source file URL : エラー - ファイルを %filename%を %filepath%にダウンロードできません。 \N\n ソースファイルが存在し、破損していないことを確認してください。 \ n \ n Source file URL
+Error - Unable to print file %filename%. \n\nPlease check that the source file is present and undamaged. \n\n Source file URL : エラー - ファイル%filename%を印刷できません。 \N\n ソースファイルが存在し、破損していないことを確認してください。 \ n \ n Source file URL
+Error - Unable to print file : エラー - ファイルを印刷できません
+Error : エラーが発生しました
+Error Adding Files : ファイルの追加でエラーが発生
+Error clearing view data : 表示データをクリアでエラーが発生
+Error deleting temporary files. : 一時的なファイルを削除されるとエラーが発生しました。
+Error in search dialog code. Field with node id %fieldId% could not be located. : 検索ダイアログのコードでエラーが発生しました。フィールド ID のnode id %fieldId%が見つかりませんでした。
+Error loading view settings : 表示設定のロードでエラーが発生
+Error populating bookmarks in Word document.  Aborting. : Word ドキュメントのブックマークを設定中にエラーが発生しました。 中止しています。
+Error processing pasted data : データの貼り付けの処理中にエラーが発生しました
+Error writing selected names. Parent document might be closed. : 選択した名前の書き込み中にエラーが発生しました。 元のドキュメントが閉じている可能性があります。　
+escalation message : エスカレーションのメッセージ
+Event log retention : イベントログ保存
+Event logging : イベントのログ記録
+Events : イベント
+Exclude files with the following extensions : 次の拡張子を持つファイルを除外する
+Exemptions : 除外
+Expand all : すべて展開
+Expand All : すべて展開
+Expertise (skills) : 専門知識（スキル）
+Export : エクスポート
+Export Files : ファイルをエクスポートする
+Export files from the following documents : 次のドキュメントからファイルをエクスポートする
+Export sub folders : サブフォルダをエクスポートする
+Export to Excel : Excel へエクスポートする
+Exporting data. Please wait : データをエクスポートしています。 しばらくお待ちください
+Exporting files.  Please wait : ファイルのエクスポート。お待ちください
+External : 外部
+External Data : 外部データ
+External setup information URL : 外部のセットアップ情報の URL
+External URL : 外部 URL
+Facet Maps : ファセットのマップ
+Facet Maps Options : ファセットのマップオプション
+Favorites : お気に入り
+Feb : 02 月
+Federated Search : フェデレーション検索
+Field Description : フィールドの説明
+Field list is either empty or its length does not match the bookmark list. : フィールドリストが空の場合、またはその length がブックマークリストに一致していません。
+Field Name : フィールド名
+field on the document containing names to assign the review action to : 名を含むドキュメントのフィールドをレビューアクションに割り当てる
+field on the document containing names to send the review action to : 名を含むドキュメントのフィールドをレビューアクションに送信する
+Field or Formula : フィールドまたは計算式
+Field validation : フィールドの検証
+File attachments : 添付ファイル
+File document : ファイルドキュメント
+File edits and check in/out are automatically logged. : ファイルの編集とチェックイン／チェックアウトが自動的にログに記録されています。
+File Export Complete.\n Please open %folder% to view any exported files. : ファイルのエクスポートを完了します。 \n フォルダのエクスポートされたファイルを表示するために、%folder% を開てください。
+File Import : ファイルのインポート
+File Name : ファイル名
+File Resources : ファイルリソース
+File Sync : ファイルの同期
+File Templates : ファイルのテンプレート
+File Type : ファイルの種類
+File types to view using local applications (rather than browser) : ファイルの種類ローカルアプリケーション（ブラウザではなく）を使用してを表示します。
+Filenames can not contain semi-colons. : ファイル名はセミコロンを含むことができませんでした。
+Files : ファイル
+Files could not be checked out properly. Please try again or contact system administrator. : ファイルが正常にチェックアウトされていることができませんでした。 再試行するか、システム管理者に連絡してください。
+Files Export : ファイルのエクスポート
+Files Path : ファイルのパス
+Files to import (a document for be create for each file) : ファイルをインポートするには、各ファイルにドキュメントを作成します
+Files to import (a document will be created for each file) : ファイルをインポートするには、各ファイルにドキュメントが作成されます 
+Filter by : フィルタによって
+Filter error : フィルタエラーが発生しました
+Filter field : フィルタフィールド
+Finish : 完了
+First Name : 名前
+First page : 最初のページ
+First position index of 0, not 1. : インデックスの最初の位置は１ではなく、０です
+Folder : フォルダ
+Folder Archive : フォルダのアーカイブ
+Folder Control : フォルダコントロール
+Folder icon : フォルダアイコン
+Folder Information : フォルダ情報
+Folder Meta-Data Subform : フォルダのMeta-Dataのサブフォーム
+Folder Name : フォルダ名
+Folder name is required. : フォルダ名は必須です。
+Folder path : フォルダのパス
+Folder Properties : フォルダのプロパティ
+Folder shortcut was added to your desktop. : フォルダのショートカットがデスクトップに追加されました。
+Folders : フォルダ
+Folders and views : フォルダとビュー
+Font : フォント
+Font size : フォントのサイズ
+For more information please contact DOCOVA sales team at (866) 331-1354. : より詳細な情報は、（ 866 ） 331-1354 DOCOVA セールスチーム担当者までご連絡ください。
+Form 1 : フォーム 1
+Form alias : フォームエイリアス
+Form Designer : フォームデザイナー
+Form Elements : フォーム要素
+Form Name : フォーム名
+Forms : フォーム
+Forward Document : フォワード文書
+French : フランス語
+Full Screen : 全画面表示
+Fully qualified domain name : フル画面の完全修飾ドメイン名
+General : 一般的な
+General Information : 一般的な情報
+General Settings : 一般的な設定
+General type : 一般的なタイプ
+Generate Thumbnail : サムネールの生成
+German : ドイツ人
+Global Settings : グローバル設定
+Group Definition : グループの定義
+Group Members : グループメンバー
+Group Name : グループ名
+Groups : グループ
+has already been downloaded and cannot be updated. Please check that the file is not already opened for editing/viewing. : が既にダウンロードされて、更新できません。 ファイルの編集 / 表示が開いていないことを確認してください。
+has already been downloaded and cannot be updated. Please close the file if already open for editing/viewing. : すでにダウンロードされているため、更新できません。 編集 / 表示を既に開いている場合はファイルを閉じてください。
+has already been downloaded and cannot be updated. Please close the file if it is open already for editing/viewing. : すでにダウンロードされているため、更新できません。 編集 / 表示するためには既に開いている場合ファイルを閉じてください。
+Has multiple attachment sections : 複数の添付ファイルのセクション
+Header : ヘッダー
+Header Access Control : ヘッダーのアクセス制御
+Height : 高さ
+Hide attachment section buttons : 添付ファイルセクションボタンを非表示にする
+Hide attachment section when : ～時に添付ファイルのセクションを非表示にする
+Hide Comments section when : ～時にコメントのセクションを非表示にする
+Hide entire document header when : ～時に全体のドキュメントのヘッダーを非表示にする
+Hide Logout Link : ログアウトリンクを非表示にする
+Hide Related Documents section when : ～時に、関連するドキュメントのセクションを非表示にする
+Hide Related Emails section when : ～時に、関連する電子メールセクションを非表示にする
+Hide Related Links section when : ～時に、関連リンクセクションを非表示にする
+Hide Text area when : ～時に、テキストのエリアを非表示にする
+Hide Web bookmark section when : ～時に、 Web のブックマークセクションを非表示にする
+Hide when : ～時に非表示にする
+Hide workflow buttons when : ～時にワークフローボタンを非表示にする
+High : 高
+Home Page : ホームページ
+html : Html
+HTML Code : HTML コード
+HTML Head : HTML Head
+HTML Resource : HTML リソース
+HTML Resources : HTML リソース
+HTML String(s) to include extra header tags like external javascript/css files. : "HTML 文字列外部の javascript / css ファイルのような追加ヘッダータグを含めることができます。"
+HTTP Host Name : HTTP ホスト名
+Http Port : Http ポート
+Icon : アイコン
+Icons : アイコン
+If "Enable Filtering" is enabled above, you can select filter fields below to define the default filtering for this folder/view. Any filters selected below that are defined in a User's Profile will provide a customized content experience for them based on their settings. : "「フィルタリング」を有効にする ] が有効になっている上記の場合は、以下のフィルタフィールドでは、デフォルトでは、このフォルダ / ビューのフィルタリングを定義するにはを選択することができます。 の下に選択したすべてのフィルタは、ユーザのプロファイルで定義された独自の設定に基づいて、それらのためのカスタマイズされたコンテンツを体験を提供します。"
+If not completed within : 完了した範囲内にない場合
+If previously released version exists set it as the current version : 以前にリリースされたバージョンが現在のバージョンとして存在する
+If using multiple uploaders and want to limit the files collected by the Compare Documents process, enter the field specified by the AttachmentNames param of the Uploader to be used. Leave blank to collect all files. : 複数のアップローダを使用している場合、ドキュメントの比較プロセスによって収集されたファイルを制限する場合は、使用するアップローダの AttachmentNames param で指定されたフィールドを入力します。 すべてのファイルを収集するには、空白のままにします。
+Import as document type : ドキュメントタイプとしてインポートする
+Import as document type : ドキュメントタイプとしてインポートをする
+Import Email Messages : 電子メールメッセージをインポートする
+Import Files : ファイルをインポートする
+Import Folder : フォルダのインポート
+Import LDAP Group : LDAP グループをインポートする
+Import Messages : メッセージをインポートする
+Import Messages is not available for your current mail configuration. : インポートメッセージは、あなたの現在のメールの設定には使用できません。
+Import Messages Not Available : インポートメッセージが使用できません
+Import was completed successfully. : インポートが正常に完了しました。
+In case the date field specified above has no value, the process will pick the first non-empty date in the following order : 上記の値がない場合、プロセスは次の順序で、最初の空白以外の日付を選択する
+In order to use this  feature please upgrade your DOCOVA license subscription to either Company or Enterprise Edition. : この機能を使用する場合、 DOCOVA ライセンス契約会社、または Enterprise Edition のいずれかをアップグレードしてください。
+Inactive : 非アクティブ
+Include : 含める
+Include archives : アーカイブを含める
+Include subfolders : サブフォルダを含める
+Include Thumbnails : サムネールを含める
+Initial cursor focus field : 最初のカーソルのフォーカスフィールド
+Input field : フィールドを入力する
+Input Field Properties : フィールドのプロパティを入力する
+Insert : 挿入
+Insert column : 列を挿入る
+Internal : 内部
+Invalid entry : エントリが無効です
+is : は
+is a newly added file. Please save this document before making any edits or revisions to it. : 新しく追加されたファイルです。 このドキュメントには、すべての編集や修正を行う前に保存してください。
+it may already be opened. : すでに開いている場合があります。
+Italic : イタリック体
+Jan : 1月
+Japanese : 日本語
+JavaScript : JavaScript
+JavaScript code(s) as Print event. : JavaScript コードを印刷イベントとする
+JS function to call when element gets focus. : JS 関数要素がフォーカスを取得したときにコールが着信する
+JS function to call when element is clicked. : JS 関数要素がクリックされたときにコールが着信する
+JS function to call when element loses focus. : JS 関数要素がフォーカスを失ったときにコールが着信する
+JS function to call when element value changes. : JS 関数要素の値を変更したときにコールが着信する
+Jul : 7 月
+Jump 200 records : ジャンプ 200 レコード
+Jun : 6 月
+Keep drafts private : 下書きがプライベートで保存する
+Keep latest : 最新の保存する
+Keywords : キーワード
+label : ラベル
+Label Properties : ラベルのプロパティ
+Label value : ラベルの値
+Last Access : 最終アクセス
+last modified : 最終更新
+Last Name : 苗字
+Last page : 最後のページ
+last review date : 最終確認日
+Latest released version (exclude drafts and prior versions) : 最新のバージョン ( 「下書き」を除外するとそれより前のバージョン )
+Latest released versions (exclude drafts and prior versions) : 最新にリリースされたバージョン ( 「下書き」およびそれ以前のバージョンの除外 )
+Layout : レイアウト
+LDAP base DN : LDAP base DN
+"LDAP base dn e.g. \"O=DLI\"" : "LDAP base dn 例: \"O=DLI\""
+LDAP directory path : LDAP ディレクトリのパス
+Leave blank for all : すべて空白のままにしておく
+Leave blank if a different mail server is used. No http : 別のメールサーバが使用されている場合は空白のままにしておきます。 Http はありません
+Leave blank if using 80 for non-SSL or 443 for SSL. : non-SSLで80使用する場合、またはSSLで 443 を使用する場合は空白のままにしておく
+Left : 左
+Let user select which one to open : ユーザを 1 つを選択してみましょう
+Libraries : ライブラリ
+Libraries and Applications : ライブラリとアプリケーション
+Libraries Repository : ライブラリリポジトリ
+Libraries to search : ライブラリを検索する
+Libraries update failed. : ライブラリの更新に失敗しました。
+Library : ライブラリ
+Library Key : ライブラリのキ－
+Library Name : ライブラリの名前
+Library Settings : ライブラリの設定
+Library Statistics : ライブラリの統計情報
+Library Subscriptions : ライブラリサブスクリプション
+Library update failed.\nServer return code : ライブラリの更新に失敗しました。 \nServer の戻りコード
+License Code : ライセンス・コード
+Licensed component : ライセンスが必要なコンポーネント
+Lifecycle settings : ライフサイクルの設定
+Link Comments : コメントリンク
+Link to document(s) : ドキュメントとリンクする
+List : リスト
+Load Library Folders : ライブラリのフォルダをロードする
+Local file delete exclusion list : ローカルファイルの除外リストの削除する
+Local host code (optional) : ローカル・ホストコード（オプション）
+Location : 場所
+Log all events : すべてのイベントをログする
+Log only critical errors : ログに重大なエラーのみログする
+Logging comment. Please wait : コメントをログしています。 しばらくお待ちください
+Logout : ログアウト
+Logout Link : リンクをログアウト
+Low : 低
+Mail for : メールの
+Mail memo : メールのメモ
+Mail Server Port : メールサーバのポート
+Mail Server Url : メールサーバーの URL
+Maintain only one live Draft at a time. Drafts can originate from Released documents or other Draft documents. : 1 つのライブは一度草案を維持のみ。 下書きの公開された文書またはその他のドラフト文書から発信できます。
+Make available in all folders in this library : このライブラリ内のすべてのフォルダで使用できるようにする
+Make available to DOCOVA Explorer : DOCOVA Explorer を利用可能にする
+Manage App Groups : アプリケーショングループの管理
+Manager : マネージャ
+Manual : マニュアル
+Mar : 3月
+Mark current document as an inactive version : 現在のドキュメントを非アクティブなバージョンとしてマークする
+Max results : 最大の結果を
+Maximum number of files : ファイルの最大数
+May : 5月
+Med : 
+Menu Bar : メニューバー
+Merge Cells : セルの結合
+Merge Right : 右のマージ
+message : メッセージ
+Message : メッセージ
+Message link : メッセージ・リンク
+Message Link : メッセージ・リンク
+Message Name : メッセージの名前
+Message was forwarded. : メッセージは転送されました。
+Message was forwarded. : メッセージは転送されました。
+Message was sent. : ッセージが送信されました。
+Message was sent. : メッセージが送信されました。
+Message/Question : メッセージ / 質問
+Meta-Data : メタデータ
+Missing Activity Message/Instruction. : 不足アクティビティメッセージ / 命令しています。
+Mobile Phone : 携帯電話
+Modified By : 変更されたことで
+month(s) : 月 
+More : 詳細
+more than : 以上
+Most mail servers are set to 993 as default. : ほとんどのメールサーバーは、デフォルトの 993 に設定されています。
+Moving documents. Please wait : ドキュメントを移動します。 しばらくお待ちください
+Moving folder. Please wait : フォルダを移動します。 しばらくお待ちください
+Multiple : 複数の
+My mail system : 私の電子メールシステム
+My Managed : 私の管理
+My Recently Used Apps : 最近使用したアプリ
+Name : 名
+Name Lookup : 名前の検索
+Name of the html field to place the cursor in when document is opened for editing. : 編集のためにドキュメントを開いたときに、カーソルに置きのHtml フィールドの名前を指定する
+Name Selection : 名前の選択
+Names field : 名前フィールド
+Names Field Properties : 名前フィールドのプロパティ
+Names of fields to validate : フィールド名を確認します。
+never : 決して
+Never : 決して
+New : 新しい
+New Activity : 新しいアクティビティ
+New App Group : 新しいアプリケーショングループ
+New Archive Policy : 新しいアーカイブ・ポリシー
+New Document : 新しいドキュメント
+New Document Type : 新しいドキュメントの種類
+New Drafts can only originate from Released documents. : 新しい下書き公開された文書から発信することのみ可能です。
+New File Template : 新しいファイルテンプレート
+New Folder : 新しいフォルダ
+New Group : 新しいグループ
+New HTML Resource : 新しい HTML リソース
+New major version : 新しいメジャーバージョン
+New minor version : 新しいマイナーバージョン
+New Password did not match with Confirm password.Please correct your password : 新しいパスワードと確認パスワードが一致しませんでした。パスワードを訂正してください。
+New Review Policy : 新しいポリシーの確認
+New revision : 新規リビジョン
+New Search Field : 新しい検索フィールド
+New Subform : 新しいサブフォーム
+New System Message : 新しいシステムメッセージ
+New User Profile : 新しいユーザープロファイル
+New View Column : 新しい列の表示
+Newly created documents. : 新しく作成されたドキュメント。
+Next 200 records : 次の 200 レコード
+Next page : 次のページへ
+Next page group : 次のページ・グループ
+No : いいえ
+No Action selected. : アクションが選択されていません。
+No Activity Subject provided. : アクティビティ件名が提供されていません。
+No Document Type selected. Please select a Document Type : ドキュメントのタイプが選択されていません。 ドキュメントのタイプを選択してください。
+No Document Type selected. Please select a Document Type to create. : ドキュメントのタイプが選択されていません。 ドキュメントのタイプの作成を選択してください。
+No Documents Found : ドキュメントが見つかりません
+No documents found. : ドキュメントが見つかりませんでした。
+No entries found. : エントリが見つかりませんでした。
+No File(s) Selected : ファイルが選択されていません
+No folder meta-data have been configured currently. Folder meta-data fields can be enabled in the Library Profile for this library in the Application Settings area. : Meta-Dataでフォルダーが構成されていません。 フォルダのMeta-Dataフィールドは、ライブラリのライブラリプロファイルからアプリケーション設定で有効にできます
+No folder selected. : フォルダが選択されていません。
+No logging : ロギングは行われません。
+No panel selected. : パネルが選択されていません。
+No panel selected. : パネルが選択されていません。
+No pending review items found. : レビュー保留中のアイテムが見つかりませんでした。
+No pending workflow items found. : ワークフロー保留中のアイテムが見つかりませんでした。
+No Recipients selected. : 受信者が選択されていません。
+No selected entries were found for the chosen folder. : 選択したフォルダ用に選択したエントリが見つかりませんでした。
+No Server Web Path value. : サーバーの Web のパス値がありません。
+No workflow actions are defined in this document : このドキュメントでは、ワークフローのアクションが定義されていません
+No Workflow Defined : ワークフローが定義されていません
+No workflow items found. : ワークフローアイテムが見つかりませんでした。
+No working folder is currently in use. Please edit a document first. : 作業フォルダはありませんが現在使用されています。 最初はドキュメントの編集をしてください。
+non : 非
+None : なし
+Not Authorized : 許可されていません。
+NOTE : 注意
+Notes mail server URL (if applicable) : Notes メールサーバーの URL ( 該当する場合 )
+Notification message sent. : 通知メッセージが送信されます。
+Notify the following that a review is now pending : 現在見直しが保留中
+Notify user : ユーザーに通知する
+Nov : 11 月
+number : 番号
+Number : 番号
+Oct : 10 月
+Office Phone : オフィスの電話
+Ok : Ok をクリック
+OK : OK 
+On all events : すべてのイベントについて
+On Blur : ブラーについて
+On Change : 変更について
+On Click : クリックについて
+On critical errors only : 重大なエラーのみについて
+On Focus : 焦点を合わせるについて
+On Logout : ログアウトについて
+on server : サーバに
+OnBeforeRelease Javascript event : リリース Javascript のイベントの前について
+One moment. : しばらくおまちください。
+One or more 'Records Managed' documents were found under this folder \n or one of its subfolders.  It can NOT be deleted. : 1つまたは複数の「管理されたレコード」ドキュメントがこのフォルダ\nまたはサブフォルダでみつかりました。それが削除することはできません。
+One or more selected documents can not be deleted because they are records managed. : 1 つまたは複数の選択されたドキュメントは記録管理されているため、削除できませんでした。
+One or more selected documents can not be deleted because they are Released and strict version controlled. : 1 つまたは複数の選択されたドキュメントがリリースされ、厳密なバージョンであるため、制御を削除することはできません。
+One or more selected documents can not be deleted because they are Released and version controlled. Use Retract instead. : 1 つまたは複数の選択されたドキュメントがリリースされ、バージョン管理されているため 削除できませんでした。 代わりにリトラクトを使用します。
+One or more selected documents can not be deleted because workflow has started and deletion during workflow has been disabled. : ワークフローが開始されましたワークフローの実行時に削除しているため、 1 つまたは複数の選択されたドキュメントを削除することはできませんが無効になっています。
+OnLoad JavaScript event : JavaScript イベントをロードするについて
+Only allow 1 live Draft at a time in non-Strict mode : non-strictモードにて、一度ずつのみ下書きを許可する
+Only one file can be converted to html and displayed in the current document.\rPlease delete one of the existing files before adding a new one. : 1 つのファイルだけを HTML に変換されます。 \r 新しいく追加する前には既存のファイルを削除してから追加してください
+Only the following users can subscribe to this library (blank allows all) : 次のユーザーだけがこのライブラリにサブスクライブすることができます（空白はすべて許可します）
+only when commentor chooses : Commentor を選択したときのみ
+OnUnLoad JavaScript event : アンロードの JavaScript イベントについて
+Open : 開く
+Open document only : ドキュメントのみを開く
+Open Folder Archive : フォルダのアーカイブを開く
+Open in App-Builder : アプリケーションビルダーで開く
+Open in New Tab : 新しいタブで開く
+Open in New Window : 新しいウィンドウで開く
+Open latest version : 最新のバージョンを開く
+Open linked version : リンクされたバージョンを開く
+Open Mode : オープンモード
+Open whole application : 全体のアプリケーションを開く
+Opening the document : ドキュメントを開く
+Operation Canceled : 操作がキャンセルされました。
+Operation did not complete. Please contact system administrator. : 操作が完了しませんでした。 システム管理者に連絡してください。
+Operation did not complete.\rStatus code : 操作が \ RStatus update ( ステータス更新 ) コードが完了しませんでした。
+Operation was not complete, due to : 操作をは完了されませんでした
+Operation was not complete. : 操作が完了しませんでした。
+Optional currency symbol etc. : オプションの通貨記号など。
+Optional Doctrine DQL where clause for a select from document table. "D" refers to Document; "CU" refers to Creator; "AU" refers to Authors. : オプションのドクトリンがドキュメントテーブルからの select 句 DQL を使用して 「 D 」のドキュメントを参照している。「 CU 」の創作者を指し、「 AU 」の作者のことを指します。
+Optional Review/Approve comments? : オプションのレビュー / コメント承認しますか ?
+Optional units etc. : オプションの単位など。
+Optional, friendly field labels to be included in error message (field name will be user if blank). : オプションで、フレンドリーフィールドにエラーメッセージが表示されます ( 空白の場合フィールド名はユーザーになります ) 
+Optional, matching data types ("text", "number" or "date"). blank enties are treated as text. : オプションで、条件にマッチするデータの種類 ( 「 text 」、「番号」または「日」空白のエントリをテキストとして扱われます。
+Options : オプション
+or : または
+Order : 順序
+Other : ほか、
+Output Folder : 出力フォルダー
+Owner : 所有者
+Panel : パネル
+Panel description is blank.  Please provide a description for this panel. : パネルの説明は空白になります。 このパネルの説明を入力してください。
+Panel list type : パネルのリストのタイプ
+Panel name : パネルの名前
+Panel name is blank.  Please provide a panel name. : パネル名が空白になっています。 パネル名を入力してください。
+Paper color : 用紙の色
+Parallel : 平行
+Parentheses on negative numbers : 負の数の括弧内
+Participants : 参加者
+Password : パスワード
+Paste : 貼り付け
+Paste Folder : フォルダの貼り付け
+Pasting documents. Please wait : ドキュメントを貼り付ける。 しばらくお待ちください
+Pasting folder. Please wait : フォルダを貼り付けます。 しばらくお待ちください
+Path : パス
+PDF Creator not installed : PDF Creator がインストールされていません
+PDF Creator not required for document comparison : PDF Creator はドキュメントの比較の際は必須ではありません
+Pending releases : リリース保留中
+People : 人々
+Percentage (value*100)% : 率（値 * 100 ）％
+Permanently delete from library : ライブラリから完全に削除
+Perspective : 観点
+Perspective name : 観点の名前
+Plain : 普通
+Please check that the source file is present and undamaged. : ソースファイルが存在し、破損していないことを確認してください。
+Please complete the following fields : 次のフィールドに入力してください。
+Please complete/correct the invalid entries. : 無効なエントリを完了/修正してください
+Please contact Administrator. : 管理者に連絡してください。
+Please describe changes to be included in the revision sheet : リビジョンシートに含まれている変更点について説明してください。
+Please described the changes to be included in this version. : このバージョンに含まれている変更を記載してください
+Please enter description. : 説明を入力してください。
+Please enter Mail Server Url. : メールサーバの URL を入力してください。
+Please enter New/Confirmed Password. : 新しい / 確認用に入力したパスワードを入力してください。
+Please enter the name of the folder you would like to create. : 作成したいフォルダの名前を入力してください。
+Please enter the perspective name. : パースペクティブの名前を入力してください。
+Please enter the release comments (optional) : リリースコメント ( オプション ) を入力してください
+Please enter the search query. : 検索クエリを入力してください。
+Please enter the search query. : 検索クエリを入力してください。
+Please enter the Tag Cloud name. : タグクラウドの名前を入力してください。
+Please enter User Email Address. : ユーザーの電子メールアドレスを入力してください。
+Please enter User First Name. : ユーザの名を入力してください。
+Please enter User Last Name. : ユーザーの苗字を入力してください。
+Please fill in the Activity Subject. : アクティビティの件名を入力してください。
+Please fill out all the required fields. To start designing you need to go to "Layout" tab. : すべての必須フィールドに情報を入力してください。 設計を開始するには「レイアウト」にアクセスする必要があります
+Please highlight a document to create a bookmark for. : ブックマークを作成するドキュメントを強調表示してください。
+Please highlight a document to create a bookmark for. : ブックマークを作成するドキュメントを強調表示してください。
+Please make this panel Shared before trying to add it to the Add List. : リストに追加しようとする前に、このパネルの共有を確認してください。
+Please make this panel Shared before trying to add names. : 名前の追加を試みる前にこのパネル共有を確認してください。
+Please provide an Activity Message/Instruction. : アクティビティメッセージ / 指示を入力してください。
+Please save this document before creating an Activity. : アクティビティを作成する前に、このドキュメントを保存してください。
+Please select a document from the Version History tab to compare this document to. : バージョン履歴 タブからこのドキュメントを比較するドキュメントを選択してください。
+Please select a folder from the left hand side to navigate to your documents! : ドキュメントを移動するには、左側からフォルダを選択してください。
+Please select a group. : グループを選択してください。
+Please select a new widget. A description of your selection will appear here. : 新しいウィジェットを選択してください。 説明がここに表示されています。
+Please select a panel. A description of your selection will appear here. : パネルを選択してください。 説明がここに表示されています。
+Please select at least one document for archiving. : アーカイブのために少なくとも 1 つ以上のドキュメントを選択してください。
+Please select at least one document for changing the doc type. : doc typeを変更するには、少なくとも 1 つのドキュメントを選択してください。
+Please select at least one document type. : 少なくとも 1 つ以上のドキュメントタイプを選択してください。
+Please select at least one document. : 1 つ以上のドキュメントを選択してください。
+Please select at least one library to search. : 検索するには、少なくとも 1 つ以上のライブラリを選択してください。
+Please select documents to print. : 印刷するドキュメントを選択してください。
+Please select libraries to update. : 更新ライブラリを選択してください。
+Please select name(s) from right pane to remove. : 削除するには右のペインから名前を選択（複数可）してください。
+Please select name(s) to add. : 追加の名前 ( 複数可 ) を選択してください。
+Please select only one document to compare to the current document : ドキュメントには、現在のドキュメントと比較するために 1 つだけ選択してください。
+Please select the applicable workflow. : 該当するワークフローを選択してください。
+Please select the data column. : データの列を選択してください。
+Please select the delete action. : アクションを削除を選択してください。
+Please select the document type. : ドキュメントの種類を選択してください。
+Please select the file(s) you would like to check out. : チェックアウトしたいファイルを選択してください。
+Please select the files to import. : インポートするファイルを選択してください。
+Please select the save action. : 保存するのアクションを選択してください。
+Please select two documents to compare. : 比較のために 2 つのドキュメントを選択してください。
+Please select two documents to compare. : 比較のために 2 つのドキュメントを選択してください。
+Please Select User Mail System. : ユーザーのメールシステムを選択してください。
+Please specify field 1. : フィールドには 1 を指定してください。
+Please specify search criteria. : 検索条件を指定してください。
+Please wait until the other user releases document lock and latest changes are available to you. : 他のユーザーのリリースドキュメントをロックし、最新の変更が終了するまでお待ちください
+Policy Name : ポリシー名
+Port : ポート
+Position : 位置
+Prefix : 接頭辞
+Preparing Excel for export. Please wait : エクスポート用の Excel を準備しています。 しばらくお待ちください
+Preview Height : プレビューの高さ
+Previous 20 records : 前の 20 件のレコード
+Previous Drafts become "Discarded". Release numbers are always the next Major version number. : 前の下書きは「廃棄」になっています。 リリース番号は常に、次のメジャーバージョン番です
+Previous page : 前のページ
+Previous page group : 前のページグループ
+Previously published, replaced by another version. : これまでに公開され、別のバージョンに置き換えられました。
+Primary lock server : プライマリサーバのロック
+Print : 印刷
+Print Attachments : 添付ファイルを印刷する
+Print Cancelled : 印刷はキャンセルされました
+Print cancelled : 印刷はキャンセルされました
+Print Document : ドキュメントを印刷する
+Print event : イベントの印刷
+Priority : 優先順位
+Private : プライベート
+Problems encountered exporting files.\n Some files could not be exported. Please open  to view any exported %folder% files. : 問題のファイルのエクスポートが発生しました。 \n いくつかのファイルにエクスポートできませんでした。 エクスポートされた任意の %folder%フォルダを開いてファイルを表示してください。
+Problems encountered exporting files.\n Some files could not be exported. Please open %folder% to view any exported files. : 問題のファイルのエクスポートが発生しました。 \n いくつかのファイルにエクスポートできませんでした。 開いている %folder%フォルダにエクスポートされたファイルを表示してください。
+Process id : プロセス ID
+Processing request. Please wait : 処理を要求します。 しばらくお待ちください
+Promote release : リリースを促進
+Prompt : プロンプト
+Properties : プロパティ
+Properties : プロパティ
+Public Panels : 公共パネル
+Published documents. : 公開されたドキュメント。
+Punctuated at thousands : 数千人は句読点を付け
+Purpose/Description : 目的 / 説明
+Radio button : ラジオボタン
+Radio Button Properties : ラジオボタンのプロパティ
+Read Only : 読み取り専用
+Read/Edit Access : 読み取り / 編集アクセス
+Read/Edit Access Tab : 読み取り / 編集アクセス タブ
+Readers : 読者
+Readers Can See Drafts : 読者は下書きを参照することができます
+Reading : 読み取り
+Reading spreadsheet data. Please wait : スプレッドシートのデータの読み取りをしています。 しばらくお待ちください
+Realm : レルム
+Recipient : 受信者
+Recipients : 受信者
+Record count : レコードカウント
+Records Manager Express Integration : Records Manager Express との統合
+Records Manager(s) : レコードマネージャー
+Recycle Bin retentions : ごみ箱の保持
+Redirect : リダイレクトする
+Reference periods to : 参照期間を
+Refresh : 更新
+Refresh view : ビューの更新
+Related Document Types : 関連ドキュメントのタイプ
+Related Documents : 関連ドキュメント
+Related Email & Links : 関連する E メールとリンク
+Related Email : 関連する E メール
+Related Links : 関連リンク
+Release as version : バージョンとしてリリース
+Release button label : ボタンのラベルのリリース
+Release Document : ドキュメントリリース
+Release Document(s) : リリース・ドキュメント
+Release Document button : ドキュメントボタンリリース
+Released : リリースされた
+Released Date : リリース日
+releases in the version stream (discarded drafts are not counted) : バージョンストリームでリリース（廃棄された下書きはカウントされません )
+Remove : 削除
+Remove Adminstrator Role? : 管理者の役割を削除しますか？
+Remove Files : ファイルを削除する
+Remove from current folder : 現在のフォルダから削除する
+Remove Selected Names : 選択した名前を削除する
+Remove sharing information? : 情報の共有を削除しますか？
+Remove Subscribers : サブスクライバを削除する
+Remove widget denied. : 削除ウィジェットが拒否されました。
+Remove widget. : ウィジェットを削除する
+Remove Widget? : ウィジェットを削除しますか？
+Remove/Delete Panel : パネルを削除する
+Rename : 名前を変更する
+Renaming of this folder has been disabled in the folder properties. : このフォルダの名前を変更するには、フォルダのプロパティで無効になっています。
+Repeat every : 繰り返し
+Request acknowledgement : 受信確認を要求する
+Request response : リクエストへの応答
+Require PDF Creator to be installed for document comparison : ドキュメントの比較のためPDF Creatorにインストールするが必要です。
+Response Requested : 要求された応答
+Resrict who can see this folder and its subfolders. Folder Authors and Editors listed above always have access. : このフォルダとそのサブフォルダを読めるが制限する。上記したの フォルダの作成者や編集者は常にアクセスできます。
+Restict read access to : 読者を制限する
+Restore : 復元
+Restore Selected : 選択したエントリを復元する
+Restore Selected Documents : 選択したドキュメントを復元する
+Restoring view state. Please wait : 表示状態を復元します。 しばらくお待ちください
+Restric Draft : 制約事項のドラフト
+Restrict document types : ドキュメントの種類を制限する
+Restrict Printing : 印刷を制限する
+Restrict readers to authors list : 読者を作成者リストから制限する
+Restrict Readers to Authors list above : 上記の作成者のリストから読者を制限する
+Restrict who can create documents in this folder. Folder Editors listed above can always create documents. : このフォルダでドキュメントを作成できるユーザーを限定しています。 上記のフォルダエディターのドキュメントを必ず作成することができます。
+Restrict who can delete documents : ドキュメントを削除できるユーザーを制限する
+Restrict who can delete documents in this folder. : このフォルダ内のドキュメントを削除できるユーザーを制限する
+Restriction limiting access to draft documents to document editors : ドキュメント下書きにアクセスできる編集者を制限する
+RestrictLive Drafts : Liveドラフトを制限する
+Results perspective : 観点の結果
+Retract release : リトラクトのリリース
+Retract Release : リリースをリトラクトする
+Retract version? : バージョンをリトラクトしますか？
+Retrieving data from the server. Please wait : サーバからデータを取得します。 しばらくお待ちください
+Retrieving records. Please wait : レコードを取得しています。 しばらくお待ちください
+Retrieving XML. Please wait : XML を取得しています。 しばらくお待ちください
+Return current document to draft state : 現在のドキュメントを下書き状態に戻す
+Retype password : パスワードを再入力します。
+Review : レビュー
+Review button label : レビューボタンラベル
+Review Cycle : レビューサイクル
+Review cycle : レビューサイクル
+Review every : すべてのレビュー
+Review Period - 'Repeat every' value : レビュー期間のすべての値を繰り返し
+Review period : レビュー期間
+Review Policies : ポリシーの見直し
+Review Policy : ポリシーの確認
+Reviewers : レビュー担当者
+Right : 右
+Right for authors to create revisions of documents they have not authored : 作成者が作成していないドキュメントを改訂する権利
+Rows : 行
+Run archiving tasks at : アーカイブ・タスクを実行する
+Run cleanup tasks at : クリーンアップタスクを実行する
+Run lifecycle and notification tasks at : ライフサイクルと通知を実行する
+Save : 保存
+Save and Close : 保存して閉じる
+Save and Close button : ［保存して閉じる ］ ボタン
+Save as new perspective : 新しい視点として保存する
+Save Forward As : 転送に名前を付けて保存する
+Save Forwards : 転送したものを保存する
+Save Perspective : パースペクティブを保存する
+Saving the document : ドキュメントを保存する
+Scheduled processes : スケジュールされたプロセス
+Search : 検索
+Search Bar : 検索バー
+Search Deleted : 検索を削除しました。
+Search Field : 検索フィールド
+Search for : 検索のための
+Search for : 検索のための
+Search in : 検索で
+Search Results : 検索結果
+Search Saved : 検索保存された
+Search Trail : 検索トレイル
+search value must be a number. : 検索値には数字を指定する必要があります。
+search value must be a valid date. Please use date selection buton next to the field. : 検索値には、有効な日付である必要があります。 フィールドの横の [ 日付の選択ボタン]を使用してください。
+Secondary lock server : セカンダリーロックサーバー
+Section label : 断面ラベル
+Section label : 断面ラベル
+Section order : セクションの順序
+Section style : セクションのスタイル
+Security : セキュリティ
+Select "None" when re-ordering choices. : 注文の選択肢を再作成する場合は、「なし」を選択する
+Select : 選択
+Select a built-in embedded form or type the name of your custom embedded form. : カスタム埋め込みフォームをビルトイン埋め込みフォームまたはタイプの名前を選んでください
+Select a layout style : レイアウトスタイルを選択する
+Select a Widget : ウィジェットを選択する
+Select all : すべてを選択する
+Select All : すべてを選択する
+select criteria : 条件を選択します。
+Select Document Type : ドキュメントのタイプを選択する
+Select font : フォントを選択する
+Select Names : 名前を選択する
+Select people and/or groups. : 人々および / またはグループを選択する
+Select search criteria : 検索条件を選択する
+Select the Applicable Document Types : 該当するドキュメントタイプを選択する
+Select the Applicable Libraries : 該当するライブラリを選択する
+Select the document type above to see its description. : 説明を参照するには、上記のドキュメントタイプを選択する
+Select the options to use for exporting the folder contents. : フォルダの内容をエクスポートするためには使用するオプションを選択する
+Select values : 値を選択する
+Select whether to include/exclude files based on extension : 拡張子に基づき、ファイルを含める / 除外するかどうかを選択する
+Selected : 選択した
+Selected document types : 選択したドキュメントのタイプ
+Selected documents : 選択されたドキュメント
+Selected documents : 選択されたドキュメント
+Selection criteria : 選択基準
+Selection Type : 選択のタイプ
+Send : 送信
+Send Email Notification : メール通知を送信する
+Sender : 送信者
+Sep : 9 月
+Separate entries with comma or semicolon. : コンマまたはセミコロンで区切る
+Serial : シリアル
+Server : サーバー
+Server and File Paths : サーバおよびファイルパス
+Server Web Path is incorrect. : サーバーの Web のパスが間違っています。
+Set as default for current folder : 現在のフォルダのデフォルトとして設定される
+Set as default in this library : このライブラリには、既定値として設定する
+Set Status : ステータスの設定
+Settings : 設定
+Setup Files and License Keys : セットアップファイルとライセンス・キー
+Setup information page : セットアップ情報のページ
+Share current panel. : "現在のパネル : を共有する"
+Share Panel : 共有パネル
+Share panel denied. : 共有パネルが拒否されました。
+Share this Panel : このパネルを共有
+Share with : 共有で
+Shared : 共有しました
+Show : 表示
+Show blank entries as zeroes : ゼロとして空白のエントリの表示
+Show Details Description : 説明の詳細を表示する
+Show User help : ユーザーへルプを表示する
+Since parent folder has read restrictions, you cannot completely remove read restrictions from the current folder. : 親フォルダには、制約事項が読み取り専用であるため、現在のフォルダから読み取り制限を完全に削除することはできません。
+Single : 単一の
+Size : サイズ
+Skip first review if it falls within : 範囲内に収まっている場合、最初のレビューをスキップする
+Sorry, no names were found to turn into SameTime links. : 大変申し訳ございませんが、名はありません SameTime のリンクに見つかりませんでした。
+Sorry, that panel is already on your Dashboard.  Please select a different panel. : 申し訳ございませんが、そのパネルは、ダッシュボード上に存在します。 別のパネルを選択してください。
+Sorry, You do not have access to change this panel. : 申し訳ございませんが、このパネルを変更するアクセス権がありません。
+Sort : 並べ替え
+Sort ascending : 昇順に並べ替える
+Sort descending : 降順並べ替え
+Sorted : ソートされた
+Source file URL : ソースファイルの URL
+Specify who can modify folder properties in addition to editors of any folders above in the hierarchy. Click here to see the names of inherited editors. : 階層内で上記のいずれかのフォルダの編集者に加えて、フォルダのプロパティを変更することができを指定します。 ここをクリックして継承された編集者の名前を参照してください。
+Standard document : 標準ドキュメント
+Start : "[ スタート ] ボタン"
+Start type in search box. : "[ 検索 ] ボックスに入力を開始る"
+Start typing application name : アプリケーション名の入力を開始する
+Start workflow button : "[ ワークフローの開始 ] ボタン"
+Starting from : から開始
+starts with : で始まります。
+Startup page : スタートアップページ
+Starup page : スタートアップページ
+Status : ステータス
+Status Bar : ステータスバー
+Step ID : ステップ ID
+Step name : ステップ名
+Step type : ステップタイプ
+Strict Versioning : 厳密なバージョン管理
+String of PHP files to be included before opening document (COMING SOON). : ドキュメントを開く前に含まれているの文字列 のPHP ファイルです。（近日公開）
+String of PHP files to be included before save section (COMING SOON). : ドキュメントを保存のセクションの前に含まれているの文字列 のPHP ファイルです。（近日公開）
+String value or PHP script enclosed in "<? ?>" that returns a string. "Release Document" will be used if left blank. Available objects are $docova and $user. : 文字列値、または「囲まれた PHP スクリプトですか？ のか > は、文字列を返す。 「ドキュメントリリース「空白のままにした場合に使用されます。 使用可能なオブジェクトは$docova と$user. 
+String value or PHP script enclosed in "<? ?>" that returns a text string; available objects are $docova and $user. : 文字列値、または「囲まれた PHP スクリプトですか？ のか > は、文字列を返す。 使用可能なオブジェクトは$docova と$user. 
+Subform saved. : サブフォームに保存されます。
+Subforms : サブフォーム
+Subject : 件名
+Subject default label text : 件名をデフォルトラベルテキスト
+Subject default value : 件名のデフォルト値
+Subject input translation : 件名の入力変換
+Subject line : 件名行
+Subject/Title : 件名／タイトル
+Submit for review? : レビュー用に送信しますか ?
+Subscribe : サブスクライブ
+Subscribed Libraries : 登録されているライブラリ
+Subscriber Name : サブスクライバの名前です。
+Subscription Restrictions : 契約の制限
+Subscriptions : 購読
+Suffix : サフィックス
+SuperCookie Error : supercookieエラー
+Superseded : 置き換えられます。
+Switch Style : スイッチスタイル
+Sync Subfolders : サブフォルダを同期
+System : システム
+System Mail Message Template : システムの電子メールメッセージのテンプレート
+System message sender name will be used if empty. : 空の場合システムメッセージの送信者の名前が使用されます。
+System Messages : システムメッセージ
+System Tag Search Cloud columns can not be modified. For more info please contact system administrator : システムタグクラウド検索列を変更することはできません。 より多くのインフォメーションのためにシステム管理者に問い合わせてください。
+Tab name : タブ名
+Table : テーブル
+Table Properties : テーブルのプロパティ
+Tag Cloud : タグクラウド
+Tags : タグ
+Tasks : タスク
+Template File : テンプレートファイル
+Template file attachment : テンプレートファイルの添付ファイル
+Template file type : テンプレートファイルの種類
+Template key : テンプレートキー
+Template name : テンプレートの名前
+Template Name : テンプレートの名前
+Template type : テンプレートのタイプ
+Template Version : テンプレートのバージョン
+Templates : テンプレート
+Text : テキスト
+text : テキスト
+Text entry type : テキストエントリタイプ
+Text label : テキストラベル
+Textarea : テキスト領域
+Textarea Properties : テキスト領域のプロパティー
+The : その
+The currently selected widgets will remain intact if you change the layout. : レイアウトを変更した場合は、選択された現在のウィジェットはそのまま残ります。
+The document has been locked for editing by %user% on %lockdate% : ドキュメントは %lockdate% に %user%によって編集用にロックされています。
+The document has been locked on %lockdate% by %locker% on server %server% . : ドキュメントは %lockdate% にの%locker% によって%server% のサーバーにロックされている。
+The document updates done on %modifydate% by %modifier% on server %server% have not yet replicated to your server. : ドキュメントの更新を使用する %modifydate%と、サーバーの %server% は、あなたのサーバにがまだレプリケートされていません。
+The field must contain a value that corresponds to the following list : このフィールドには、次のリストに対応する値が含まれている必要があります
+The following editors of higher level folders can manage this folder : より高いレベルのフォルダには、次の編集者は、このフォルダを管理できます。
+The following fields did not pass the validation : 次のフィールドは、確認プロセスに合格しませんでした
+The information provided cannot be resolved as a Notes doclink or Web URL : 提供された情報をノート doclink または Web URL としては解決できません
+The number of cells does not match the number of fields. : セルの数フィールドの数と一致しません。
+The selected document could not be accessed.\nIt has most likely been deleted. : 選択されたドキュメントにアクセスできませんでした。 \ nIt は削除されました可能性が高い。
+The selected related document has been Deleted. : 選択されたドキュメントは削除されました。
+The selected widget is already on this panel.  Please select a different widget. : 選択したウィジェットは、このパネルにすでに使用されています。 別のウィジェットを選択してください。
+The Server Web Path on the Server and File Paths tab is blank.  Please provide a value. : サーバおよびファイルパス タブの サーバーの Web のパスが空白になっています。 値を入力してください。
+The temporary working folder could not be deleted. Please check that all related documents have been closed and select Retry. : 一時作業フォルダを削除できませんでした。 関連するすべてのドキュメントが閉じられたことを確認して、再試行してください。
+There are no documents to filter. : フィルタにドキュメントはありません。
+There are no documents to filter. : フィルタにドキュメントはありません。
+There are no steps that can be deleted. : 削除できる手順はありません。
+There are no workflow processess available for this document. : このドキュメントの使用可能なワークフロープロセスはありません。
+There is no mail in your inbox. : 受信トレイ内の新着メールはありません。
+thingFactory : 工場出荷時
+This document has version control and its workflow has completed. \nYou can not check-out files.  Please create a new version if required. : このドキュメントにはバージョンのコントロールとそのワークフローが完了しました。 \N チェックアウトしたファイルを表示することができませんでした。 必要に応じて新しいバージョンを作成してください。
+This is a root level folders hence it does not inherit any editors. : したがってこれは、ルートレベルのフォルダには 任意の編集者は継承しません。
+This panel is : このパネルは
+This process might take several minutes to finish so please be patient while this operation is in progress. : この操作には数分かかる場合がありますので今しばらくお待ちください
+This process might take several minutes to finish so please be patient while this operation is in progress.\n\nWould you like to continue? : このプロセスは数分かかる場合がありますの作業が終わるまでで今しばらくお待ちください。 \ n 作業を続行しますか？
+Thumbnail Height : サムネールの高さ
+Thumbnail Width : サムネールの幅
+Time : 時間
+Title : タイトル
+To : へ
+to : へ
+Tool Bar : ツールバー
+Tools : ツール
+Top Banner : トップバナー
+Total : 合計
+Type : タイプ
+Type Key : タイプのキー
+Unable to acces template file. : アクセステンプレートファイルにできません。
+Unable to access Excel object. : Excel オブジェクトにアクセスできません。
+Unable to access file system object. : ファイルシステム・オブジェクトにアクセスできません。
+Unable to access Internet Explorer object. : Internet Explorer のオブジェクトにアクセスできません。
+Unable to access Power Point object. : パワーポイントのオブジェクトにアクセスできません。
+Unable to access shell object. : シェルオブジェクトにアクセスできません。
+Unable to access template file. : テンプレートファイルにアクセスできません。
+Unable to access the local Word Application. : ローカルの Word アプリケーションにアクセスできません。
+Unable to access windows script network object. : Windows スクリプトネットワークオブジェクトにアクセスできません。
+Unable to access windows script network object. : Windows スクリプトネットワークオブジェクトにアクセスできません。
+Unable to access windows script shell object. : Windows スクリプトシェルオブジェクトにアクセスできません。
+Unable to access windows script shell object. : Windows スクリプトシェルオブジェクトにアクセスできません。
+Unable to create bookmark in the same folder as the source document. Please choose an alternate folder. : 元のドキュメントと同じフォルダにブックマークを作成することができません。 別のフォルダを選択してください。
+Unable to create bookmark in the same folder as the source document. Please choose an alternate folder. : 元のドキュメントと同じフォルダにブックマークを作成することができません。 別のフォルダを選択してください。
+Unable to create Excel objects. : Excel オブジェクトを作成できません。
+Unable to create folder : フォルダを作成することができません
+Unable to create temporary folder.  Print cancelled : 一時フォルダを作成できません。 印刷はキャンセルされました
+Unable to create temporary folder. Print cancelled. : 一時フォルダを作成できません。 印刷はキャンセルされました。
+Unable to delete folder : フォルダを削除できません
+Unable to launch Microsoft Word object. : Microsoft Word オブジェクトを起動できません。
+Unable to locate file : ファイルを見つけることができません
+Unable to open folder. The requested folder could not be opened. : フォルダを開くことができません。 要求されたフォルダを開くことができませんでした。
+Unable to run document comparison.  PDF Creator is not installed. : ドキュメントの比較を実行できません。 PDF Creator がインストールされていません。
+Unable to run document comparison. PDF Creator is not installed. : ドキュメントの比較を実行できません。 PDF Creator がインストールされていません。
+Unable to update SuperCookie (%cookie%)\n Please contact Administrator. : SuperCookie を更新できません (%cookie%) \ n 管理者に連絡してください。
+Unable to update SuperCookie : SuperCookie を更新できません。
+Underline : 下線を入れ
+Unlock : ロックを解除する
+Unselected : 選択されていない
+Unsubscribe : アンサブスクライブ
+Update : 更新
+Update Bookmarks to Latest Version : ブックマークを最新のバージョンに更新する
+Update current perspective : 現在のパースペクティブの更新する
+Update Design : デザインの更新
+Update full text index when file import is completed : フル・テキスト・インデックス・ファイルのインポートの完了後にアップデートする
+Update Library Design : 更新ライブラリの設計
+Update View Columns. : 表示の列を更新する
+Updating checked out file list from the server. Please wait : サーバーからチェックアウトされたファイルのリストを更新しています。 しばらくお待ちください
+Updating checked out file list on the server. Please wait : チェックされているサーバー上のファイルのリストを更新しています。 しばらくお待ちください
+Updating folder and document properties. Please wait : フルテキスト検索インデックスを更新しています。 しばらくお待ちください
+Updating full text search index. Please wait : フルテキスト検索インデックスを更新しています。 しばらくお待ちください
+Updating library design. Please wait : ライブラリの設計を更新しています。 しばらくお待ちください
+Uploader Pro : Uploader Pro
+Use : 使用する
+Use as default document workflow if none specified : 指定がなければデフォルトのドキュメントワークフローを使用する
+Use DOCOVA for user authentication : ユーザ認証のためにDOCOVAを使用する 
+Use jQuery onDomReady : onDomReadyにJQuery を使用する
+Use LDAP/AD for user authentication : ユーザー認証に LDAP / AD を使用する
+Use Widget : ウィジェットを使用する
+User : ユーザ
+User Comment : ユーザのコメント
+User Dashboard : ユーザーダッシュボード
+User Experience : ユーザー体験
+User Experience Attributes : ユーザー体験の属性
+User ID : ユーザー ID
+User Profile : ユーザプロファイル
+User Profile Creation : ユーザプロファイルの作成
+User Profiles : ユーザプロファイル
+User Role : ユーザーの役割
+User selects version : ユーザバージョンを選択する
+User Settings : ユーザー設定
+User Theme : ユーザーのテーマ
+Username : ユーザ名
+Users should not be accessing the libraries while this operation is in progress. : ユーザがこの操作の実行中は、ライブラリにアクセスするべきではありません。
+Uses SSL? : SSL を使用してますか？
+Validation function could not be executed due to the following error : 検証機能は次のエラーのために実行されませんでした
+Value : 値
+Value sum : 値の合計
+Version : バージョン
+Version History : バージョン履歴
+Versioning : バージョン管理
+Versioning options : バージョン管理オプション
+View : 表示
+View Column Settings : 列の設定を表示する
+View Columns : 列を表示する
+View Manager Hierarchy : Managerを表示する 
+View Options Bar : オプションバーを表示する
+Viewing the document : ドキュメントの表示しています
+Visibility : 可視性
+Web Bookmark : Web ブックマーク
+Web components and desktop client : Web コンポーネントとクライアントデスクトップ
+Web components only : Web コンポーネントのみ
+Web Path : Web へのパス
+WebQueryOpen event : WebQueryOpen イベント
+WebQuerySave event : WebQuerySave イベント
+week(s) : 週
+When a new version is created include all Related Email links? : 新しいバージョンが作成されたときに、関連するすべての電子メールのリンクが含まれますか？
+When a new version is created include all Related Links? : 新しいバージョンが作成されたときに、関連するすべてのリンクが含まれていますか？
+When a new version is created, copy links for the following document types : 新しいバージョンが作成されたときは、次の種類のドキュメントのリンクをコピーする
+When applying changes, copy the following settings to all subfolders of the current folder : 変更を適用する際には、次の現在のフォルダのすべてのサブフォルダに設定をコピーする
+When library selected : ライブラリを選択した場合
+When linking to one or more documents, cross link automatically, creating links to the source document in the target document simultaneously . : 1つまたは複数のドキュメントにリンクする場合、自動的にクロスリンクされ、ターゲットドキュメントでソースドキュメントへのリンクを同時に作成します。
+When linking to one or more documents, linked files option allows the attachments in related documents to be launched when the main file is viewe/edited. Allows for the use of embedded/linked content within Office documents (eg. Excel, Word, Powerpoint). : 1 つまたは複数の文書を、リンクされたファイルオプション関連の主なファイルはファイルビューアのショートカット / 編集されたときに開始したドキュメントの添付ファイルの許可にリンクするときにします。 Office 文書に埋め込まれた / リンクされたコンテンツの（ eg を使用することができます。 Excel 、 Word 、 Powerpoint ）。
+When related document has newer version : 関連ドキュメントが新しいバージョンの場合
+whenever a comment is entered :  コメントが入力されたときに
+Who : 誰
+Who can create folders at the library root level? : ライブラリのルートレベルにフォルダーを作成することはできますか？
+Width : 幅
+Workflow : ワークフロー
+Workflow buttons visibility : ワークフローボタンの可視性
+Workflow Cancelled : ワークフローはキャンセルされました
+Workflow on after release function could not be executed due to the following error : 次のエラーが発生したため、リリース機能する後でワークフローを実行できませんでした
+Workflow on approve function could not be executed due to the following error : 次のエラーが発生したため、ワークフロー承認機能は実行されませんでした
+Workflow on before release function could not be executed due to the following error : 次のエラーが発生したため、リリース機能する前にワークフローを実行できませんでした
+Workflow on complete function could not be executed due to the following error : 次のエラーが発生したため、、完全な機能では、ワークフローを実行できませんでした
+Workflow on deny  function could not be executed due to the following error : 次のエラーが発生したため、、拒否機能のワークフローを実行できませんでした
+Workflow on start function could not be executed due to the following error : 次のエラーが発生したため、起動機能では、ワークフローを実行できませんでした
+Workflow Process Settings : ワークフロープロセスの設定
+Workflow Processes : ワークフローのプロセス
+Workflow Start : ワークフローの開始
+Workflow Step Complete : ワークフローのステップを完了しました
+Workflow Step Paused : ワークフローステップを一時停止
+Workflow Step Settings : ワークフローのステップの設定
+Workflow validation function could not be executed due to the following error : 次のエラーが発生したため、ワークフローの検証機能には実行できませんでした
+Working Folder Busy : 作業フォルダが混雑しています
+Workspace : ワークスペース
+Would you like to close your browser window? : ブラウザウィンドウを閉じますか？
+Would you like to continue? : 処理を続行しますか ?
+Would you like to create a Bookmark entry for the current document? : 現在のドキュメントのブックマークエントリを作成しますか ?
+Would you like to create a Bookmark entry for the highlighted document? : ハイライトされたドキュメントのブックマークエントリを作成しますか ?
+Would you like to create a Bookmark entry for the highlighted document? : ハイライトされたドキュメントのブックマークエントリを作成しますか ?
+Would you like to save the changes to this document? : 変更は、このドキュメントに保存しますか？
+XML Node cannot be empty. : XML ノードは空にできません。
+XML NodeName : XML ノード名
+xmlNode : XmlNode
+year(s) : 年
+Yes : はい
+You and the folder managers can always edit this document. : あなたとフォルダの管理者は、このドキュメントをいつでも編集することができます。
+You are about to archive %entries% document(s).  Are you sure? : "%entries%ドキュメントをアーカイブしようとしています。 実行してよろしいですか ?"
+You are about to archive : アーカイブしようとしています
+You are about to archive current document.  Are you sure? : 現在ドキュメントをアーカイブしようとしています。 実行してよろしいですか ?
+You are about to backtrack the workflow.  Are you sure? : ワークフローに後戻りしようとしています。 実行してよろしいですか ?
+You are about to cancel the workflow. This action will delete the current workflow and return this document to Draft state.\r\rDo you want to continue? : ワークフローをキャンセルしようとしています。現在のワークフローを削除するには、このドキュメントの下書きの状態に戻ります。 \r\r を続行しますか ?
+You are about to Check-out the following files : ファイルからチェックアウトしようとしています
+You are about to delete the current Saved Search named %searchname%.  Are you sure? : 検索名 % searchname ％を削除しようとしています。 実行してよろしいですか ?
+You are about to deny the approval.  Are you sure? : 承認を拒否しようとしています。 実行してよろしいですか ?
+You are about to pause the workflow. This action will stop past due reminders.\r\rAre you sure? : ワークフローを一時停止しようとしています。 このアクションは、過去のリマインダーを停止します。 \ r \ 実行してよろしいですか ?
+You are about to reactivate discarded draft document.\rAre you sure? : 破棄された下書きのドキュメントを再び処分しようとしています。実行してよろしいですか？
+You are about to remove a widget from this panel.  Are you sure? : このパネルからウィジェットを削除しようとしています。 実行してよろしいですか ?
+You are about to remove Administrator Access for yourself.  Are you sure? : あなた自身のための管理者アクセス権を削除しようとしています。 実行してよろしいですか ?
+You are about to retract a published document.\rAre you sure? : 公開されたドキュメントをリトラクトします。実行しますか？
+You are about to retract a released document.  Please select retract options : リリースされたドキュメントをリトラクトします。 リトラクトのオプションを選択してください。
+You are about to start workflow process for this document.  Are you sure? : このドキュメントのワークフロープロセスを開始しようとしています。 実行してよろしいですか ?
+You are changing this panel to be Private. Any sharing options will be cleared. Are you sure? : このパネルをプライベートに変更しています。 任意の共有オプションがクリアされます。 実行してよろしいですか ?
+You are not authorized to access this document. : このドキュメントにアクセスする権限がありません。
+You are not authorized to edit this document. : このドキュメントを編集することは許可されていません。
+You are not authorized to edit this document. : このドキュメントを編集することを許可されていません。
+You are not authorized to open this document, or the document could not be found : このファイルを開く管理者からの権限がないか、ファイルが見当たりません。
+You are not permitted to print this document : このドキュメントの印刷を許可されていません。
+You are requesting to delete the panel named %paneltitle% from your Dashboard. Are you sure? : 名前付き %paneltitle%パネルをダッシュボードから削除することを要求しています。 実行してよろしいですか ?
+You can change the layout style of a panel at any time. : 任意の時刻にパネルのレイアウトのスタイルを変更することができます。
+You can use either your own internal LDAP/AD directory to authenticate the users, or you can use DOCOVA to authenticate the users, or you can use both. : あなた自身の内部 LDAP / AD ディレクトリにユーザの認証を使用するか DOCOVAを使用して のユーザーを認証することができ、またはその両方を使用することができます。
+You cannot modify LDAP directory members. : LDAP ディレクトリのメンバを変更することはできません。
+You cannot modify the current document until the latest changes are available to you. Please try again in few minutes. : 最新の変更を利用できるようになるまでは、現在のドキュメントを変更することはできません。 数分後に再度実行してください。
+You cannot select the current folder. : 現在のフォルダを選択することはできません。
+You currently have no pending Activities to display. : 現在表示する保留中のアクティビティがありません。
+You do not have sufficient rights to create documents in the selected folder. Please choose an alternate folder. : 選択したフォルダにドキュメントを作成するための十分な権限がありません。 別のフォルダを選択してください。
+You do not have sufficient rights to create documents in the selected folder. Please choose an alternate folder. : 選択したフォルダにドキュメントを作成するための権限がありません。 別のフォルダを選択してください。
+You have error : エラーが発生しました
+You have insufficient access to create a root folder. : ルートフォルダを作成するための不十分なアクセス権を持っています。
+You have insufficient access to cut this folder. : このフォルダにカットの不十分なアクセスがあります。
+You have insufficient access to delete this folder. : このフォルダを削除するための不十分なアクセス権を持っています。
+You have insufficient access to paste into this folder. : このフォルダに貼り付けるための不十分なアクセス権を持っています。
+You have no checked out files associated with this document. : このドキュメントに関連付けられたファイルはありません
+You must assign this Action to the Document Owner or select one or more people for the Recipient List. : "受信者のリストを表示するには、このアクションは : ドキュメントの所有者であるか、 1 つまたはそれ以上を選択して割り当てる必要があります。"
+You must choose an Action : アクションを選択する必要があります
+You must enter the numeric values fo major and minor version number. : 数値 のメジャーバージョンとマイナーバージョンの番号を入力する必要があります。
+You must have at least one facet map field. : 少なくとも 1 つのファセットのフィールドをマップしておく必要があります。
+You must have at least one facet map field. : 少なくとも 1 つのファセットのフィールドをマップしておく必要があります。
+You must select participant names for all steps of the document workflow. : ドキュメントワークフローのすべてのステップの参加者の名前を選択する必要があります。
+You selected the current document.  Please select a different version. : 現在のドキュメントが選択されています。 別のバージョンを選択してください。
+You, folder managers and Additional Editors can always read this document. : フォルダは、管理者およびその他のエディターは、このドキュメントをいつでも読むことができます
+Your Libraries : あなたのライブラリ
+Your search was deleted. : あなたの検索が削除されました。
+Your search was saved. : あなたの検索が保存されました。
+Your session has timed out.  Please press F5 to login again. : セッションがタイムアウトしました。 F5 キーを押して、再度ログインしてください。

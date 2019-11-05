@@ -1,0 +1,155 @@
+<div id="appearance_container">
+	<ul>
+		<li><a href="#tab1">Paper color and subject options</a></li>
+		<li><a href="#tab2">More section options</a></li>
+		<li><a href="#tab3">Additional options</a></li>
+	</ul>
+	<div id="tab1">
+		<table class="elmContainer" cellspacing="0">
+			<tr>
+				<td class="firstRw">{% trans %}Paper color{% endtrans %}:</td>
+				<td class="firstRw">
+			        <input type="text" id="PaperColor" name="PaperColor" value="{{ document is defined ? '#' ~ document.getPaperColor : '' }}" class="text ui-widget-content ui-corner-all" />
+					<span id="CBPaperColor" class="colorCode" style="background-color:{{ document is defined ? '#' ~ document.getPaperColor : '' }}"></span>
+					<button class="colorPicker" field="PaperColor"></button>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Subject default label text{% endtrans %}:</td>
+				<td>
+					<input type="text" name="CustomSubjectLabelText" value="{{ document is defined ? document.getSubjectLabel : 'Subject/Title'|trans }}" class="text ui-widget-content ui-corner-all" />
+					<span class="elNote">{% trans %}Defaults to "Subject/Title".{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Subject default value{% endtrans %}:</td>
+				<td>
+            		<textarea class="text ui-widget-content ui-corner-all" name="CustomSubjectDefaultFormula">{{ document is defined ? document.getCustomSubjectFormula : '' }}</textarea>
+					<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a text string; available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Subject input translation{% endtrans %}:</td>
+				<td>
+					<textarea class="text ui-widget-content ui-corner-all" name="CustomSubjectTranslationFormula">{{ document is defined ? document.getTranslateSubjectTo : '' }}</textarea>
+					<span class="elNote">{% trans %}String value or PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a text string; available objects are $docova and $user.<br>e.g. <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="blue">'Enter Subject'</span> : <span class="blue">''</span>; <span class="red">?&gt;</span>{% endtrans %}</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="tab2">
+		<table class="elmContainer" cellspacing="0">
+			<tr>
+				<td class="firstRw">{% trans %}Subject and Status fields{% endtrans %}:</td>
+				<td class="firstRw">
+					<label><input type="checkbox" value="1" name="HideSubject" {{ document is defined and document.getHideSubject ? 'checked' : '' }} /> {% trans %}Display Subject and Status in "More" section{% endtrans %}</label>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}'More' section label{% endtrans %}:</td>
+				<td>
+            		<input type="text" name="MoreSectionLabel" value="{{ document is defined ? document.getMoreSectionLabel : '' }}" class="text ui-widget-content ui-corner-all" />
+					<span class="elNote">{% trans %}Defaults to 'More'{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Hide entire document header when{% endtrans %}:</td>
+				<td>
+					<label><input type="checkbox" value="R" name="HideHeaderRead" {{ document is defined and document.getHideOnReading ? 'checked' : '' }} /> {% trans %}Reading{% endtrans %}</label> 
+					<label><input type="checkbox" value="E" name="HideHeaderEdit" {{ document is defined and document.getHideOnEditing ? 'checked' : '' }} /> {% trans %}Editing{% endtrans %}</label> 
+					<label><input type="checkbox" value="C" class="hideShow" show="hcustom" name="HideHeaderCustom" {{ document is defined and document.getHideOnCustom  ? 'checked' : '' }} /> {% trans %}Custom{% endtrans %}</label>
+				</td>
+			</tr>
+			<tr class="hcustom{% if document is not defined or document.getHideOnCustom %} hidden{% endif %}">
+				<td>{% trans %}Custom hide when PHP script{% endtrans %}:</td>
+				<td>
+					<textarea class="text ui-widget-content ui-corner-all" name="CustomHeaderHideWhen">{{ document is defined ? document.getCustomHeaderHideWhen : '' }}</textarea>
+					<span class="elNote">{% trans %}PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns a boolean value [true (hide) or false (show)]; available objects are $docova and $user.{% endtrans %}
+              		{% trans %}e.g.{% endtrans %} <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="purple">true</span> : <span class="purple">false</span>; <span class="red">?&gt;</span></span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<span class="elNote">{% trans %}In all cases, PHP script enclosed in "<span class="red">&lt;? ?&gt;</span>" that returns true (allowed) or false (not allowed). Default is true. Available objects are $docova and $user.{% endtrans %}<br />
+					{% trans %}e.g.{% endtrans %} <span class="red">&lt;?</span> <span class="purple">return</span> $docova->isNew() ? <span class="purple">true</span> : <span class="purple">false</span>; <span class="red">?&gt;</span></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="hdr" colspan="2">{% trans %}Document Details Tab{% endtrans %}</td>
+			</tr>
+			<tr>
+				<td class="firstRw">{% trans %}Change document author{% endtrans %}:</td>
+				<td class="firstRw exc"><input type="text" name="CustomChangeDocAuthor" value="{{ document is defined ? document.getCustomChangeDocAuthor : '' }}" class="text ui-widget-content ui-corner-all" /></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Show Details Description{% endtrans %}:</td>
+				<td><input type="text" name="CustomHideDescription" value="{{ document is defined ? document.getCustomHideDescription : '' }}" class="text ui-widget-content ui-corner-all" /></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Keywords{% endtrans %}:</td>
+				<td><input type="text" name="CustomHideKeywords" value="{{ document is defined ? document.getCustomHideKeywords : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Review Cycle{% endtrans %}:</td>
+				<td><input type="text" name="CustomHideReviewCycle" value="{{ document is defined ? document.getCustomHideReviewCycle : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Archiving{% endtrans %}:</td>
+				<td><input type="text" name="CustomHideArchiving" value="{{ document is defined ? document.getCustomHideArchiving : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+			</tr>
+			<tr>
+				<td class="hdr" colspan="2">{% trans %}Read/Edit Access Tab{% endtrans %}</td>
+			</tr>
+			<tr>
+				<td class="firstRw">{% trans %}Change Owner{% endtrans %}:</td>
+				<td class="firstRw"><input type="text" name="CustomChangeOwner" value="{{ document is defined ? document.getCustomChangeOwner : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Change Additional Editors{% endtrans %}:</td>
+				<td><input type="text" name="CustomChangeAddEditors" value="{{ document is defined ? document.getCustomChangeAddEditors : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Change Restrict read access to{% endtrans %}:</td>
+				<td><input type="text" name="CustomChangeReadAccess" value="{{ document is defined ? document.getCustomChangeReadAccess : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+			</tr>
+		</table>
+	</div>
+	<div id="tab3">
+		<table class="elmContainer" cellspacing="0">
+			<tr>
+				<td class="firstRw">{% trans %}Top Banner{% endtrans %}:</td>
+				<td class="firstRw"><input type="text" name="CustomTopBanner" value="{{ document is defined ? document.getTopBanner : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Bottom Banner{% endtrans %}:</td>
+				<td><input type="text" name="CustomBottomBanner" value="{{ document is defined ? document.getBottomBanner : '' }}" class="text ui-widget-content ui-corner-all"/></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Section style{% endtrans %}:</td>
+				<td>
+					<label><input type="radio" value="1" class="hideShow" show="sectionLbl" name="ContentAppearance" {{document is not defined or document.getSectionStyle ? 'checked' : '' }} /> {% trans %}Default style{% endtrans %}</label> 
+					<label><input type="radio" value="0" class="hideShow" hide="sectionLbl" name="ContentAppearance" {{document is defined and not document.getSectionStyle ? 'checked' : '' }} /> {% trans %}Plain{% endtrans %}</label>
+				</td>
+			</tr>
+			<tr class="sectionLbl{% if document is defined and not document.getSectionStyle %} hidden{% endif %}">
+				<td>{% trans %}Section label{% endtrans %}:</td>
+				<td><input type="text" name="lblContent" value="{{ document is defined ? document.getSectionLabel : '' }}" class="text ui-widget-content ui-corner-all" /></td>
+			</tr>
+			<tr>
+				<td>{% trans %}Background color{% endtrans %}:</td>
+				<td>
+					<input type="text" value="#{{ document is defined ? document.getBackgroundColor : 'DFDFDF' }}" name="ContentBackgroundColorSelect" id="ContentBackgroundColorSelect" class="text ui-widget-content ui-corner-all" />
+					<span class="colorCode" style="background-color:{{ document is defined ? '#' ~ document.getBackgroundColor : '#DFDFDF' }}"></span>
+					<button class="colorPicker" field="ContentBackgroundColorSelect"></button>
+				</td>
+			</tr>
+			<tr>
+				<td>{% trans %}Additional style CSS text{% endtrans %}:</td>
+				<td>
+					<textarea class="text ui-widget-content ui-corner-all" name="ContentStyleSelect">{{ document is defined ? document.getAdditionalCss : "padding:4px;width:100%;" }}</textarea>
+					<span class="elNote">{% trans %}Do not add "background-color" attribute.{% endtrans %}</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

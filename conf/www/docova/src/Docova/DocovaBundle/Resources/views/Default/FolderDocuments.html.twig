@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleFolderBase.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleActionBar.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/multiselect.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/viewObjects.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/multiselect.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/viewContents.js') }}"></script>
+<script language="JavaScript" type="text/javascript">
+var info = {
+	"DocID" : "{{ folder ? folder.getId : 'RCBIN' ~ library.getId }}",
+	"DocKey" : "{{ folder ? folder.getId : 'RCBIN' ~ library.getId }}",
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}", 
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"SystemKey" :  "",
+	"isRecycleBin" : "{{ not folder ? 'true' : '' }}",
+	"CanCreateDocuments" : "{{ user_access.ccdocument ? 'true' : '' }}",
+	"CanSoftDeleteDocuments" : "{{ user_access.ccdocument ? 'true' : '' }}",
+	"CanDeleteDocuments" : "{{ user_access.cddocument ? 'true' : '' }}",
+	"CanCreateRevisions" : "{{ user_access.ccrevision ? 'true' :'' }}",
+	"DocAccessLevel" : "{{ user_access.docacess }}",
+	"DocAccessRole" : "{{ user_access.docrole }}",
+	"DbAccessLevel" : "{{ user_access.dbaccess }}",
+	"CutCopyPaste" : "{% if folder and folder.getDisableCCP == true %}1{% endif %}",
+	"HTTP_Referer" : "{{ url('docova_leftnav') }}",
+	"Query_String" : "OpenDocument",
+	"Query_String_Decoded" : "OpenDocument",
+	"Path_Info_Decoded" : "{{ path('docova_allbydockey', {'key' : (folder ? folder.getId : 'RCBIN' ~ library.getId) }) }}?OpenDocument",
+	"SSLState" : "",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"LibraryKey" : "{{ library.getId }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length -1] }}",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length-2] }}",
+	"DocumentTypeOption" : "{% if folder %}{% if not folder.getDefaultDocType %}N{% elseif folder.getDefaultDocType == -1 %}A{% else %}S{% endif %}{% endif %}", 
+	{% set folder_doctypes_list = '' %}
+	{% set defaultDocType = '' %}
+	{% if folder and folder.getApplicableDocType.count > 0 %}
+		{% for doctype in folder.getApplicableDocType %}
+			{% set folder_doctypes_list = folder_doctypes_list ~ ", " ~ doctype.getId %}
+			{% if doctype.getId == folder.getDefaultDocType %}
+			{% set defaultDocType = doctype.getDocName %}
+			{% endif %} 
+		{% endfor %}
+		{% set folder_doctypes_list = folder_doctypes_list[2:] %}
+	{% endif %}
+	"DocumentType" : "{{ folder_doctypes_list }}",
+	"SyncNav" : "{% if load_doc_id %}1{% endif %}",
+	"LoadDoc" : "{{ load_doc_id }}",
+	"ImgPath" : "{{ asset('bundles/docova/images/') }}",
+	"FolderID" : "{{ folder ? folder.getId : 'RCBIN' ~ library.getId }}", 
+	"FolderParentID" : "",
+	"FolderName" : "{{ folder ? folder.getFolderName : 'Recycle Bin'|trans }}",
+	"CreatedBy" : "{{ folder ? folder.getCreator.getUserNameDnAbbreviated : '' }}",
+	"CreatedDate" : "{{ folder ? folder.getDateCreated|date('Y/m/d H:i:s') : '' }}",
+	{% if library.getDefaultPerspective %}
+		{% if library.getDefaultPerspective.getIsSystem == true %}
+			{% set default_perspective = 'system_' ~ library.getDefaultPerspective.getId %}
+		{% else %}
+			{% set default_perspective = 'custom_' ~ library.getDefaultPerspective.getId %}
+		{% endif%}  
+	{% elseif folder %}
+		{% if folder.getDefaultPerspective.getIsSystem == true %}
+			{% set default_perspective = 'system_' ~ folder.getDefaultPerspective.getId %}
+		{% else %}
+			{% set default_perspective = 'custom_' ~ folder.getDefaultPerspective.getId %}
+		{% endif%}
+	{% else %}
+		{% set default_perspective = 'system_' ~ valid_perspectives[0].getId %}
+	{% endif %}
+	"DefaultPerspective" : "{{ default_perspective }}",
+	"FolderPerspectives" : "{% if folder and folder.getDefaultPerspective.getIsSystem != true %}custom_{{ folder.getDefaultPerspective.getId }}{% endif %}",
+	"MailAcquireDialogUrl" : "{% if user.getUserProfile.getUserMailSystem in ['N','G','Y','H','X'] %}{{ path('docova_mailacquire') }}?OpenForm{% elseif user.getUserProfile.getUserMailSystem == 'O' %}{{ path('docova_outlookmailacquire') }}?OpenForm{% endif %}",
+	"MailAcquireMessagesDialogUrl" : "{% if user.getUserProfile.getUserMailSystem in ['N','G','Y','H','X'] %}{{ path('docova_mailacquiremessages') }}?OpenForm{% elseif user.getUserProfile.getUserMailSystem == 'O' %}{{ path('docova_outlookacquiremessages') }}?OpenForm{% endif %}{% if user.getUserProfile.getUserMailSystem == 'O' %}&ParentUNID={{ folder ? folder.getId : -1 }}{% endif %}",
+	"UserMailSystem" : "{{ user.getUserProfile.getUserMailSystem }}", 
+	"RMEEnabled" : "",
+	{% set fltr_fields = '' %}
+	{% if folder %}
+		{% if folder.getFltrField1 %}
+			{% set fltr_fields = fltr_fields ~ folder.getFltrField1.getXMLName ~ ';' %}
+		{% else %}
+			{% set fltr_fields = fltr_fields ~ '0;' %}
+		{% endif %}
+		{% if folder.getFltrField2 %}
+			{% set fltr_fields = fltr_fields ~ folder.getFltrField2.getXMLName ~ ';' %}
+		{% else %}
+			{% set fltr_fields = fltr_fields ~ '0;' %}
+		{% endif %}
+		{% if folder.getFltrField3 %}
+			{% set fltr_fields = fltr_fields ~ folder.getFltrField3.getXMLName ~ ';' %}
+		{% else %}
+			{% set fltr_fields = fltr_fields ~ '0;' %}
+		{% endif %}
+		{% if folder.getFltrField4 %}
+			{% set fltr_fields = fltr_fields ~ folder.getFltrField4.getXMLName %}
+		{% else %}
+			{% set fltr_fields = fltr_fields ~ '0' %}
+		{% endif %}
+	{% endif %}
+	{% set ufltr_fields = '' %} 
+	{% set ufltr_values = '' %}
+	{% if user.getUserProfile.getFltrField1 %}
+		{% set ufltr_fields = ufltr_fields ~ user.getUserProfile.getFltrField1.getXMLName ~ ';' %}
+		{% set ufltr_values = ufltr_values ~ (user.getUserProfile.getFltrFieldVal1 ? user.getUserProfile.getFltrFieldVal1 ~ ';' : '') %}
+	{% endif %} 
+	{% if user.getUserProfile.getFltrField2 %}
+		{% set ufltr_fields = ufltr_fields ~ user.getUserProfile.getFltrField2.getXMLName ~ ';' %}
+		{% set ufltr_values = ufltr_values ~ (user.getUserProfile.getFltrFieldVal2 ? user.getUserProfile.getFltrFieldVal2 ~ ';' : '') %}
+	{% endif %} 
+	{% if user.getUserProfile.getFltrField3 %}
+		{% set ufltr_fields = ufltr_fields ~ user.getUserProfile.getFltrField3.getXMLName ~ ';' %}
+		{% set ufltr_values = ufltr_values ~ (user.getUserProfile.getFltrFieldVal3 ? user.getUserProfile.getFltrFieldVal3 ~ ';' : '') %}
+	{% endif %} 
+	{% if user.getUserProfile.getFltrField4 %}
+		{% set ufltr_fields = ufltr_fields ~ user.getUserProfile.getFltrField4.getXMLName ~ ';' %}
+		{% set ufltr_values = ufltr_values ~ (user.getUserProfile.getFltrFieldVal4 ? user.getUserProfile.getFltrFieldVal4 ~ ';' : '') %}
+	{% endif %} 
+	{% if ufltr_fields|length > 0 %}
+		{% set ufltr_fields = ufltr_fields[:ufltr_fields|length - 1] %}
+	{% endif %} 
+	{% if ufltr_values|length > 0 %}
+		{% set ufltr_values = ufltr_values[:ufltr_values|length - 1] %}
+	{% endif %} 
+	
+	"fltrFieldNodes" : "{{ fltr_fields }}",
+	"EnableFolderFiltering" : "{% if folder and folder.getFiltering %}1{% endif %}",
+	"UserFltrFieldNodes" : "{{ ufltr_fields }}",
+	"UserFltrFieldNodeVals" : "{{ ufltr_values }}",
+	"RequirePDFCreator" : "",
+	"UseContentPaging" : "{% if folder and folder.getPagingCount %}1{% endif %}",
+	"MaxDocCount" : "{% if folder and folder.getPagingCount %}{{ folder.getPagingCount }}{% else %}100{% endif %}",
+	"DisableBookmarks" : "{% if folder and folder.getDisableTCB == true %}1{% endif %}",
+	"SessionDateFormat" : '{{ date_format|replace({'m' : 'MM', 'd' : 'DD', 'Y' : 'YYYY'}) }}',
+	"MembersEnabled" : '',
+	"PublicAccessEnabled" : '',
+	"LimitPathLength" : {{ settings.getLimitFolderPathLength and settings.getFolderPathLength ? settings.getFolderPathLength : 0 }},
+	"refreshView" : '{% trans %}Refresh view{% endtrans %}',
+	"selectAll" : '{% trans %}Select All{% endtrans %}',
+	"deselectAll" : '{% trans %}Deselect All{% endtrans %}',
+	"expandAll" : '{% trans %}Expand All{% endtrans %}',
+	"collapseAll" : '{% trans %}Collapse All{% endtrans %}',
+	"sortAscending" : '{% trans %}Sort ascending{% endtrans %}',
+	"sortDescending" : '{% trans %}Sort descending{% endtrans %}',
+	"sortDefault" : '{% trans %}Default sort{% endtrans %}',
+	"deleteColumn" : '{% trans %}Delete column{% endtrans %}',
+	"insertColumn" : '{% trans %}Insert column{% endtrans %}',
+	"appendColumn" : '{% trans %}Append column{% endtrans %}',
+	"categorize" : '{% trans %}Categorize{% endtrans %}',
+	"properties" : '{% trans %}Properties{% endtrans %}',
+    "externalView" : '{% if dataView is defined %}{{ dataView }}{% endif %}'
+};
+
+//---------------------------------------------------------------------
+InitVars(info);
+PreloadBaseImages();
+</script>
+
+</head>
+<body text="#000000" SCROLL="no" oncontextmenu="return false;" class="ui-widget">
+	<div id="viewMainContainer" style="display:;">
+		<!-------------------------- non-scrollable header ----------------------->
+		<div id="divHeaderSection" style="width: 100%; border-top:0; border-bottom:0; visibility:hidden;">
+			<!------------------------------------------------------>
+			<div id="actionPaneHeader" class="wrapper" style="width: 100%; padding: 4px 6px 3px 6px;">
+				<table border=0 cellspacing=0 cellpadding=0 width=100%>
+					<tr>
+						<td id="tdActionBar">
+							{% if user_access.ccdocument and folder and (folder.getApplicableDocType|length > 0 or folder.getDefaultDocType != null) %}
+							<a onclick="ViewCreateDocument(); return false;" href="" primary="ui-icon-document" secondary="">{% if folder.getApplicableDocType|length != 1 %}{% trans %}New Document{% endtrans %}{% else %}New {{ defaultDocType }}{% endif %}</a>
+							{% endif %}
+							{% if not folder %}
+								<a onclick="objView.UndeleteSelectedEntries(); try { parent.frames['fraLeftFrame'].ReloadLibraryByID( docInfo.LibraryKey, '', false); } catch (e){}; return false;" href="" primary="ui-icon-extlink" secondary="">{% trans %}Restore Selected{% endtrans %}</a>
+								{% if is_granted('ROLE_ADMIN') %}
+								<a onclick="objView.SelectAllEntries(); objView.RemoveSelectedEntries(); return false;" href="" primary="ui-icon-trash" secondary="">{% trans %}Empty Recycle Bin{% endtrans %}</a>
+								{% endif %}
+							{% endif %}
+							<a onclick="CreateEditSubmenu(this); return false;" href="" primary="ui-icon-pencil" secondary="ui-icon-triangle-1-s">{% trans %}Edit{% endtrans %}</a>
+							<a onclick="CreateViewSubmenu(this); return false;" href="" primary="ui-icon-image" secondary="ui-icon-triangle-1-s">{% trans %}View{% endtrans %}</a>
+							<a onclick="CreateToolsSubmenu(this); return false;" href="" primary="ui-icon-wrench" secondary="ui-icon-triangle-1-s">{% trans %}Tools{% endtrans %}</a>
+							{% include '::customActionButtons.html.twig' ignore missing %}
+						</td>
+						<td align="right">&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--- BEGIN Document View header ----->
+			<div id="divViewHeader" style="width:100%;padding: 0px 0px 0px 0px;">
+			<!------------------------------------------------------>
+				<div id="divToolbarSearch" style="display:none; padding: 4px 6px 4px 6px; border-top: 1px solid #CCC;"> 
+					<div id="divSearchQuery" style="display:none;"></div>
+					<div id="divQueryFields" style="display:none;"></div>
+					<span style="width: 75px;">{% trans %}Search for{% endtrans %}:</span>
+					<input id="inpQuery" name="inpQuery" placeholder="Use AND, OR, <, >, = , >=, <= and wildcards like *, ?" type="text" style="width: 330px;" tabindex="1" />&nbsp;
+					<button id="btnFTSearch" tabindex="2">{% trans %}Full-text Search (incl. Attachments){% endtrans %}</button>&nbsp;
+					<button id="btnAdvancedSearch" tabindex="3">{% trans %}Advanced Search{% endtrans %}</button>&nbsp;
+					<select name="MySavedSearches" id="MySavedSearches" onchange="GetSavedSearch(this)" tabindex="4">
+						<option selected value="0">-{% trans %}My Saved Searches{% endtrans %}-</option>
+						{% if savedSearches|length %}
+							{% for item in savedSearches %}
+						<option value="{{ item.getId }}">{{ item.getSearchName }}</option>
+							{% endfor %}
+						{% endif %}
+					</select>&nbsp;
+					<button id="btnFTClear" tabindex="5">{% trans %}Clear Search{% endtrans %}</button>&nbsp;
+					<button id="btnDelete" tabindex="6">{% trans %}Delete Current Saved Search{% endtrans %}</button>
+					<span id="divToolbarFilter" align="right" style="display:{{ folder and folder.getFiltering ? '' : 'none' }}; border-left: groove 1px; padding: 4px 6px 4px 6px;">
+						<span style="width: 40px;">{% trans %}Filters{% endtrans %}: </span>
+						<button id="btnClearAllFilters" title="{% trans %}Clear all folder filtering{% endtrans %}" onclick="ClearAllFilters();" tabindex="7">{% trans %}Clear All Filters{% endtrans %}</button>
+						<button id="btnResetFolderFilter" title="{% trans %}Reset to folder's default filter{% endtrans %}" onclick="ResetFolderFilter();" tabindex="8">{% trans %}Reset Folder Filter{% endtrans %}</button>
+					</span>
+					<span style="font-size:11px;color:#0050D1;display:none" id="divSearchResultCount"></span>					
+				</div>
+				<!------------------ Content Paging ------------------------------------>
+				<div id="divContentPaging" disabled style="display:none; border-top:1px solid #CCC; padding: 4px 6px 4px 6px;">
+					<div id="countPicker" style="z-index:1000; position:absolute; display:none; background-color: white; border:1px solid grey; padding:2px"></div>
+					<table style="font-size:8pt" border=0 cellpadding=0 cellspacing=0>
+						<tr>
+							<td width=290>
+								{% trans %}Displaying records{% endtrans %} <span id=startCount>1</span>&nbsp;{% trans %}to{% endtrans %}&nbsp;
+								<div id="currCount" style="background-color:white; padding-left:1px;padding-right:2px; height:13px; display:inline">{{ folder ? folder.getPagingCount : '' }}</div>
+								<div id="currPic" style="width:50px; display:inline; background-color:white;" onclick="getDisplayCount(this);">&nbsp;
+									<IMG SRC= "{{ asset('bundles/docova/images/downarrow-blk.gif') }}" Border=0>&nbsp;
+								</div>&nbsp;{% trans %}of{% endtrans %}&nbsp;
+								<span id=totalCount></span>
+							</td>
+							<td width=190>
+								<button id="btnContPage1" title="{% trans %}First{% endtrans %}" tabindex="9"></button>
+								<button id="btnContPage2" title="{% trans %}Previous{% endtrans %}" tabindex="10"></button>
+								<button id="btnContPage3" title="{% trans %}Next{% endtrans %}" tabindex="11"></button>
+								<button id="btnContPage4" title="{% trans %}Last{% endtrans %}" tabindex="12"></button>
+							</td>
+							<td>{% trans %}Find{% endtrans %} <input type="text" onfocus="selText(this)" style="width:90px" onkeyup="triggerGetPage()" id="GetPage"/></td>
+						</tr>
+					</table>
+				</div>
+				<!--------------------- End Content Paging --------------------------------->
+				<!------------------------------------------------------>
+				<div id="divToolbarPerspective" style="display:none; width:100%; padding: 4px 6px 4px 6px; border-top: 1px solid #CCC;">
+					<script id="xmlViewPerspective" type="text/xml">{{ system_perspective|raw }}</script>
+					<span style="width: 75px;">{% trans %}Perspective{% endtrans %}:</span>
+					<select name="inpSwitchPerspective" id="inpSwitchPerspective" style=" width: 200px;" onchange="ViewSwitchPerspective(this.options[this.selectedIndex].value)" tabindex="13">
+					{% if valid_perspectives|length %} 
+						{% for perspective in valid_perspectives %}
+						<option value="{% if perspective.getIsSystem == true %}system_{% else %}custom_{% endif %}{{ perspective.getId }}">{{ perspective.getPerspectiveName }}</option> 
+						{% endfor %}
+					{% endif %}
+					</select>&nbsp;
+					<span id="labelViewOptions">{% trans %}Show{% endtrans %}:
+					    {% set CANSEEALL = (user_access.ccdocument or (folder ? folder.getSetDVA : false)) %}
+                        {% set DEFSHOW = (user ? user.getUserProfile.getDefaultShowOption : '') %}
+                        {% set SHOWTYPE = (CANSEEALL ? (DEFSHOW == "" ? "A" : DEFSHOW) : "C") %}					
+						<select name="selVersionScope" id="selVersionScope" class="txFld" style=" width: 125px; height:18px;" onchange="ViewApplyQueryOptions();" tabindex="14" {{ not folder or (not user_access.ccdocument and not folder.getSetDVA) ? 'disabled="disabled"' : '' }}>
+							<option value="" {{ SHOWTYPE == 'A' ? 'selected' : ''  }}>{% trans %}All versions{% endtrans %}
+							<option value="REL" {{ SHOWTYPE == 'C'  ? 'selected' : '' }}>{% trans %}Current versions{% endtrans %}
+							<option value="NEW" {{ SHOWTYPE == 'P' ? 'selected' : ''  }}>{% trans %}Pending releases{% endtrans %}
+						</select>&nbsp;
+						<input type="checkbox" id="inpViewScope" value="1" onclick="ViewApplyQueryOptions();" tabindex="15"/>{% trans %}Include subfolders{% endtrans %}
+					</span>
+				</div>
+			</div><!--- END Document View header ----->
+		</div><!--- END Header Section ---->
+		<div id="divViewEventCapture" tabindex="1"><!--- BEGIN Document keyboard event capture ----->
+			<!-------------------------- scrollable content----------------------->
+			<!--- BEGIN Document view contents----->
+			<div id="divViewContent" style="width: 100%; padding: 0px; margin: 0px;overflow: auto" tabindex="16"></div>
+			<!--- END Document view contents----->
+		</div><!--- End event capture area ----->
+		<!--- BEGIN Folder filter components----->
+		<script id="FolderFilterXSL" type="text/xml"></script>
+		<div id="SelectFilterDiv" style="display:none; position:absolute;z-index:100px;" ></div>
+		<div id="CurrentFilterDiv" style="display:none; position:absolute; top:0px; left:0px;"></div>
+		<!--- END Folder filter components----->
+	</div> <!--- END viewMainContainer--->
+<!------------------ SUBFORM sfKillCache ------------>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

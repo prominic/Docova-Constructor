@@ -1,0 +1,11 @@
+document.write('<OBJECT ID="thingFactory" ');
+document.write('CLASSID="CLSID:8A9AE4F4-7651-4484-A877-B126009B8C7B" ');
+document.write('class="ThingFactoryObj" CODEBASE="">');
+document.write('<param name="LicenseCode" value="{{ settings.getThingFactoryKey }}"> ');
+document.write('<PARAM name="LocalHostCode" value="{{ settings.getLocalHostCode }}">');
+document.write('<div style="font: 12px Arial; color: red; border: 2 solid red; padding: 5; width: 95%;"> ');
+document.write('thingFactory ActiveX contrrol is not loaded. Application will not run.<br><br> ');
+document.write('Please make sure that the thingFactory cabinet file is accessible for download  ');
+document.write('from the web server at "" and that your browser security  ');
+document.write('settings allow download and installation of ActiveX controls.</div><br><br> ');
+document.write('</OBJECT>');

@@ -1,0 +1,66 @@
+DIV#divdocumentTypeTabOptions
+{
+     padding: 10px 0px 2px 0px; 
+     border-top: solid 1px #DFDFDF;
+}
+TABLE.clsTabStrip 
+{ 
+    border-bottom:0; 
+}
+TABLE.clsTabStrip 
+{
+    border:0;
+}     
+TABLE.clsTabStrip TR.clsTab TD 
+{ 
+    font-family:verdana; 
+    font-size:11px; 
+    white-space: nowrap;
+}     
+TABLE.clsTabStrip TD.clsTab 
+{ 
+    cursor:hand; 
+    color: #777777;
+    border-left:1 solid #efefef; 
+    border-top:1 solid #efefef;
+    border-right:1 solid #888888;  
+    border-bottom:1 solid white; 
+    background-color:#dddddd;
+    padding: 3px 5px 2px 5px;
+    white-space: nowrap;
+}
+TABLE.clsTabStrip TD.clsTabSel 
+{ 
+    cursor:hand; 
+    border-left:1 solid #efefef; 
+    border-top:1 solid #efefef;
+    border-right:1 solid #888888;   
+    border-bottom:1 solid #efefef;  
+    padding: 3px 5px 2px 5px;
+    background-color:#efefef;
+    color: black;
+    white-space: nowrap;
+}    
+TABLE.clsTabStrip TD.clsTabSpacer
+{ 
+    width: 3px; 
+    padding: 0px;
+}  
+TABLE.clsTabStrip 
+{ 
+    border-bottom:0; 
+} 
+TD.clsTabFiller
+{ 
+    border-bottom:0; 
+}
+DIV.clsTab 
+{
+    width: 100%; 
+    font : normal 11px Verdana,  Arial, sans-serif;
+    overflow: auto;
+    border-left:1 solid white; 
+    border-right:1 solid #888888;  
+    border-bottom:1 solid #888888;  
+    background-color:#efefef;
+} 

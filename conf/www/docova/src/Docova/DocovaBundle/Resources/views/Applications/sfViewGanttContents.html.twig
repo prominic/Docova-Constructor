@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/admin/styleAppBuilder.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleFolderBase.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleActionBar.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/Gantt/platform.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/Gantt/gantt.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/Gantt/ganttPrint.css') }}" type="text/css" media="print" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/viewObjects.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language='JavaScript' type='text/javascript' src='{{ asset('bundles/docova/js/AppFormJS.js') }}'></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/fullcalendar/moment.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/fullcalendar/fullcalendar.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/FormulaLanguage.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/jquery/jquery.livequery.min.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/jquery/jquery.timers.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/utilities.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/forms.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/date.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/dialogs.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/layout.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/i18nJs.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/jquery/JST/jquery.JST.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/jquery/svg/jquery.svg.min.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/libs/jquery/svg/jquery.svgdom.1.8.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/beautify/beautify.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/ganttUtilities.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/ganttTask.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/ganttDrawerSVG.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/ganttGridEditor.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/Gantt/ganttMaster.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/xmljson/json2xml.js') }}"></script>
+<script language="JavaScript" type="text/javascript">
+var info = {
+	"DocID" : "{{ view.getId }}",
+	"DocKey" : "{{ view.getId }}",
+	"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	"SystemKey" :  "{{ settings.getSystemKey }}",
+	"DocAccessLevel" : "",
+	"DocAccessRole" : "",
+	"DbAccessLevel" : "",
+	"CutCopyPaste" : "",
+  	"HTTP_Referer" : "",
+	"Query_String" : "OpenDocument&viewType=Gantt",
+	"Query_String_Decoded" : "OpenDocument&viewType=Gantt",
+  	"Path_Info_Decoded" : "{{ path('docova_appviewall', {'viewname' : view.getViewName }) }}?OpenDocument&viewType=Gantt&AppID={{ view.getApplication.getId }}",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"LibraryKey" : "{{ view.getApplication.getId }}",
+	"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length -1] }}",
+	"AssetsPath" : "{{ asset('bundles/docova/') }}",
+	"ViewName" : "{{ view.getViewName }}",
+	"RestrictToCategory" : "{{ app.request.query.has('restrictToCategory') ? (app.request.query.get('restrictToCategory') ? app.request.query.get('restrictToCategory') : 'DOCOVA_RESTRICT_TO_EMPTY_CATEGORY') }}",
+	"AppID" : "{{ view.getApplication.getId }}",
+	"IsEmbedded":  {{ app.request.query.get('isEmbedded') == 'true' ? 'true' : 'false' }},
+	"ShowSearch":   "{{ app.request.query.get('showSearch') }}",
+	"SessionDateFormat" : "{{ settings.getDefaultDateFormat|lower|replace({'yyyy':'yy'}) }}",
+	"ViewID": "{{ view.getId }}",
+	"UseContentPaging" : "",
+	"MaxDocCount" : "100",
+	"OpenDocInEditMode": "{{ view.getOpenInEdit ? 1 : '' }}",
+	"TitleNode": "",
+	"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"IsFolder" : "{{ view.getEmulateFolder ? 1 : '' }}",
+	"PrivateOnFirstUse" : "{{ view.getEmulateFolder and view.getPrivateOnFirstUse ? 1 : '' }}",
+	"HideActions" : {{ app.request.query.get('HideActions') in ['1', 'true'] ? 'true' : 'false' }},
+	"Weekends" : {{ view.getWeekends ? 'true' : 'false' }},
+	"Style" : {{ view.getStyle ? 'true' : 'false' }},
+	"EventColor" : "{{ view.getEventColor ? view.getEventColor : '#000000' }}",
+	"EventTextColor" : "{{ view.getEventTextColor ? view.getEventTextColor : '#000000' }}",
+	"DayClick" : "{{ view.getDayClick|raw }}",
+	"DayDblClick" : "{{ view.getDayDblClick|raw }}",
+	"EventClick" : "{{ view.getEventClick|raw }}",
+	"EventDblClick" : "{{ view.getEventDblClick|raw }}",
+	"FirstDay" : {{ view.getFirstDay ? view.getFirstDay : 1 }},
+	"SelectedDoc" : "",
+	"SelectedDate" : null,
+	"ViewType" : 'Gantt'
+};
+function getinfovar(){
+   return info;
+}
+InitVars(info);
+
+var objView = null; //view object
+var currentPerspective=""; //current perspective id
+var isiPad = navigator.userAgent.match(/iPad/i) != null; //Detects if User is using an iPad.  Used to handle things like double click.
+
+var dlgParams = new Array();  //params array that gets used by dialogs
+var retValues = new Array(); //ret params array that can be used by dialogs
+
+var shiftkeypressed = false;
+var ctrlkeypressed = false;
+var DLExtensions = null;
+
+//-- gantt chart object
+var ge = null;
+var ganttWorkspace = null;
+var ganttUseAddressBook = false;
+
+$(document).ready(function(){
+	//reformat the date setting for use with gantt chart
+	var tempdateformat = info.SessionDateFormat;
+	if(tempdateformat.indexOf("yyyy") < 0){
+		tempdateformat = tempdateformat.replace("yy", "yyyy");
+	}
+	tempdateformat = tempdateformat.replace("mm", "MM");
+	Date.defaultFormat = tempdateformat;   //-- set default date format that will be used for Gantt chart
+	
+	DLExtensions = window.top.DocovaExtensions;
+	var objContent = $("#divViewContent");
+	objContent.on('dragover', function (e) 
+	{
+				     e.stopPropagation();
+				     e.preventDefault();
+				       $( this).css("border", "2px dashed gray");
+	});
+	objContent.on('dragleave', function (e) 
+	{
+				     e.stopPropagation();
+				     e.preventDefault();
+				        $( this).css("border", "0px");
+				 
+	});
+
+	objContent.disableSelection();
+		
+	if(info.HideActions){
+			$("#divHeaderSection").hide();
+			$("#divViewContent").css("top", "0px");
+	}
+	else {
+		$("#tdActionBar").css("display", "inline-block");
+	}
+		
+	//--show/reveal view after all elements are loaded
+	$("#viewMainContainer").css("display", "");
+	
+	ge = new GanttMaster();		
+	ganttWorkspace = $("#divViewContent");
+	ge.init(ganttWorkspace, $("#divGanttButtons"));
+	loadI18n(); //overwrite with localized ones
+
+	loadGanttTasks(false);	//load tasks from server
+	muteAlertOnChange = true;
+  
+   $(window).resize(function(){
+    	ganttWorkspace.css({
+		width: $(window).width() - 1,
+		height: $(window).height() - ganttWorkspace.position().top}
+	);
+    	ganttWorkspace.trigger("resize.gantt");
+  }).oneTime(150,"resize",function(){$(this).trigger("resize")});
+
+
+});   
+
+
+
+
+// ======================= view event handlers =======================
+
+//Global varables
+var dragSourceColumn; //column heading being dragged into new location
+var dragTargetColumn; //target column heading for dragover and drop 
+var selectDragMode; //specifies how the drag selection over checkboxes should be handled
+var viewContainer ; //object where the view contents will be plugged
+mouseX; //mouse coordinates
+mouseY;
+
+
+//-------- column drag and drop --------------------
+function ViewColumnDragStart(source)
+{
+}
+function ViewColumnDrag(source)
+{
+}
+function ViewColumnDragOver(source)
+{
+}
+function ViewColumnDragDrop(source)
+{
+}
+
+//-------- clipboard functions --------------------
+
+function ViewCopySelected()
+{
+	if(objView.currentEntry =="" && objView.selectedEntries.length == 0) {return false;};
+	ViewSetClipboard("copy");
+}
+
+function ViewCutSelected()
+{
+	if(objView.currentEntry =="" && objView.selectedEntries.length == 0) {return false;};
+	ViewSetClipboard("cut");
+}
+
+function ViewSetClipboard(action)
+{
+	if(objView.currentEntry =="" && objView.selectedEntries.length == 0) {return false;};
+
+	var clipdata="<srclibkey>" + docInfo.LibraryKey + "</srclibkey>";
+	clipdata += "<srcfolderid>" + docInfo.FolderID + "</srcfolderid>"; // source folder id for refresh
+	if(objView.selectedEntries.length > 0)
+		{
+			for(var k=0; k<objView.selectedEntries.length; k++)
+				{
+					clipdata+="<Unid>" + objView.selectedEntries[k] + "</Unid>";
+				}
+		}
+		else
+		{
+			clipdata+="<Unid>" + objView.currentEntry  + "</Unid>"
+		}
+
+	Docova.Utils.setCookie({ keyname: "clipaction", keyvalue: action })
+	Docova.Utils.setCookie({ keyname: "clipdata", keyvalue: clipdata })
+}
+
+function ViewPasteSelected()
+{
+	var clipdata = Docova.Utils.getCookie({ keyname: "clipdata" })
+	if(clipdata == "") {return false;}
+	var action = Docova.Utils.getCookie({keyname: "clipaction" })
+	
+
+	var request = "<Request>";
+	request += "<Action>PASTE</Action>";
+	request += "<clipaction>" + action + "</clipaction>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<targetfolder>" + docInfo.FolderID + "</targetfolder>";
+	request += clipdata;
+	request += "</Request>";	
+
+	if(action == "cut"){ //paste after cut is a one time shot	
+ 		var parser = new DOMParser();
+		var tmpXMLDocument = parser.parseFromString("<dummy>" + clipdata + "</dummy>","text/xml");		
+		var node = tmpXMLDocument.documentElement.selectSingleNode("srcfolderid");
+		if ( node != null ){
+			var folderid = node.textContent || node.text;
+			var unid = folderid.substring(2);
+			if (window.parent.fraTabbedTable){ 
+				window.parent.fraTabbedTable.objTabBar.RefreshHelper.AddFolderToRefreshList(unid, ""); // added for source folder refresh
+			}
+		}
+		Docova.Utils.showProgressMessage("{% trans %}Moving documents. Please wait{% endtrans %}...")
+		Docova.Utils.setCookie({ keyname: "clipaction", keyvalue: "" }) 
+		Docova.Utils.setCookie({ keyname: "clipdata", keyvalue: "" }) 
+	} else {
+		Docova.Utils.showProgressMessage("{% trans %}Pasting documents. Please wait{% endtrans %}...")
+	}
+
+	//--- processing agent url
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/ViewServices?OpenAgent"
+	var httpObj = new objHTTP();
+
+	var retStatus = httpObj.PostData(request, url);
+	Docova.Utils.hideProgressMessage();
+	
+	if(!retStatus ){return false;}
+	objView.queryOptions = ViewGetQueryOptions();
+	
+	if(docInfo.EnableFolderFiltering == "1"){
+		$("#divViewContent").css("display", "none")	
+		objView.Refresh(true, false, true)
+		ApplyFolderFilter(true);
+		$(".listheader").resizable({ handles: "e" })
+		$("#divViewContent").css("display", "")	
+	}else{
+		objView.Refresh(true, false, true)
+		$(".listheader").resizable({ handles: "e" })
+	}
+}
+
+
+//----------- utility functions ---------------
+
+// clears the view event variables in case mouse cursor had wandered to far
+function ViewClearEventState()
+{
+var dragSourceColumn=null;
+var dragTargetColumn=null;
+selectDragMode=null;
+return true;
+}
+
+function CancelEvent()
+{
+	if(!window.event) {return;}
+	window.event.cancelBubble = true;
+	window.event.returnValue=false;
+	return false;
+}
+
+function SubmitRequest(request, agentName){
+	//send the request to server
+	var processUrl = docInfo.ServerUrl + docInfo.PortalWebPath + "/" + agentName  + "?OpenAgent"
+	var httpObj = new objHTTP();
+	if(!httpObj.PostData(request, processUrl) || httpObj.status=="FAILED"){
+		HideProgressMessage();
+		return false;
+	}
+
+	return (httpObj.results.length)? httpObj.results[0] : true;
+}
+
+
+function loadI18n() {
+	GanttMaster.messages = {
+			  "CANNOT_WRITE": "{% trans %}Cannot write.{% endtrans %}",
+			  "CHANGE_OUT_OF_SCOPE": "{% trans %}No rights for update. Parent out of editor scope.{% endtrans %}",
+			  "START_IS_MILESTONE":                    "{% trans %}Start is a milestone.{% endtrans %}",
+			  "END_IS_MILESTONE":                      "{% trans %}End is a milestone.{% endtrans %}",
+			  "TASK_HAS_CONSTRAINTS":                  "{% trans %}Task has constraints.{% endtrans %}",
+			  "GANTT_ERROR_DEPENDS_ON_OPEN_TASK":      "{% trans %}Error: Depends upon an open task.{% endtrans %}",
+			  "GANTT_ERROR_DESCENDANT_OF_CLOSED_TASK": "{% trans %}Error: Descendant of a closed task.{% endtrans %}",
+			  "TASK_HAS_EXTERNAL_DEPS":                "{% trans %}Task has external dependencies.{% endtrans %}",
+			  "GANTT_ERROR_LOADING_DATA_TASK_REMOVED": "{% trans %}Error loading data. A task has been removed.{% endtrans %}",
+			  "ERROR_SETTING_DATES":                   "{% trans %}Error setting dates.{% endtrans %}",
+			  "CIRCULAR_REFERENCE":                    "{% trans %}Circular reference.{% endtrans %}",
+			  "CANNOT_MOVE_TASK":                      "{% trans %}Task cannot be moved.{% endtrans %}",
+			  "CANNOT_DEPENDS_ON_ANCESTORS":           "{% trans %}A task cannot depend upon an ancestor.{% endtrans %}",
+			  "CANNOT_DEPENDS_ON_DESCENDANTS":         "{% trans %}A task cannot depend upon a descendant.{% endtrans %}",
+			  "INVALID_DATE_FORMAT":                   "{% trans %}Invalid Date Format{% endtrans %}",
+			  "TASK_MOVE_INCONSISTENT_LEVEL":"{% trans %}Task move is to an inconsistent level.{% endtrans %}",
+			  "GANTT_QUARTER_SHORT":                   "qtr.",
+			  "GANTT_SEMESTER_SHORT":                  "sem.",
+			  "CANNOT_CLOSE_TASK_IF_OPEN_ISSUE":       "{% trans %}The task cannot be closed with an issue open.{% endtrans %}",
+			  "PLEASE_SAVE_PROJECT":                   "{% trans %}Please save the project.{% endtrans %}"
+			};
+}
+
+function loadGanttTasks(warnuser){
+	if(warnuser){
+		var answer = $$Prompt("[YesNo]", "{% trans %}Reload Tasks?{% endtrans %}", "{% trans %}This process will overwrite any unsaved changes you have made to the current project.  Do you wish to continue?{% endtrans %}");
+		if(!answer){
+			return;
+		}
+	}
+
+  	delete ge.gantt.zoom;  //in order to force compute the best-fitting zoom level 	
+	var taskdata = [];
+	var resdata = [];	
+	
+	var taskurl = '/'+ docInfo.NsfName + "/PlugInServices?OpenAgent&Action=GANTT&ViewName=" + docInfo.ViewName + '&AppID=' + docInfo.AppID + (docInfo.RestrictToCategory !== "" ? "&category=" + encodeURIComponent(docInfo.RestrictToCategory) : ""); 
+  	jQuery.ajax({
+  		dataType: "json",
+		url: taskurl, 
+   		cache: false,
+  		async: false,		
+		success: function(data){
+  			taskdata = data.tasks.slice();
+  			resdata = data.resources.slice();
+  			
+  			if(data.options && data.options.addresslookup){
+	  			ganttUseAddressBook = true;
+  			}
+  			
+			var idrowmapping = {};
+
+			//-- generate a document id to row number mapping for use in converting dependencies
+  			for(var i=0; i<taskdata.length; i++){
+  				idrowmapping[taskdata[i].id] = {
+					'row': (i+1).toString(),
+					'level': 0
+				};
+  			}
+  			
+  			//-- perform some manipulation on the data
+  			for(var i=0; i<taskdata.length; i++){  				
+  				//-- convert string start date to numeric
+   				if(taskdata[i].start && typeof taskdata[i].start == 'string'){
+  					var tempdate = new Date(taskdata[i].start);
+  					taskdata[i].start = tempdate.getTime();
+  				}
+   				//-- convert string end date to numeric 				
+  				if(taskdata[i].end && typeof taskdata[i].end == 'string'){
+  					var tempdate = new Date(taskdata[i].end);
+  					taskdata[i].end = tempdate.getTime();
+  				} 
+  				//-- convert dependencies to row numbers
+  				if(taskdata[i].depends && taskdata[i].depends !== ''){
+	  				var tempdep = taskdata[i].depends.split(",");
+	  				for(var d=0; d<tempdep.length; d++){
+	  					//-- check if this id is present
+	  					if(idrowmapping.hasOwnProperty(tempdep[d])){
+	  						//-- convert element to row number
+	  						tempdep[d] = idrowmapping[tempdep[d]].row;
+	  					}else{
+	  						//-- if not lets remove the element
+	  						tempdep.splice(d, 1);
+	  					}
+	  				}	  			
+	  				taskdata[i].depends = tempdep.join(",");
+  				}	
+				//-- calculate task level indent, taking into account parent level
+				var level = 0;
+  				if(taskdata[i].parent && taskdata[i].parent !== ''){
+  					//-- check if this id is present
+  					if(idrowmapping.hasOwnProperty(taskdata[i].parent)){ 						
+  						level = idrowmapping[taskdata[i].parent].level + 1;
+   					}
+   					taskdata[i].parent = ''; //--clear parent since from now on we will be using Gantt index and level instead
+				}	
+				taskdata[i].level = level;
+				idrowmapping[taskdata[i].id].level = level;
+				
+  			}//--end loop through tasks	
+			if(typeof window['Postopen'] == "function"){
+				try{
+					Postopen();
+				}catch(e){}
+			}	
+		}, //--end success
+		error: function(jqXHR, exception){
+			var msg = '';
+			if (jqXHR.status === 0) {
+				msg = '{% trans %}Not connect.\n Verify Network.{% endtrans %}';
+			} else if (jqXHR.status == 404) {
+				msg = '{% trans %}Requested page not found.{% endtrans %} [404]';
+			} else if (jqXHR.status == 500) {
+				msg = '{% trans %}Internal Server Error{% endtrans %} [500].';
+			} else if (exception === 'parsererror') {
+				msg = '{% trans %}Requested JSON parse failed.{% endtrans %}';
+			} else if (exception === 'timeout') {
+				msg = '{% trans %}Time out error.{% endtrans %}';
+			} else if (exception === 'abort') {
+				msg = '{% trans %}Ajax request aborted.{% endtrans %}';
+			} else {
+				msg = '{% trans %}Uncaught Error.{% endtrans %}\n' + jqXHR.responseText;
+			}
+			if(console){console.log(msg)};
+		} //--end error
+	});//--end ajax call
+	
+
+	//project data to be loaded
+	var gData = {
+	    "tasks": taskdata,
+		"canWrite":true,
+		"canWriteOnParent":true,
+		"selectedRow":0,
+		"deletedTaskIds":[],
+		"resources" : resdata
+  	}
+  	ge.loadProject(gData); //end Gantt
+  
+  	ge.checkpoint(); //empty the undo stack
+}//--end loadGanttTasks
+
+
+function saveGanttOnServer(uidoc){
+	if (ge.deletedTaskIds.length>0) {
+		if (!confirm("{% trans with {'%taskid%' : '\'"+ ge.deletedTaskIds.length + "\''} %}Saving this project will result in %taskid% documents/tasks being deleted.  Do you wish to continue?{% endtrans %}")) {
+			return;
+		}
+	}
+	
+	var prj = ge.saveProject();
+	delete prj.resources;
+	delete prj.roles;
+	delete prj.selectedRow;
+	delete prj.canWrite;
+	delete prj.canWriteOnParent;
+	delete prj.zoom;
+	delete prj.changesReasonWhy;
+	
+	var lastlevel = 0;
+	var lastid = "";
+	var parentids = [];
+	var tasks = prj.tasks;
+	if (uidoc && !tasks.length) {
+		uidoc.close({ savePrompt: false });
+	}
+	//-- loop through tasks and perform some data adjustments before submit
+	for(var i=0; i<tasks.length; i++){
+				//-- convert numeric start date to string
+   				if(tasks[i].start && typeof tasks[i].start == 'number'){
+  					var tempdate = new Date(tasks[i].start);
+  					tasks[i].start = tempdate.toISOString();
+  				}
+  				
+   				//-- convert numeric end date to string 				
+  				if(tasks[i].end && typeof tasks[i].end == 'number'){
+  					var tempdate = new Date(tasks[i].end);
+  					tasks[i].end = tempdate.toISOString();
+  				} 		
+  				
+  				//-- calculate parent property
+  				if(lastlevel < tasks[i].level){
+  					//-- indenting a level so add the parent id to the stack
+  					parentids.push(lastid);
+  				}else if(lastlevel > tasks[i].level){	
+  					//-- leaving an indented level so remove a parent id from the stack
+  					parentids.pop();
+  				}
+  				if(tasks[i].level == 0){
+  					tasks[i].parent = "";
+  				}else{
+  					tasks[i].parent = parentids[parentids.length - 1];
+  				}
+  				lastlevel = tasks[i].level;
+  				lastid = tasks[i].id;
+  				
+  				//-- convert dependencies from row numbers to ids
+  				if(tasks[i].depends && tasks[i].depends !== ''){
+	  				var tempdep = tasks[i].depends.split(",");
+	  				for(var d=0; d<tempdep.length; d++){
+	  					var index = tempdep[d]-1;
+	  					if(index >= 0){
+		  					//-- convert element from row number to id	  					
+	  						tempdep[d] = tasks[index].id;
+	  					}else{
+	  						//--something is wrong - we have an index that is out of bounds
+	  						//-- lets remove the element
+	  						tempdep.splice(d, 1);	  						
+	  					}
+	  				}	  			
+	  				tasks[i].depends = tempdep.join(",");
+  				}
+  				
+  				//-- add a row property
+  				tasks[i].row = i+1;
+
+				//-- clear properties we don't need to save
+				delete tasks[i].progressByWorklog;
+				delete tasks[i].relevance;
+				delete tasks[i].type;
+				delete tasks[i].typeId;			
+				delete tasks[i].level;
+				delete tasks[i].canWrite;
+				delete tasks[i].collapsed;
+				delete tasks[i].hasChild;		
+	}
+
+	var request = "";
+	request += "<Request>";
+	request += "<Action>GANTTSAVE</Action>";
+	request += "<ViewName><![CDATA[" + decodeURIComponent(docInfo.ViewName) + "]]></ViewName>";
+	request += "<Category>" +  (docInfo.RestrictToCategory !== "" ? "<![CDATA[" + docInfo.RestrictToCategory  + "]]>": "") + "</Category>"; 
+	request += "<ProjectData>";
+		request += json2xml(prj, "");
+	request += "</ProjectData>";
+	request += "</Request>";
+	var taskupdateurl = "/" + docInfo.NsfName + "/PlugInServices?OpenAgent&AppID=" + docInfo.AppID;
+	
+	var saveok = false;
+  	$.ajax({
+  		url: taskupdateurl,
+    	dataType:"xml",
+    	data:  encodeURIComponent(request),
+    	type:"POST",
+    	success: function(response) {
+    		if(jQuery(response).find("Result[ID=Status]").text() == "OK"){
+				saveok = true;
+    		}
+    	},
+    	complete: function(){
+			if(saveok){
+        		var errMsg="{% trans %}Project successfully saved.{% endtrans %}\n";			
+				loadGanttTasks(false);	//reload tasks from server
+				if (uidoc) {
+					uidoc.close({ savePrompt: false });
+				}
+			}else{
+        		var errMsg="{% trans %}Errors saving project.{% endtrans %}\n";
+      		}    		
+      		alert(errMsg);      		        			
+    	}
+  	});
+}//--end saveGanttOnServer
+
+
+
+function SubmitRequest(request, agentName){
+	//send the request to server
+	var processUrl =  "/" + docInfo.AppFilePath + "/" + agentName  + "?OpenAgent"
+	var httpObj = new objHTTP();
+	if(!httpObj.PostData(request, processUrl) || httpObj.status=="FAILED"){
+		HideProgressMessage();
+		return false;
+	}
+
+	return (httpObj.results.length)? httpObj.results[0] : true;
+}
+
+
+$.JST.loadDecorator("RESOURCE_ROW", function(resTr, res){
+    resTr.find(".delRes").click(function(){$(this).closest("tr").remove()});
+});
+
+$.JST.loadDecorator("ASSIGNMENT_ROW", function(assigTr, taskAssig){
+	var resEl = assigTr.find("[name=resourceId]");
+//	var resEf = assigTr.find('[name=effort]');
+	if (ganttUseAddressBook === true) {
+        for(var i=0; i< taskAssig.task.master.resources.length;i++){
+    		var res = taskAssig.task.master.resources[i];
+    		if(taskAssig.assig.resourceId == res.id) {
+				resEl.val(res.name);
+//				resEf.val(taskAssig.assig.effort);
+    		}
+        }
+	}
+	else {
+    	var opt = $("<option>");
+    	resEl.append(opt);
+        for(var i=0; i< taskAssig.task.master.resources.length;i++){
+    		var res = taskAssig.task.master.resources[i];
+    		opt = $("<option>");
+    		opt.val(res.id).html(res.name);
+    		if(taskAssig.assig.resourceId == res.id) {
+    			opt.attr("selected", "selected");
+//				resEf.val(taskAssig.assig.effort);
+    		}
+    		resEl.append(opt);
+		}
+	}
+
+    if(taskAssig.task.master.permissions.canWrite && taskAssig.task.canWrite){
+		assigTr.find(".delAssig").click(function(){
+			var tr = $(this).closest("[assId]").fadeOut(200, function(){$(this).remove()});
+		});
+	}
+});
+
+function chooseResource(buttonelement){
+	var inputfield = jQuery(buttonelement).closest("td").find("input[name=resourceId]:first");
+	window.top.Docova.Utils.showAddressDialog({ 
+		dlgtype: "single",
+		title: "Select Resource",
+		defaultvalues: inputfield.val(),
+		cb: function(chosenval){
+			inputfield.val(chosenval);
+		}		 
+	});  
+	return false;
+}
+
+{% if view.getViewJavaScript %}
+{{ view.getViewJavaScript|raw }}
+{% endif %}
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" SCROLL="no" oncontextmenu="return false;" autocomplete="off">
+	<form onsubmit="doUpdate(); return true;" action="">
+		<div id="tmpToolbardata" style="display: none" class="noprint"></div>
+		<div id="viewMainContainer" style="display:none;">
+			<!-------------------------- non-scrollable header ----------------------->
+			<div id="divHeaderSection" class="noprint" style="width: 100%;">
+				<!------------------------------------------------------>
+				<div id="actionPaneHeader" class="wrapper" style="width: 100%; height: 42px; padding: 0px; border-bottom: 1px solid #959595; ">
+    				<table border=0 cellspacing=0 cellpadding=0 width=100%>
+         				<tr>
+            				<td>
+            					<div id="divGanttButtons"></div>
+            					<div id="tdActionBar">{{ toolbar|raw }}</div>
+            				</td>
+         				</tr>
+    				</table>
+				</div>
+				<!------------------------------------------------------>
+			</div>
+			<!------------------------------------------------------>
+			<div id="divViewEventCapture" tabindex="1">
+				<!-------------------------- scrollable content----------------------->
+				<!--- BEGIN Document view contents----->
+				<div id="divViewContent" style="position:relative; top:42px; width: 100%; padding: 0px; margin: 0px; overflow:auto;" ></div>
+				<!--- END Document view contents----->
+			</div>
+			<!--- BEGIN Folder filter components----->
+			<!--- END Folder filter components----->
+		</div>
+		<!--- END viewMainContainer--->
+
+		<!-- Gantt Templates - START -->
+		<div id="gantEditorTemplates" style="display:none;">
+			<div class="__template__" type="GANTBUTTONS">
+<!--<div class="ganttButtonBar noprint">
+    <div class="buttons">
+     <button onclick="$(ganttWorkspace).trigger('undo.gantt');return false;" class="button textual icon requireCanWrite" title="undo"><span class="teamworkIcon">&#39;</span></button>
+      <button onclick="$(ganttWorkspace).trigger('redo.gantt');return false;" class="button textual icon requireCanWrite" title="redo"><span class="teamworkIcon">&middot;</span></button>
+      <span class="ganttButtonSeparator requireCanWrite requireCanAdd"></span>
+      <button onclick="$(ganttWorkspace).trigger('addAboveCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanAdd" title="insert above"><span class="teamworkIcon">l</span></button>
+      <button onclick="$(ganttWorkspace).trigger('addBelowCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanAdd" title="insert below"><span class="teamworkIcon">X</span></button>
+      <span class="ganttButtonSeparator requireCanWrite requireCanInOutdent"></span>
+      <button onclick="$(ganttWorkspace).trigger('outdentCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanInOutdent" title="un-indent task"><span class="teamworkIcon">.</span></button>
+      <button onclick="$(ganttWorkspace).trigger('indentCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanInOutdent" title="indent task"><span class="teamworkIcon">:</span></button>
+      <span class="ganttButtonSeparator requireCanWrite requireCanMoveUpDown"></span>
+      <button onclick="$(ganttWorkspace).trigger('moveUpCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanMoveUpDown" title="move up"><span class="teamworkIcon">k</span></button>
+      <button onclick="$(ganttWorkspace).trigger('moveDownCurrentTask.gantt');return false;" class="button textual icon requireCanWrite requireCanMoveUpDown" title="move down"><span class="teamworkIcon">j</span></button>
+      <span class="ganttButtonSeparator requireCanWrite"></span>
+      <button onclick="$(ganttWorkspace).trigger('deleteCurrentTask.gantt');return false;" class="button textual icon delete requireCanWrite" title="Delete"><span class="teamworkIcon">&cent;</span></button>
+      <span class="ganttButtonSeparator requireCanAddIssue"></span>
+      <button onclick="$(ganttWorkspace).trigger('addIssue.gantt');return false;" class="button textual icon requireCanAddIssue" title="add issue / todo"><span class="teamworkIcon">i</span></button>
+      <span class="ganttButtonSeparator"></span>
+      <button onclick="$(ganttWorkspace).trigger('expandAll.gantt');return false;" class="button textual icon " title="EXPAND_ALL"><span class="teamworkIcon">6</span></button>
+      <button onclick="$(ganttWorkspace).trigger('collapseAll.gantt'); return false;" class="button textual icon " title="COLLAPSE_ALL"><span class="teamworkIcon">5</span></button>
+    <span class="ganttButtonSeparator"></span>
+      <button onclick="$(ganttWorkspace).trigger('zoomMinus.gantt'); return false;" class="button textual icon " title="zoom out"><span class="teamworkIcon">)</span></button>
+      <button onclick="$(ganttWorkspace).trigger('zoomPlus.gantt');return false;" class="button textual icon " title="zoom in"><span class="teamworkIcon">(</span></button>
+    <span class="ganttButtonSeparator"></span>
+      <button onclick="print();return false;" class="button textual icon " title="Print"><span class="teamworkIcon">p</span></button>
+    <span class="ganttButtonSeparator"></span>
+      <button onclick="ge.gantt.showCriticalPath=!ge.gantt.showCriticalPath; ge.redraw();return false;" class="button textual icon requireCanSeeCriticalPath" title="CRITICAL_PATH"><span class="teamworkIcon">&pound;</span></button>
+    <span class="ganttButtonSeparator requireCanSeeCriticalPath"></span>
+      <button onclick="ge.splitter.resize(.1);return false;" class="button textual icon" ><span class="teamworkIcon">F</span></button>
+      <button onclick="ge.splitter.resize(50);return false;" class="button textual icon" ><span class="teamworkIcon">O</span></button>
+      <button onclick="ge.splitter.resize(100);return false;" class="button textual icon"><span class="teamworkIcon">R</span></button>
+      &nbsp; &nbsp; &nbsp; &nbsp;
+    </div>
+</div> -->
+</div>
+
+<div class="__template__" type="TASKSEDITHEAD">
+<!--<table class="gdfTable" cellspacing="0" cellpadding="0">
+    <thead>
+   <tr style="height:40px">
+      <th class="gdfColHeader" style="width:35px; border-right: none">
+            <button onclick="loadGanttTasks(true);return false;" class="button textual icon fa fa-refresh requireCanWrite" title="refresh"></button>
+      </th>
+      <th class="gdfColHeader" style="width:25px;"></th>
+      <th class="gdfColHeader gdfResizable" style="width:100px;">Code/Short Name</th>
+      <th class="gdfColHeader gdfResizable" style="width:300px;">Name</th>
+      <th class="gdfColHeader"  align="center" style="width:20px;" title="Start date is a milestone."><span class="teamworkIcon" style="font-size: 8px;">^</span></th>
+      <th class="gdfColHeader gdfResizable" style="width:80px;">Start</th>
+      <th class="gdfColHeader"  align="center" style="width:20px;" title="End date is a milestone."><span class="teamworkIcon" style="font-size: 8px;">^</span></th>
+      <th class="gdfColHeader gdfResizable" style="width:80px;">End</th>
+      <th class="gdfColHeader gdfResizable" style="width:50px;">Dur.</th>
+      <th class="gdfColHeader gdfResizable" style="width:20px;">%</th>
+      <th class="gdfColHeader gdfResizable requireCanSeeDep" style="width:50px;">Depe.</th>
+      <th class="gdfColHeader gdfResizable" style="width:1000px; text-align: left; padding-left: 10px;">Assignees</th>
+    </tr>
+    </thead>
+</table>-->
+</div>
+
+<div class="__template__" type="TASKROW">
+<!--<tr taskId="(#=obj.id#)" class="taskEditRow (#=obj.isParent()?'isParent':''#) (#=obj.collapsed?'collapsed':''#)" level="(#=level#)">
+    <th class="gdfCell edit" align="right" style="cursor:pointer;"><span class="taskRowIndex">(#=obj.getRow()+1#)</span> <span class="teamworkIcon" style="font-size:12px;" >e</span></th>
+    <td class="gdfCell noClip" align="center"><div class="taskStatus cvcColorSquare" status="(#=obj.status#)"></div></td>
+    <td class="gdfCell"><input type="text" name="code" value="(#=obj.code?obj.code:''#)" placeholder="Code/Short Name"></td>
+    <td class="gdfCell indentCell" style="padding-left:(#=obj.level*10+18#)px;">
+      <div class="exp-controller" align="center"></div>
+      <input type="text" name="name" value="(#=obj.name#)" placeholder="Name">
+    </td>
+    <td class="gdfCell" align="center"><input type="checkbox" name="startIsMilestone"></td>
+    <td class="gdfCell"><input type="text" name="start"  value="" class="date"></td>
+    <td class="gdfCell" align="center"><input type="checkbox" name="endIsMilestone"></td>
+    <td class="gdfCell"><input type="text" name="end" value="" class="date"></td>
+    <td class="gdfCell"><input type="text" name="duration" autocomplete="off" value="(#=obj.duration#)"></td>
+    <td class="gdfCell"><input type="text" name="progress" class="validated" entrytype="PERCENTILE" autocomplete="off" value="(#=obj.progress?obj.progress:''#)" (#=obj.progressByWorklog?"readOnly":""#)></td>
+    <td class="gdfCell requireCanSeeDep"><input type="text" name="depends" autocomplete="off" value="(#=obj.depends#)" (#=obj.hasExternalDep?"readonly":""#)></td>
+    <td class="gdfCell taskAssigs">(#=obj.getAssigsString()#)</td>
+  </tr>-->
+</div>
+
+<div class="__template__" type="TASKEMPTYROW">
+<!--<tr class="taskEditRow emptyRow" >
+    <th class="gdfCell" align="right"></th>
+    <td class="gdfCell noClip" align="center"></td>
+    <td class="gdfCell"></td>
+    <td class="gdfCell"></td>
+    <td class="gdfCell"></td>
+    <td class="gdfCell"></td>
+    <td class="gdfCell"></td>
+    <td class="gdfCell"></td>
+    <td class="gdfCell"></td>
+    <td class="gdfCell"></td>
+    <td class="gdfCell requireCanSeeDep"></td>
+    <td class="gdfCell"></td>
+  </tr>-->
+</div>
+
+<div class="__template__" type="TASKBAR">
+<!--<div class="taskBox taskBoxDiv" taskId="(#=obj.id#)" >
+    <div class="layout (#=obj.hasExternalDep?'extDep':''#)">
+        <div class="taskStatus" status="(#=obj.status#)"></div>
+        <div class="taskProgress" style="width:(#=obj.progress>100?100:obj.progress#)%; background-color:(#=obj.progress>100?'red':'rgb(153,255,51);'#);"></div>
+        <div class="milestone (#=obj.startIsMilestone?'active':''#)" ></div>
+        <div class="taskLabel"></div>
+         <div class="milestone end (#=obj.endIsMilestone?'active':''#)" ></div>
+    </div>
+</div>-->
+</div>
+
+<div class="__template__" type="CHANGE_STATUS">
+<!--<div class="taskStatusBox">
+    <div class="taskStatus cvcColorSquare" status="STATUS_ACTIVE" title="Active"></div>
+    <div class="taskStatus cvcColorSquare" status="STATUS_DONE" title="Completed"></div>
+    <div class="taskStatus cvcColorSquare" status="STATUS_FAILED" title="Failed"></div>
+    <div class="taskStatus cvcColorSquare" status="STATUS_SUSPENDED" title="Suspended"></div>
+    <div class="taskStatus cvcColorSquare" status="STATUS_UNDEFINED" title="Undefined"></div>
+</div>-->
+</div>
+
+<div class="__template__" type="TASK_EDITOR">
+<!--<div class="ganttTaskEditor">
+    <h4 class="taskData">Task Editor</h4>
+    <table  cellspacing="1" cellpadding="5" width="100%" class="taskData table" border="0">
+          <tr>
+        <td width="200" style="height: 80px"  valign="top">
+          <label for="code">Code/Short Name</label><br>
+          <input type="text" name="code" id="code" value="" size=15 class="formElements" autocomplete='off' maxlength=255 style='width:100%' oldvalue="1">
+        </td>
+        <td colspan="3" valign="top"><label for="name" class="required">Name</label><br><input type="text" name="name" id="name"class="formElements" autocomplete='off' maxlength=255 style='width:100%' value="" required="true" oldvalue="1"></td>
+          </tr>
+
+
+      <tr class="dateRow">
+        <td nowrap="">
+          <div style="position:relative">
+            <label for="start">Start</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" id="startIsMilestone" name="startIsMilestone" value="yes"> &nbsp;<label for="startIsMilestone">Is Milestone</label>&nbsp;
+            <br><input type="text" name="start" id="start" size="8" class="formElements dateField validated date" autocomplete="off" maxlength="255" value="" oldvalue="1" entrytype="DATE">
+         </div>
+        </td>
+        <td nowrap="">
+          <label for="end">End</label>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="checkbox" id="endIsMilestone" name="endIsMilestone" value="yes"> &nbsp;<label for="endIsMilestone">Is Milestone</label>&nbsp;
+          <br><input type="text" name="end" id="end" size="8" class="formElements dateField validated date" autocomplete="off" maxlength="255" value="" oldvalue="1" entrytype="DATE">
+        </td>
+        <td nowrap="" >
+          <label for="duration" class=" ">Days</label><br>
+          <input type="text" name="duration" id="duration" size="4" class="formElements validated durationdays" title="Duration is in working days." autocomplete="off" maxlength="255" value="" oldvalue="1" entrytype="DURATIONDAYS">&nbsp;
+        </td>
+      </tr>
+
+      <tr>
+        <td  colspan="2">
+          <label for="status" class=" ">Status</label><br>
+          <select id="status" name="status" class="taskStatus" status="(#=obj.status#)"  onchange="$(this).attr('STATUS',$(this).val());">
+            <option value="STATUS_ACTIVE" class="taskStatus" status="STATUS_ACTIVE" >Active</option>
+            <option value="STATUS_SUSPENDED" class="taskStatus" status="STATUS_SUSPENDED" >Suspended</option>
+            <option value="STATUS_DONE" class="taskStatus" status="STATUS_DONE" >Completed</option>
+            <option value="STATUS_FAILED" class="taskStatus" status="STATUS_FAILED" >Failed</option>
+            <option value="STATUS_UNDEFINED" class="taskStatus" status="STATUS_UNDEFINED" >Undefined</option>
+          </select>
+        </td>
+
+        <td valign="top" nowrap>
+          <label>Progress</label><br>
+          <input type="text" name="progress" id="progress" size="7" class="formElements validated percentile" autocomplete="off" maxlength="255" value="" oldvalue="1" entrytype="PERCENTILE">
+        </td>
+      </tr>
+
+          </tr>
+          <tr>
+            <td colspan="4">
+              <label for="description">Description</label><br>
+              <textarea rows="3" cols="30" id="description" name="description" class="formElements" style="width:100%"></textarea>
+            </td>
+          </tr>
+        </table>
+
+    <h4>Assignments</h4>
+  <table  cellspacing="1" cellpadding="0" width="100%" id="assigsTable">
+    <tr>
+      <th style="width:100px;">Name</th>
+      <th style="width:30px;">Hours</th>
+      <th style="width:30px;" id="addAssig"><span class="teamworkIcon" style="cursor: pointer">+</span></th>
+    </tr>
+  </table>
+
+  <div style="text-align: right; padding-top: 20px">
+    <button id="saveButton" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" title="Save"  onClick="$(this).trigger('saveFullEditor.gantt');">
+         <span class="ui-button-icon-primary ui-icon ui-icon-disk"></span>
+         <span class="ui-button-text">Save</span>
+    </button>
+  </div>
+</div>-->
+</div>
+
+<div class="__template__" type="ASSIGNMENT_ROW">
+<!--<tr taskId="(#=obj.task.id#)" assId="(#=obj.assig.id#)" class="assigEditRow" >
+    <td >
+ <(#=ganttUseAddressBook ? "input" : "select"#) name="resourceId" class="formElements" style="width: 550px; height: 28px;" value="(#=obj.assig.name#)"  (#=ganttUseAddressBook ? "" : "elem=\"select\" allownewvals=\"0\""#) >(#=ganttUseAddressBook ? "<button class=\"ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-primary\" style=\"height:28px; width: 28px;\" onclick=\"chooseResource(this);return false;\"><span class=\"ui-button-icon-primary ui-icon ui-icon-person\"></span></button>" : "</select>"#)
+    </td>
+    <td ><input type="text" name="effort" value="(#=getMillisInHoursMinutes(obj.assig.effort)#)" size="5" class="formElements" style="width: 70px;"></td>
+    <td align="center"><span class="teamworkIcon delAssig del" style="cursor: pointer">d</span></td>
+  </tr>-->
+</div>
+
+<div class="__template__" type="RESOURCE_EDITOR">
+<!--<div class="resourceEditor" style="padding: 5px;">
+    <h2>Project team</h2>
+    <table  cellspacing="1" cellpadding="0" width="100%" id="resourcesTable">
+        <tr>
+            <th style="width:100px;">name</th>
+            <th style="width:30px;" id="addResource"><span class="teamworkIcon" style="cursor: pointer">+</span></th>
+        </tr>
+    </table>
+    <div style="text-align: right; padding-top: 20px"><button id="resSaveButton" class="button big">save</button></div>
+</div>-->
+</div>
+
+<div class="__template__" type="RESOURCE_ROW">
+<!--<tr resId="(#=obj.id#)" class="resRow" >
+    <td ><input type="text" name="name" value="(#=obj.name#)" style="width:100%;" class="formElements"></td>
+    <td align="center"><span class="teamworkIcon delRes del" style="cursor: pointer">d</span></td>
+</tr>-->
+</div>
+
+</div>
+		<!-- Gantt Templates - END -->
+	</form>
+</body>
+</html>

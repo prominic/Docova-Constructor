@@ -1,0 +1,141 @@
+DIV.wf_container_section {
+	margin-top: 7px;
+	margin-left: 12px;
+	width:200px;
+	position:absolute;
+	background:#FFF;
+	z-index:7;
+}
+SAMP { font-family: Verdana, Arial, Serif; }
+#wf_displayname { float:left; margin-left: 10px; }
+#btnSelectWorkflow { float:left; margin-left: 5px; }
+#wf_steps_container { width:99%;
+	padding:5px;
+	position:relative;
+	margin:20px auto 7px auto;
+	border:1px solid #C7C7C7;
+	border-radius:5px;
+}
+#wf_steps_container A.wf-navigate {
+	top: 21px;
+	z-index: 10;
+	width: 70px;
+	height: 40px;
+	cursor: pointer;
+	font-size: 2.3em;
+	position: absolute;
+	background-color: transparent;
+}
+#wf_steps_container A.rt {
+	right: 2px;
+	text-align: right;
+	padding-right: 5px;
+	background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1) 70%);
+}
+#wf_steps_container A.lt {
+	left: 2px;
+	text-align: left;
+	padding-left: 5px;
+	background: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,1) 70%);
+}
+#wf_steps_header {
+	list-style:none;
+	white-space:nowrap;
+	padding-left:30px;
+	padding-top:5px;
+	overflow:hidden;
+	height: 40px;
+	width:95%;
+}
+#wf_steps_header LI {
+	margin: 0;
+	color: #FFF;
+	height:22px;
+	width: 135px;
+	cursor: pointer;
+	font-size: 1.1em;
+	font-weight: bold;
+	text-align:center;
+	position: relative;
+	display: inline-block;
+	padding: 10px 7px 6px 19px;
+	transition: all .2s ease-in-out;
+}
+#wf_steps_header LI:not(.active):hover { color:#222; }
+#wf_steps_header LI.complete:hover, #wf_steps_header LI.complete.selected { border-bottom:2px #55be55 solid; border-top:2px #55be55 solid; margin-top:-2px; }
+#wf_steps_header LI.pending:hover, #wf_steps_header LI.pending.selected { border-bottom:2px #A7A7A7 solid; border-top:2px #A7A7A7 solid; margin-top:-2px; }
+#wf_steps_header LI.selected { color:#222; }
+#wf_steps_header LI.active { margin-top:-2px; border-top:1px solid #808080; border-bottom:1px solid #808080; }
+#wf_steps_header li.no-lf-border.active { border-left: 1px solid #808080; }
+#wf_steps_header li:not(.no-lf-border):before {
+    content: '';
+    border-left: 12px solid #FFF;
+    border-top: 21px solid transparent;
+    border-bottom: 21px solid transparent;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+}
+#wf_steps_header li:after {
+    content: '';
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    position: absolute;
+    top: -1px;
+    left: 100%;
+    z-index: 9;
+}
+#wf_steps_header li.complete:before { margin-right:1px; left:1px; }
+#wf_steps_header li.complete:after { border-left: 12px solid #55be55; }
+#wf_steps_header li.active:before {
+	border-left: 13px solid #808080;
+	border-top: 21px outset transparent;
+	border-bottom: 21px outset transparent;
+}
+#wf_steps_header li.active:after {
+	margin-left: -1px;
+	border-left: 13px solid #55be55;
+	border-top: 20px outset transparent;
+	border-bottom: 20px outset transparent;
+}
+#wf_steps_header li.pre-active:before {
+	margin-top: 1px;
+	margin-left: -1px;
+	border-left: 14px solid #808080;
+	border-top: 20px outset transparent;
+	border-bottom: 21px outset transparent;
+}
+#wf_steps_header li.whiteborder:before { border-left: 14px solid #FFF !important; }
+#wf_steps_header li.pending:after { border-left: 12px solid #A7A7A7; }
+#wf_steps_header LI.complete { background-color:#55be55; }
+#wf_steps_header LI.active {
+	background-color:#55be55;
+	border-left-color:#55be55;
+	border-left-style:solid;
+}
+#wf_steps_header LI.pending {
+	background-color:#A7A7A7;
+	border-left-color:#A7A7A7;
+	border-left-style:solid;
+}
+#step_detail {
+	padding:7px;
+	padding-top:20px;
+	text-align:left;
+	margin-top:-45px;
+	font-size:13px;
+}
+#step_detail TABLE {
+	display:none;
+	padding-top:14px;
+	width:100%;
+	table-layout:fixed;
+	color:#707070;
+}
+#step_detail TABLE.active { display:table; }
+#step_detail TABLE.selected { display:table; }
+#step_detail TD { vertical-align: top;}
+#step_detail TD.wf-icon-cell { width:110px; text-align:center; vertical-align:middle; }
+#step_detail TD.wf-icon-cell I { color:rgba(187,222,251,0.8); }
+#step_detail SAMP { color:#111; }
+#step_detail BUTTON { width:24px !important; height:21px !important; }

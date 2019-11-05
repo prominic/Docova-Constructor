@@ -1,0 +1,140 @@
+	{% set selected_section = '' %}
+	{% set section_properties = '' %}
+	{% for subform in document.getDocTypeSubform %}
+		{% if subform.getSubform.getFormName == 'Attachments' %}
+			{% set selected_section = subform %}
+			{% set section_properties = subform.getPropertiesXML(true) %}
+		{% endif %}
+	{% endfor %}
+	{% if section_properties != '' %}
+	<table cellspacing="0" class="elmContainer">
+		{% if section_properties['Interface']['AttachmentReadOnly'] == 1 %}
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">{{ section_properties['Interface']['AttachmentReadOnly'] == 1 ? 'Read Only' : '' }}</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td {{ section_properties['Interface']['AttachmentReadOnly'] == 1 ? '' : 'class="firstRw"' }} >{% trans %}Label{% endtrans %}: </td> 
+			<td {{ section_properties['Interface']['AttachmentReadOnly'] == 1 ? '' : 'class="firstRw"' }} >{{ section_properties['Interface']['AttachmentLabel'] }}</td>
+		</tr>
+		<tr>
+			<td class="fieldCell">{% trans %}Height{% endtrans %}: </td> 
+			<td class="fieldCell">{{ section_properties['Interface']['AttachmentsHeight'] }}<span>px</span></td>
+		</tr>
+		<tr>
+			<td class="fieldCell">{% trans %}Maximum number of files{% endtrans %}: </td> 
+			<td class="fieldCell">{{ section_properties['MaxFiles'] }}<span>({% trans %}0 for unlimited{% endtrans %})</span></td>
+		</tr>
+		<tr>
+			<td>{% trans %}Generate Thumbnails{% endtrans %}:</td> 
+			<td>{{ section_properties['Interface']['GenerateThumbnails'] == 1 ? 'Yes' : 'No' }}</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Thumbnail Width{% endtrans %}:</td> 
+			<td>{{ section_properties['Interface']['ThumbnailWidth'] }}<span>px</span></td>
+		</tr>
+		<tr>
+			<td>{% trans %}Thumbnail Height{% endtrans %}:</td> 
+			<td>{{ section_properties['Interface']['ThumbnailHeight'] }}<span>px</span></td>
+		</tr>
+		<tr>
+			<td>{% trans %}Allowed file extensions{% endtrans %}:</td> 
+			<td>
+				{{ section_properties['Interface']['AllowedFileExtensions'] }}<span>({% trans %}blank for any{% endtrans %})</span>
+				<span class="elNote">{% trans %}Comma separated list of acceptable file extensions, blank for any.{% endtrans %}</span>
+			</td>
+		</tr>
+		{% if section_properties['Interface']['EnableFileViewLogging'] == 1 %}
+		<tr>
+			<td></td>
+			<td>{% trans %}Audit log when Users view files{% endtrans %}</td>
+		</tr>
+		{% endif %}
+		{% if section_properties['Interface']['EnableFileDownloadLogging'] == 1 %}
+		<tr>
+			<td></td>
+			<td>
+				{% trans %}Audit log when Users download files{% endtrans %}
+				<span class="elNote">{% trans %}File edits and check in/out are automatically logged.{% endtrans %}</span>
+			</td>
+		</tr>
+		{% endif %}
+		{% if section_properties['Interface']['EnableLocalScan'] == 1 %}
+		<tr>
+			<td></td>
+			<td>{% trans %}Enable access to local scanner{% endtrans %}</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td>{% trans %}Custom Scan JS function{% endtrans %}:</td>
+			<td>
+				{{ section_properties['Interface']['CustomScanJS']|nl2br }}
+                <span class="elNote">{% trans %}Default scan function called if left blank.{% endtrans %}</span>
+			</td>
+		</tr>
+		{% if section_properties['Interface']['EnableFileCIAO'] == 1 %}
+		<tr>
+			<td></td>
+			<td>{% trans %}Enable file check in and out tracking{% endtrans %}</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td>{% trans %}Default List Type{% endtrans %}:</td>
+			<td>
+				{% if section_properties['Interface']['ListType'] == 'I' %}{% trans %}Icons{% endtrans %}
+				{% elseif section_properties['Interface']['ListType'] == 'L' %}{% trans %}List{% endtrans %}
+				{% elseif section_properties['Interface']['ListType'] == 'R' %}{% trans %}Details{% endtrans %}
+				{% endif %}
+			</td>
+		</tr>
+		{% if section_properties['Interface']['HideAttachButtons'] == 1 %}
+		<tr>
+			<td></td>
+			<td>{% trans %}Hide attachment section buttons{% endtrans %}</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td></td>
+			<td>
+				{% trans %}Hide attachment section when{% endtrans %}:
+				{% if section_properties['Interface']['HideOnReading'] == 1 %}{% trans %}Reading{% endtrans %}{% endif %}&nbsp;&nbsp;
+				{% if section_properties['Interface']['HideOnEditing'] == 1 %}{% trans %}Editing{% endtrans %}{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				{% trans %}Has multiple attachment sections{% endtrans %}:
+				{{ section_properties['Interface']['HasMultiAttachmentSection'] == 1 ? 'Yes'|trans : 'No'|trans }}
+			</td>
+		</tr>
+		<tr>
+			<td>{% trans %}Associated template files{% endtrans %}:</td>
+            <td>
+            	{% trans %}Template type{% endtrans %}: 
+            	{% if section_properties['TemplateType'] == 'None' %}{% trans %}None{% endtrans %}
+            	{% elseif section_properties['TemplateType'] == 'All' %}{% trans %}All{% endtrans %}
+            	{% else %}{{ section_properties['TemplateType'] }}
+            	{% endif %}
+			</td>
+		</tr>
+		{% if section_properties['TemplateType'] != 'None' %}
+		<tr>
+			<td class="firstRw">{% trans %}Applicable templates{% endtrans %}:</td>
+			<td class="firstRw">
+			{% set templates = section_properties['TemplateName']|split(',') %}
+			{% for tmp in templates %}
+				{{ tmp }}<br />
+			{% endfor %}
+			</td>
+		</tr>
+		{% if templates|length > 0 %}
+		<tr>
+			<td class="firstRw"></td>
+			<td class="firstRw">{{ section_properties['TemplateAutoAttachment'] == 1 ? 'Auto attach template on document creation'|trans : '' }}</td>
+		</tr>
+		{% endif %}
+		{% endif %}		
+	</table>
+	{% endif %}

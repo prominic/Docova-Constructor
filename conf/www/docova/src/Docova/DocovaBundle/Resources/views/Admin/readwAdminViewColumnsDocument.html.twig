@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>{% trans %}View Column{% endtrans %}</title>
+	{% include 'DocovaBundle:Admin:sfWebAdminCommonScriptHeader.html.twig'%}
+	{% include 'DocovaBundle:Admin:sfWebAdminCommonFields.html.twig' with { 
+		'document' : document is defined ? document : '',  
+		'view_name' : view_name, 
+		'view_title' : view_title, 
+		'mode' :mode,
+		'path_info' : ""
+	} %}
+</head>
+
+<body scroll="no">
+	<ul class="ui-widget-header actionBar hidetoload">
+		<a id="editBtn" href="{{ path('docova_admin_editdocument', { 'view_name' : view_name, 'doc_id' : document.getId }) }}" >{% trans %}Edit{% endtrans %}</a>
+		<li id="closeBtn">{% trans %}Close{% endtrans %}</li>
+	</ul>
+	<div id="frmEmulator">
+		<div id="divFormContainer" class="hidetoload">
+			<table class="elmContainer" cellspacing="0">
+				<tr>
+					<td colspan="2" class="firstRw"><h3 class="headings1">{% trans %}View Column Settings{% endtrans %}</h3></td>
+				</tr>
+				<tr>
+					<td class="firstRw">{% trans %}Column Type{% endtrans %}:</td>
+					<td class="firstRw">{{ document.getColumnType ? 'Built In'|trans : 'Custom'|trans }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Column Status{% endtrans %}: </td>
+					<td>{{ document.getColumnStatus ? 'Enabled'|trans : 'Disabled'|trans }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Default Column Title{% endtrans %}:</td>
+					<td>{{ document.getTitle }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Field or Formula{% endtrans %}:</td>
+					<td>{{ document.getFieldName }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Data Type{% endtrans %}:</td>
+					<td>
+						{% if document.getDataType == 1 %}
+							{% trans %}text{% endtrans %}
+						{% elseif document.getDataType == 2 %}
+							{% trans %}date{% endtrans %}
+						{% elseif document.getDataType == 3 %}
+							{% trans %}name{% endtrans %}
+						{% elseif document.getDataType == 4 %}
+							{% trans %}html{% endtrans %}
+						{% else %}
+							{% trans %}Unknown{% endtrans %}
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Default Width{% endtrans %}:</td>
+					<td>{{ document.getWidth }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}XML NodeName{% endtrans %}:</td>
+					<td>{{ document.getXMLName }}</td>
+				</tr>
+				<tr>
+					<td>{% trans %}Related Document Types{% endtrans %}:</td>
+					<td>{{ document.getRelatedDocTypes.count == 0 ? 'All'|trans : 'Selected'|trans }}</td>
+				</tr>
+				{% if document.getRelatedDocTypes.count %}
+				<tr>
+					<td class="firstRw exc"></td>
+					<td class="firstRw exc">
+						{% set relatedDocTypes = '' %}
+						{% for docType in document.getRelatedDocTypes %}
+							{% set relatedDocTypes = relatedDocTypes ~ docType.getDocName ~ ', ' %}
+						{% endfor %}
+						{% set relatedDocTypes = relatedDocTypes[:relatedDocTypes|length - 2] %}
+						{{ relatedDocTypes }}
+					</td>
+				</tr>
+				{% endif %}
+				<tr>
+					<td>{% trans %}Applicable Libraries{% endtrans %}</td>
+					<td>{{ document.getApplicableLibraries.count == 0 ? 'All'|trans : 'Selected'|trans }}</td>
+				</tr>
+				{% if document.getApplicableLibraries.count %}
+				<tr class="selectedLibs{% if document is not defined or document.getApplicableLibraries.count %} hidden{% endif %}">
+					<td class="firstRw exc"></td>
+					<td class="firstRw">
+						{% set applicableLibs = '' %}
+						{% for libDoc in document.getApplicableLibraries %}
+							{% set applicableLibs = applicableLibs ~ libDoc.getLibraryTitle ~ ', ' %}
+						{% endfor %}
+						{% set applicableLibs = applicableLibs[:applicableLibs|length - 2] %}
+						{{ applicableLibs }}
+					</td>
+				</tr>
+				{% endif %}
+			</table>
+		</div>
+	</div>
+</body>
+
+</html>

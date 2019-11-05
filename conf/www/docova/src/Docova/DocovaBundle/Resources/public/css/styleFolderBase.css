@@ -1,0 +1,268 @@
+﻿BODY  
+{ 
+margin: 0px;
+font: normal 11px Verdana,  Arial, sans-serif;
+color: black; 
+scroll: no;
+overflow: hidden;
+/*background-color: white;*/
+}
+/*-- view table --*/
+#ui-datepicker-div { z-index:10 !important; }
+#VDataTable thead {
+	width:100%;
+}
+
+#VDataTable  {
+	border-bottom : solid 1px lightgray;
+
+}
+
+#VDataTable tbody {
+	/*margin-top: 19px;*/
+	width:100%;
+	
+}
+
+#VDataTable tbody tr:nth-child(even) {background: #EFF0F0};
+
+TABLE.listtable
+{
+table-layout:fixed;
+
+margin-bottom: 10px;
+border-top: 1px solid #BBB;
+}
+
+ /*-- selection column header cell --*/
+.listselheader 
+{
+position: relative;
+z-index:35;
+padding : 2px;
+background-color: darkgray;
+border-right : solid 1px white;
+border-top : solid 1px #bbbbbb;
+white-space: nowrap;
+color: white;
+}
+
+.listtable thead tr {
+	/*box-shadow: 4px 2px 8px 2px lightgray;*/	
+}
+
+/*-- header cell --*/
+.listheader
+{
+position: relative;
+padding : 8px;
+background-color: darkgray;
+border-right : solid 1px white;
+border-top : solid 1px #bbbbbb;
+font: bold 11px Verdana,  Arial, sans-serif;
+color: white;
+white-space: nowrap;
+}
+
+/*-- filtered header cell --*/
+TD.listheaderfltr
+{
+z-index:20;
+position: relative;
+padding : 2px 1px 1px 3px;
+border-top : solid 2px #ff9900;
+border-bottom : solid 1px #bbbbbb;
+border-right : groove 1px;
+font: normal 11px Verdana,  Arial, sans-serif;
+color: black; 
+white-space: nowrap;
+}
+
+/*-- pinned header cell --*/
+TD.listheaderfr
+{
+z-index:25;
+/*position: relative; top: expression(parentNode.parentNode.parentNode.parentNode.scrollTop);
+left:expression(parentNode.parentNode.parentNode.parentNode.scrollLeft);*/
+padding : 2px 1px 1px 3px;
+/* background-color: #EFEFEF; */ 
+border-bottom : solid 1px #bbbbbb;
+border-right : groove 1px;
+font: normal 11px Verdana,  Arial, sans-serif;
+color: black; 
+white-space: nowrap;
+}
+
+/*-- pinned and filtered header cell --*/
+TD.listheaderfrfltr
+{
+z-index:25;
+/*position: relative; top: expression(parentNode.parentNode.parentNode.parentNode.scrollTop);
+left:expression(parentNode.parentNode.parentNode.parentNode.scrollLeft);*/
+padding : 2px 1px 1px 3px;
+/* ackground-color: #EFEFEF; */
+border-top : solid 2px #ff9900;
+border-bottom : solid 1px #bbbbbb;
+border-right : groove 1px;
+font: normal 11px Verdana,  Arial, sans-serif;
+color: black; 
+white-space: nowrap;
+}
+
+/*-- data cell --*/
+.listitem
+{
+z-index:20;
+padding : 8px;
+font : normal 11px Verdana,  Arial, sans-serif;
+border-bottom : solid 1px #f0f0f0;
+/*background-color: white; */
+word-break: break-all; 
+}
+
+/*-- pinned data cell --*/
+.listitemfr
+{
+z-index:10;
+position:relative;
+/*left:expression(parentNode.parentNode.parentNode.parentNode.scrollLeft);*/
+padding : 1px 3px 1px 3px;
+font : normal 11px Verdana,  Arial, sans-serif;
+border-bottom : solid 1px #f0f0f0;
+background-color: white; 
+word-break: break-all; 
+}
+/*-- selection column cell --*/
+.listsel
+{
+z-index: 30;
+padding : 2px 3px 2px 3px;
+/* background-color: #EFEFEF; */ 
+border-right : groove 1px;
+}
+/*----- category head ------*/
+.listcat
+{
+padding : 1px;
+border-bottom : solid 2px #aaccff;
+font : normal 11px Verdana,  Arial, sans-serif;
+/*background-color: white; */
+}
+.listcatfr
+{
+z-index:10;
+position:relative;
+/*left:expression(parentNode.parentNode.parentNode.parentNode.scrollLeft);*/
+padding : 1px;
+border-bottom : solid 2px #aaccff;
+font : bold 11px Verdana,  Arial, sans-serif;
+/*background-color: white; */
+word-break: keep-all; 
+}
+.summaryTitle
+{
+font-weight: bold;
+margin-bottom: 5px;
+}
+.summaryDesc
+{
+margin-bottom: 5px;
+}
+.summaryEdit
+{
+margin-bottom: 3px;
+}
+.summaryFiles
+{
+margin-bottom: 8px;
+}
+SELECT, INPUT, TEXTAREA 
+{
+color: black;
+font : normal 11px Verdana,  Arial, sans-serif;
+}
+INPUT.inpRadioChkbox
+{
+	font : normal 11px Verdana,  Arial, sans-serif;
+}
+fieldLabelCell
+{
+	border-bottom: solid 1px #dddddd;
+	font : normal 11px Verdana,  Arial, sans-serif;
+	padding: 3px 0px 3px 0px;
+}
+fieldCell
+{
+	border-bottom: solid 1px #dddddd;
+	font : normal 11px Verdana,  Arial, sans-serif;
+	padding: 3px 0px 3px 0px;
+}
+
+SPAN.thumbnail{
+	margin-top: 10px;
+	margin-left: 5px;
+	display:inline-block;
+	font: normal 10px  Arial, sans-serif;
+	color : grey;
+	text-overflow:ellipsis;
+   	overflow:hidden;
+   	white-space:nowrap;
+}
+
+.thumbtext{
+	font: normal 10px  Arial, sans-serif;
+	color : grey;
+}
+
+#VDataTable{ width:99.7% !important;}
+
+IMG.shadow
+{
+ 	padding:4px;
+	-moz-box-shadow: 3px 3px 4px lightgray;
+	-webkit-box-shadow: 3px 3px 4px lightgray;
+	box-shadow: 3px 3px 4px lightgray;
+	float:left;
+}
+
+.ui-menu {
+	z-index: 999 !important; /* so context ui-menus appear in front of categories in views */
+}
+
+.viewexpandcollapse {
+	color:#6d6666;
+	padding-left:4px;
+	padding-right:4px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background-color: #eaeaea;
+    border-left: 1px solid #ccc;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #8f9096;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #939394;
+}
+
+/* Allow Font Awesome Icons in lieu of jQuery UI and only apply when using a FA icon */
+.ui-icon[class*=" fa-"] {
+    /* Remove the jQuery UI Icon */
+    background: none repeat scroll 0 0 transparent;
+    /* Remove the jQuery UI Text Indent */
+    text-indent: 0; 
+    /* Bump it up - jQuery UI is -8px */
+    margin-top: -0.5em;
+}
+/* Allow use of icon-large to be properly aligned */
+.ui-icon.icon-large {
+    margin-top: -0.75em;
+}
+.ui-button-icon-only .ui-icon[class*=" fa-"] {
+    /* Bump it - jQuery UI is -8px */
+    margin-left: -7px;
+}

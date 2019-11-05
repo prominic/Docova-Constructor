@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<TITLE>DOCOVA</TITLE>
+<META charset="utf-8">
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<style type='text/css'>
+html,body {
+	padding: 0px;
+	margin: 0px;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+#content {
+	width: 100%;
+	height: 100%;
+}
+</style>
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness-flat/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}" type="text/css" />
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type="text/javascript">
+var redirect = false;
+var info = {
+	"isAppSettingsExist" : "",
+	"isAppSettingsUnidExist" : "",
+	"systemKey" : "DLIT-AAWMDP",
+	"redirectMobileReader" : "No",
+	"browserType" : "Chrome",
+	"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	"mobileUrl" : "{{ path('docova_mobile') }}",
+	"appSettingsUrl" : "",
+	"gotoReaderUrl" : "{{ path('docova_redirectto') }}",
+	"licenseIssueUrl" : "",
+	"finalUrl" : "{{ path('docova_homepage') }}",
+	"expired" : "",
+	"license" : "",
+	"mode" : "edit"
+};
+function getinfovar(){
+	return info;
+}
+
+$(document).ready(function(){
+	//Disable context menu
+	$(document).on("contextmenu", function(e){ e.preventDefault(); e.stopPropagation();});
+
+	$('#content').click(function(e) {  
+		var frameelem = window.frameElement;
+		var parentFrmst = $(frameelem).parent();
+		var count = 0;
+		while ( $(parentFrmst).attr("id") != "dummy" && count < 20){
+			parentFrmst = $(parentFrmst).parent();
+			count ++;
+		}
+		$(parentFrmst).find("frame").each ( function ( index, element ) {
+			
+			if  ( frameelem == element ) {
+				var bdy = $(this.contentWindow.document).find("body");
+				bdy.css("background-color", "#EBF4FA" );
+				$(element).attr("isSel", "1");
+			}else{
+				var bdy = $(this.contentWindow.document).find("body");
+				bdy.css("background-color", "#FFFFFF" );
+				$(element).attr("isSel", "" );
+			}
+		});
+		
+   		var par = window.parent;
+		par.parent.getFrameAttributes(window);
+	});
+});
+</script>
+</head>
+<body>
+	<div id="content">
+	{% if app.request.query.get('showmsg') == 1 %}
+		<table style="border:20px solid white;height:100%; width:100%;border-radius:20px; background-color:silver;">
+			<tr>
+				<td style="vertical-align:bottom;text-align:center;">
+					<span style="font-size: 20px; font-family: 'verdana';color:white;text-align:center;">{% trans %}Nothing Defined{% endtrans %}</span>
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align:top;text-align:center;">
+					<span style="font-size: 14px; font-family: 'verdana'; color:white;">{% trans %}Open this App in the DOCOVA App Builder to edit its design and layout.{% endtrans %}</span>
+				</td>
+			</tr>
+		</table>
+	{% endif %}
+	</div>
+</html>

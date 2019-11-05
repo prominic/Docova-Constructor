@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/tabFunctions.js') }}" charset="UTF-8"></script>
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness-flat/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styletabbedtable.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script type=text/javascript>
+var dbname = "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}";
+var homepageweb = "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}";
+var UserNameAB = "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}";
+var designelements = [{'id' : 'Agents', 'label': 'Agents', 'icon': 'far fa-code', 'description': 'Listing of custom agents', 'sortorder': '8'},{'id' : 'CSS', 'label': 'CSS', 'icon': 'fab fa-css3', 'description': 'Listing of custom CSS elements', 'sortorder': '11'},{'id' : 'Forms', 'label': 'Forms', 'icon': 'far fa-copy', 'description': 'Custom form design elements', 'sortorder': '1'},{'id' : 'Images', 'label': 'Images', 'icon': 'far fa-file-image', 'description': 'Listing of image resources', 'sortorder': '10'},{'id' : 'JS', 'label': 'JavaScript', 'icon': 'far fa-code-branch', 'description': 'Custom JavaScript library design elements', 'sortorder': '7'},{'id' : 'Layouts', 'label': 'Layouts', 'icon': ' far fa-object-group', 'description': 'Listing of Layouts', 'sortorder': '3'},{'id' : 'Menus', 'label': 'Menus', 'icon': 'far fa-bars', 'description': 'Listing of Menus', 'sortorder': '6'},{'id' : 'Pages', 'label': 'Pages', 'icon': 'far fa-copy', 'description': 'Listing of custom Page design elements', 'sortorder': '4'},{'id' : 'ScriptLibraries', 'label': 'Script Libraries', 'icon': 'far fa-file-code', 'description': 'Listing of custom script libraries', 'sortorder': '9'},{'id' : 'Subforms', 'label': 'Subforms', 'icon': 'far fa-clone', 'description': 'Custom subform design elements', 'sortorder': '5'},{'id' : 'Views', 'label': 'Views', 'icon': 'far fa-list-ul', 'description': 'Listing of Views', 'sortorder': '2'},{'id' : 'Workflow', 'label': 'Workflow', 'icon': 'far fa-project-diagram', 'description': 'Listing of Workflows', 'sortorder': '12'}];
+
+$(function() {
+	$('li.action').on('click', function(){
+		if ($(this).hasClass('expanded')) {
+			expCollapseNav($(this), true);
+		}
+		else {
+			expCollapseNav($(this));
+		}
+	});
+
+	//expand the left nav for apps by default
+	expCollapseNav($('li.action[target="apps"]'));
+	
+	var appToOpen = window.top.Docova.GlobalStorage['appBuilderOpenApp'];
+	//get all apps that the user has opened
+	var appsXML = "<Libraries>{{ userapps|raw }}</Libraries>";
+	xmlDoc = $.parseXML(appsXML);
+	$xml = $(xmlDoc);
+	var totalcount = 0;
+	var appIndex = 0;
+	$($xml).find('Library').each(function(index) {
+		totalcount++;
+		var title = $(this).find('Title').text();
+		var icon = $(this).find('AppIcon').text();
+		var iconColor = $(this).find('AppIconColor').text();
+		var docKey = $(this).find('DocKey').text();
+		var unid = $(this).find('Unid').text();
+		var deflayout = $(this).find('LayoutKey').text();
+		var nsfpath = $(this).find('NsfName').text();
+		$('#wdg_menu li').attr('nsfpath', nsfpath);
+		if (icon == "")
+			icon = "far fa-copy";
+		if (iconColor == "")
+			iconColor = "green";
+
+		designelements.sort(function(a, b) {
+			var valA = parseInt(a.sortorder);
+			valA = isNaN(valA) ? 0 : valA;
+			var valB = parseInt(b.sortorder);
+			valB = isNaN(valB) ? 0 : valB;
+			return valA - valB;
+		});
+
+		if (docKey == appToOpen)
+			appIndex = totalcount - 1;
+
+		var htmlStr = '<h3 dockey=' + docKey + ' ><i class="' + icon + '"></i> ' + title
+				+ '<i style="float:right" dockey=' + docKey + ' class="_remove ui-icon ui-icon-close"></i></h3>'
+		htmlStr += '<div class="list-group" layoutid= "' + deflayout + '" dockey="' + docKey + '" unid="' + unid + '"  + title="' + title + '" nsfpath="' + nsfpath + '">'
+		htmlStr += '<a class="list-group-item" id="appProperties" href="#" ondragstart="return false;"><i class="far fa-cog fa-fw"></i>&nbsp; {% trans %}Properties{% endtrans %}</a>';
+		for (var x = 0; x < designelements.length; x++) {
+			htmlStr += '<a class="list-group-item" id="app' + designelements[x].id + '" href="#"ondragstart="return false;"><i class=" ' + designelements[x].icon + ' fa-fw"></i>&nbsp; '
+					+ designelements[x].label
+					+ '</a>';
+		}
+		htmlStr += '</div>';
+		$(htmlStr).appendTo("#accordion");
+
+	});
+
+	if (totalcount > 0) {
+		$("#prop").hide();
+		$("#accordion").accordion({
+			active : appIndex,
+			heightStyle : 'content'
+		});
+
+		$("#accordion").accordion("option", "active", appIndex);
+	}
+
+	$("h3").click(function() {
+		window.top.Docova.GlobalStorage['appBuilderOpenApp'] = $(this).attr("dockey");
+	});
+
+	$(".list-group-item").on('click', function() {
+		var url = "";
+		var key = $(this).parent().attr("dockey");
+		var unid = $(this).parent().attr("unid");
+		var nsfpath = $(this).parent().attr("nsfpath");
+		var deflayout = $(this).parent().attr("layoutid");
+		var title= jQuery(this).text().trim();
+		var elemid = jQuery(this).attr("id");
+		if (elemid == "appProperties") {
+			url = "ApplicationDocKey/" + key + "?editDocument";
+		}
+		else if (key === '0') {
+			url = 'WidgetsView?ReadForm&DesignElement=' + elemid;
+		}
+		else {
+			url = nsfpath + "NotesView?ReadForm&AppID=" + key + "&DesignElement=" + elemid.slice(3);
+		}
+		if (url) {
+			// window.parent.fraTabbedTable.objTabBar.UpdateTab(title, "appBuilderMain", url);	
+			var objtabs = window.parent.fraTabbedTable.objTabBar;
+			if (objtabs.IsFolderOpen("appBuilderMainView")) {
+				objtabs.UpdateTab(title, "appBuilderMainView", url);
+			} else {
+				objtabs.CreateTab(title, "appBuilderMainView", "D", url);
+			}
+		}
+	});
+
+	$("._remove").click(function() {
+		RemoveAppFromAppBuilder(this);
+	})
+
+	//When X is hovered over
+	$(".ui-icon-close").hover(
+		function() {
+			$(this).removeClass("ui-icon-close").addClass("ui-icon-circle-close");
+		},
+		function() {
+			$(this).removeClass("ui-icon-circle-close").addClass("ui-icon-close");
+		}
+	);
+	//Disable context menu
+	$(document).on("contextmenu", function(e){ e.preventDefault(); e.stopPropagation();});
+});
+
+function RemoveAppFromAppBuilder(appObj) {
+
+	var delmsgtxt = "{% trans %}You are about to remove this application from your App Builder.{% endtrans %}<br><br><b>"
+			+ $(appObj).parent().text() + "</b><br><br>";
+	delmsgtxt += "{% trans %}Are you sure?{% endtrans %}<br><br>";
+	delmsgtxt += "({% trans %}Note: Please ensure you have closed all design elements before removing.{% endtrans %})<br>";
+	delmsgtxt += "({% trans %}Note: Removing an application does not delete it.{% endtrans %})";
+	var choice = window.top.Docova.Utils.messageBox({
+		prompt : delmsgtxt,
+		icontype : 2,
+		title : "{% trans %}Remove Application{% endtrans %}",
+		width : 550,
+		msgboxtype : 4,
+		onNo : function() {
+			return
+		},
+		onYes : function() {
+			var appUnid = $(appObj).attr("dockey")
+			var agentName = "WorkspaceServices"
+			var request = "<Request><Action>REMOVEFROMAPPLIST</Action><UserName><![CDATA[" + UserNameAB + "]]></UserName>";
+			request += "<Document>";
+			request += "<AppID>" + appUnid + "</AppID>";
+			request += "</Document>";
+			request += "</Request>";
+			var result = SubmitRequest(request, agentName);
+			if (result == "FAILED") {
+				window.top.Docova.Utils.hideProgressMessage();
+				alert("{% trans %}The Application could not be removed from the App Builder.{% endtrans %}");
+				return;
+			}
+
+			//-----Remove html from accordion
+			$("[dockey=" + appUnid + "]").fadeOut("slow", function() {
+				$("[dockey=" + appUnid + "]").remove();
+			});
+			$(appObj).parent().fadeOut("slow", function() {
+				$(this).remove();
+			});
+			window.top.Docova.GlobalStorage['appBuilderOpenApp'] = "";
+		}
+	});
+	return;
+}
+
+function SubmitRequest(request, agentName) {
+	//send the request to server
+	//var processUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" + agentName  + "?OpenAgent"
+	var processUrl = homepageweb + "/" + agentName + "?OpenAgent"
+	var result;
+	var resulttext;
+	$.ajax({
+		type : "POST",
+		url : processUrl,
+		data : request,
+		cache : false,
+		async : false,
+		dataType : "xml",
+		success : function(xml) {
+			result = true;
+			var xmlobj = $(xml);
+			var statustext = xmlobj.find("Result").first().text();
+			if (statustext == "OK") {
+				resulttext = xmlobj.find("Result[ID=Ret1]").text();
+			}
+		},
+		error : function() {
+			result = false
+			resulttext = "FAILED"
+			//provide an error message
+		}
+	});
+	return resulttext;
+}
+
+function expCollapseNav(elm, close) {
+	$('div.cntr').hide();
+	if (close === true) {
+		$('#' + elm.attr('target') + '_container').hide();
+		parent.document.getElementsByTagName('frameset')[0].setAttribute('cols','42,*');
+		elm.removeClass('expanded');
+	}
+	else {
+		parent.document.getElementsByTagName('frameset')[0].setAttribute('cols','257,*');
+		$('#' + elm.attr('target') + '_container').show();
+		elm.addClass('expanded');
+	}
+}
+</script>
+
+<style>
+html, body {
+	padding: 0px;
+	margin: 0px;
+	height: 100%;
+	width: 99.5%;
+	overflow: hidden
+}
+body { background: #FAFAFA; }
+#content {
+	width: 100%;
+	height: 100%;
+}
+
+#accordion {
+	padding: 8px
+}
+
+a {
+	color: #21b384;
+	text-decoration: none;
+}
+
+a:hover, a:focus {
+	color: #198764;
+	text-decoration: underline;
+}
+
+a:focus {
+	outline: thin dotted;
+	outline: 5px auto -webkit-focus-ring-color;
+	outline-offset: -2px;
+}
+
+figure {
+	margin: 0;
+}
+
+img {
+	vertical-align: middle;
+}
+#wdg_menu {
+	width: 95%;
+	padding: 0;
+	margin: 5px auto;
+	list-style: none;
+}
+#wdg_menu A { border-radius: 0 !important; font-size: 1.1em; }
+#action_list {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	background: #C7C7C5;
+	list-style: none;
+}
+#action_list LI {
+	padding: 7px;
+	text-align: center;
+	background: #E5E5E7;
+	margin: 3px 0;
+	cursor: pointer;
+}
+#action_list LI.expanded { background: #FAFAFA; }
+#action_list LI I { color:#777; font-size:24px; }
+#action_list LI:hover I { color:#333; !important }
+.cntr {
+	width: auto;
+	display: none;
+	overflow: hidden;
+}
+.ui-accordion .ui-accordion-content {
+	padding: 0em;
+}
+
+.list-group {
+	padding: none !important;
+}
+
+.list-group-item {
+	position: relative;
+	display: block;
+	padding: 5px 15px;
+	margin-bottom: -1px;
+	background-color: #ffffff;
+	border: 1px solid #dddddd;
+}
+
+.list-group-item:first-child {
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+}
+
+.list-group-item:last-child {
+	margin-bottom: 0;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+a.list-group-item, button.list-group-item {
+	color: #555555;
+	text-decoration:  none !important;
+}
+
+a.list-group-item .list-group-item-heading, button.list-group-item .list-group-item-heading
+	{
+	color: #333333;
+}
+
+a.list-group-item:hover, button.list-group-item:hover, a.list-group-item:focus, button.list-group-item:focus {
+	text-decoration: none;
+	color: #555555;
+	background-color: #f5f5f5;
+}
+
+button.list-group-item {
+	width: 100%;
+	text-align: left;
+}
+
+.list-group-item.disabled, .list-group-item.disabled:hover, .list-group-item.disabled:focus {
+	background-color: #eeeeee;
+	color: #777777;
+	cursor: not-allowed;
+}
+</style>
+</head>
+<body text="#000000" style="overflow-y: auto;">
+	<ul id="action_list">
+		<li class="action" target="apps" title="{% trans %}App-Builder{% endtrans %}"><i class="far fa-tasks fa-2x"></i></li>
+		<li class="action" target="widgets" title="{% trans %}Widget Builder{% endtrans %}"><i class="far fa-user-cog fa-2x"></i></li>
+	</ul>
+	<div class="cntr" id="widgets_container">
+		<ul id="wdg_menu">
+			<li layoutid="" dockey="0" unid="" title="{% trans %}Custom Widgets{% endtrans %}">
+				<a class="list-group-item" id="customwidgets" href="#" ondragstart="return false;"><i class="far fa-edit fa-fw"></i>&nbsp; {% trans %}Custom Widgets{% endtrans %}</a>
+			</li>
+			<li layoutid="" dockey="0" unid="" title="{% trans %}System Widgets{% endtrans %}">
+				<a class="list-group-item" id="systemwidgets" href="#" ondragstart="return false;"><i class="far fa-code fa-fw"></i>&nbsp; {% trans %}System Widgets{% endtrans %}</a>
+			</li>
+		</ul>
+	</div>
+	<div class="cntr" id="apps_container">
+    	<div id="accordion"></div>
+    	<div style="position: absolute; left: 10%; top: 30%" id="prop">
+    		<span style="font-color: lightgray">{% trans %}No recent applications.{% endtrans %} </span>
+    	</div>
+    </div>
+</body>
+</html>

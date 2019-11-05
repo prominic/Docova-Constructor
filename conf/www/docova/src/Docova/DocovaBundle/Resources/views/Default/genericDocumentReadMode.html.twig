@@ -1,0 +1,3639 @@
+<!doctype html>
+<html>
+<head>
+<title>{% trans %}Document{% endtrans %}: {{ document.getDocTitle }}</title>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+<link rel="stylesheet" href="{{ asset('bundles/docova/font-awesome/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleDocumentBase.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/styleActionBar.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/multiselect.css') }}" type="text/css" />
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/PrintDocument.css') }}" type="text/css" media="print" />
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script type="text/javascript" language="JavaScript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/sarissa_ieemu_xpath.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/multiselect.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/Docova.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/viewObjects.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/toolbar.js') }}" charset="UTF-8"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/embeddedViewObjects.js') }}" charset="UTF-8"></script>
+<script type="text/javascript">var _show_editor=false;</script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+{% set date_format = settings.getDefaultDateFormat|replace({'MM' : 'm', 'DD' : 'd', 'YYYY' : 'Y'}) %}
+<script language="JavaScript" type="text/javascript">
+var info = {
+	  "DocID" : "{{ document.getId }}",
+	  "DocKey" : "{{ document.getId }}",
+	  "DocumentNumber" : "",
+	  "DocStatus" : "{{ document.getDocStatus }}",
+	  "DocStatusNo" : "{{ document.getStatusNo }}",
+	  "ThreadKey" : "{{ document.getId }}",
+	  "DocumentTypeKey" : "{{ document.getDocType.getId }}",
+	  "DocTitle" : "{{ document.getDocTitle|replace({'"' : '\\"'})|raw }}",
+	  "DocumentType" : "{{ document.getDocType.getDocName }}",
+	  "LibraryKey" : "{{ document.getFolder.getLibrary.getId }}",
+	  "LibraryTitle" : "{{ document.getFolder.getLibrary.getLibraryTitle|raw }}",
+	  "SystemKey" : "{{ settings.getSystemKey }}",
+	  "UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+	  "UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+	  "UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+	  "TodayDate" : "{{ 'now'|date(date_format) }}",
+	  "isNewDoc" : "",
+	  "isDocBeingEdited" : "",
+	  "CursorFocusField" : "",
+	  "DocAccessLevel" : "{{ is_granted('ROLE_ADMIN') ? 7 : user_access.docacess }}",
+	  "CanDeleteDocuments" : "{{ user_access.cddocument ? 'true' : '' }}",
+	  "DocAccessRole" : "{{ user_access.docrole }}",
+	  "DbAccessLevel" : "{{ user_access.dbaccess }}",
+	  "CanCreateRevisions" : "{% if bookmarked != true and document.getDocType.getDocName != 'Mail Memo' and user_access.docacess > 2 %}true{% endif %}",
+	  "Mode" : "{{ app.request.query.get("mode") ? app.request.query.get("mode") : '' }}",
+	  "LoadAction" : "{{ app.request.query.get("loadaction") ? app.request.query.get("loadaction") : '' }}",
+	  "DataDocUrl" : "{{ url('docova_allbydockey', {'key' : document.getFolder.getId}) }}",
+	  "HTTP_Referer" : "{{ url('docova_allbydockey', {'key' : document.getFolder.getId}) }}",
+	  "Query_String" : "ParentUNID={{ document.getFolder.getId }}",
+	  "Query_String_Decoded" : "ParentUNID={{ document.getFolder.getId }}",
+	  "Path_Info_Decoded" : "{{ path('docova_readdocument', {'doc_id' : document.getId}) }}?ParentUNID={{ document.getFolder.getId }}",
+	  "SSLState" : "{{ app.request.getscheme == 'https' ? 'ON' : 'OFF' }}",
+	  "ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+	  "ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+	  "NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	  "LogNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+	  "ImagesPath" : "{{ asset('bundles/docova/images/') }}",
+	  "ArchiveNsfName" : "",
+	  "PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+	  "PortalNsfName" : "{{ path('docova_homepage') }}",
+	  "KeywordsNsfName" : "",
+	  "KeywordsWebName" : "",
+	  "FolderID" : "{{ document.getFolder.getId }}",
+	  "FolderUNID" : "{{ document.getFolder.getId }}",
+	  "FolderName" : "{{ document.getFolder.getFolderName|raw }}",
+	  {% set ancestors = '' %}
+	  {% if document.getFolder.getParentFolder %}
+	  	{% set ancestors = document.getFolder.getParentFolder.getFolderPath|replace({'\\' : ','}) %}
+	  {% endif %}
+	  "FolderAncestors" : "{{ ancestors|trim }}",
+	  "FolderPath" : "{{ document.getFolder.getFolderPath }}",
+	  "CreatedBy" : "{{ document.getCreator.getUserNameDnAbbreviated }}",
+	  "CreatedDate" : "{{ document.getDateCreated|date('d/m/Y') }}",
+	  "Managers" : "{{ managers|join(', ') }}",
+	  "Authors" : "{{ authors|join(', ') }}",
+	  "Readers" : "{{ readers|join(', ') }}",
+	  "FolderEditors" : "{{ folder_editors|join(', ') }}",
+	  "FolderAuthors" : "{{ folder_authors|join(', ') }}",
+	  "FolderReaders" : "{{ folder_readers|join(', ') }}",
+	  {% set fdoctypes = '' %}
+	  {% if document.getFolder.getApplicableDocType.count > 0 %}
+	  	{% for type in document.getFolder.getApplicableDocType %}
+	  		{% set fdoctypes = fdoctypes ~ type.getDocName ~ ', ' %}
+	  	{% endfor %}
+	  	{% set fdoctypes = fdoctypes[:fdoctypes|length - 2] %}
+	  {% endif %}
+	  "FolderDocTypes" : "{{ fdoctypes }}",
+	  "LastModifiedBy" : "{% if document.getModifier|length > 0 %}{{ document.getModifier.getUserNameDnAbbreviated }}{% endif %}",
+	  "LastModifiedDate" : "{% if document.getDateModified|length > 0 %}{{ document.getDateModified|date(date_format) }}{% endif %}",
+	  "LastModifiedServer" : "",
+	  "isReplicated" : "",
+	  "LockEditor" : "{{ document.getLockEditor ? document.getLockEditor.getUserNameDnAbbreviated : '' }}",
+	  "LockDate" : "{{ document.getLocked ? document.getDateModified|date(date_format) : '' }}",
+	  "LockServer" : "",
+	  "LockStatus" : "{{ document.getLocked ? '1' : '0' }}",
+	  "isLockEditor" : "{{ document.getLocked and document.getLockEditor.getUserNameDnAbbreviated == user.getUserNameDnAbbreviated ? 'true' : '' }}",
+	  "isLocked" : "{{ document.getLocked ? 'true' : '' }}",
+	  "isEditable" : "true",
+	  "isFileCIAOEnabled" : "{{ attachment_settings['EnableFileCIAO'] is defined and attachment_settings['EnableFileCIAO'] == 1 ? 'true' : '' }}",
+	  "isFileViewLoggingOn" : "{{ attachment_settings['EnableFileViewLogging'] is defined and attachment_settings['EnableFileViewLogging'] == 1 ? 'true' : '' }}",
+	  "isFileDownloadLoggingOn" : "{{ attachment_settings['EnableFileDownloadLogging'] is defined and attachment_settings['EnableFileDownloadLogging'] == 1 ? 'true' : '' }}",
+	  "MaxFiles" : "{{ attachment_settings['MaxFiles'] is defined ? attachment_settings['MaxFiles'] : 0 }}",
+	  "AllowedFileExtensions" : "{{ attachment_settings['AllowedFileExtensions'] is defined ? attachment_settings['AllowedFileExtensions'] : '' }}",
+	  "AttachmentsReadOnly" : "{{ attachment_settings['AttachmentReadOnly'] is defined and attachment_settings['AttachmentReadOnly'] == 1 ? 'true' : '' }}",
+	  "AttachmentsHidden" : "{{ attachment_settings['HideOnEditing'] is defined and attachment_settings['HideOnEditing'] == 1 ? 'true' : '' }}",
+	  "EnableDiscussion" : "{{ document.getDocType.getEnableDiscussion == 1 ? 'true' : '' }}",
+	  "EnableLocalScan" : "{{ attachment_settings['EnableLocalScan'] is defined and attachment_settings['EnableLocalScan'] == 1 ? 'true' : '' }}",
+	  "EnableMailAcquire" : "{{ document.getDocType.getEnableMailAcquire ? 'true' : '' }}",
+	  "EnableDropboxAcquire" : "",
+	  "EnableForwarding" : "{{ document.getDocType.getAllowForwarding ? 'true' : '' }}",
+	  "ForwardSave" : "{{ document.getDocType.getAllowForwarding ? document.getDocType.getForwardSave : '' }}",
+	  "ForwardSaveAs" : "", {# new option in standard #}
+	  "EnableLinkedFiles" : "{{ rel_doc_settings['EnableLinkedFiles'] is defined and rel_doc_settings['EnableLinkedFiles'] == 1 ? 'true' : '' }}",
+	  "LaunchLinkedFiles" : "{{ rel_doc_settings['LaunchLinkedFiles'] is defined and rel_doc_settings['LaunchLinkedFiles'] == 1 ? 'true' : '' }}",
+	  "RestrictPrinting" : "{{ translated_values['Restrict_Printing'] is defined and translated_values['Restrict_Printing'] ? 'true' : '' }}",
+	  "RequirePDFCreator" : "{{ document.getFolder.getLibrary.getPDFCreatorRequired ? 'true' : '' }}",
+	  "TemplateList" : "{{ templates['Template_List'] is defined ? templates['Template_List'] : '' }}",
+	  "TemplateNameList" : "{{ templates['Template_Name_List'] is defined ? templates['Template_Name_List'] : '' }}",
+	  "TemplateFileList" : "{{ templates['Template_File_List'] is defined ? templates['Template_File_List'] : '' }}",
+	  "TemplateVersionList" : "{{ templates['Template_Version_list'] is defined ? templates['Template_Version_list'] : '' }}",
+	  "TemplateType" : "{{ templates['Template_Type'] is defined ? templates['Template_Type'] : '' }}",
+	  "TemplateAutoAttach" : "{{ templates['Template_Auto_Attach'] is defined ? templates['Template_Auto_Attach'] : '' }}",
+	  "HasWorkflow" : "{{ document.getDocType.getEnableLifecycle and document.getDocType.getEnableWorkflow ? 'true' : '' }}",
+	  "HasLifecycle" : "{{ document.getDocType.getEnableLifecycle ? 'true' : '' }}",
+	  {% if workflow_options|length > 0 %}
+	  "isWorkflowCreated" : "{% if workflow_options.isCreated == true %}true{% endif %}",
+	  "isWorkflowCompleted" : "{% if workflow_options.isCompleted == true %}true{% endif %}",
+	  "CreateWorkflowInDraft" : "{% if workflow_options.createInDraft == true %}true{% endif %}",
+	  {% else %}
+	  "isWorkflowCreated" : "",
+	  "isWorkflowCompleted" : "",
+	  "CreateWorkflowInDraft" : "",
+	  {% endif %}
+	  "EnableVersions" : "{{ document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions ? 'true' : '' }}",
+	  "isXLinkEnabled" : "{{ rel_doc_settings['EnableXLink'] is defined and rel_doc_settings['EnableXLink'] == 1 ? 'true' : '' }}",
+	  "Version" : "{% if document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions %}{{ document.getDocVersion }}{% endif %}",
+	  "FullVersion" : "{% if document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions %}{{ document.getDocVersion }}.{{ document.getRevision ? document.getRevision : '0' }}{% endif %}",
+	  "PreviousFullVersion" : "",
+	  "NextFullVersion" : "",
+	  "AvailableVersionList" : "{{ available_versions|length > 0 ? available_versions|join(',') : '1.0.0,0.1.0,0.0.1' }}",
+	  "isInitialVersion" : "{{ is_initial_version }}",
+	  "isSupersededVersion" : "{{ document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions and document.getDocStatus == document.getDocType.getSupersededStatus ? 'true' : '' }}",
+	  "isDiscardedVersion" : "{{ document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions and document.getDocStatus == document.getDocType.getDiscardedStatus ? 'true' : '' }}",
+	  "isCurrentVersion" : "{{ document.getDocType.getEnableLifecycle and document.getDocStatus == document.getDocType.getFinalStatus ? 'true' : '' }}",
+	  "isNewVersion" : "",
+	  "StrictVersioning" : "{{ document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions and document.getDocType.getStrictVersioning ? 'true' : '' }}",
+	  "AllowRetract" : "{{ document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions and document.getDocType.getStrictVersioning and document.getDocType.getAllowRetract ? 'true' : '' }}",
+	  "RestrictDrafts" : "{{ document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions and document.getDocType.getStrictVersioning and document.getDocType.getRestrictDrafts ? 'true' : '' }}",
+	  "RestrictLiveDrafts" : "{{ document.getDocType.getEnableLifecycle and document.getDocType.getEnableVersions and document.getDocType.getRestrictLiveDrafts ? 'true' : '' }}",
+	  "AttachmentOptions" : "{# new item in doctype form in WF section #}",
+	  "HasAttachmentsSection" : "{{ attachment_settings ? 'true' : '' }}",
+	  "HasMultiAttachmentSections" : "",
+	  "TextContentType" : "{{ text_content_type }}",
+	  {# "TextContentType" : "{% if document.getDocType.getDocName == 'Mail Memo' %}HTML{% endif %}", #}
+	  "MailAcquireDialogUrl" : "{{ path('docova_mailacquire') }}?acquiretype=S",
+	  "RelatedDocOpenMode" : "{{ rel_doc_settings['RelatedDocOpenMode'] is defined and rel_doc_settings['RelatedDocOpenMode'] == 1 ? 'true' : '' }}",
+	  "OMUserSelectDocTypeKey" : "{{ rel_doc_settings['OMUserSelectDocTypeKey'] is defined ? rel_doc_settings['OMUserSelectDocTypeKey'] : '' }}",
+	  "OMLatestDocTypeKey" : "{{ rel_doc_settings['OMLatestDocTypeKey'] is defined ? rel_doc_settings['OMLatestDocTypeKey'] : '' }}",
+	  "OMLinkedDocTypeKey" : "{{ rel_doc_settings['OMLinkedDocTypeKey'] is defined ? rel_doc_settings['OMLinkedDocTypeKey'] : '' }}",
+	  "MailAcquireMessagesDialogUrl" : "{% if user.getUserProfile.getUserMailSystem == 'O' %}{{ path('docova_outlookacquiremessages') }}{% else %}{{ path('docova_mailacquiremessages') }}{% endif %}",
+	  "UserMailSystem" : "{{ user.getUserProfile.getUserMailSystem }}",
+	  "UserMailImport" : "{{ user.getUserProfile.getUserMailSystem }}",
+		{% set attachments = '' %}
+		{% set outlook_file_size = '' %}
+		{% if document.getAttachments.count > 0 %}
+			{% for attach in document.getAttachments %}
+				{% set attachments = attachments ~ '*' ~ attach.getFileName %}
+				{% set outlook_file_size = outlook_file_size ~ ',' ~ attach.getFileName ~ '*' ~ ((attach.getFileSize / 1024)|number_format) ~ ' KB' %}
+			{% endfor %}
+			{% set attachments = attachments[1:] %}
+			{% set outlook_file_size = outlook_file_size[1:] %}
+		{% endif %}
+	  "OutlookAttachmentsSize" : "{{ outlook_file_size }}",
+	  "DocAttachmentNames" : "{{ attachments|raw }}",
+	  "SessionDateFormat" : "{{ settings.getDefaultDateFormat|lower }}",
+	  "isLinkComments" : "{{ link_comments == 1 ? 'true' : '' }}",
+	  "hasDrafts" : "{{ has_draft }}",
+	  "MoreSectionLabel" : "{{ document.getDocType.getMoreSectionLabel|trans }}",
+	  "isBookmark" : "{{ bookmarked == true ? 'true' : '' }}",
+	  "BookmarkParentDocKey" : "",
+	  "DisableBookmarks" : "{{ document.getFolder.getDisableTCB ? '1' : '' }}",
+	  "DocIsDeleted" : "",
+	  "IncompleteEdits" : "{{ incompleteEdits }}",
+	  "MembersEnabled" : "true",
+	  {% set count = 0 %}
+	  {% if not document.getDocType.getDisableActivities and document.getActivities.count > 0 %}
+	  	{% for item in document.getActivities %}
+	  		{% if not item.getIsComplete and item.getAssignee.getId == user.getId %}
+	  			{% set count = count + 1 %}
+	  		{% endif %}
+	  	{% endfor %}
+	  {% endif %}
+	  "HasActivities" : "{{ count > 0 ? count : '' }}",
+	  "TargetFile" : '{{ app.request.query.get('targetfile') }}',
+	  "LimitPathLength" : {{ settings.getLimitFolderPathLength and settings.getFolderPathLength ? settings.getFolderPathLength : 0 }}
+};
+function getinfovar() {
+	return info;
+}
+
+//var aBar = new objCustomActionBar(false, "aBar");
+
+var statusWin; // progress message status window
+var checkin=false;
+var allowClose = false;
+var forceSave = false;
+var resizeUL = true;
+
+var dlgParams = new Array();  //params array that gets used by dialogs
+var retValues = new Array(); //ret params array that can be used by dialogs
+
+var DLExtensions = null;
+
+//var tmpOrphanXml = Sarissa.getDomDocument();   //temporary storage used for related document cleanup
+//---- global temp file variables----
+var tmpSupportFolders=new Array();
+var tmpFilePaths=new Array();
+
+var srcWindow = null;
+var openAction = null,
+	DocActivityData = null,
+	AuditLogData = null,
+	CommentLogData = null,
+	VersionLogData = null;
+
+window.top.Docova.Utils.showProgressMessage("Loading document...");
+
+$(function(){
+	DLExtensions = DocovaExtensions;
+
+	$('#audit_tab').click(function() {
+		if (AuditLogData === null) {
+			dataIslandInit('audit');
+		}
+	});
+
+	$('#version_tab').click(function() {
+		if (VersionLogData === null) {
+			dataIslandInit('versions');
+		}
+	});
+
+	$('#comments_tab').click(function() {
+		if (CommentLogData === null) {
+			dataIslandInit('comments');
+		}		
+	});
+
+	$('#activity_tab').click(function() {
+		if (DocActivityData === null) {
+			dataIslandInit('activity');
+		}
+	});
+	
+	$('#tdActionPane a').each(function(index,element) {
+   		$(element).button({
+			text: $.trim($(this).text()) ? true : false,
+			label: $.trim($(this).text()),
+			icons: {
+		 		primary: ($.trim($(this).attr('primary'))) ? $(this).attr('Primary') : null,
+				secondary: ($.trim($(this).attr('secondary'))) ? $(this).attr('secondary') : null
+			}
+		});
+	});
+
+	$( "#tabs" ).tabs();
+    //For sections
+    $("#sectionAdvancedComments").accordion();
+
+	$( "#OriginalDate" ).datepicker( { dateFormat: docInfo.SessionDateFormat } );
+	$( "#CustomArchiveDate" ).datepicker( { dateFormat: docInfo.SessionDateFormat } );
+	$( ".dateField").datepicker( { dateFormat: docInfo.SessionDateFormat } ); //For any date fields generated by Designer
+	
+	$("#btnMore").button({
+		icons: { primary: "ui-icon-circle-arrow-e" },
+		label: docInfo.MoreSectionLabel,
+		text: false
+	}).click(function(event){
+		ToggleOptions();
+		event.preventDefault();
+	});
+	
+	$( "button" ).button().click(function( event ) {
+		event.preventDefault();
+	});
+	
+	//Activities and Print buttons
+	var tooltip = $("#btnShowActivities").button({
+		icons: { primary: "ui-icon-alert" },
+		label: docInfo.HasActivities,
+		text: true
+    }).click(function(event){
+        tooltip.tooltip('close');
+    	displayResponseActivities();
+    	event.preventDefault();
+	}).tooltip();
+	
+	$("#btnCreateActivity").button({
+		icons: { primary: "ui-icon-script" }
+    	}).click(function(event){
+    		CreateActivity();
+    		event.preventDefault();
+	}).tooltip();
+	
+	$("#btnPrintPage").button({
+		icons: { primary: "ui-icon-print" }
+    	}).click(function(event){
+    		printPage();
+    		event.preventDefault();
+	}).tooltip();
+	
+	// Address dialog buttons
+	$("#btnOriginalAuthor").button({
+    		text: false
+    	}).click(function(event){
+    	 	var restricttomembers = (docInfo.MembersEnabled)? docInfo.LibraryKey : ""; 
+    		window.top.Docova.Utils.showAddressDialog({ fieldname: "OriginalAuthor", dlgtype: "single", sourcedocument: document, "restricttolibrarymembers" : restricttomembers });
+    		event.preventDefault();
+	});
+
+	$("#btnDocumentOwner").button({
+    		text: false
+    	}).click(function(event){
+    	 	var restricttomembers = (docInfo.MembersEnabled)? docInfo.LibraryKey : "";     	
+    		window.top.Docova.Utils.showAddressDialog({ fieldname: "DocumentOwner", dlgtype: "single", sourcedocument: document, "restricttolibrarymembers" : restricttomembers });
+    		event.preventDefault();
+	});
+
+    $("#btnAuthors").button({
+    		text: false
+    	}).click(function(event){
+    	 	var restricttomembers = (docInfo.MembersEnabled)? docInfo.LibraryKey : "";     	    	
+    		window.top.Docova.Utils.showAddressDialog({ fieldname: "Authors", dlgtype: "multi", sourcedocument: document, "restricttolibrarymembers" : restricttomembers });
+    		event.preventDefault();
+	});
+
+    $("#btnReaders").button({
+    		text: false
+    	}).click(function(event){
+    	 	var restricttomembers = (docInfo.MembersEnabled)? docInfo.LibraryKey : "";        	
+    		window.top.Docova.Utils.showAddressDialog({fieldname: "Readers", dlgtype: "multi", sourcedocument: document, "restricttolibrarymembers" : restricttomembers });
+    		event.preventDefault();
+	});
+
+    $("#btnReviewers").button({
+    		text: false
+    	}).click(function(event){
+    	 	var restricttomembers = (docInfo.MembersEnabled)? docInfo.LibraryKey : "";        	
+	    	window.top.Docova.Utils.showAddressDialog({ fieldname: "Reviewers", dlgtype: "multi", sourcedocument: document, "restricttolibrarymembers" : restricttomembers });
+    		event.preventDefault();
+	});
+
+	$(".btnAddrButton").button({ //For custom address dialog buttons created with Designer
+    		text: false
+    	}).click(function(event){
+    		var fname = $(this).attr("fname");
+    		var dtype = $(this).attr("dtype");
+    	 	var restricttomembers = (docInfo.MembersEnabled)? docInfo.LibraryKey : "";        		
+    		window.top.Docova.Utils.showAddressDialog({ fieldname: fname, dlgtype: dtype, sourcedocument: document,  "restricttolibrarymembers" : restricttomembers });
+    		event.preventDefault();
+	});
+	
+	$("#btnAddComment").button({
+		icons: { primary: "ui-icon-comment" },
+		label: "Add Comment",
+    		text: false
+    	}).click(function(event){
+    		LogAdvancedComment(true)
+    		event.preventDefault();
+	});
+
+	$("#btnDeleteComment").button({
+		icons: { primary: "ui-icon-trash" },
+		label: "Delete Comment",
+    		text: false
+    	}).click(function(event){
+    		DeleteComment()
+    		event.preventDefault();
+	});
+
+	$('#divContentSection').bind('keydown', function(event) {
+		
+    		if(event.which === 27){ // Check for the Esc key being pressed
+        		console.log('Esc was pressed');
+        		event.preventDefault();
+        		var uidoc = Docova.getUIDocument();
+        		uidoc.close()
+        		return false;
+    		}
+	});
+
+	
+});
+
+$(document).ready(function() {
+	window.top.Docova.Utils.hideProgressMessage();
+	$('#divContentSection, #FormHeader').show();
+});
+
+/**
+ * Generic function to intiate document data islands
+ * 
+ * @param string type (can be: activity, audit, comments or versions)
+ */
+function dataIslandInit(type)
+{
+	switch(type) {
+    	case 'activity':
+    		DocActivityData= new xmlDataIsland();
+    		DocActivityData.setSrc ( "{{ path('docova_activitydocdata') }}?RestrictToCategory={{ document.getId }}&{{ 'now'|date('m/d/Y H:i:s') }}" ) ;
+    		DocActivityData.id = "DocActivityData";
+    		DocActivityData.setTemplateName( "otblDocActivityData");
+    		DocActivityData.ondatasetcomplete = function() {
+        		if (typeof(ActivitiesLoaded) == 'function')
+        			ActivitiesLoaded();
+        		else {
+        			$("#NoDocActivityDataMsg").css("display", "");
+        			$("#tblDocActivityData").css("display", "none");
+            	}
+        	}
+    		//DocActivityData.process();
+    		break;
+    	case 'audit':
+    		AuditLogData= new xmlDataIsland();
+    		AuditLogData.setSrc ( "{{ path('docova_documentlogs', {'document' : document.getId, 'filter' : '0'}) }}?{{ "now"|date('m-d-Y h:i:s A') }}" ) ;
+    		AuditLogData.id = "AuditLogData";
+    		AuditLogData.setTemplateName( "tblAuditLogData");
+    		AuditLogData.ondatasetcomplete = function() { ""; }
+    		//AuditLogData.process();
+    		break;
+    	case 'comments':
+    		CommentLogData= new xmlDataIsland();
+    		CommentLogData.setSrc ( "{{ path('docova_documentcomments') }}?openPage&RestrictToCategory=DK{{ document.getFolder.getLibrary.getId }}DK{{ document.getId }}&{{ 'now'|date('m/d/Y H:i:s') }}" ) ;
+    		CommentLogData.id = "CommentLogData";
+    		CommentLogData.setTemplateName( "tblCommentLogData");
+    		CommentLogData.ondatasetcomplete = function() { ""; }
+    		//CommentLogData.process();
+    		break;
+    	case 'versions':
+    		VersionLogData= new xmlDataIsland();
+    		VersionLogData.setSrc ( "{{ path('docova_versionlog') }}?RestrictToCategory={{ document.getId }}&{{ 'now'|date('m/d/Y H:i:s') }}" );
+    		VersionLogData.id = "VersionLogData";
+    		VersionLogData.setTemplateName( "tblVersionLogData");
+    		VersionLogData.ondatasetcomplete = function() { ""; }
+    		//VersionLogData.process();
+	}
+}
+
+//------ document attachment comparison functions --------------------------------------
+function CompareVersions(){
+
+	var PDFCreatorAvailable = true;
+	//check whether PDF Creator is installed, which is required to view the comparison results
+	//unless the user has printing rights, in which case comparison results may be viewed in Word.
+	if(!DLExtensions.isPDFCreatorInstalled()) { PDFCreatorAvailable = false;	}
+	
+	if (docInfo.RestrictPrinting && PDFCreatorAvailable==false) {
+		alert("{% trans %}Unable to run document comparison.  PDF Creator is not installed.{% endtrans %}");
+		return;
+	}
+
+	if (VersionLogData == null) {
+		dataIslandInit('versions');
+	}
+	
+	var progressMsg = ""
+	var docID;
+	var docKey;
+	var docLocation;
+	var rs = VersionLogData.recordset;
+	var idList = new Array();
+	var x = 0;
+	rs.MoveFirst();
+	while(!rs.EOF()){
+		if(rs.getFIELDSCount() > 0){
+			if(rs.Fields("Selected").getValue()=="1"){
+				//idList[x] = rs.Fields("ParentDocKey").getValue();
+				idList[x] = rs.Fields("ParentDocID").getValue();
+				docLocation = rs.Fields("Location").getValue();
+				docID = rs.Fields("ParentDocID").getValue();
+				x++;
+			}
+		}
+		rs.MoveNext();
+	}
+	if(idList.length > 1) {
+		alert("Please select only one document to compare to the current document");
+		return false;
+	}
+	if(idList.length == 0) {
+		alert("Please select a document from the Version History tab to compare this document to.");	
+		if($("#btnMore").attr("isOpen") == "false"){  //ensure More section is open
+			ToggleOptions();
+		}
+		return false;
+	}
+	if(docID == docInfo.DocID){
+			alert("You selected the current document.  Please select a different version.")
+			return;	
+	}
+	
+	docKey = idList[0];
+		
+		//-----------------------------------------------------------
+		//check current user access
+		progressMsg += "{% trans %}Verifying you access to the files{% endtrans %}....<br>"
+		Docova.Utils.showProgressMessage(progressMsg)
+		var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/AccessServices?OpenAgent"
+		var request="";
+		
+		request += "<Request>";
+		request += "<Action>QUERYACCESS</Action>";
+		request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+		request += "<Unid>" + docID + "</Unid>";
+		request += "<Location>" + docLocation + "</Location>";
+		request += "<DocKey>" + docID + "</DocKey>";
+		request += "</Request>";
+
+		jQuery.ajax({
+			type: "POST",
+			url: url,
+			data: request,
+			cache: false,
+			async: false,
+			dataType: "xml",
+			success: function(xml){
+				var xmlobj = $(xml);
+				var statustext = xmlobj.find("Result").first().text();
+				if(statustext == "OK"){
+					var accessLevel = xmlobj.find('Results Result[ID=Ret1]').text()
+					if(accessLevel == 0) {
+						Docova.Utils.hideProgressMessage()
+						window.top.Docova.Utils.messageBox({
+							prompt: "{% trans %}You are not authorized to access this document.{% endtrans %}",
+							icontype: 1,
+							msgboxtype: 0, 
+							title: "{% trans %}Not Authorized.{% endtrans %}",
+							width: 400
+						})
+						return false;
+					}else if(accessLevel == 99) {
+						Docova.Utils.hideProgressMessage()
+						window.top.Docova.Utils.messageBox({
+							prompt: "{% trans %}The selected document could not be accessed.  It has most likely been deleted.{% endtrans %}",
+							icontype: 1,
+							msgboxtype: 0, 
+							title: "{% trans %}Document Deleted.{% endtrans %}",
+							width: 400
+						})
+						return false;
+					}
+					
+					//-----Compare the documents
+					var arr = new Array()
+					arr[0] = docInfo.DocID;
+					arr[1] = docKey;
+					arr[2] = docLocation //"A" if archived - agent handles case
+					CompareWordAttachments(arr, function(saveCompareDocPath){	
+						if(!saveCompareDocPath) {
+							Docova.Utils.hideProgressMessage()
+							return;
+						}
+						if(docInfo.RequirePDFCreator || docInfo.RestrictPrinting) {		
+							Docova.Utils.showProgressMessage("{% trans %}Converting comparison results to PDF{% endtrans %}..." );
+								
+							//------------------ convert the compare results to PDF ----------------------------------
+							if (docInfo.RestrictPrinting) {
+								var pdfPath = DLExtensions.ConvertToPDF ( saveCompareDocPath, true, "");
+							} else { 
+								var pdfPath = DLExtensions.ConvertToPDF ( saveCompareDocPath, false, "");
+							}
+							Docova.Utils.hideProgressMessage()
+				
+							//--------------- launch the pdf for viewing ----------------------------
+							DLExtensions.LaunchFile(pdfPath);
+						} else {
+							//launch in Word
+							Docova.Utils.hideProgressMessage()
+							DLExtensions.LaunchFile(saveCompareDocPath);
+						}	
+					})					
+				}
+			},
+			error: function(){
+				Docova.Utils.hideProgressMessage()
+				alert("{% trans %}Error:  An error occured while trying to get Users access level for a compare document operation.{% endtrans %}");
+			}
+		})
+}
+
+function getSelectedDocumentID(){
+
+	//get the DocumentUNID from the Version History document that has been selected
+	var inputs = document.getElementsByTagName("INPUT");
+	var selDoc = new Array();
+	var count = 0;
+	for(x=0; x<inputs.length; x++) {
+		if(inputs[x].id == "rowSelect") {
+			if(inputs[x].checked) {
+				selDoc[count] = getDocKey(inputs[x]);
+				count += 1;
+			}
+		}
+	}
+	if(selDoc.length > 1) {
+		alert("{% trans %}Please select only one document to compare to the current document{% endtrans %}");
+		return false;
+	} else if(selDoc == "") {
+		if($("#btnMore").attr("isOpen") == "false"){  //ensure More section is open
+			ToggleOptions();
+		}		
+		alert("{% trans %}Please select a document from the Version History tab to compare this document to.{% endtrans %}");
+	}
+	else {
+		return selDoc[0]
+	}
+}
+
+function getDocKey(clickObj) {
+		//returns the ParentDocID from the XML record set for the selected row
+		var rs = doc.xmlDataVersionLog.recordset;
+		var recNo=clickObj.recordNumber;
+		rs.AbsolutePosition = recNo;
+		if(rs.Fields("Location").Value == "A") {
+			return([rs.Fields("ParentDocKey").Value, "A"]);
+		} else {
+			return([rs.Fields("ParentDocID").Value, ""]);
+		}
+}
+//------ END document attachment comparison functions ----------------------------------------
+
+function bytesToSize(bytes, precision)
+{  
+    var kilobyte = 1024;
+    var megabyte = kilobyte * 1024;
+    var gigabyte = megabyte * 1024;
+    var terabyte = gigabyte * 1024;
+   
+    if ((bytes >= 0) && (bytes < kilobyte)) {
+        return bytes + ' B';
+ 
+    } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+        return (bytes / kilobyte).toFixed(precision) + ' KB';
+ 
+    } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+        return (bytes / megabyte).toFixed(precision) + ' MB';
+ 
+    } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+        return (bytes / gigabyte).toFixed(precision) + ' GB';
+ 
+    } else if (bytes >= terabyte) {
+        return (bytes / terabyte).toFixed(precision) + ' TB';
+ 
+    } else {
+        return bytes + ' B';
+    }
+}
+
+function printfix(){
+
+		if(!docInfo.AttachmentsHidden) {	
+			var Uploader = document.all.DLIUploader1;
+			if ( Uploader == null ) return;
+			var FNames = doc.DLIUploader1.GetAllFileNames(";");
+			var aFnames = FNames.split (";")
+			var aFDates = doc.DLIUploader1.GetAllFileDates(";").split(";");
+			var aFSize= doc.DLIUploader1.GetAllFileLengths(";").split(";");
+			document.all.divAttachmentSection.style.display = "none";
+			var printDiv = document.all.printAttach;
+			var tmpHtml = '<font face=Verdana  size=1><table style ="width=100%;border: 1px solid;"><tr><th width="50%" style="border-bottom: silver 1px solid;">{% trans %}File Name{% endtrans %}</th><th width="25%" style="border-bottom: silver 1px solid;">{% trans %}Date{% endtrans %}</th><th width="25%" style="border-bottom: silver 1px solid;">{% trans %}File Size{% endtrans %}</th></tr>';		
+			for (i = 0; i < Uploader.FileCount; i ++ ){
+					tmpHtml += '<tr><td style="border-bottom: silver 1px solid;">' + aFnames[i] + '</td><td style="border-bottom: silver 1px solid;">' + aFDates[i]  + '</td><td style="border-bottom: silver 1px solid;">' + bytesToSize(aFSize[i], 2) + "</td></tr>";
+			}
+			tmpHtml += "</table></font><br/>";
+			printDiv.innerHTML = tmpHtml;
+			printDiv.style.display = "block";
+		}
+}
+
+function removeprintfix()
+{
+	if(!docInfo.AttachmentsHidden) {		
+		var Uploader = document.all.DLIUploader1;
+		if ( Uploader == null ) return;
+		document.all.divAttachmentSection.style.display = "block";
+		document.all.printAttach.style.display = "none";
+	}
+}
+
+function IsValidParent()
+{
+	try	{
+		var parentFolderUNID = docInfo.FolderUNID;
+		//------------------ Content Paging Support -------------------------------------------
+		if (docInfo.Mode != "dle" && docInfo.Mode !="window"){
+			var fs = window.parent.fsContentFrameset;
+			if (fs){	
+				for ( var x = 3; x < fs.childNodes.length; x++ ){
+					currFrameID = fs.childNodes[x].id;	
+					if ( currFrameID == parentFolderUNID ){
+						srcWindow = fs.childNodes[x];
+						break;
+					}
+				}
+			}
+		}
+
+		if (srcWindow && typeof srcWindow.contentWindow.ViewLoadDocument === 'function'){ return true; }
+	}
+	catch (e) {
+		return false;
+	}
+	return false;
+}
+
+
+function ResetMenu()
+{
+	if(aBar){
+	if(aBar.curSubactionParent) {aBar.resetSubactionPanel(); }
+	}
+}
+
+
+
+function ToggleOptions()
+{
+	if($("#btnMore").attr("isOpen") == "true"){
+		$('#btnMore .ui-icon').addClass('ui-icon-circle-arrow-e').removeClass('ui-icon-circle-arrow-s');
+		$( "#divHeaderOptions" ).hide( "blind", 1000 );
+		$("#btnMore").attr("isOpen", false)
+	}else{
+		$('#btnMore .ui-icon').addClass('ui-icon-circle-arrow-s').removeClass('ui-icon-circle-arrow-e');
+		$( "#divHeaderOptions" ).show( "blind", 1000 );
+		$("#btnMore").attr("isOpen", true)
+	}
+}
+
+
+function CloseDocument(refreshView)
+{
+
+	//if(!checkActivities()) { return false; }
+	//If doc is new, check to see if any activities were created in draft mode and confirm user wants to remove them
+	if(docInfo.isNewDoc){
+		if($("#tmpActivity").val() == "1" && $("#tmpDiscardActivities").val() == "0"){
+			checkActivities();
+			return false;
+		}
+	}
+	
+	//If this is a new doc and not being saved, but items like Related Documents have been linked, we need to clean those temporary orphans up.
+	if(docInfo.isNewDoc){
+		//xmlDoc = tmpOrphanXml;
+		orphanData = document.getElementById("tmpOrphanXML");
+		var xmlString = $(orphanData).text();
+		var parser = new DOMParser;
+		xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+		var nodeList = xmlDoc.selectNodes( 'Libraries/Library' ); 
+		if(nodeList.length > 0){
+			ClearTmpOrphans(xmlDoc);
+		} 
+	}
+
+
+	//var Uploader = DLIUploader1;  //Attachment Recovery
+	if(typeof DLIUploader1 == 'undefined'){
+		var Uploader = false;
+	}else{
+		var Uploader = DLIUploader1;
+	}
+	
+	allowClose = true; //to let the onUnload event fall through	
+	if(docInfo.isDocBeingEdited && docInfo.isLocked)	{
+		Unlock();
+	}
+
+	//----------------------------------------------------------------	
+	if(docInfo.Mode=="dle"){
+		doc.tmpDleDataXml.value="<Results><Result ID='Status'>OK</Result></Results>";
+		window.external.DocLogic_SubmitCancel();	
+		return false;
+	}
+	else if(docInfo.Mode=="window"){
+		if(docInfo.isDocBeingEdited) { 	//attachment recovery
+			if(Uploader) {
+				Uploader.EnableFileCleanup = 1; 
+				removeEditInPlaceLogs();
+			}
+		}
+		window.close();
+		return false;
+	}
+	else if(docInfo.Mode=="preview"){
+		if(( window.parent.fraTabbedTable && window.parent.fraTabbedTable.objTabBar) || (window.parent.fraTabbedTableSearch && window.parent.fraTabbedTableSearch.objTabBarSearch) ){
+		
+			//archive open throught the search results...
+			//in this case it will open in the tabbed interface...if so don't do anything
+			//the following code will close the tab.
+		}else{
+			window.close();
+			return false;
+		}
+	}
+	//----------------------------------------------------------------
+	if(IsValidParent()) {
+		if(docInfo.isDocBeingEdited) { 	//attachment recovery
+			if(Uploader) {
+				Uploader.EnableFileCleanup = 1; 
+				removeEditInPlaceLogs();
+			}
+		}	
+		srcWindow.contentWindow.ViewUnloadDocument(refreshView, docInfo.DocID);
+	}else{
+		if(docInfo.isDocBeingEdited) { 	//attachment recovery
+			if(Uploader) {
+				Uploader.EnableFileCleanup = 1; 
+				removeEditInPlaceLogs();
+			}
+		}		
+	}
+	
+	var currDocID = "";
+	if(self.frameElement) {
+		currDocID = self.frameElement.id;
+	}
+	if(!docInfo.isNewDoc) { 
+		currDocID = docInfo.DocID; 
+	}
+	
+	if(window.parent.fraTabbedTable && window.parent.fraTabbedTable.objTabBar){
+		window.parent.fraTabbedTable.objTabBar.CloseTab(currDocID);
+	}
+	else if(window.parent.fraTabbedTableSearch && window.parent.fraTabbedTableSearch.objTabBarSearch){
+		window.parent.fraTabbedTableSearch.objTabBarSearch.CloseTab(currDocID);
+	}
+}
+
+
+function checkConnectionActive(){
+	var result = false;
+
+	//--- url to check connectivity
+	var url = docInfo.ServerUrl +docInfo.PortalWebPath + "/LoginConfirmation.xml?OpenPage&" + Math.random();
+
+		jQuery.ajax({
+			type: "POST",
+			url: url,
+			cache: false,
+			async: false,
+			dataType: "xml",
+			success: function(xml) {
+				var xmlobj = jQuery(xml);
+				var statustext =  xmlobj.find("status").text();
+				result = true;
+			},
+			error: function(){
+				alert("Your session has timed out, or your network connection was lost.\n In the following dialog please try logging back in.\n Then try saving this document again.");
+				var dlgUrl = docInfo.ServerUrl +docInfo.PortalWebPath + "/LoginPublic?ReadForm&" + Math.random();
+				var dlgLoginPublic = Docova.Utils.createDialog({
+					id: "divLoginPublic", 
+					url: dlgUrl,
+					title: "{% trans %}Login{% endtrans %}",
+					height: 600,
+					width: 800, 
+					useiframe: true,
+					sourcewindow: window,
+					sourcedocument: document,
+					buttons: {
+        					"{% trans %}Close{% endtrans %}": function() {
+							dlgLoginPublic.closeDialog();
+       					}
+      				}
+				})
+			result = false;
+			}
+		});	
+	return result;
+}
+
+
+
+function SaveAndClose(refreshView)
+{
+	if(!checkConnectionActive()){
+		return false;
+	}
+
+	resizeUL = false; //Don't resize any Uploaders on the form
+	if(! docInfo.isDocBeingEdited) {return CloseDocument(refreshView);}
+	allowClose = true; //to let the onUnload event fall through
+
+	//----- get Docova Editor ----------------
+      try {
+            saveDocovaRichText();
+      }catch (e) {}
+
+	//----- get rich editor data -----------------	
+	try{
+            saveDocovaRichTextTinyMCE();
+	}catch(e) {}
+
+	//---------------------------------------------
+	if(!docInfo.isWorkflowCreated && docInfo.CreateWorkflowInDraft && doc.tmpWorkflowDataXml.value==""){
+		ProcessWorkflow("CREATE");
+	}
+
+	//-----Attachment related-------
+	//-----If multiple attachment sections exist, then manage storing file lists for each
+	if(docInfo.HasMultiAttachmentSections == "1"){
+		StoreMultiCtrlFileNames();
+	}
+	
+//	if ( DLIUploader1 )
+//		GetFileChanges();
+	if(typeof DLIUploader1 != "undefined"){
+		GetFileChanges();
+	}		
+		
+	var parentFolderUNID = docInfo.FolderUNID;
+	//------------------ Content Paging Support -------------------------------------------
+	if (docInfo.Mode != "dle" && docInfo.Mode !="window"){
+		var fs = window.parent.fsContentFrameset;
+		if (fs){	
+			for ( var x = 3; x < fs.childNodes.length; x++ ){
+				currFrameID = fs.childNodes[x].id;	
+				if ( currFrameID == parentFolderUNID ){
+					var folderInfo = fs.childNodes[x].contentWindow.getinfovar();
+					if(folderInfo.UseContentPaging == "1") {	
+						var folderFrame = fs.childNodes[x];
+						folderFrame.contentWindow.objView.docSubject = doc.Subject.value ;
+					}
+					break;
+				}
+			}
+		}
+	}
+//---------------------------------------------	
+	//var Uploader =DLIUploader1;
+	if(typeof DLIUploader1 == "undefined"){
+		var Uploader = false;
+	}else{
+		var Uploader = DLIUploader1;
+	}
+	if (Uploader ){
+			if (docInfo.Mode=="dle"){
+			//var retValue = document.all.DLIUploader1.Submit(false);
+			
+			Uploader.Submit({
+					Navigate: false, 
+					GetResults: true, 
+					onOk: function(){
+						doc.tmpDleDataXml.value = Uploader.SubmitResultPage;
+						//doc.dleOk.click();
+						window.external.DocLogic_SubmitOk(Uploader.SubmitResultPage);
+						return false;
+					}, 
+				 onOtherwise: function(){
+				 	doc.tmpDleDataXml.value="<Results>";
+					doc.tmpDleDataXml.value+="<Status>FAILED</Status>";
+					doc.tmpDleDataXml.value+="<Message>Failed submitting data to server.</Message>";
+					doc.tmpDleDataXml.value+="<Code>ERR_" +  retValue + "</Code>";
+					doc.tmpDleDataXml.value+="</Results>";
+					//doc.dleFailed.click();
+					var ResultXml = "<Results><Status>FAILED</Status><Message>Failed submitting data to server.</Message><Code>ERR_1</Code></Results>";
+					window.external.DocLogic_SubmitFailed(ResultXml);
+					return false;
+				}
+			});
+		
+		}else{
+			//if(!FileOpenInApp()){
+				Uploader.EnableFileCleanup =1;
+				removeEditInPlaceLogs();
+				Uploader.Submit();
+				
+				//Tabs are closed in the response returned by the webquerysave agent
+		//	}
+		}
+	}else{
+		document.forms[0].submit();
+		//Tabs are closed in the response returned by the webquerysave agent
+	}
+}
+
+function HandleKeyboard(){
+	if(event.keyCode == 8) {
+		//override IE default behaviour
+		if(document.activeElement.type == "text" || document.activeElement.type == "textarea") {
+			if(document.activeElement.contentEditable == "inherit" && document.activeElement.readOnly == false)  {
+				return true; 
+			} else {return false; }
+		} else if(document.activeElement.contentEditable == "true") {
+			return true; 
+		} else {
+			return false;
+		}
+	}
+	if(event.keyCode == 27 && !docInfo.isDocBeingEdited) {CloseDocument();}
+	if(event.keyCode == 27 && docInfo.isDocBeingEdited){
+		//---- Following condition forces doc to save if user check in file(s) but then hit ESC ----
+		if(forceSave){
+			HandleSaveClick(true);
+			CloseDocument(true);
+		}
+		else
+		{
+			var ans=SaveBeforeClosing();
+			if(ans==6)
+			{
+				HandleSaveClick();
+			}
+			else if(ans==7)
+			{
+				CloseDocument();
+			}
+		}
+	}
+	if((event.keyCode == 80) && (event.ctrlKey)) { 
+		if(docInfo.RestrictPrinting) {
+			alert("{% trans %}You are not permitted to print this document{% endtrans %}");
+			return;
+		}
+	}
+}
+
+function InitDoc()
+{
+	if(IsValidParent())
+	{
+		try	{
+			if(docInfo.LoadAction == "refreshview")
+			{
+				srcWindow.contentWindow.ViewReload(docInfo.DocID)
+			}
+		}
+		catch (e){	}
+	}
+
+	//catch for opening related doc, if archived and deleted
+	if(docInfo.DocIsDeleted == "1") {
+		alert('{% trans %}Document has been deleted{% endtrans %}');
+	}
+	
+	//check for any attachment edit logs (attachments edited but not saved properly) 
+	if(docInfo.isDocBeingEdited) {
+		//var Uploader = DLIUploader1;
+		if(typeof DLIUploader1 == "undefined"){
+			var Uploader = false;
+		}else{
+			var Uploader = DLIUploader1;
+		}
+		if(Uploader) {
+			var incompEdits = docInfo.IncompleteEdits;	
+			if(incompEdits) {
+				attachmentEditLogManager(incompEdits);
+			}
+		}
+	}
+	
+	//---- check to see if we should auto attach any template
+	if (docInfo.TemplateAutoAttach == "1"){
+		if (docInfo.isNewDoc && docInfo.isDocBeingEdited){
+			try{
+				AttachTemplate();
+			}
+			catch(e) {}
+		}
+	}	
+	
+	//Update the tabbed table entry to show the path to this document
+	if(window.parent.fraTabbedTable && window.parent.fraTabbedTable.objTabBar){
+		window.parent.fraTabbedTable.objTabBar.UpdateTitle( docInfo.DocID, docInfo.LibraryTitle + "\\" +  docInfo.FolderPath + "\\" + docInfo.DocTitle );
+	}
+	
+	//if open from search resutls
+	if(window.parent.fraTabbedTableSearch && window.parent.fraTabbedTableSearch.objTabBarSearch){
+		window.parent.fraTabbedTableSearch.objTabBarSearch.UpdateTitle( docInfo.DocID, docInfo.LibraryTitle + "\\" +  docInfo.FolderPath + "\\" + docInfo.DocTitle );
+	}
+	
+	 //---- check if the discussion JS header is loaded---
+	try{
+			LoadDiscussionThread();
+			//HighlightCurrent();
+		}
+	catch(e) {}
+	//----- check if the mail correspondence header is loaded----
+	try{
+			LoadMailCorrespondence();
+		}
+	catch(e) {}
+	document.body.onkeydown=HandleKeyboard;
+	if(docInfo.CursorFocusField !="" && docInfo.isDocBeingEdited){
+		try{
+			document.all[docInfo.CursorFocusField].focus();
+		}
+		catch(e) {
+			document.body.focus();
+		}
+	}
+	else{
+		document.body.focus(); //just opening the doc - focus so the doc event handlers start working
+	}
+}
+
+function EditDocument()
+{
+	allowClose = true; //to let the onUnload event fall through	
+	var curUrl = docInfo.ServerUrl + "/" + docInfo.NsfName+ "/EditDocument/" + docInfo.DocID + '?editDocument';
+	curUrl += (docInfo.Mode)? "&mode=" + docInfo.Mode : ""; 
+	if(!Lock()){return false;}
+
+	if(IsValidParent())
+		{
+			srcWindow.contentWindow.ViewLoadDocument(curUrl);
+		}
+		else
+		{
+			location.replace(curUrl)
+		}
+}
+
+function SaveBeforeClosing(noCancel)
+{
+
+	if(!docInfo.isDocBeingEdited) {return false;}
+
+	var doctitle = Docova.Utils.getField("Subject")
+	if(doctitle == ""){
+		doctitle = "-untitled-";
+	}
+	
+	var boxType = (noCancel)? 4 : 3; //4 = Yes, No   3 = Yes, No, Cancel
+
+	//return thingFactory.MessageBox( "Would you like to save the changes to this document titled (" + doctitle + ")? " + String.fromCharCode(10)  + String.fromCharCode(10) + "Answer Yes, to be sure that any changes made to files are saved properly." ,boxType, "Closing Document" );
+		var msg = "{% trans with {'%doctitle%' : '" + doctitle + "'} %}Would you like to save the changes to this document titled (%doctitle%)?<br><br>Answer Yes, to be sure that any changes made to files are saved properly.{% endtrans %}";
+		window.top.Docova.Utils.messageBox({
+			prompt: msg,
+			title: "{% trans %}Closing Document{% endtrans %}",
+			width: 400,
+			icontype : 2,
+			msgboxtype : boxType,
+			onYes: function() {
+				HandleSaveClick();
+			},
+			onNo: function() { 
+				CloseDocument();
+			},
+			onCancel: function() {
+				return false;
+			}
+    		});	
+}
+
+//-------------------- document fields validation called from IsValidData function
+function ValidateFields(items, hideErrorMsg)
+{
+	var itemList = items.split(";");
+	if(itemList.length == 0) { return true; }
+	var fieldValue;
+	var errorMsg = "";
+	var firstBadField;
+	var itemProperties;
+
+	for(var k=0; k<itemList.length ; k++)
+	{
+		itemProperties = itemList[k].split("~");
+		if(itemProperties[0]) //field name was supplied
+			{
+				if(document.getElementsByName(itemProperties[0]).length == 0)
+					{
+						continue; //field not found
+					}
+				fieldValue = Docova.Utils.getField(itemProperties[0]);
+				if(Docova.Utils.allTrim(fieldValue)) //has some text
+					{
+						//check for data type errors if applicable
+						if((itemProperties[1] == "number" &&  !isNumeric(fieldValue)) || (itemProperties[1] == "date" &&  !Docova.Utils.checkDate(fieldValue)))
+							{
+								firstBadField = (firstBadField)? firstBadField :  itemProperties[0];
+								errorMsg += (itemProperties[2])? itemProperties[2] : itemProperties[0];
+								errorMsg += " (invalid " + itemProperties[1] + ")\r";
+							}
+					}
+				else //empty
+					{
+						firstBadField = (firstBadField)? firstBadField :  itemProperties[0];
+						errorMsg += (itemProperties[2])? itemProperties[2] : itemProperties[0];
+						errorMsg += " ({% trans %}missing value{% endtrans %})\r";
+					}
+			}
+	}
+
+	if(errorMsg && !hideErrorMsg)
+		{
+			window.top.Docova.Utils.messageBox({
+			prompt: "{% trans %}The following fields did not pass the validation{% endtrans %}:<br><br>" + errorMsg + "<br><br>{% trans %}Please complete/correct the invalid entries.{% endtrans %}",
+			icontype: 1,
+			msgboxtype: 0, 
+			title: "{% trans %}Validation error{% endtrans %}",
+			width: 400
+		})
+			try
+				{
+					var focusField = document.getElementsByName(firstBadField);
+					focusField.focus();
+				}
+			catch(e){}
+
+			return false;
+		}
+		
+	if(errorMsg) {return false;} 	
+	return true;
+}
+
+
+
+//--- attempts to lock current document -----
+function Lock()
+{
+	if(docInfo.isLocked)
+		{
+			if(docInfo.isLockEditor)
+				{
+					return true; //alreadylocked by currnet user, nothing to do
+				} 
+				else
+				{
+					var msg = "The document has been locked for editing by " + docInfo.LockEditor;
+					msg += " on " + docInfo.LockDate;
+					alert(msg);
+					return false;
+				}
+		}
+	//--- document is automatically locked for editing
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/DocumentServices?OpenAgent"
+	var request="";
+
+	//--build the Lock request
+	request += "<Request>";
+	request += "<Action>LOCK</Action>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docInfo.DocID + "</Unid>";
+	request += "</Request>";
+	var httpObj = new objHTTP();
+	
+	if(httpObj.PostData(request, url)){
+		if(httpObj.status=="LOCKED" && httpObj.resultCount > 0){
+				alert(httpObj.results[1]);
+				return false;
+			}
+		else if(httpObj.status=="OK"){
+				docInfo.isLocked=true;
+				return true;
+			}
+		}
+return false;
+}
+
+//--- attempts tounlock current document -----
+function Unlock()
+{
+	//--- document is automatically checked out for editing
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/DocumentServices?OpenAgent"
+	var request="";
+
+	//--build the UNLOCK request
+	request += "<Request>";
+	request += "<Action>UNLOCK</Action>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docInfo.DocID + "</Unid>";
+	request += "</Request>";
+
+	jQuery.ajax({
+		type: "POST",
+		url: url,
+		data: request,
+		cache: false,
+		async: false,
+		dataType: "xml",
+		success: function(xml) {
+			result = true;
+			var xmlobj = jQuery(xml);
+			var statustext =  xmlobj.find("Result").first().text();
+			if(statustext == "OK"){
+				docInfo.isLocked=false;
+				docInfo.LockEditor = "";
+				docInfo.LockDate = "";
+			}
+		},
+		error: function(){
+			alert("{% trans %}Error: Could not release the lock on this document.  Please contact your Administrator.{% endtrans %}");
+			result = false;
+		}
+	});		
+
+	return result;
+}
+
+
+function NewVersionDiscardDrafts(versionType){
+	var customMsg = Docova.Utils.dbLookup({	
+		 	servername: "",
+			 nsfname: docInfo.KeywordsWebName,
+			 viewname: "luKeywordsByKey",
+			 key: "DiscardWarning",
+			 columnorfield: "KeywordAlias",
+			 delimiter: ";",
+			 alloweditmode: false,
+			 secure: docInfo.SSLState,
+			 failsilent: true
+	})
+	customMsg = eval(customMsg)
+	var msg = "{% trans with {'%hasdraft%' : '" + hasDrafts + "'} %}Warning:  An existing draft or pending version of this document,\ncreated by %hasdraft%, was found.\n\nIf you continue it will be discarded.\n\nContinue?{% endtrans %}";
+	if(customMsg) { msg = customMsg; }
+
+	window.top.Docova.Utils.messageBox({
+		prompt: msg,
+		title: "{% trans %}Warning{% endtrans %}",
+		width: 400,
+		icontype : 2,
+		msgboxtype : 4,
+		onYes: function() {
+			var attOption = docInfo.AttachmentOptions;
+			var delFile = "";  //default, keep all attachments
+			if(attOption == "1") { delFile = "ALL"; }
+			if(attOption == "2") { 
+				NewVersionDelFiles(versionType, docInfo.DocAttachmentNames)
+			}else{
+				DoNewVersion(versionType, delFile)
+			}
+			return;
+		},
+		onNo: function() { 
+			return false;
+		}
+	});	
+}
+
+function NewVersionDelFiles(versionType, docAttachmentNames){
+	dlgParams.length = 0; //reset dlgParams array.
+	dlgParams[0] = docAttachmentNames;
+	var dlgUrl ="/" + docInfo.PortalNsfName + "/" + "dlgSelectAttachments?OpenForm";
+	var SelDelFiles = window.top.Docova.Utils.createDialog({
+			id: "divDlgSelectAttachments", 
+			url: dlgUrl,
+			title: "{% trans %}Select Attachments{% endtrans %}",
+			height: 300,
+			width: 450, 
+			useiframe: true,
+			sourcedocument: document,
+			sourcewindow: window,
+			buttons: {
+       			"OK": function() {
+					var dlgDoc = window.top.$("#divDlgSelectAttachmentsIFrame")[0].contentWindow.document;
+					var delFile = $("input[name='FileAttach']:checked", dlgDoc).map( function(){ return this.value; }).get().join("*"); //gets * delimited file list from dialog
+					DoNewVersion(versionType,delFile);
+					SelDelFiles.closeDialog();
+        			},
+        			"Cancel": function() {
+					SelDelFiles.closeDialog();
+        			}
+      		}
+		})		
+}
+
+//--- attempts to create new version of the current document -----
+function NewVersion(versionType)
+{
+	//warn user if strict versioning or restrict drafts on and drafts found - they will be discarded if continue.
+	if(docInfo.StrictVersioning || docInfo.RestrictLiveDrafts) {
+		var hasDrafts = docInfo.hasDrafts;
+		if(hasDrafts) {
+			NewVersionDiscardDrafts(versionType);
+			return;   //exit early since a dialog will have been presented that needs complete to trigger any future action
+		}
+	}
+	
+	var attOption = docInfo.AttachmentOptions;
+	var delFile = "";  //default, keep all attachments
+	if(attOption == "1") { delFile = "ALL"; }
+	if(attOption == "2") { 
+		NewVersionDelFiles(versionType, docInfo.DocAttachmentNames)
+	}else{
+		DoNewVersion(versionType, delFile)
+	}
+}
+
+function DoNewVersion(versionType, delFile){
+	//--- processing agent url
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/DocumentServices?OpenAgent";
+	var request="";
+
+	//--build the NEWVERSION request
+	request += "<Request>";
+	request += "<Action>NEWVERSION</Action>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docInfo.DocID + "</Unid>";
+	request += "<VersionType>" + versionType + "</VersionType>";
+	request += "<Delfile><![CDATA[" + delFile + "]]></Delfile>";
+	request += "</Request>";
+
+	jQuery.ajax({
+		type: "POST",
+		url: url,
+		data: request,
+		cache: false,
+		async: false,
+		dataType: "xml",
+		success: function(xml) {
+			var xmlobj = jQuery(xml);
+			var statustext = xmlobj.find("Result").first().text();
+			if(statustext == "OK"){
+				var newDocID = xmlobj.find('Results Result[ID=Ret1]').text()
+				var newUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/EditDocument/" + newDocID + '?editDocument';
+				newUrl += (docInfo.Mode)? "&mode=" + docInfo.Mode : ""; 
+				newUrl += "&loadaction=refreshview";
+				
+				if(window.parent.fraTabbedTable && window.parent.fraTabbedTable.objTabBar){
+					var fid = docInfo.FolderID.substring(2);
+					window.parent.fraTabbedTable.objTabBar.CreateTab(docInfo.DocTitle, newDocID, "D", newUrl, fid, true);	
+				}
+			}
+		},
+		error: function(){
+			alert("{% trans %}Error creating new version.  Please try again.{% endtrans %}");
+		}
+	})
+}
+
+//--- retract current version of the document -----
+function RetractVersion()
+{
+	if(!CanModifyDocument(true)){return false;}
+
+	var requestOptions="";
+	if(docInfo.EnableVersions){
+		var dlgUrl =  docInfo.ServerUrl + "/" + docInfo.NsfName + "/" + "dlgRetractRelease?OpenForm"
+		var dlgRetractRelease =  window.top.Docova.Utils.createDialog({
+			id: "divDlgRetractRelease", 
+			url: dlgUrl,
+			title: "{% trans %}Retract Release{% endtrans %}",
+			height: 300,
+			width: 500, 
+			useiframe: true,
+			sourcewindow: window,
+			buttons: {
+       			"OK": function() {
+					var dlgDoc = window.top.$("#divDlgRetractReleaseIFrame")[0].contentWindow.document
+					var curAction = $("input[name=CurVersionAction]:checked", dlgDoc).val()
+					var prevAction = $("input[name=PrevVersionAction]:checked", dlgDoc).val()
+					curAction = (curAction == null) ? "" : curAction;
+					prevAction = (prevAction == null) ? "" : prevAction;
+					requestOptions = "<CurAction>" + curAction + "</CurAction><PrevAction>" + prevAction + "</PrevAction>"
+					DoRetractVersion(requestOptions);
+					dlgRetractRelease.closeDialog();
+        			},
+        			"Cancel": function() {
+					dlgRetractRelease.closeDialog();
+        			}
+      		}
+		})		
+	}else{
+		var msg = "{% trans %}You are about to retract a published document.<br><br>Are you sure?{% endtrans %}";
+		window.top.Docova.Utils.messageBox({
+			prompt: msg,
+			title: "{% trans %}Retract Version?{% endtrans %}",
+			width: 400,
+			icontype : 2,
+			msgboxtype : 4,
+			onYes: function() {
+				DoRetractVersion(requestOptions);
+			},
+			onNo: function() { 
+				return false;
+			}
+    		});	
+	}
+}
+
+function DoRetractVersion(requestOptions){
+	var request="";
+	//--build the RETRACTVERSION request
+	request += "<Request>";
+	request += "<Action>RETRACTVERSION</Action>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docInfo.DocID + "</Unid>";
+	request += requestOptions;
+	request += "</Request>";
+	
+	if(docInfo.isDocBeingEdited){
+		$("#tmpRequestDataXml").val(request);
+		HandleSaveClick();
+		return;
+	}
+	//--- processing agent url
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/WorkflowServices?OpenAgent"
+	jQuery.ajax({
+		type: "POST",
+		url: url,
+		data: request,
+		cache: false,
+		async: false,
+		dataType: "xml",
+		success: function(xml) {
+			result = true;
+			var xmlobj = jQuery(xml);
+			var statustext =  xmlobj.find("Result").first().text();
+			if(statustext == "OK"){
+				location.replace(location.href + "&loadaction=refreshview");
+			}
+		},
+		error: function(){
+			alert("{% trans %}Error: Could not retract document.  Please contact your Administrator.{% endtrans %}");
+			result = false;
+		}
+	});	
+}
+
+
+//--- reactivate discarded version of the document -----
+
+function ActivateVersion()
+{
+	if(!CanModifyDocument(true)){return false;}
+
+	var requestOptions="";
+	
+		window.top.Docova.Utils.messageBox({
+			prompt: "{% trans %}You are about to reactivate discarded draft document.\rAre you sure?{% endtrans %}",
+			title: "{% trans %}Activate Version?{% endtrans %}",
+			width: 400,
+			icontype : 2,
+			msgboxtype : 4,
+			onYes: function() {
+				var request="";
+				//--build the ACTIVATEVERSION request
+				request += "<Request>";
+				request += "<Action>ACTIVATEVERSION</Action>";
+				request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+				request += "<Unid>" + docInfo.DocID + "</Unid>";
+				request += "</Request>";
+				if(docInfo.isDocBeingEdited){
+					$("#tmpRequestDataXml").val(request);
+					HandleSaveClick();
+					return;
+				}else{
+					var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/WorkflowServices?OpenAgent"
+					jQuery.ajax({
+						type: "POST",
+						url: url,
+						data: request,
+						cache: false,
+						async: false,
+						dataType: "xml",
+						success: function(xml) {
+							result = true;
+							var xmlobj = jQuery(xml);
+							var statustext =  xmlobj.find("Result").first().text();
+							if(statustext == "OK"){
+								location.replace(location.href + "&loadaction=refreshview");
+							}
+						},
+						error: function(){
+							alert("{% trans %}Error: Could not reactivate this document.  Please contact your Administrator.{% endtrans %}");
+							result = false;
+						}
+					});
+				}
+			},
+			onNo: function() { 
+				return false;
+			}
+    		});
+    		
+}
+
+//-------- release the document --------
+function ReleaseDocument(keepVersion)
+{
+	if(!CanModifyDocument(true)){return false;}
+
+	//----Run custom on before release JS function if identified---//
+	if(!CustomOnBeforeReleaseHandler()){
+		return false;
+	}
+	
+	if (UserHasFilesCheckedOut())
+	{
+		alert("{% trans %}Before you can release this document you must check in any files you have checked out{% endtrans %}")
+		return false
+	}
+	
+	var userComment = "";
+	var requestOptions="";
+	var version = "";
+	
+	if(docInfo.EnableVersions && !keepVersion){
+		dlgParams.length = 0; //reset dlgParams array.
+		dlgParams[0] = docInfo.AvailableVersionList; 
+		dlgParams[1] = docInfo.FullVersion; 
+		dlgParams[2] = docInfo.isInitialVersion; 
+		dlgParams[3] = docInfo.StrictVersioning;
+		
+		var dlgUrl ="/" + NsfName + "/" + "dlgWorkflowDocRelease?OpenForm";
+		var dlgWorkflowDocRelease = window.top.Docova.Utils.createDialog({
+			id: "divDlgWorkflowDocRelease", 
+			url: dlgUrl,
+			title: "{% trans %}Release Document{% endtrans %}",
+			height: 270,
+			width: 455, 
+			useiframe: true,
+			sourcewindow: window,
+			buttons: {
+       			"{% trans %}OK{% endtrans %}": function() {
+					var dlgDoc = window.top.$("#divDlgWorkflowDocReleaseIFrame")[0].contentWindow.document
+					var userComment = $("#Comment", dlgDoc).val()
+					var isFirstRelease = dlgParams[2];
+					if(isFirstRelease){
+						if(!isNumeric($("#MajorVersion", dlgDoc).val()) || !isNumeric($("#MinorVersion", dlgDoc).val()) || !isNumeric($("#Revision", dlgDoc).val())){
+							alert("{% trans %}Sorry.  You must enter numeric values for major and minor version number.{% endtrans %}");
+							$("#MajorVersion", dlgDoc).focus();
+							return false;
+						}
+						version = $("#MajorVersion", dlgDoc).val() + "." + $("#MinorVersion", dlgDoc).val()  + "." + $("#Revision", dlgDoc).val()
+					}else{
+						version = $("input[name=VersionSelect]:checked", dlgDoc).val()
+						if(version ==""){
+							alert("{% trans %}Sorry.  You must select the major or minor version increment.{% endtrans %}");
+							return false;
+						}
+					}
+					if(!isFirstRelease && !userComment){ //comment is required for auto incremented versions
+						alert("{% trans %}Comment required. Please describe the changes to be included in this version.{% endtrans %}");
+						$("#Comment", dlgDoc).focus();
+						return false;
+					}
+					requestOptions += "<Version>" + version +  "</Version>";
+					requestOptions += "<UserComment><![CDATA[" + userComment +  "]]></UserComment>";
+					DoReleaseDocument(requestOptions, version, keepVersion);
+					dlgWorkflowDocRelease.closeDialog();
+        			},
+       			"{% trans %}Cancel{% endtrans %}": function() {
+					dlgWorkflowDocRelease.closeDialog();
+       			}
+      		}
+		})		
+	}else{
+		var fieldMsg = "{% trans %}Please enter the release comments (optional):{% endtrans %} ";
+		dlgParams.length = 0; //reset dlgParams array.
+		dlgParams[0] = fieldMsg; //Message to pass to dialog.
+		dlgParams[1] = false; //Are comments required? Picked up by dialog. For Release its false
+		var dlgUrl ="/" + docInfo.NsfName + "/" + "dlgWorkflowComment?OpenForm";
+		var dlgWorkflowComment = window.top.Docova.Utils.createDialog({
+			id: "divDlgWorkflowComments", 
+			url: dlgUrl,
+			title: "{% trans %}Comments{% endtrans %}",
+			height: 230,
+			width: 435, 
+			useiframe: true,
+			sourcewindow: window,
+			buttons: {
+       			"{% trans %}OK{% endtrans %}": function() {
+					//$("#divDlgWorkflowCommentsIFrame")[0].contentWindow.completeWizard(); //Call completeWizard in iframe in dialog
+					var dlgDoc = window.top.$("#divDlgWorkflowCommentsIFrame")[0].contentWindow.document
+					var userComment = $("#Comment", dlgDoc).val()
+					if(dlgParams[1] && !userComment){
+						window.top.Docova.Utils.messageBox({
+							icontype : 1,
+							msgboxtype : 0,
+							prompt: "{% trans %}Please enter a comment{% endtrans %}",
+							title: "{% trans %}Comment Required{% endtrans %}",
+							width: 200,
+							onOk: function() {
+								return;
+							}, 
+						});
+					}else{
+						requestOptions += "<Version>" + docInfo.FullVersion + "</Version>";
+						requestOptions += "<UserComment><![CDATA[";
+						requestOptions += (userComment)? userComment : ""; //userComment will be false if the dialog is cancelled
+						requestOptions += "]]></UserComment>";	
+						DoReleaseDocument(requestOptions,keepVersion);
+						dlgWorkflowComment.closeDialog();
+					}
+        			},
+       			"{% trans %}Cancel{% endtrans %}": function() {
+					dlgWorkflowComment.closeDialog();
+       			}
+      		}
+		})
+	}
+}
+
+function DoReleaseDocument(requestOptions, version, keepVersion){
+	var result = false;
+	var request="";
+	//--build the RELEASEVERSION request
+	request += "<Request>";
+	request += "<Action>RELEASEVERSION</Action>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docInfo.DocID + "</Unid>";
+	request += requestOptions;
+	request += "</Request>";
+
+	//--- process on server --
+	if(docInfo.isDocBeingEdited){
+		document.getElementById("tmpRequestDataXml").value = request;
+		//-----Set tmpVersion field to make available for onAfterRelease event------
+		if(docInfo.EnableVersions && !keepVersion){
+			document.getElementById("tmpVersion").value = version
+		}else{
+			document.getElementById("tmpVersion").value = docInfo.FullVersion
+		}
+		//-----Run custom on after release handler				
+		if(!CustomOnAfterReleaseHandler()){
+			return false;
+		}
+		HandleSaveClick();
+		return;
+	}else{
+		//--- processing agent url
+		var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/WorkflowServices?OpenAgent";
+		jQuery.ajax({
+			type: "POST",
+			url: url,
+			data: request,
+			cache: false,
+			async: false,
+			dataType: "xml",
+			success: function(xml){
+				var xmlobj = jQuery(xml);
+				var statustxt = xmlobj.find("Result").first().text()
+				if(statustxt == "OK"){
+					if(!CustomOnAfterReleaseHandler()){
+						result = false;
+					}else{							
+						//add this folder to the refresh list so that when the tab is closed in readmode, the view refreshes to show the new status
+						window.parent.fraTabbedTable.objTabBar.RefreshHelper.AddFolderToRefreshList( docInfo.FolderUNID, docInfo.DocID);
+						location.replace(location.href +  "&loadaction=refreshview");
+						result = true;
+					}						
+				}
+			}
+		})
+	}
+}
+
+// ---------- workflow/lifecycle comment dialog --------
+function GetComment(fieldMsg, required)
+{
+	//var params = new Array();
+	//params[0] = (fieldMsg)? fieldMsg : "";
+	//params[1] = (required)? required : false;
+
+//	var dlgUrl ="/" + NsfName + "/" + "dlgWorkflowComment?OpenForm";
+//	var dlgSettings = "dialogHeight:200px;dialogWidth:420px;center:yes; help:no; resizable:no; status:no;";
+//	return window.showModalDialog(dlgUrl,params,dlgSettings); //Display the comment dialog
+}
+
+// ---------- log workflow/lifecycle dialog --------
+function LogLifecycleComment(){
+	if(document.getElementById("AdvComments")){
+		LogAdvancedComment(true);
+	}else{
+		dlgParams.length = 0;
+		dlgParams[0] = "{% trans %}Please enter your comments below:{% endtrans %}";
+		dlgParams[1] = true;
+		var dlgUrl ="/" + NsfName + "/" + "dlgWorkflowComment?OpenForm";
+		var dlgWorkflowComment = window.top.Docova.Utils.createDialog({
+			id: "divDlgGetComment", 
+			url: dlgUrl,
+			title: "{% trans %}Comment{% endtrans %}",
+			height: 250,
+			width: 420, 
+			useiframe: true,
+			sourcewindow: window,
+			buttons: {
+       			"{% trans %}OK{% endtrans %}": function() {
+					var dlgDoc = window.top.$("#divDlgGetCommentIFrame")[0].contentWindow.document
+					var userComment = $("#Comment", dlgDoc).val()
+					if(dlgParams[1] && !userComment){
+						window.top.Docova.Utils.messageBox({
+							icontype : 1,
+							msgboxtype : 0,
+							prompt: "{% trans %}Please enter a comment{% endtrans %}",
+							title: "{% trans %}Comment Required{% endtrans %}",
+							width: 200,
+							onOk: function() {
+								return;
+							}, //onOk 
+						}); //messagebox
+					}else{
+						var request = "<UserComment><![CDATA[" + userComment +  "]]></UserComment>";
+						ProcessLifecycleRequest("ADDCOMMENT", request, true)
+						dlgWorkflowComment.closeDialog();
+					} //if else
+        			}, //OK
+        		"{% trans %}Cancel{% endtrans %}": function() {
+					dlgWorkflowComment.closeDialog();
+        		} //Cancel
+        	}
+		})	
+	}
+}
+
+// ---------- mark document reviewed --------
+
+function ReviewDocument(forceComplete)
+{
+	if(!CanModifyDocument(true)){return false;}
+
+	dlgParams.length = 0;
+	dlgParams[0] = "{% trans %}Enter your review comments below:{% endtrans %}";
+	dlgParams[1] = true;
+	var dlgUrl ="/" + NsfName + "/" + "dlgWorkflowComment?OpenForm";
+	var dlgWorkflowComment = window.top.Docova.Utils.createDialog({
+		id: "divDlgGetComment", 
+		url: dlgUrl,
+		title: "{% trans %}Comment{% endtrans %}",
+		height: 250,
+		width: 420, 
+		useiframe: true,
+		sourcewindow: window,
+		buttons: {
+		"{% trans %}OK{% endtrans %}": function() {
+			var dlgDoc = window.top.$("#divDlgGetCommentIFrame")[0].contentWindow.document
+			var userComment = $("#Comment", dlgDoc).val()
+			if(dlgParams[1] && !userComment){
+				window.top.Docova.Utils.messageBox({
+					icontype : 1,
+						msgboxtype : 0,
+						prompt: "{% trans %}Please enter a comment{% endtrans %}",
+						title: "{% trans %}Comment Required{% endtrans %}",
+						width: 200,
+						onOk: function() {
+							return;
+						}, //onOk 
+					}); //messagebox
+			}else{
+				var request = "<UserComment><![CDATA[" + userComment +  "]]></UserComment>";
+				request += (forceComplete)? "<ForceComplete>1</ForceComplete>" : "<ForceComplete/>";
+				if(ProcessLifecycleRequest("REVIEW", request, true)){
+					if(docInfo.isLinkComments){
+						var addrequest = "<UserComment><![CDATA[" + "Scheduled Review: " + userComment +  "]]></UserComment>";
+						addrequest += "<CommentType>LC</CommentType>";					
+						ProcessComment("LOGCOMMENT", addrequest, true)
+					}
+					HandleSaveClick(true);
+				}
+				dlgWorkflowComment.closeDialog();
+			} //if else
+		}, //OK
+        "{% trans %}Cancel{% endtrans %}": function() {
+			dlgWorkflowComment.closeDialog();
+        } //Cancel
+       }
+	})
+}
+
+
+//--- processess the lifecycle on the server ---
+function ProcessLifecycleRequest(action, additionalHeader, submitNow)
+{
+	var returnval = false;
+	var request="";
+
+	//--collect the xml for all nodes to be processed
+	request += "<Request>";
+	request += "<Action>" + action + "</Action>";
+	request += "<ServerUrl>" + docInfo.ServerUrl + "</ServerUrl>";
+	request += (additionalHeader)? additionalHeader : "";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docInfo.DocID + "</Unid>";
+
+	request += "</Request>";
+
+	if(docInfo.isDocBeingEdited && !submitNow) //edit mode, doc WQS agent will take care of the request
+		{
+			$("#tmpRequestDataXml").val(request)
+			alert("{% trans %}Your comments will be added on document save.{% endtrans %}");
+		}
+	else // read mode, process via workflow services agent
+		{
+			var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/WorkflowServices?OpenAgent"
+			jQuery.ajax({
+				type: "POST",
+				url: url,
+				data: encodeURI(request),
+				cache: false,
+				async: false,
+				dataType: "xml",
+				success: function(xml){
+					returnval = true;
+					var xmlobj = $(xml);
+					var statustext = $(xmlobj).find("Result").first().text()
+					if(statustext == "OK"){
+						if (CommentLogData == null) {
+							dataIslandInit('comments');
+						}
+						else {
+							CommentLogData.reload();
+						}
+						//alert("Your comment has been added.")
+					}	
+				},
+				error: function(){
+					returnval = false;
+				}
+			});
+		}
+}
+
+
+
+function NewCopy()
+{
+	//--- processing agent url
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/DocumentServices?OpenAgent"
+	var request="";
+
+	//--build the NEWCOPY request
+	request += "<Request>";
+	request += "<Action>NEWCOPY</Action>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docInfo.DocID + "</Unid>";
+	request += "</Request>";
+
+	var httpObj = new objHTTP()
+	
+	if(httpObj.PostData(request, url))
+	{
+	 if(httpObj.status=="OK") //all OK
+		{
+			if(httpObj.results.length > 0)
+			{
+				var newUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/EditDocument/" + httpObj.results[0] + '?editDocument';
+				curUrl += (docInfo.Mode)? "&mode=" + docInfo.Mode : ""; 
+				curUrl +=  "&loadaction=refreshview";
+				location.replace(newUrl );
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+//--- updates docInfo from stub document data stored in the master home database -----
+
+function UpdateStubInfo()
+{
+	//--- processing agent url
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/DocumentServices?OpenAgent"
+	var request="";
+	var result = true;
+
+	//--build the GETSTUBINFO request
+	request += "<Request>";
+	request += "<Action>GETSTUBINFO</Action>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docInfo.DocID + "</Unid>";
+	request += "</Request>";
+
+		jQuery.ajax({
+			type: "POST",
+			url: url,
+			data: request,
+			cache: false,
+			async: false,
+			dataType: "xml",
+			success: function(xml) {
+				result = true;
+				var xmlobj = jQuery(xml);
+				var statustext =  xmlobj.find("Result").first().text();
+				if(statustext == "OK"){
+					docInfo.LastModifiedBy = xmlobj.find("LastModifiedBy").text();
+					docInfo.LastModifiedDate = xmlobj.find("LastModifiedDate").text();
+					docInfo.LastModifiedServer = xmlobj.find("LastModifiedServer").text();
+					docInfo.isReplicated = xmlobj.find("IsReplicated").text();
+					docInfo.LockEditor = xmlobj.find("LockEditor").text();
+					docInfo.LockDate = xmlobj.find("LockDate").text();
+					docInfo.LockServer = xmlobj.find("LockServer").text();
+					docInfo.LockStatus = xmlobj.find("LockStatus").text();
+					docInfo.isLockEditor = xmlobj.find("IsLockEditor").text();
+					docInfo.isLocked = xmlobj.find("IsLocked").text();
+				}
+			},
+			error: function(){
+				alert("{% trans %}Error: Could not retrieve stub information in UpdateStubInfo() function of wDocument.\rIf the issue persists, please contact your Administrator.{% endtrans %}");
+				result = false;
+			}
+		});		
+	return result;
+}
+
+// boolean, checks if the document can be modified at this moment
+function CanModifyDocument(noMsg)
+{
+
+	if(!docInfo.isDocBeingEdited){
+		UpdateStubInfo();
+	}
+	
+	var isDelegate = false;
+	if(docInfo.HasWorkflow && docInfo.isWorkflowCreated && !docInfo.isWorkflowCompleted) {
+		if(wfInfo.isDelegate == "1") { isDelegate = true; }
+	}	
+	
+	var msg="";
+	if(docInfo.DocAccessLevel < "3" && !isDelegate){
+		if(noMsg){return false;}
+		alert("{% trans %}You do not have sufficient access to modify this document.{% endtrans %}")
+		return false;
+	}
+
+	if(!docInfo.isReplicated){ 
+		if(noMsg){return false;}
+		msg += "The document updates done on " + docInfo.LastModifiedDate + " by " + docInfo.LastModifiedBy;
+		msg += " on server " + docInfo.LastModifiedServer + " have not yet replicated to your server. ";
+		msg += "You cannot modify the current document until the latest changes are available to you. Please try again in few minutes."
+		alert(msg);
+		return false;	
+	}
+	
+	if(docInfo.LockStatus=="2"){ 
+		if(noMsg){return false;}
+		msg += "The document has been locked on " + docInfo.LockDate + " by " + docInfo.LockEditor;
+		msg += " on server " + docInfo.LockServer + ". ";
+		msg += "Please wait until the other user releases document lock and latest changes are available to you."
+		alert(msg);
+		return false;	
+	}
+	return true;
+}
+
+//=================================================
+// Create discussion topic
+//=================================================
+
+function CreateDiscussionTopic()
+{
+	var curUrl = "/" + docInfo.NsfName + "/DiscussionTopic?OpenForm&ParentUNID=" + docInfo.DocID;
+	curUrl += (docInfo.Mode)? "&mode=" + docInfo.Mode : "";
+	if(IsValidParent()){
+		srcWindow.contentWindow.ViewLoadDocument(curUrl);
+	}else{
+		window.location.href=curUrl;
+	}
+}
+
+//==========================================================================================
+// Tools submenu
+//==========================================================================================
+
+function CreateToolsSubmenu(actionButton)
+{
+	if(!actionButton) {return}
+
+	var showDropBox= docInfo.isDocBeingEdited && docInfo.EnableDropboxAcquire;
+	var showMailbox= (docInfo.isDocBeingEdited && docInfo.EnableMailAcquire);
+	var showScanner=	(docInfo.isDocBeingEdited && docInfo.EnableLocalScan);
+	var showDiscussion = (!docInfo.isDocBeingEdited && !docInfo.isNewDoc && docInfo.EnableDiscussion && !docInfo.isBookmark);
+	var showCompare = (!docInfo.isNewDoc && docInfo.HasLifecycle && !docInfo.isBookmark);	
+	var showUnlock = (docInfo.DocAccessLevel >= "6" && docInfo.isLocked && !docInfo.isDocBeingEdited && !docInfo.isBookmark);
+	var showArchive = (docInfo.DocAccessLevel >= "6" && !docInfo.isDocBeingEdited && !docInfo.isBookmark);
+	var showCopyAttachments = (!docInfo.isNewDoc && $.trim(docInfo.DocAttachmentNames) != '');
+	var showNotify = !docInfo.isNewDoc;
+	var showForwardDocument = !docInfo.isNewDoc && !docInfo.isDocBeingEdited && docInfo.EnableForwarding;
+	var showBookmark = !docInfo.isNewDoc && !docInfo.isDocBeingEdited && !docInfo.isBookmark && !docInfo.DisableBookmarks;
+	var showComment = !docInfo.isNewDoc && !docInfo.isBookmark;
+	var showCompleteReview = docInfo.HasPendingReview && docInfo.DocAccessLevel>"3" && !docInfo.isBookmark;
+
+	//-----Build menu-----
+		Docova.Utils.menu({
+		delegate: actionButton,
+		menuid: "DocToolsMenu",
+		width: 200,
+		menus: [
+				{ title: "{% trans %}Acquire from email{% endtrans %}", itemicon: "ui-icon-mail-open", action: "AcquireEmail()", disabled: !showMailbox },
+				{ title: "{% trans %}Acquire from scanner{% endtrans %}", itemicon: "ui-icon-extlink", action: "HandleScanClick()", disabled: !showScanner },
+				{ separator: true },
+				{ title: "{% trans %}Send Email Notification{% endtrans %}", itemicon: "ui-icon-extlink", action: "TriggerSendDocumentMessage()", disabled : !showNotify },
+				{ title: "{% trans %}Forward Document{% endtrans %}", itemicon: "ui-icon-arrowthick-1-ne", action: "ForwardDocument()", disabled: !showForwardDocument },				
+				{ separator: true },
+				{ title: "{% trans %}Add Comment{% endtrans %}", itemicon: "ui-icon-comment", action: "LogLifecycleComment()", disabled: !showComment },
+				{ title: "{% trans %}Discuss{% endtrans %}", itemicon: "ui-icon-volume-on", action: "CreateDiscussionTopic()", disabled: !showDiscussion },
+				{ separator: true },
+				{ title: "{% trans %}Compare Documents{% endtrans %}", itemicon: "ui-icon-transferthick-e-w", action: "CompareVersions()", disabled: !showCompare },
+				{ separator: true },
+				{ title: "{% trans %}Copy Link{% endtrans %}", itemicon: "ui-icon-link", action: "CopyLink()", disabled: docInfo.IsNewDoc },
+				{ title: "{% trans %}Copy Attachments Link{% endtrans %}", itemicon: "ui-icon-link", action: "copyAttachmentLink()", disabled: !showCopyAttachments },
+				{ title: "{% trans %}Create Bookmark{% endtrans %}", itemicon: "ui-icon-bookmark", action: "CreateBookmark()", disabled: !showBookmark },
+				{ separator: true },
+				{ title: "{% trans %}Close Review{% endtrans %}", itemicon: "ui-icon-circe-check", action: "ReviewDocument(true)", disabled: !showCompleteReview },
+				{ separator: true },
+				{ title: "{% trans %}Unlock{% endtrans %}", itemicon: "ui-icon-unlocked", action: "Unlock()", disabled: !showUnlock },
+				{ title: "{% trans %}Archive Document{% endtrans %}", itemicon: "ui-icon-tag", action: "ArchiveDocument()", disabled: !showArchive }
+		]
+	})
+}
+
+//==========================================================================================
+// Lifecycle submenu
+//==========================================================================================
+function CreateLifecycleSubmenu(actionButton)
+{
+	if(!actionButton) {return}
+
+	//-- check to see if user can create revisions for this document due to their document access
+	if(! docInfo.CanCreateRevisions){
+		//-- if not, then let's check to see if the folder properties grant them rights
+		var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/xFolderAccess.xml?ReadForm&ParentUNID=" + docInfo.FolderUNID;
+		jQuery.ajax({
+			type: "GET",
+			url: url,
+			cache: false,
+			async: false,
+			dataType: "xml",
+			success: function(xml) {
+				var xmlobj = jQuery(xml);
+				var foldercancreaterevisions =  xmlobj.find("CanCreateRevisions").text();
+				if(foldercancreaterevisions == "1"){
+					docInfo.CanCreateRevisions = "true";	
+				}
+			}
+		});
+	}
+	
+	if(!docInfo.StrictVersioning){ //-----Standard versioning
+		var showAddMajorVersion = docInfo.CanCreateRevisions && docInfo.EnableVersions && !docInfo.isDiscardedVersion && !docInfo.isDocBeingEdited;
+		var showAddMinorVersion = docInfo.CanCreateRevisions && docInfo.EnableVersions && !docInfo.isDiscardedVersion && !docInfo.isDocBeingEdited;
+		var showAddRevision = docInfo.CanCreateRevisions && docInfo.EnableVersions && !docInfo.isDiscardedVersion && !docInfo.isDocBeingEdited;
+		var showRetractVersion = docInfo.DocAccessLevel > "2" && docInfo.isCurrentVersion && docInfo.HasLifecycle && !docInfo.isDocBeingEdited && CanModifyDocument();
+		var showPromoteVersion = docInfo.DocAccessLevel > "2" && docInfo.isSupersededVersion && docInfo.HasLifecycle && !docInfo.isDocBeingEdited && CanModifyDocument();
+		var showActivateDiscarded= docInfo.DocAccessLevel > "2" && docInfo.isDiscardedVersion && docInfo.HasLifecycle && !docInfo.isDocBeingEdited && CanModifyDocument();
+	}else{ //-----Strict versioning on
+		var showAddMajorVersion = false;
+		if (docInfo.RestrictDrafts){
+				var showAddMinorVersion = docInfo.CanCreateRevisions && docInfo.EnableVersions && docInfo.isCurrentVersion && !docInfo.isDocBeingEdited;
+		}else{
+				var showAddMinorVersion = docInfo.CanCreateRevisions && docInfo.EnableVersions && !docInfo.isDiscardedVersion && !docInfo.isDocBeingEdited;
+		}
+		var showAddRevision = false;
+		var showRetractVersion = docInfo.DocAccessLevel > "2" && docInfo.isCurrentVersion && docInfo.HasLifecycle && !docInfo.isDocBeingEdited && docInfo.AllowRetract;
+		var showPromoteVersion = false;
+		var showActivateDiscarded= false;
+	}
+
+	//-----Build menu-----
+		Docova.Utils.menu({
+		delegate: actionButton,
+		width: 170,
+		menus: [
+				{ title: "{% trans %}New major version{% endtrans %}", itemicon: "ui-icon-extlink", action: "NewVersion('MAJOR')", disabled: !showAddMajorVersion },
+				{ title: "{% trans %}New minor version{% endtrans %}", itemicon: "ui-icon-extlink", action: "NewVersion('MINOR');", disabled: !showAddMinorVersion },
+				{ title: "{% trans %}New revision{% endtrans %}", itemicon: "ui-icon-extlink", action: "NewVersion('REVISION');", disabled : !showAddRevision },
+				{ separator: true },
+				{ title: "{% trans %}Retract release{% endtrans %}", itemicon: "ui-icon-arrowreturnthick-1-s", action: "RetractVersion()", disabled: !showRetractVersion },				
+				{ title: "{% trans %}Promote release{% endtrans %}", itemicon: "ui-icon-arrowreturnthick-1-n", action: "ReleaseDocument(true)", disabled: !showPromoteVersion },
+				{ title: "{% trans %}Activate discarded{% endtrans %}", itemicon: "ui-icon-arrowrefresh-1-e", action: "ActivateVersion()", disabled: !showActivateDiscarded }
+		]
+	})
+}
+
+//-------- mail acquire handler -----------
+function AcquireEmail()
+{
+	var dlgUrl =docInfo.MailAcquireDialogUrl;
+	if (dlgUrl == ''){
+			window.top.Docova.Utils.messageBox({
+				title: "{% trans %}Import Messages Not Available{% endtrans %}",
+				prompt: "{% trans %}Import Messages is not available for your current mail configuration.{% endtrans %}",
+				icontype: 4,
+				msgboxtype: 0,
+				width: 400
+			});
+			return false;
+	}
+	
+	if(docInfo.UserMailSystem == "O" && !window.top.Docova.IsPluginAlive){
+			window.top.Docova.Utils.messageBox({
+				title: "{% trans %}DOCOVA Plugin Not Running{% endtrans %}",
+				prompt: "{% trans %}The DOCOVA Plugin is required for the importing of messages from Outlook.{% endtrans %}",
+				width: 400,
+				icontype: 4,
+				msgboxtype: 0
+			});
+			return false;	
+	}		
+
+	var dlgmail = window.top.Docova.Utils.createDialog({
+		id: "divDlgAcquireMessages", 
+		url: dlgUrl,
+		title: "{% trans %}Import Mail Messages{% endtrans %}",
+		height: 600,
+		width: 800, 
+		useiframe: true,
+		sourcedocument : document,		
+		sourcewindow : window,
+		buttons: {
+        			"{% trans %}Close{% endtrans %}": function() {
+	        			var returnValue = jQuery("#" + this.id + "IFrame", this).get(0).contentWindow.GetImportCount();      
+		   				dlgmail.closeDialog();
+        			},
+        			"{% trans %}Acquire{% endtrans %}": function() {
+        				if(docInfo.UserMailSystem == "O"){
+		        			jQuery("#" + this.id + "IFrame", this).get(0).contentWindow.CompleteDialog(function(returnValue){
+		    	        			if(returnValue){
+								dlgmail.closeDialog();
+							}
+						});        				
+        				}else{
+		        			var returnValue = jQuery("#" + this.id + "IFrame", this).get(0).contentWindow.CompleteDialog();
+		    	        		if(returnValue){
+								dlgmail.closeDialog();
+						}
+					}    			       			
+				}
+      	}
+	});		
+}//--end AcquireEmail
+
+
+//-------- related links handler -----------
+function AddRelatedLinks()
+{
+var dlgParams = window;
+var dlgUrl =docInfo.ServerUrl + docInfo.PortalWebPath + "/dlgRelatedDocMain?ReadForm&goto=" + docInfo.LibraryKey + "," + docInfo.FolderID
+var dlgSettings = "dialogHeight:500px;dialogWidth:810px;center:yes; help:no; resizable:yes; status:no;";
+return window.showModalDialog(dlgUrl,dlgParams,dlgSettings); //Display the address dialog
+
+}
+
+//-- initialize default subject and call send email dialog
+function TriggerSendDocumentMessage(){
+	var defsubject = jQuery("input[name=Subject]").val();
+	if(defsubject == undefined){
+		defsubject = docInfo.DocTitle;
+	}
+	if(defsubject == undefined){
+		defsubject = "";
+	}else{
+		if(defsubject != ""){
+			defsubject = "Re:" + defsubject;
+		}
+	}
+	SendDocumentMessage(defsubject);
+}//--end TriggerSendDocumentMessage
+
+// ---------- send mail memo with link to document, files of document or via Public Access --------
+function SendDocumentMessage(optionalDefaultSubject,optionalDefaultBody)
+{
+	var fwdAttachments = "Yes"
+	if(docInfo.EnableForwarding == "") { fwdAttachments = "0" }
+	
+	dlgParams.length = 0; //reset dlgParams array.
+	dlgParams[0] = optionalDefaultSubject;
+	dlgParams[1] = optionalDefaultBody;
+	//See dlgParams[2] also at the end of this function which is set to the dialog object so the dialog can use .closeDialog()
+	
+	var dlgUrl =docInfo.ServerUrl + "/" + NsfName + "/" + "dlgSendLinkMessage?OpenForm&DocUNID=" + docInfo.DocID + "&FwdAtt=" + fwdAttachments;
+	
+	var dlgSendLinkMessage = window.top.Docova.Utils.createDialog({
+		id: "divDlgSendDocMessage", 
+		url: dlgUrl,
+		title: "{% trans %}Send Email Notification{% endtrans %}",
+		height: 500,
+		width: 420, 
+		useiframe: true,
+		sourcedocument: document,
+		sourcewindow: window,
+		buttons: {
+      		"{% trans %}Send{% endtrans %}": function() {
+				var dlgDoc = window.top.$("#divDlgSendDocMessageIFrame")[0].contentWindow.document
+				var dlgWin = window.top.$("#divDlgSendDocMessageIFrame")[0].contentWindow
+				var tmpurl = "HomeFrame?ReadForm&goto=" + docInfo.LibraryKey + "," + docInfo.FolderID;
+				if (dlgWin.info.PublicAccessEnabled == 'true')
+					var folderPath = docInfo.ServerUrl + docInfo.PortalWebPath + "/publicAccess?OpenPage&gotourl=" + tmpurl;
+				else 
+					var folderPath = docInfo.ServerUrl + docInfo.PortalWebPath + '/w' + tmpurl;
+				var sendto = $.trim($("#SendTo", dlgDoc).val());
+				var subject = $.trim($("#Subject", dlgDoc).val());
+				var body = $.trim($("#Body", dlgDoc).val());
+				var contentinclude = $("input[name=ContentInclude]:checked", dlgDoc).val()
+				//--- If activity type is not selected 
+				if(sendto == ""){
+					window.top.Docova.Utils.messageBox({
+							title: "{% trans %}Invalid Entry.{% endtrans %}",
+							prompt: "{% trans %}Please enter the recipient names.{% endtrans %}",
+							width: 300,
+							icontype : 1,
+							msgboxtype : 0,
+					})
+					return false;
+				}
+				//--- If recipient is not document owner and/or sendto list
+				if(subject == ""){
+					window.top.Docova.Utils.messageBox({
+							title: "{% trans %}Invalid Entry.{% endtrans %}",
+							prompt: "{% trans %}Please enter the subject{% endtrans %}",
+							width: 300,
+							icontype : 1,
+							msgboxtype : 0,
+					})
+					return false;
+				}
+				//--- If subject for activity email is blank.
+				if(body == ""){
+					window.top.Docova.Utils.messageBox({
+							title: "{% trans %}Invalid Entry.{% endtrans %}",
+							prompt: "{% trans %}Please enter a message.{% endtrans %}",
+							width: 300,
+							icontype : 1,
+							msgboxtype : 0,
+					})
+					return false;
+				}
+
+				if(contentinclude == "P"){
+					dlgWin.completeWizard()
+				}else{
+					//--- If all ok, generate request
+					var request = "<?xml version='1.0' encoding='UTF-8' ?>";
+					request += "<Request>";
+					request += "<Action>";
+					request += (contentinclude=="A")? "SENDATTACHMENTMSG" : "SENDLINKMSG";
+					request += "</Action>";
+					request += "<SendTo><![CDATA[" + sendto +  "]]></SendTo>";
+					request += "<Subject><![CDATA[" + subject +  "]]></Subject>";
+					request += "<Body><![CDATA[" + body +  "]]></Body>";
+					request += "<UserName><![CDATA[" + docInfo.UserName +  "]]></UserName>";	
+					request += "<FolderName><![CDATA[" + docInfo.FolderName +  "]]></FolderName>";
+					request += "<FolderPath><![CDATA["  + folderPath +  "]]></FolderPath>";
+					request += "<Unid>" + docInfo.DocID +  "</Unid>";
+					request += "</Request>"
+
+					DoSendDocumentMessage(request);
+					dlgSendLinkMessage.closeDialog();
+				}
+       		},
+       		"{% trans %}Cancel{% endtrans %}": function() {
+				dlgSendLinkMessage.closeDialog();
+     		}
+     	}
+	});
+	
+	//Puts the dialog into the dlgParams array so that it is available to be closed with closeDialog() within the dialog itself.
+	dlgParams[2] = dlgSendLinkMessage;
+}
+
+function DoSendDocumentMessage(request){
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/MessagingServices?OpenAgent"
+
+	jQuery.ajax({
+		type: "POST",
+		url: url,
+		data: encodeURI(request),
+		cache: false,
+		async: false,
+		dataType: "xml",
+		success: function(xml){
+			var xmlobj = $(xml);
+			var statustext = $(xmlobj).find("Result").first().text()
+			if(statustext == "OK"){
+				alert("Message was sent.")
+			}
+		},
+		error: function(){
+			alert("{% trans %}Error.  Message was not sent.  Please check error logs for more information.{% endtrans %}");
+		}
+	})
+}
+
+//Forward a document as an email with an optional introduction
+function ForwardDocument()
+{
+	var selecteddocid = docInfo.DocID;
+
+	//-----------------------------------------------------------
+	//check current user access to parent folder
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/FolderServices?OpenAgent"
+	
+	var request = "<Request>";
+	request += "<Action>QUERYACCESS</Action>";
+	request += "<AccessType>CANCREATEDOCUMENTS</AccessType>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<DocKey>" + docInfo.FolderID + "</DocKey>";
+	request += "</Request>";
+	
+	request = encodeURIComponent(request);
+	
+	var httpObj = new objHTTP();
+	
+	var canadddocs = 0;
+	
+	if(httpObj.PostData(request, url)){
+		if(httpObj.status=="OK" && httpObj.resultCount > 0){
+			canadddocs = httpObj.results[0];
+		}
+	}
+		
+	var forcesave = (docInfo.ForwardSave == "1");   //1 indicates Force Save of Forwards
+ 	var promptsave = (docInfo.ForwardSave == "2");	//2 indicates Prompt for Save of Forwards
+  	var savecopyoption = (canadddocs == 1) ? (forcesave ? "1" : (promptsave ? "2" : "0")) : "0"; //if user is unable to make revisions disable saving of forwards
+	var defsubject = encodeURIComponent(docInfo.DocTitle);
+	
+	var dlgUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/" + "dlgForwardDocument?OpenForm&SourceDocUNID=" + selecteddocid + "&savecopy=" + savecopyoption + "&DefaultSubject=" + defsubject ;
+
+	var fwdDialog = window.top.Docova.Utils.createDialog({
+		id: "divForwardDoc", 
+		url: dlgUrl,
+		title: "{% trans %}Forward Document{% endtrans %}",	
+		height: 610,
+		width: 700, 
+		useiframe: true,
+		defaultButton: 1,
+		sourcedocument: document, 
+		buttons: {
+        	"{% trans %}Send{% endtrans %}": function() {
+				var dlg = "";        		
+				var dlgDoc = "";
+				if($("#divForwardDocIFrame", this)[0].contentWindow) {
+					dlg = $("#divForwardDocIFrame", this)[0].contentWindow;
+				} else {
+					dlg = $("#divForwardDocIFrame", this)[0].window;
+				}		
+				if(dlg.completeWizard()){
+					fwdDialog.closeDialog();
+					window.top.Docova.Utils.messageBox({ prompt: "Message was forwarded.", title: "Message Forwarded" })									
+				}											
+			},					
+        	"{% trans %}Cancel{% endtrans %}": function() {
+				fwdDialog.closeDialog();
+        	}
+      	}
+	})	
+	
+	return false;
+}
+
+
+//--------------- deletes temporary files ad folder after succesful submision
+function ClearTempFiles()
+{
+	if(tmpFilePaths.length==0 && tmpSupportFolders.length==0){return true;}
+	try{
+			for(var i=0; i<tmpSupportFolders.length; i++){
+					DocovaExtensions.deleteFolder(tmpSupportFolders[i]);
+			}
+			for(var i=0; i<tmpFilePaths.length; i++){
+					DocovaExtensions.deleteFile(tmpFilePaths[i], true);
+			}
+	}
+	catch(e){
+			alert("{% trans %}Error deleting temporary files.{% endtrans %}\rError: " + e.message);
+		}
+}
+		
+
+
+//----------------- file operation logging ------------------
+function GetFileChanges(controlNo, append){
+
+
+	var ctrlno = 1;
+	var uploader = window["DLIUploader" + ctrlno];
+	
+	while ( uploader ){
+		var separator="*";
+		if(append){
+			$('#tmpDeletedFiles').val($('#tmpDeletedFiles').val() + ($('#tmpDeletedFiles').val() != "")? separator + uploader.GetDeletedFileNames(separator) : uploader.GetDeletedFileNames(separator));
+			$('#tmpEditedFiles').val($('#tmpEditedFiles').val() + ($('#tmpEditedFiles').val() != "")? separator + uploader.GetEditedFileNames(separator) : uploader.GetEditedFileNames(separator));
+			$('#tmpAddedFiles').val($('#tmpAddedFiles').val() + ($('#tmpAddedFiles').val() != "")? separator + uploader.GetNewFileNames(separator) : uploader.GetNewFileNames(separator));
+		}
+		else{
+			$('#tmpDeletedFiles').val(uploader.GetDeletedFileNames("; "));
+			$('#tmpAddedFiles').val(uploader.GetNewFileNames("; "));
+			$('#tmpEditedFiles').val(uploader.GetEditedFileNames("; "));
+		}
+	
+		// Getting original date list from newly added files
+		var newFileList = uploader.GetNewFileNames("*", true);
+		var editedFileList = uploader.GetEditedFileNames("*");
+		var deletedFileList = uploader.GetDeletedFileNames("*");
+		var changedFileList = "";
+		var hasNewFiles = false;
+		var hasEditedFiles = false;
+		var hasDeletedFiles = false;
+
+		//----- If there are new files, then manage the new files
+		if(newFileList != ""){
+			var result = ManageNewFiles(newFileList, uploader)
+		}
+
+		if(editedFileList != ""){
+			changedFileList += editedFileList;
+		}
+	
+		if(deletedFileList != ""){
+			if(changedFileList != ""){
+				changedFileList += "*" + deletedFileList;
+			}else{
+				changedFileList += deletedFileList;
+			}
+		}
+	
+		if(changedFileList != ""){
+	   		var result = ManageChangedFiles(changedFileList, uploader)
+		}	
+		
+		ctrlno++;
+		uploader = window["DLIUploader" + ctrlno];
+	}
+
+	
+	
+
+}
+
+//-------------------------- manually archive document ----------------------
+
+function ArchiveDocument()
+{
+
+	if(!CanModifyDocument(true)){return false;}
+	var msg = "{% trans %}You are about to archive current document.  Are you sure?{% endtrans %}";
+	window.top.Docova.Utils.messageBox({
+		prompt: msg,
+		title: "{% trans %}Archive document?{% endtrans %}",
+		width: 400,
+		icontype : 2,
+		msgboxtype : 4,
+		onYes: function() {
+			var request="";
+			//--collect the xml for all nodes to be processed
+			request += "<Request>";
+			request += "<Action>ARCHIVESELECTED</Action>";
+			request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+			request += "<Unid>" + docInfo.DocID +  "</Unid>" ;
+			request += "</Request>";
+
+			//--- processing agent url
+			var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/LibraryServices?OpenAgent"
+			jQuery.ajax({
+				type: "POST",
+				url: url,
+				data: request,
+				cache: false,
+				async: false,
+				dataType: "xml",
+				success: function(xml){
+					var xmlobj = $(xml);
+					var statustext = $(xmlobj).find("Results").first().text();
+					if(statustext == "OK"){
+					alert("{% trans %}Document was successfully archived.{% endtrans %}");
+					CloseDocument(true);
+					}
+				},
+				error: function(){
+					alert("{% trans %}Error: There was a problem archiving this document. Please check the error logs for more information.{% endtrans %}");
+				}
+			})
+		},
+		onNo: function() { 
+			return false;
+		}
+	});	
+}
+
+function CopyLink()
+{
+	var docUrl=docInfo.ServerUrl + docInfo.PortalWebPath + "/wHomeFrame?ReadForm&goto=" + docInfo.LibraryKey + "," + docInfo.FolderID + "," + docInfo.DocKey;
+	var html = '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr valign="top"><td width="100%">\
+		<div id="dlgContentNh" class="ui-widget" style="width:100%;">\
+		<span id="FieldLabel"class="frmLabel">{% trans %}Use CTRL+A to select and CTRL+C to copy{% endtrans %}:</span>\
+		<textarea style="font: 11px Verdana;width:350px;" class="txFld" id="docURL" name="docURL" rows=6>'+ ($.trim(docUrl) ? docUrl : errortext) +'</textarea></div></td></tr></table>';
+
+	var dlgCopyDocURL = window.top.Docova.Utils.createDialog({
+		id: "divDocUrl", 
+		dlghtml : html,
+		title: "{% trans %}Document Link URL{% endtrans %}",
+		height: 250,
+		width: 400,
+		sourcewindow: window,
+		buttons: {
+        	"Close": function() {
+				dlgCopyDocURL.closeDialog();
+        	}
+      	}
+	});
+}
+
+function copyAttachmentLink()
+{
+	var filesList =  docInfo.DocAttachmentNames.split('*');
+	var listHtml = '';
+	for (var x = 0; x < filesList.length; x++) {
+		listHtml += '<li><label><input style="border: 0;" type="radio" value="'+ filesList[x] +'" name="attLink" onclick="Docova.GlobalStorage[\'divCopyAttLinks\'].sourcewindow.setAttLink(this);" />'+ filesList[x] +'</label></li>';
+	}
+	var html = '<ul style="list-style:none; padding-left:2px; border:1px solid #AAA;">'+ listHtml +'</ul>';
+		html += '<div style="display:block; clear:both; margin-top: 5px;"><b>{% trans %}Use CTRL+A to select and CTRL+C to copy{% endtrans %}:</b><br>\
+				<textarea style="font: 11px Verdana;width:350px;" class="txFld" id="attURL" name="attURL" rows=5></textarea></div>';
+	var dlgCopyDocURL = window.top.Docova.Utils.createDialog({
+		id: "divCopyAttLinks", 
+		dlghtml : html,
+		title: "{% trans %}Copy Attachments Link{% endtrans %}",
+		height: 250,
+		width: 400,
+		sourcewindow: window,
+		buttons: {
+        	"Close": function() {
+				dlgCopyDocURL.closeDialog();
+        	}
+      	}
+	});
+}
+
+function setAttLink(obj)
+{
+	var link = docInfo.ServerUrl + '/' + docInfo.NsfName + '/openDocFile/';
+	link += $(obj).val();
+	link += '?doc_id=' + docInfo.DocKey;
+	window.top.$('#attURL').val(link);
+}
+
+function ManageNewFiles(newFileList, uploader){
+
+	var newFileArray = newFileList.split("*");
+	var currOFileNames = $("#OFileNames").val();
+	var currOFileDates = $("#OFileDates").val();
+	var newFileList = "";
+	var newFileDateList = "";
+		
+	var currindx, origdate, count, FileName, fullFileName, FileNameArray, FileNameAndDate;
+	var trackingFileList = "";
+
+//----- Get original dates from new files -----
+		count = newFileArray.length-1;
+		for (var n=0; n<= count; n++){
+			fullFileName = newFileArray[n]
+			FileNameArray = fullFileName.split("\\")
+			FileName = FileNameArray[ FileNameArray.length - 1 ];
+			currindx = uploader.GetFileIndex(fullFileName)
+			origdate = uploader.GetFileDate(currindx)
+
+			//-- check to see if file has been renamed. if so use the new name 
+			var tmpRenFileName = "";
+			try{ tmpRenFileName = uploader.GetRenamedFileName(currindx);}catch(err){}				
+			if(tmpRenFileName != "") FileName = tmpRenFileName;
+			//-------------------------------------------------------------------------------------
+			if(n!=count){
+				newFileList += FileName + ";";
+				newFileDateList += origdate + ";";
+			}else{
+				newFileList += FileName;
+				newFileDateList += origdate;
+			}
+		}
+		if (currOFileDates != ""){
+			currOFileNames += ";" + newFileList;
+			currOFileDates += ";" + newFileDateList;
+			}else{
+			currOFileNames = newFileList;
+			currOFileDates = newFileDateList;
+		}
+		
+		$("#OFileNames").val( currOFileNames);
+		$("#OFileDates").val(currOFileDates);
+}
+
+function ManageChangedFiles(changedFileList){
+	var changedFileArray = changedFileList.split("*");
+	var currOFileNames = $("#OFileNames").val();
+	var currOFileNamesArray = currOFileNames.split(";");
+	var currOFileDates = $("#OFileDates").val();
+	var currOFileDatesArray = currOFileDates.split(";");
+
+	var currOFileDate;
+	var currOFileName;
+	var newOFileNameArray;
+	var newOFileDateArray;
+	var i, j
+	var resultOFileList = "";
+	var resultODateList = "";
+	var matchfound = false;
+	
+	for (i = 0; i <= currOFileNamesArray.length-1; i++){
+		currOFileName = currOFileNamesArray[i]
+		currOFileDate = currOFileDatesArray[i]
+		matchfound = false
+		for (j=0; j <= changedFileArray.length-1; j++){
+	   		currChangedFile = changedFileArray[j];
+	   		currOFileName = ltrim(currOFileName);
+	     	if(currChangedFile == currOFileName){
+				matchfound = true;
+			}     
+	   	}
+	   	if(!matchfound){
+	   		if(resultOFileList == ""){
+				resultOFileList = currOFileName;
+				resultODateList = currOFileDate;
+			}else{
+				resultOFileList += ";" + currOFileName;
+				resultODateList += ";" + currOFileDate;
+			}
+		}
+	}
+
+	$("#OFileNames").val(resultOFileList);
+	$("#OFileDates").val(resultODateList);
+	return(true)
+}
+
+function trim(stringToTrim) {
+	return stringToTrim.replace(/^\s+|\s+$/g,"");
+}
+function ltrim(stringToTrim) {
+	return stringToTrim.replace(/^\s+/,"");
+}
+function rtrim(stringToTrim) {
+	return stringToTrim.replace(/\s+$/,"");
+}
+
+/*******************************************************************
+	 * Prints page after adjusting the width of Uploader
+*********************************************************************/
+function standardPrintPage()
+{
+	$( "#btnPrintPage" ).tooltip( "destroy" )
+	$("#DocToolsMenu").hide();
+	window.print();
+	return;
+}
+
+function ClearTmpOrphans(xmlDoc){
+	var request = "<Request><Action>REMOVETMPORPHANS</Action><UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>"
+	request += xmlDoc.xml
+	request += "</Request>"
+	
+	//Send request to server
+	var processUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/LibraryServices?OpenAgent"
+	jQuery.ajax({
+		type: "POST",
+		url: processUrl,
+		data: request,
+		cache: false,
+		async: false,
+		dataType: "xml",
+		success: function(xml){
+			var xmlobj = $(xml);
+			var statustext = xmlobj.find("Result").first().text();
+			if(statustext == "OK"){
+				alert("{% trans %}should be deleted{% endtrans %}");
+			}
+		},
+		error: function(){
+		}
+	})
+}
+
+function UserHasFilesCheckedOut()
+{
+	if(!document.getElementById("xmlFileLog")){
+		return false;
+	}
+	
+	var parser = new DOMParser;
+	var xmlString = $("#xmlFileLog").html()
+	var objCoFiles = parser.parseFromString(xmlString, "text/xml")
+
+	var nodeList = objCoFiles.selectNodes('cofiles/file[editor="' + docInfo.UserNameAB + '"]');
+	var userHasFiles = false;
+	
+	if(nodeList != null) 
+		{
+			userHasFiles = (nodeList.length>0);
+		}
+		
+	return userHasFiles;
+}
+
+/*******************************************************************
+	 * Creates a bookmark copy of a document in a specified folder
+*********************************************************************/
+function CreateBookmark() {
+	window.top.Docova.Utils.messageBox({
+		title : "{% trans %}Create Bookmark?{% endtrans %}",
+		prompt : "{% trans %}Would you like to create a Bookmark entry for the current document?{% endtrans %}",
+		icontype : 2,
+		msgboxtype : 4,
+		width : 400,
+		onYes : function () {
+			//-- choose target folder
+			var dlgUrl = docInfo.ServerUrl + docInfo.PortalWebPath + "/dlgFolderSelect?ReadForm&flags=create,notcurrent,norecycle";
+			var folderdbox = window.top.Docova.Utils.createDialog({
+					id : "divDlgFolderSelect",
+					url : dlgUrl,
+					title : "{% trans %}Select Bookmark Folder{% endtrans %}",
+					height : 420,
+					width : 420,
+					useiframe : true,
+					sourcedocument : document,
+					buttons : {
+						"{% trans %}Create Bookmark{% endtrans %}" : function () {
+							var returnValue = jQuery("#" + this.id + "IFrame", this).get(0).contentWindow.completeWizard();
+
+							//-- returnValue [0]=LibraryID, [1]=FolderID, [2]=FolderUNID, [3]=FolderAccessLevel
+							if (returnValue) {
+								if (returnValue[1] == docInfo.FolderID) {
+									alert("{% trans %}Unable to create bookmark in the same folder as the source document. Please choose an alternate folder.{% endtrans %}");
+									return;
+								}
+								//---------------------------------- Check Folder Access Level -----------------------------------------
+								if (Number(returnValue[3]) < 3) {
+									alert("{% trans %}You do not have sufficient rights to create documents in the selected folder. Please choose an alternate folder.{% endtrans %}");
+									return;
+								}
+								folderdbox.closeDialog();
+								//--- processing agent url
+								var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/DocumentServices?OpenAgent";
+								//--build the CREATEBOOKMARK request
+								var request = "";								
+								request += "<Request>";
+								request += "<Action>CREATEBOOKMARK</Action>";
+								request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+								request += "<Unid>" + docInfo.DocID + "</Unid>";
+								request += "<LibraryID>" + returnValue[0] + "</LibraryID>";
+								request += "<FolderID>" + returnValue[1] + "</FolderID>";
+								request += "</Request>";
+								var httpObj = new objHTTP();
+								if (httpObj.PostData(request, url)) {
+									if (httpObj.status == "OK") {
+										if (httpObj.results.length > 0) {
+											alert("{% trans %}Bookmark successfully created in chosen folder.{% endtrans %}");
+										}
+									}
+								}
+							}
+						},
+						"{% trans %}Cancel{% endtrans %}" : function () {
+							folderdbox.closeDialog();
+						}						
+					}
+				});  //end createDialog
+		} //end onYes
+	})
+}//--end CreateBookmark
+
+function BookmarkOpenParent(){
+		//--- processing agent url
+		var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/DocumentServices?OpenAgent"
+		var request="";
+
+		//--build the BOOKMARKPARENT request
+		request += "<Request>";
+		request += "<Action>GETURL</Action>";
+		request += "<Type>BOOKMARKPARENT</Type>";
+		request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+		request += "<Unid>" + docInfo.DocID + "</Unid>";
+		request += "</Request>";
+
+		var httpObj = new objHTTP();
+		httpObj.supressWarnings = true;	
+		if(httpObj.PostData(request, url)){
+			 if(httpObj.status=="OK") {
+				if(httpObj.results.length > 0){
+					var docUrl = httpObj.results[0];
+					var height = document.body.clientHeight;
+					var width = Math.round(document.body.clientWidth*.9);
+					window.open(docUrl,"Preview","height=" + height + ",width=" + width + ",status=no,toolbar=no,menubar=no,location=no,resizable=yes");
+				}
+			}
+		}		
+}
+
+
+function ValidatePathLength(){
+  var result = true;
+  
+  if(docInfo && docInfo.LimitPathLength && docInfo.LimitPathLength > 0){
+      //-- only check folder path length if limit is configured and folder is less than that limit since we cannot 
+      //-- affect the folder path length from the document
+       if(docInfo.FolderPath.length < docInfo.LimitPathLength){
+			var uploadercount = 0; 
+			var problemfiles = [];
+      		var keepchecking = true;
+       		do{
+       			var Uploader = false;
+       			uploadercount ++;
+       			if( typeof window["DLIUploader" + uploadercount.toString()] == "undefined"){
+       				keepchecking = false;
+				}else{
+					Uploader = window["DLIUploader" + uploadercount.toString()];
+				}
+				if (Uploader ){
+					var FNames = Uploader.GetAllFileNames(";");
+					var aFnames = FNames.split (";");
+					for(var x=0; x<aFnames.length; x++){
+						var index = Uploader.GetFileIndex(aFnames[x]);
+						var checkname = Uploader.GetRenamedFileName(index);
+						if(checkname == ""){
+							checkname = aFnames[x];
+						}				
+						if((docInfo.FolderPath.length + checkname.length + 1) > docInfo.LimitPathLength){
+						    problemfiles.push(checkname);
+						}
+					}
+				}                   			
+       		}while(keepchecking);
+       		
+       		if(problemfiles.length > 0 && problemfiles[0] !== ""){
+				var answer = confirm("The attachment(s) named [" + problemfiles.join(", ") + "] will cause the folder path to exceed the limit specified by the administrator.  Select OK to continue saving.  Select Cancel to stop the save and then rename or remove the file(s).");
+ 				if(answer === false){
+ 				       result = false;
+ 				}
+       		}
+	  }    
+  }
+  
+  return result;
+}
+
+function SetRowColor(rowObj, mode){
+	if(mode == true){
+		$(rowObj).css("background-color", "#dfefff");
+		$(rowObj).prop("title", "Click to open the Activity.");
+	}else{
+		$(rowObj).css("background-color", "");
+		$(rowObj).prop("title", "");
+	}
+}
+
+function OpenDocument(recNo)
+{
+	var rs = VersionLogData.recordset;
+	rs.AbsolutePosition(recNo)
+	var docTypeKey = docInfo.DocumentTypeKey;
+	var docKey= rs.Fields("ParentDocKey").getValue();
+	var docID = rs.Fields("ParentDocID").getValue();
+	var docSubject = rs.Fields("Subject").getValue();
+	var docLocation = rs.Fields("Location").getValue();
+	var isAvailable = rs.Fields('isAvailable').getValue();
+	
+	//--- If clicked doc is current doc then don't open it
+	if(docKey==docInfo.DocKey){
+		alert("This is the document you are currently on!")
+		return false;
+	}
+	
+	//-----------------------------------------------------------
+	//check current user access
+	var url = docInfo.ServerUrl + "/" + docInfo.NsfName + "/AccessServices?OpenAgent"
+	var accessLevel = 0;
+	var request="";
+	request += "<Request>";
+	request += "<Action>QUERYACCESS</Action>";
+	request += "<UserName><![CDATA[" + docInfo.UserNameAB + "]]></UserName>";
+	request += "<Unid>" + docID + "</Unid>";
+	request += "<Location>" + docLocation + "</Location>";
+	request += "<DocKey>" + docKey + "</DocKey>";
+	request += "</Request>";
+
+	jQuery.ajax({
+		type: "POST",
+		url: url,
+		data: request,
+		cache: false,
+		async: false,
+		dataType: "xml",
+		success: function(xml){
+			var xmlobj = jQuery(xml);
+			var statustext = xmlobj.find("Result").first().text();
+			if(statustext == "OK"){
+				accessLevel = xmlobj.find('Results Result[ID=Ret1]').text()
+				if(accessLevel == 0){
+					alert("Sorry.  You are not authorized to access this document.")
+					return;
+				}
+				if(isAvailable != "1"){
+					alert("Sorry.  Document is not available.")
+					return;
+				}
+				// Open pre version in its own tab
+            	var newUrl = docInfo.ServerUrl + "/" + docInfo.NsfName + "/ReadDocument/" + docID + "?ParentUNID=" + docInfo.FolderID + "&mode=preview";
+            	newUrl += "&typekey=" + docTypeKey + "&datadocsrc=" + docLocation + "&datadoc=" + docKey;
+				
+				if(window.parent.fraTabbedTableSearch && window.parent.fraTabbedTableSearch.objTabBarSearch){
+					var searchtabwin = window.top.Docova.getUIWorkspace(document).getDocovaFrame("searchtabs", "window");
+					searchtabwin.objTabBarSearch.CreateTab(docSubject, docID, "A", newUrl, "", false);
+				}else if(window.parent.fraTabbedTable && window.parent.fraTabbedTable.objTabBar){
+					var fid = docInfo.FolderID.substring(2);
+					window.parent.fraTabbedTable.objTabBar.CreateTab(docSubject, docID, "D", newUrl, fid, false);	
+				}
+			}
+		},
+		error: function(){
+		}
+	})
+}
+</script>
+{% if bookmarked != true and document.getDocType.getEnableLifeCycle and document.getDocType.getDocName != 'Mail Memo' and app.request.get('mode') != 'preview' %}
+<script type="text/javascript" language="javascript" src="{{ asset('bundles/docova/js/versioning.js') }}" charset="UTF-8"></script>
+{% endif %}
+{% if attachment_settings %}
+<script type="text/javascript" language="javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-Attachments.js') }}" charset="UTF-8"></script>
+{% endif %}
+{% if subforms %}
+	{% for subform in subforms %}
+	{% if subform['JSHeader'] != false %}
+	<script language="javascript" type="text/javascript" src="{% if subform['JSHeader'] starts with 'sfCustomSection-' %}{{ asset('upload/js/') }}{% else %}{{ asset('bundles/docova/js/custom/') }}{% endif %}{{ subform['JSHeader'] ~ '.js' }}" charset="UTF-8"></script>
+	{% endif %}
+	{% endfor %}
+{% endif %}
+{% if document.getDocType.getEnableDiscussion %}
+	<script type="text/javascript" language="javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-DiscussionThread.js') }}"></script>
+{% endif %}
+{% if workflow_options|length > 0 %}
+	{% if workflow_options['JSHeader'] != false %}
+	 <script language="javascript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/sfDocSection-WorkflowCommon.js') }}" charset="UTF-8"></script>
+	<script language="javascript" type="text/javascript" src="{{ asset('bundles/docova/js/custom/') ~ workflow_options['JSHeader'] ~ '.js' }}" charset="UTF-8"></script>
+	{% endif %}
+{% endif %}
+{% if not document.getDocType.getDisableActivities %}
+<script language="javascript" type="text/javascript" src="{{ asset('bundles/docova/js/UserActivities.js') }}" charset="UTF-8"></script>
+{% endif %}
+
+{{ document.getDocType.getCustomHtmlHead|trim ? document.getDocType.getCustomHtmlHead|trim|raw : '' }}
+</head>
+<body text="#000000" class="ui-widget" SCROLL="no" onload="InitDoc();
+window.onbeforeprint= printfix;
+window.onafterprint = removeprintfix;
+//---------pass Uploader to DocLogic----------
+//---------pass Uploader to DocLogic----------
+if ($('#LoadedInDLE').val()== '1'){
+	var UploaderObj ;
+	if(typeof DLIUploader1 == 'undefined')
+	UploaderObj = false;
+	else
+	UploaderObj = DLIUploader1;
+	if (UploaderObj ){
+		window.external.DocLogic_SetUploader(UploaderObj);
+		//---------add files to Uploader--------------
+		window.external.DocLogic_ShowUploadFiles();
+	}
+}
+
+return CustomOnLoadHandler();
+" onunload="if(!allowClose && docInfo.isDocBeingEdited )
+{
+	var ans=SaveBeforeClosing(true);
+	if(ans==6){
+		HandleSaveClick();
+	}
+	else if(ans==7){
+		CloseDocument();
+	}
+	else{
+		return false;
+	}
+}
+
+ClearTempFiles();
+
+if(docInfo.EnableLinkedFiles){
+	LinkedFilesOnUnLoad();
+}
+
+return CustomOnUnLoadHandler();">
+<!-------------------- User Activities Section -------------------------------------------->
+{% if not document.getDocType.getDisableActivities %}
+<div id="ActivityResponseData" style="display:none; z-index: 100; position:absolute; top: 28px; right: 5px; padding: 0px 5px 2px 5px; width: 275px;">
+	<div style="width: 0; height: 0; margin-left: 165px; border-style: solid; border-width: 0 15px 7px 15px; border-color: transparent transparent #CFCF00 transparent; line-height: 0px; _border-color: #000000 #000000 #CFCF00 #000000;"></div>
+	<div style="display: block; width: 225px; margin:0; padding: 2px; background-color: #FFFFB7; border: 1px #CFCF00 solid;">
+		<h3 style="width: 100%; margin: 5px 1px 10px 5px; color: #0050D1; font: bold 10px verdana,arial;">{% trans %}Your Activities (for this document){% endtrans %}&nbsp;</h3>
+		<table id="tblActivityResponseData" datasrc="#ActivityResponseData" width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr style="cursor:pointer;" onClick="OpenActivityResponse(this.rowIndex)" onMouseOver="SetActivityResponseRowColor(this,true)" onMouseOut="SetActivityResponseRowColor(this, false)">
+				<td class="fieldCell" width="30"><img src="{{ asset('bundles/docova/images/YellowNote.gif') }}" style="vertical-align: middle;" /></td>
+				<td class="fieldCell"><span datafld="Subject"></span>&nbsp;</td>
+				<td class="fieldCell"><span datafld="Obligation"></span>&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<input type="hidden" id="tmpActivity" name="tmpActivity" value="0"/>
+	<input type="hidden" id="tmpDiscardActivities" name="tmpDiscardActivities" value="0"/>
+<script>
+	var ActivityResponseData= new xmlDataIsland();
+	ActivityResponseData.setSrc ( "{{ path('docova_xactivitydata') }}?RestrictToCategory={{ user.getId }}~{{ document.getId }}&{{ 'now'|date('m/d/Y H:i:s') }}" );
+	ActivityResponseData.id = "ActivityResponseData";
+	ActivityResponseData.setTemplateName( "tblActivityResponseData");
+	ActivityResponseData.ondatasetcomplete = function() { ""; }
+//	ActivityResponseData.process();
+</script>
+</div>
+{% endif %}
+<!-- End Subform -- thingFactory --><!-- data exchange -->
+<span style="display:none;">
+<input type="button" id="dleOk"><input type="button" id="dleCancel"><input type="button" id="dleFailed">
+<input type="hidden" id="tmpDleDataXml" name="tmpDleDataXml" value=""/>
+<input type="hidden" id="tmpDleStatusXml" name="tmpDleStatusXml" value=""/>
+<input type=hidden id="tmpRequestDataXml" name="tmpRequestDataXml" value=""/>
+<input type=hidden id="tmpLinkDataXml" name="tmpLinkDataXml" value=""/>
+<input type=hidden id="tmpEmailAuditDataXml" name="tmpEmailAuditDataXml" value=""/>
+<input type=hidden id="DocKey" name="DocKey" value="{{ document.getId }}"/>
+<input type="hidden" id="tmpAddedFiles" name="tmpAddedFiles" value=""/>
+<input type="hidden" id="tmpDeletedFiles" name="tmpDeletedFiles" value=""/>
+<input type=hidden id="tmpEditedFiles" name="tmpEditedFiles" value=""/>
+<input type="hidden" id="LoadedInDLE" name="LoadedInDLE" value=""/>
+<input type="hidden" id="OFileNames" name="OFileNames" value=""/>
+<input type="hidden" id="OFileDates" name="OFileDates" value=""/>
+<input type="hidden" id="ActivityRecipients" name="ActivityRecipients" value=""/>
+<input type="hidden" id="tmpVersion" name="tmpVersion" value=""/>
+<input type=hidden id="UserHomeServer" name="UserHomeServer" value="{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}"/>
+<xml id="tmpOrphanXml" scr=""></xml>
+</span>
+<!------------------------------------>
+<script language="javascript" type="text/javascript">
+InitVars(info);
+function HandleSaveClick(refreshView)
+{
+	if(!IsValidData()) {return false;}
+	{% if document.getDocType.getSaveCloseCustomJS %}
+	try { 
+		{{ document.getDocType.getSaveCloseCustomJS|raw }} 
+	} catch(e) {
+		alert('{% trans %}Custom save function could not be executed due to the following error{% endtrans %}: ' + e); return false;
+	}{% else %}
+	SaveAndClose(refreshView);
+	{% endif %}
+}
+function HandleEditClick()
+{
+	{%if document.getDocType.getEditDocumentCustomJS %}
+	try {
+		{{ document.getDocType.getEditDocumentCustomJS|raw }}
+	} catch(e) {alert('{% trans %}Custom edit function could not be executed due to the following error{% endtrans %}: r' + e); return false;}
+	{% else %}
+	EditDocument();
+	{% endif %}
+}
+function IsValidData()
+{
+	try{
+		
+	} catch(e) {
+		alert('{% trans %}Validation function could not be executed due to the following error{% endtrans %}: \r' + e); 
+		return false;
+	}
+	return true;
+}
+function CustomOnLoadHandler()
+{
+{% if document.getDocType.getOnLoadCustomJS %}
+	try {
+		{{ document.getDocType.getOnLoadCustomJS|raw }}
+	} catch(e) {alert('{% trans %}Custom onLoad function could not be executed due to the following error{% endtrans %}: ' + e); return false;}
+{% else %}
+	return true;
+{% endif %}
+}
+function CustomOnUnLoadHandler()
+{
+{% if document.getDocType.getOnUnLoadCustomJS %}
+	try {
+		{{ document.getDocType.getOnUnLoadCustomJS|raw }}
+	} catch(e) {alert('{% trans %}Custom onUnLoad function could not be executed due to the following error{% endtrans %}: ' + e); return false;}
+{% else %}
+	return true;
+{% endif %}
+}
+function printPage()
+{
+	if(docInfo.RestrictPrinting) {
+		alert("{% trans %}You are not permitted to print this document{% endtrans %}");
+		return;
+	}
+	{% if document.getDocType.getPrintCustomJS %}
+	try {
+		{{ document.getDocType.getPrintCustomJS|raw }}
+	} catch(e) {alert('{% trans %}Custom print function could not be executed due to the following error{% endtrans %}: r' + e); return false;}
+	{% else %}
+	standardPrintPage();
+	{% endif %}
+}
+function CustomOnBeforeReleaseHandler(){
+	try{
+		{% if document.getDocType.getBeforeReleaseCustomJS %}
+		if(!{{ document.getDocType.getBeforeReleaseCustomJS|raw }}) { return false; }
+		{% endif %}
+	} catch(e) {
+		alert('{% trans %}Workflow on before release function could not be executed due to the following error{% endtrans %}: \r' + e); 
+		return false;
+	}
+	return true;
+}
+function CustomOnAfterReleaseHandler(version, comment){
+	try{
+		{% if document.getDocType.getAfterReleaseCustomJS %}
+		if (!{{ document.getDocType.getAfterReleaseCustomJS|raw }}) { return false; }
+		{% endif %}
+	} catch(e) {
+		alert('{% trans %}Workflow on after release function could not be executed due to the following error{% endtrans %}: \r' + e); 
+		return false;
+	}
+	return true;
+}
+</script>
+<div id="FormHeader" style="padding-top:4px; display:none;">
+	<table border=0 cellspacing=0 cellpadding=0 width=100%>
+		<tr>
+			<td id="tdActionPane" class="libdocs">
+			{% if not document.getDocType.getTrash and editable == true and (not(document.getDocType.getEnableLifecycle and document.getStatusNo > 0) or is_granted('ROLE_ADMIN')) and bookmarked != true and document.getDocType.getDocName != 'Mail Memo' and app.request.get('mode') != 'preview' and (translated_values['Hide_Edit_Button'] is not defined or not translated_values['Hide_Edit_Button']) %}
+				<a onclick="if(!CanModifyDocument()){ return false; } HandleEditClick(); return false;" href="" primary="ui-icon-pencil" secondary="">{{ document.getDocType.getCustomEditButtonLabel|trim ? document.getDocType.getCustomEditButtonLabel|trim : 'Edit'|trans }}</a>
+			{% endif %}
+				<a onclick="if(docInfo.isDocBeingEdited){ SaveBeforeClosing(); }else{ CloseDocument(); } return false;" href="" primary="ui-icon-close" secondary="">{% trans %}Close{% endtrans %}</a>
+			{% if action_buttons|length > 0 and app.request.get('mode') != 'preview' %}
+				{% for button in action_buttons %}
+					{% if button['Visible'] == true %}
+				<a onclick="{{ button['Script']|raw }}" href="" primary="{{ button['Primary'] }}" secondary="{{ button['Secondary'] }}">{{ button['Label']|trans }}</a>
+					{% endif %}
+				{% endfor %}
+			{% elseif not bookmarked and document.getDocType.getEnableLifeCycle and document.getDocType.getDocName != 'Mail Memo' and document.getDocStatus == document.getDocType.getInitialStatus and (editable == true or is_granted('ROLE_ADMIN')) and app.request.get('mode') != 'preview' and not document.getDocType.getEnableWorkflow and (translated_values['Hide_Release'] is not defined or not translated_values['Hide_Release']) %}
+				<a onclick="if(!CanModifyDocument()) { return false; } ReleaseDocument(); return false;" href="" primary="ui-icon-circle-check" secondary="">{{ translated_values['Release_Label'] is defined ? translated_values['Release_Label'] : 'Release Document'|trans }}</a>
+			{% endif %}
+			{% if bookmarked != true and document.getDocType.getEnableLifeCycle and document.getDocType.getDocName != 'Mail Memo' and app.request.get('mode') != 'preview' %}
+				<a onclick="CreateLifecycleSubmenu(this); return false;" primary="ui-icon-copy" secondary="ui-icon-triangle-1-s">{% trans %}Versioning{% endtrans %}</a>
+			{% endif %}
+			{% if document.getHasPendingReview and not bookmarked and app.request.get('mode') != 'preview' and user.getUserNameDnAbbreviated in reviewers %}
+				<a onclick="ReviewDocument(); return false;" href="" primary="ui-icon-tag" secondary="">{{ document.getDocType.getCustomReviewButtonLabel ? document.getDocType.getCustomReviewButtonLabel : 'Mark Reviewed'|trans }}</a>
+			{% endif %}
+			{% if app.request.get('mode') != 'preview' %}
+				<a onclick="CreateToolsSubmenu(this); return false;" href="" primary="ui-icon-wrench" secondary="ui-icon-triangle-1-s">{% trans %}Tools{% endtrans %}</a>
+			{% endif %}
+			{% include '::customDocReadActionButtons.html.twig' ignore missing %}
+			</td>
+			<td align="right">{{ document.getDocType.getTopBanner|raw }}</td>
+			<td align="right">
+				<div style="padding-right:20px;">
+				{% if not document.getDocType.getDisableActivities and app.request.get('mode') != 'preview' %}
+					<button id="btnShowActivities" title="{% trans %}Your pending activities.{% endtrans %}" style="display: {{ count > 0 ? '' : 'none' }};"></button>
+					<button id="btnCreateActivity" title="{% trans %}Create an activity.{% endtrans %}" class="btnStandard"></button>
+				{% endif %}
+					<button id="btnPrintPage" title="{% trans %}Print this document.{% endtrans %}" class="btnStandard"></button>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div id="divContentSection" style="display:none;">
+	<div id="divDocPage" style="min-height:95%;border: solid 1px #aaaaaa;border-right: solid 2px #777777;border-bottom: solid 2px #777777;padding: 5px; background-color: #{{ document.getDocType.getPaperColor ? document.getDocType.getPaperColor : 'FFF' }};">
+	{% if bookmarked == true %}
+	<!-- hidden bookmark logo if not flagged as a bookmark document -->
+	<div id="tdHeaderOptionsToggle" align="right" style="font:normal 11px verdana,arial;" >{% trans %}Bookmark Entry{% endtrans %}&nbsp;
+		<img src= "{{ asset('bundles/docova/images/icn16-docbookmark.png') }}" alt="" onclick="BookmarkOpenParent();" border="0" align="top"/>
+	</div>
+	{% endif %}
+	<!-- document header fieldset -->
+	<fieldset id="fsDocumentHeader" style="{% if document.getDocType.getHideOnReading == true or (translated_values['Hide_Header'] is defined and translated_values['Hide_Header']) %}display:none{% endif %}">
+	<!-- legend section (default subject visibility) -->
+	{% if not document.getDocType.getHideSubject %}
+		<legend style="font: bold 13px verdana,arial,sans-serif;">
+			<IMG SRC= "{{ asset('bundles/docova/images/') ~ document.getDocType.getDocIcon }}" border="0" align="top">&nbsp;{{ document.getDocType.getDocName }}&nbsp;
+		</legend>
+	{% endif %}
+
+	<table width="100%" cellpadding="0" cellsapcing="0" border="0" style="{% if not document.getDocType.getHideSubject %}margin-top: 10px;{% endif %}">
+	<tr>
+		<td>
+		<!-- subject section (default visibility) -->
+		{% if not document.getDocType.getHideSubject %}
+			<table cellpadding="3" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr valign="top">
+					<td width="30%">{{ document.getDocType.getSubjectLabel|trans }}: </td>
+					<td width="100%">{{ document.getDocTitle }}&nbsp;</td>
+				</tr>
+				{% if document.getDocType.getEnableLifecycle %}
+				<tr valign="top">
+					<td width="30%" valign="middle">{% trans %}Status{% endtrans %}:</td>
+					<td width="100%">
+						<table cellpadding="0" cellspacing="0" width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr valign="top">
+								<td width="40%">{{ document.getDocStatus|trans }}</td>
+								{% if document.getDocType.getEnableVersions or document.getDocType.getDocTypeWorkflow.count > 0 %}
+								<td width="60%">{% trans %}Version{% endtrans %}: {{ document.getDocVersion }}.{{ document.getRevision }} </td>
+								{% endif %}
+							</tr>
+						</table>
+					</td>
+				</tr>
+				{% endif %}
+			</table>
+		{% else %}
+			<span style="font: bold 13px verdana,arial,sans-serif; color: black;">
+				<img align="top" src="{{ asset('bundles/docova/images/') ~ document.getDocType.getDocIcon }}" border="0"/>&nbsp;{{ document.getDocType.getDocName }}
+			</span>
+		{% endif %}
+		<!-- legend section (subject in More section) -->
+		</td>
+		<td valign="bottom">
+		{% if bookmarked != true %}
+			<!-- hidden  More marker if flagged as a bookmark document -->
+			<div id="tdHeaderOptionsToggle" align="right"><button id="btnMore" style="width:2.4em;height:2.2em;" isOpen=false ></button></div>
+		{% endif %}
+		</td>
+	</tr>
+	</table>
+	
+	<div id="divHeaderOptions" style="display:none; width:100%; padding: 10px 0px 2px 0px; border-top: solid 1px #DFDFDF;">
+	<!-- tabbed table -->
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">{% trans %}Document Details{% endtrans %}</a></li>
+			<li><a href="#tabs-2">{% trans %}Read/Edit Access{% endtrans %}</a></li>
+			<li id="audit_tab"><a href="#tabs-3">{% trans %}Audit Log{% endtrans %}</a></li>
+			{% if document.getDocType.getEnableLifecycle %}
+			<li id="version_tab"><a href="#tabs-4">{% trans %}Version History{% endtrans %}</a></li>
+		    {% endif %}
+			{% if workflows|length > 0 and (not workflow_options.isCreated or not workflow_options.isCompleted) and document.getDocType.getHideWorkflow %}
+			<li><a href="#tabs-5">{% trans %}Workflow{% endtrans %}</a></li>
+		    {% endif %}
+			<li id="comments_tab"><a href="#tabs-6">{% trans %}Comments{% endtrans %}</a></li>
+			<li id="activity_tab"><a href="#tabs-7">{% trans %}Activities{% endtrans %}</a></li>
+			{% if subforms %}
+				{% set tabNo = 8 %}
+				{% for subform in subforms %}
+					{% if subform['More_Section'] %}
+				<li><a href="#tabs-{{ tabNo }}">{{ subform['More_Section']['Tab_Name'] }}</a></li>
+	  					{% set tabNo = tabNo + 1 %}
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+{# <li style="display:<Computed Value>"><a href="#tabs-11">Related Documents</a></li> #}
+		</ul>	
+
+		<!-------------------- Document Details -------------------------------------------->
+		<div class="clsTab" id="tabs-1">
+		<!-- subject section (moved to More) -->
+		{% if document.getDocType.getHideSubject %}
+			<table cellpadding="3" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr valign="top">
+					<td width="30%">{{ document.getDocType.getSubjectLabel|trans }}: </td>
+					<td width="100%">{{ document.getDocTitle }}&nbsp;</td>
+				</tr>
+				{% if document.getDocType.getEnableLifecycle %}
+				<tr valign="top">
+					<td width="30%" valign="middle">{% trans %}Status{% endtrans %}:</td>
+					<td width="100%">
+						<table cellpadding="0" cellspacing="0" width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr valign="top">
+								<td width="40%">{{ document.getDocStatus|trans }}</td>
+								{% if document.getDocType.getEnableVersions or document.getDocType.getDocTypeWorkflow.count > 0 %}
+								<td width="60%">{% trans %}Version{% endtrans %}: {{ document.getDocVersion }}.{{ document.getRevision }} </td>
+								{% endif %}
+							</tr>
+						</table>
+					</td>
+				</tr>
+				{% endif %}
+			</table>
+		{% endif %}
+			<table class="tblFields" cellpadding="3" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Author{% endtrans %}:</td>
+					<td width="100%">{% if document.getAuthor %}{{ not settings.getUserDisplayDefault ? document.getAuthor.getUserNameDnAbbreviated : document.getAuthor.getUserProfile.getDisplayName }}{% endif %}</td>
+				</tr>
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Document Date{% endtrans %}:</td>
+					{% set date_format = settings.getDefaultDateFormat|replace({'MM' : 'm', 'DD' : 'd', 'YYYY' : 'Y'}) %}
+					<td width="100%">{{ document.getDateCreated|date(date_format) }}</td>
+				</tr>
+				{% if translated_values['Show_Description'] is not defined or translated_values['Show_Description'] %}
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Description{% endtrans %}:</td>
+					<td width="100%">{{ document.getDescription }}&nbsp;</td>
+				</tr>
+				{% endif %}
+				{% if translated_values['Show_Keywords'] is not defined or translated_values['Show_Keywords'] %}
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Keywords{% endtrans %}:</td>
+					<td width="100%">{{ document.getKeywords }}&nbsp;</td>
+				</tr>
+				{% endif %}
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Library{% endtrans %}:</td>
+					<td width="100%">{{ document.getFolder.getLibrary.getLibraryTitle }}</td>
+				</tr>
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Folder Path{% endtrans %}:</td>
+					<td width="100%">{{ document.getFolder.getFolderPath }}</td>
+				</tr>
+				{% if translated_values['Show_Review_Cycle'] is not defined or translated_values['Show_Review_Cycle'] %}
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Review cycle{% endtrans %}:</td>
+					<td width="100%">
+					{% if document.getReviewType == 'P' %}{% trans %}As per applicable policy{% endtrans %}
+					{% elseif document.getReviewType == 'C' %}{% trans %}Reviewed every{% endtrans %} 
+						{{ document.getReviewPeriod > 1 ? document.getReviewPeriod : '' }}
+						{% if document.getReviewPeriodOption == 'D' %}{% trans %}day{% endtrans %}
+						{% elseif document.getReviewPeriodOption == 'W' %}{% trans %}week{% endtrans %}
+						{% elseif document.getReviewPeriodOption == 'M' %}{% trans %}month{% endtrans %}
+						{% elseif document.getReviewPeriodOption == 'Y' %}{% trans %}year{% endtrans %}{% endif %}.<br> 
+						Reviewers: 
+						{% set docreviewers = '' %}
+						{% if document.getAuthorReview %}{% set docreviewers = document.getAuthor.getUserNameDnAbbreviated ~ ',' %}{% endif %}
+						{% if document.getReviewers.count > 0 %}
+							{% for rw in document.getReviewers %}
+								{% set docreviewers = (not settings.getUserDisplayDefault ? rw.getUserNameDnAbbreviated : rw.getUserProfile.getDisplayName) ~ ',' ~ docreviewers %}
+							{% endfor %}
+						{% endif %}
+						{% set docreviewers = docreviewers|length > 0 ? docreviewers[:docreviewers|length - 1] : '' %}
+						{{ docreviewers }}
+					{% elseif document.getReviewType == 'N' %}{% trans %}Does not require review{% endtrans %}{% endif %}.<br>
+					</td>
+				</tr>
+				{% endif %}
+				{% if translated_values['Show_Archiving'] is not defined or translated_values['Show_Archiving'] %}
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Archiving{% endtrans %}:</td>
+					<td width="100%">
+					{% if document.getArchiveType == 'P' %}{% trans %}As per applicable policy{% endtrans %}
+					{% elseif document.getArchiveType == 'C' %}{% trans %}Archive on{% endtrans %}
+						{{ document.getCustomArchiveDate ? document.getCustomArchiveDate.format(date_format) : '' }} 
+					{% elseif document.getArchiveType == 'N' %}{% trans %}Do not Archive{% endtrans %}{% endif %}.
+					</td>
+				</tr>
+				{% endif %}
+			</table>
+		</div>
+	
+		<!-------------------- Read/Edit access -------------------------------------------->
+		<div class="clsTab" id="tabs-2" style="padding: 4px;">
+			<table class="tblFields" cellpadding="3" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Owner{% endtrans %}:</td>
+					<td width="100%">{{ not settings.getUserDisplayDefault ? document.getOwner.getUserNameDnAbbreviated : document.getOwner.getUserProfile.getDisplayName }}</td>
+				</tr>
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Additional Editors{% endtrans %}:</td>
+					<td width="100%">{% if doc_editors %}{{ doc_editors }}{% endif %}&nbsp;</td>
+				</tr>
+				<tr valign="top">
+					<td class="frmLabel" width="30%">{% trans %}Restrict read access to{% endtrans %}:</td>
+					<td width="100%">{% if doc_readers %}{{ doc_readers }}{% endif %}&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	
+		<!-------------------- Audit Log -------------------------------------------->
+		<div class="clsTab" id="tabs-3" style="padding: 4px;">
+			<!-------------------- Audit Log entries ------------------------------------->
+			<table style="background-color:#efefff;" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<th class="fieldCell" width="100">{% trans %}Date{% endtrans %}</th>
+					<th class="fieldCell" width="100">{% trans %}Time{% endtrans %}</th>
+					<th class="fieldCell" width="200">{% trans %}Who{% endtrans %}</th>
+					<th class="fieldCell">{% trans %}Details{% endtrans %}</th>
+				</tr>
+			</table>
+			<div style="width: 100%; height: 200px; overflow: auto;">
+				<table id="tblAuditLogData" datasrc="#AuditLogData" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="fieldCell" width="100"><span datafld="logdate"></span>&nbsp;</td>
+						<td class="fieldCell" width="100"><span datafld="logtime"></span>&nbsp;</td>
+						<td class="fieldCell" width="200"><span datafld="logauthor"></span>&nbsp;</td>
+						<td class="fieldCell"><span datafld="logdetails"></span>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	
+		<!-------------------- Revision Log Placeholder -------------------------------->
+		<div class="clsTab" id="tabs-4" style="padding: 4px;">
+		{% if document.getDocType.getEnableLifecycle %}
+			<table  style="border: 1px ridge; background-color:#efefff;" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<th class="fieldCell" width="30">&nbsp;</th>
+					<th class="fieldCell" width="100">{% trans %}Version{% endtrans %}</th>
+					<th class="fieldCell" width="100">{% trans %}Status{% endtrans %}</th>
+					<th class="fieldCell" width="200">{% trans %}Released{% endtrans %}</th>
+					<th class="fieldCell">{% trans %}By{% endtrans %}</th>
+				</tr>
+			</table>
+			<div style="width: 100%; height: 300px; overflow: auto;">
+				<table id="tblVersionLogData" datasrc="#VersionLogData" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr style="cursor:hand;" ondblclick="OpenDocument(this.rowIndex);" onMouseOver="SetRowColor(this, true)" onMouseOut="SetRowColor(this, false)">
+						<td class="fieldCell" width="30"><input id="rowSelect" type="checkbox" datafld="Selected">&nbsp;</td>
+						<td class="fieldCell" width="100"><span datafld="FullVersion" style="font-weight:bold;"></span>&nbsp;</td>
+						<td class="fieldCell" width="100"><span datafld="Status"></span>&nbsp;</td>
+						<td class="fieldCell" width="200"><span datafld="ReleasedDate"></span>&nbsp;</td>
+						<td class="fieldCell"><span datafld="ReleasedBy"></span>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		{% endif %}
+		</div>
+	
+		<!-------------------- Workflow section (when moved to More) -------------------------------------------->
+		<div class="clsTab" id="tabs-5" style="padding: 4px;">
+		{% if workflows|length > 0 and (not workflow_options.isCreated or not workflow_options.isCompleted) and document.getDocType.getHideWorkflow %}
+			{% for workflow in workflows %}
+				{{ workflow|raw }}
+			{% endfor %}
+		{% endif %}
+		</div>
+	
+		<!-------------------- Comments -------------------------------------------->
+		<div class="clsTab" id="tabs-6" style="padding: 4px;">
+			<!-------------------- Comment log entries ------------------------------------->
+			<table style="background-color:#efefff;" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<th class="fieldCell" width="250">{% trans %}Date/Time/Who{% endtrans %}</th>
+					<th class="fieldCell">{% trans %}Comments{% endtrans %}</th>
+				</tr>
+			</table>
+			<div style="width: 100%; height: 200px; overflow: auto;">
+				<table id="tblCommentLogData" datasrc="#CommentLogData" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td class="fieldCell" width="250">
+							<span datafld="logdate"></span> <span datafld="logtime"></span><br>
+							<span style=" font-weight: bold;">({% trans %}By{% endtrans %}:&nbsp;&nbsp;</span><span style=" font-weight: bold;" datafld="logauthor"></span>&nbsp;<span style=" font-weight: bold;">)</span>
+						</td>
+						<td class="fieldCell"><span datafld="logdetails"></span>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	
+		<!-------------------- Document Activites -------------------------------->
+		<div class="clsTab" id="tabs-7" style="padding: 4px;">
+			<div id="DocActivityData" style="height: 200px; overflow: auto;">
+				<div id="NoDocActivityDataMsg" style="display:none; font: 11px verdana,arial;">{% trans %}Currently no Activities data for this document.{% endtrans %}</div>
+				<table  id="tblDocActivityData" datasrc="#DocActivityData" width="100%" border="0" cellspacing="0" cellpadding="0">
+					<thead style="background-color:#efefff;">
+					<tr>
+						<th class="fieldCell">{% trans %}Type{% endtrans %}</th>
+						<th class="fieldCell">{% trans %}Status{% endtrans %}</th>
+						<th class="fieldCell">{% trans %}Created by{% endtrans %}</th>
+						<th class="fieldCell">{% trans %}Recipient{% endtrans %}</th>
+						<th width=75 class="fieldCell">{% trans %}Status Date{% endtrans %}</th>
+					</tr>
+					</thead>
+					<tbody id="otblDocActivityData">
+					<tr style="cursor:hand;" {% if not document.getDocType.getDisableActivities %} onclick="ViewDocActivity(this.rowIndex);" onMouseOver="SetDocActivityRowColor(this, true)" onMouseOut="SetDocActivityRowColor(this, false)"{% endif %}>
+						<td class="fieldCell" valign=top ><span datafld="ActivityType"></span>&nbsp;</td>
+						<td class="fieldCell" valign=top><span datafld="ActivityStatus"></span>&nbsp;</td>
+						<td class="fieldCell" valign=top><span datafld="CreatedBy"></span>&nbsp;</td>
+						<td class="fieldCell" valign=top><span datafld="Recipient"></span>&nbsp;</td>
+						<td class="fieldCell" valign=top><span datafld="StatusDate"></span>&nbsp;</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	
+		<!-------------------- Custom Subforms Placeholder -------------------------------->
+		{% if subforms %}
+			{% set tabNo = 8 %}
+			{% for subform in subforms %}
+				{% if subform['More_Section'] %}
+		<div class="clsTab" id="divTab_{{ tabNo }}" style="padding: 4px;">
+			{{ subform['HTML']|raw }}
+		</div>
+				{% set tabNo = tabNo + 1 %}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</div><!---end tabs div--->
+	</div>
+	</fieldset>
+	<!-- end of header -->
+
+	<!-------------------- Configurable content section -------------------------------------------->
+	<fieldset style="margin-top: 5px;padding:4px;">
+		{% if document.getDocType.getTrash %}
+		<div style="width: 100%; text-align: center; padding: 5px 0;">
+			<strong style="color: red; font-size: 13px;">{% trans with {'%doctype%' : document.getDocType.getDocName} %}&quot;%doctype%&quot; document type was deleted.{% endtrans %}</strong>
+		</div>
+		{% else %} 
+			{% if document.getArchived %}
+			<div style="width: 100%; text-align: center; padding: 5px 0;">
+				<strong style="color: red; font-size: 13px;">{% trans  %}This document has been archived.{% endtrans %}</strong>
+			</div>
+			{% endif %}
+			{% if not document.getDocType.getSectionStyle and document.getDocType.getSectionLabel %} 
+			<legend style="font : normal 11px Verdana, Arial, sans-serif;margin-bottom:10px;">{{ document.getDocType.getSectionLabel|trans }}&nbsp;</legend>
+			{% endif %}
+			<div class="ui-widget" style="background-color:#{{ document.getDocType.getBackgroundColor }}; {{ document.getDocType.getAdditionalCss ? document.getDocType.getAdditionalCss : 'width:100%;' }}">
+			{% if subforms %}
+				{% for subform in subforms %}
+					{% if not subform['More_Section'] %}
+				{{ subform['HTML']|raw }}
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+			</div>
+		{% endif %}
+	</fieldset>
+
+	<!-------------------- Workflow section (default location) -------------------------------------------->
+	{% if workflows|length > 0 and (not workflow_options.isCreated or not workflow_options.isCompleted) and not document.getDocType.getHideWorkflow %}
+		{% for workflow in workflows %}
+			{{ workflow|raw }}
+		{% endfor %}
+	{% endif %}
+
+	<!-------------------- Discussion Thread -------------------------------------------->
+	{% if document.getDocType.getEnableDiscussion %}
+	<fieldset id="divThreadContainer" style="padding:4px 4px 10px 4px; display:none;">
+		<legend style="font: normal 11px Verdana, Arial, sans-serif; margin-bottom: 10px;">{% trans %}Related Discussions{% endtrans %}&nbsp;</legend>
+		<div id="divThreadContent" style="font: 11px verdana;padding:5px; border: 1px solid silver; background-color:white;">{% trans %}Please wait while loading discussion thread{% endtrans %}...</div>
+	</fieldset>
+	{% endif %}
+
+	<!-------------------- Bottom Banner -------------------------------------------->
+	</div>
+	<table width="100%" id="banner">
+		<tr><td>{{ document.getDocType.getBottomBanner|raw }}</td></tr>
+	</table>
+</div>
+<!------------------ SUBFORM sfKillCache ------------>
+<!------------------Microsoft suggestion to force no cacheing of documents------------>
+<HEAD>
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="0">
+<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+</HEAD>
+<!------------------END SUBFORM sfKillCache  ------------>
+</body>
+</html>

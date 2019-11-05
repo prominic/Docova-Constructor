@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{% trans %}Workflow Process Settings{% endtrans %}</title>
+<!--  common javascript & CSS header -->
+{% include 'DocovaBundle:Admin:sfWebAdminCommonScriptHeader.html.twig'%}
+
+{% if workflow is defined %}
+	{% include 'DocovaBundle:Admin:WorkflowDefinitionRead.html.twig' %}
+{% elseif workflow_item is defined %}
+	{% include 'DocovaBundle:Admin:WorkflowItemDefinitionRead.html.twig' %}
+{% endif %}
+</html>

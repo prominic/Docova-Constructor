@@ -1,0 +1,52 @@
+HTML, BODY { height: 100% }
+BODY {
+	font-family: Verdana, Arial, Sans Serif;
+	font-size: 12px;
+	background-color: transparent;
+	overflow:hidden;
+	margin: 0;
+}
+.full_nav {
+	width: 100vw;
+	display: flex;
+	padding: 12px 5px;
+	background-color: #FEFEFE;
+	border-bottom: 1px #CCC solid;
+	justify-content: space-between;
+	flex-direction: row;
+	-ms-flex-direction: row;
+	-webkit-flex-direction: row;
+}
+DIV.flex {
+	padding: 2px 7px;
+	-webkit-flex: 1;
+	-ms-flex: 1;
+	flex: 1;
+}
+DIV.flex A {
+	text-decoration: none;
+}
+DIV.flex UL {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+DIV.flex LI.itmlist {
+	height: 19px;
+	position: relative;
+	white-space: nowrap;
+	padding: 7px 1px 5px 19px;
+	border-bottom: 1px dotted #EEE;
+}
+DIV.flex LI.itmlist SPAN {
+	position: absolute;
+}
+DIV.flex H3,DIV.flex H4,DIV.flex H5,DIV.flex H6 {
+	margin: 0;
+	padding: 7px 1px 5px 7px;
+}
+DIV.flex UL LI.itmlist:hover {
+	border-bottom: 1px #AAA dotted;
+/*	font-size: 13px; */
+	cursor: pointer;
+}

@@ -1,0 +1,16 @@
+<input name="subforms[]" type="hidden" value="{{ data['AllowPrint']['Field'].getSubform.getId }}" >
+<script type="text/javascript">
+prmptMessages.msgW2PDF001 = "{% trans %}PDF Creator not installed{% endtrans %}";
+prmptMessages.msgW2PDF002 = "{% trans %}PDF Conversion Failed{% endtrans %}!!";
+prmptMessages.msgW2PDF003 = "{% trans %}An error has occurred in the copyFileToTempLocation function.{% endtrans %}";
+prmptMessages.msgW2PDF004 = "{% trans %}Converting to PDF{% endtrans %}...";
+</script>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr valign="top">
+		<td class="fieldLabelCell" width="22%">{% trans %}Allow Printing{% endtrans %}</td>
+		<td class="fieldCell" width="78%">
+			<input type="radio" name="{{ data['AllowPrint']['Field'].getFieldName }}" value="0" {% if data['AllowPrint']['Value'] == 0 %}checked="checked"{% endif %}>{% trans %}Yes{% endtrans %}</label><label>
+			<input type="radio" name="{{ data['AllowPrint']['Field'].getFieldName }}" value="1" {% if data['AllowPrint']['Value'] == 1 %}checked="checked"{% endif %}>{% trans %}No{% endtrans %}</label>
+		</td>
+	</tr>
+</table>

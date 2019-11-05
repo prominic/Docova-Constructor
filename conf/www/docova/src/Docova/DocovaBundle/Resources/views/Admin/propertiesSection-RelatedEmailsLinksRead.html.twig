@@ -1,0 +1,59 @@
+	{% set L_selected_section = '' %}
+	{% set E_selected_section = '' %}
+	{% set L_section_properties = '' %}
+	{% set E_section_properties = '' %}
+	{% for subform in document.getDocTypeSubform %}
+		{% if subform.getSubform.getFormName == 'Related Emails' %}
+			{% set E_selected_section = subform %}
+			{% set E_section_properties = subform.getPropertiesXML(true) %}
+		{% elseif subform.getSubform.getFormName == 'Related Links' %}
+			{% set L_selected_section = subform %}
+			{% set L_section_properties = subform.getPropertiesXML(true) %}
+		{% endif %}
+	{% endfor %}
+ 	{% if E_section_properties != '' or L_section_properties != '' %}
+ 	<table cellspacing="0" class="elmContainer">
+ 		{% if E_section_properties != '' and E_selected_section.getSubform.getFormName == 'Related Emails' %}
+ 		<tr>
+ 			<td colspan="2" class="hdr">{% trans %}Related Emails{% endtrans %}</td>
+ 		</tr>
+ 		<tr>
+ 			<td class="firstRw">{% trans %}Document Versioning{% endtrans %}:</td>
+ 			<td class="firstRw">
+				<span class="elNote">{% trans %}When a new version is created include all Related Email links?{% endtrans %}</span>
+				{{ E_section_properties['IncludeEmailLinks'] == 1 ? 'Yes'|trans : 'No'|trans }}
+ 			</td>
+ 		</tr>
+ 		<tr>
+ 			<td>{% trans %}Save Forward As{% endtrans %}:</td>
+ 			<td>{{ E_section_properties['ForwardSaveAs'] == 1 ? 'Related Email'|trans : '' }}</td>
+ 		</tr>
+ 		<tr>
+ 			<td>{% trans %}Visibility{% endtrans %}:</td>
+ 			<td>
+				{% trans %}Hide Related Emails section when{% endtrans %}: 
+				{% if E_section_properties and E_section_properties['Interface']['HideOnReading'] == 1 %}{% trans %}Reading{% endtrans %}{% endif %}
+				{% if E_section_properties and E_section_properties['Interface']['HideOnEditing'] == 1 %}{% trans %}Editing{% endtrans %}{% endif %}
+ 			</td>
+ 		</tr>
+ 		{% endif %}
+ 		<tr>
+ 			<td colspan="2" class="hdr">{% trans %}Related Links{% endtrans %}</td>
+ 		</tr>
+ 		<tr>
+ 			<td class="firstRw">{% trans %}Document Versioning{% endtrans %}:</td>
+ 			<td class="firstRw">
+				<span class=elNote"">{% trans %}When a new version is created include all Related Links?{% endtrans %}</span>
+				{{ L_section_properties['IncludeRelLinks'] is defined and L_section_properties['IncludeRelLinks'] == 1 ? 'Yes'|trans : 'No'|trans }}
+ 			</td>
+ 		</tr>
+ 		<tr>
+ 			<td>{% trans %}Visibility{% endtrans %}:</td>
+ 			<td>
+				{% trans %}Hide Related Links section when{% endtrans %}: 
+				{% if L_section_properties and L_section_properties['Interface']['HideOnReading'] == 1 %}<label> {% trans %}Reading{% endtrans %}</label>{% endif %}
+				{% if L_section_properties and L_section_properties['Interface']['HideOnEditing'] == 1 %}<label> {% trans %}Editing{% endtrans %}</label>{% endif %}
+ 			</td>
+ 		</tr>
+ 	</table>
+    {% endif %}

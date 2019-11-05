@@ -1,0 +1,37 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr valign="top">
+		<td class="fieldLabelCell" width="14%">{% trans %}Date{% endtrans %}:</td>
+		<td class="fieldCell" width="86%">{{ data['mail_date'] is defined and data['mail_date']['Value'] is defined ? data['mail_date']['Value'] : ''}}&nbsp;</td>
+	</tr>
+
+	<tr valign="top">
+		<td class="fieldLabelCell" width="14%">{% trans %}From{% endtrans %}:</td>
+		<td class="fieldCell" width="86%">{{ data['mail_from']['Value'] }}&nbsp;</td>
+	</tr>
+
+	<tr valign="top">
+		<td class="fieldLabelCell" width="14%">{% trans %}To{% endtrans %}:</td>
+		<td class="fieldCell" width="86%">{{ data['mail_to']['Value'] }}&nbsp;</td>
+	</tr>
+
+	<tr valign="top">
+		<td class="fieldLabelCell" width="14%">{% trans %}cc{% endtrans %}:</td>
+		<td class="fieldCell" width="86%">{{ data['mail_cc']['Value'] }}&nbsp;</td>
+	</tr>
+
+	<tr valign="top">
+		<td class="fieldLabelCell" width="14%">{% trans %}bcc{% endtrans %}:</td>
+		<td class="fieldCell" width="86%">{{ data['mail_bcc']['Value'] }}&nbsp;</td>
+	</tr>
+
+	<tr valign="top">
+		<td class="fieldLabelCell" width="14%">{% trans %}Subject{% endtrans %}:</td>
+		<td class="fieldCell" width="86%">{{ data['mail_subject']['Value'] }}&nbsp;</td>
+	</tr>
+
+	<tr valign="top">
+		<td width="100%" colspan="2">
+			<div id="outlookMsgAttachments" style="display: none;"></div>
+		</td>
+	</tr>
+</table>

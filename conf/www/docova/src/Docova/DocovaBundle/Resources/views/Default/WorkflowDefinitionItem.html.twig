@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Workflow Definition Item</title>
+	<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/docova/js/commonFunctions.js') }}"></script>
+	<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/js/popupmenu.js') }}" charset="UTF-8" ></script>
+	{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+	{% set date_format = settings.getDefaultDateFormat|replace({'MM' : 'm', 'DD' : 'd', 'YYYY' : 'Y'}) %}
+	<script type="text/javascript">
+	var info = {
+		"DocID" : "",
+		"DocKey" : "",
+		"DocumentNumber" : "",
+		"ThreadKey" : "",
+		"UserName" : "{{ user.getUserNameDn|replace({'\\': '\\\\'}) }}",
+		"UserNameAB" : "{{ user.getUserNameDnAbbreviated|replace({'\\': '\\\\'}) }}",
+		"UserNameCN" : "{{ f_Name("[CN]", user.getUserNameDnAbbreviated)|replace({'\\': '\\\\'}) }}",
+		"TodayDate" : "{{ 'now'|date(date_format) }}",
+		"isNewDoc" : "true",
+		"isDocBeingEdited" : "true",
+		"Mode" : "",
+		"LoadAction" : "",
+		"HTTP_Referer" : "http://dev01.dlitools.com/Docova/Dev/JAV/3-5-1/DOCOVAHome.nsf/wAdminContent?OpenForm&viewname=wAdminSystemMessages&viewtitle=System Messages",
+		"Query_String" : "OpenForm&ParentUNID=",
+		"Query_String_Decoded" : "OpenForm&ParentUNID=",
+		"Path_Info_Decoded" : "{{ path('docova_adminwfstep', { 'step' : step.getId }) }}?OpenForm&ParentUNID=",
+		"ServerName" : "{{ app.request.server.get('HTTP_HOST') }}",
+		"ServerUrl" : "{{ app.request.getscheme }}://{{ app.request.server.get('HTTP_HOST') }}",
+		"NsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+		"LogNsfName" : "",
+		"ArchiveNsfName" : "",
+		"PortalWebPath" : "{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}",
+		"PortalNsfName" : "{{ path('docova_homepage')[1:path('docova_homepage')|length - 2] }}",
+		"CreatedBy" : "",
+		"CreatedDate" : "",
+		"Managers" : "",
+		"Authors" : "[Ad,ministration]",
+		"Readers" : "",
+		"LastModifiedBy" : "",
+		"LastModifiedDate" : "",
+		"LastModifiedServer" : "",
+		"SessionDateFormat" : "mm/dd/yyyy",
+		"DocAccessLevel" : "7",
+		"CanDeleteDocuments" : "true",
+		"DocAccessRole" : "Manager",
+		"DbAccessLevel" : "7",
+		"isEditable" : "true",
+		"DocovaEnvironment" : "Internal",
+		"isAppSettings" : "",
+		"isUserUpdate" : "No",
+		"userProfileRetUrl" : "/Docova/Dev/JAV/3-5-1/DOCOVAHome.nsf/luUserProfilesByName/Javad Rahimi/DLI?OpenDocument&uType=user",
+		"formName" : "",
+		"initUserRole" : ""
+	};
+	function getinfovar() {
+		return info;
+	}
+	function CloseDocument()
+	{
+		window.close();
+		return false;
+	}
+	</script>
+	<script type="text/javascript">
+$(document).ready(function() {
+	InitVars(info);
+	$('li').on('click', function() {
+		if (!$(this).hasClass('active')) {
+			$('li').removeClass('active');
+			$(this).addClass('active');
+			$('table.selected').hide(10, function() {
+				$('table:not(.selected)').fadeIn('slow', function() {
+					$(this).addClass('selected');
+				});
+				$(this).removeClass('selected');
+			});
+		}
+	});
+});
+	</script>
+	<style type="text/css">
+UL { list-style: none; padding: 0; margin: 5px 0 0 0; width:100%; }
+UL LI { float: left; width: 150px; background-color: #DDDDDD; margin-left:3px; height:22px; padding:5px 0 0 7px; border: 1px #CCC solid; border-bottom: 0; font-size: 12px; cursor: pointer; }
+UL LI.active { background-color: #EFEFEF; }
+IMG { border: 0; }
+TD { vertical-align: top; min-width: 200px; }
+.container { width:100%; margin:0; padding:2px; border:1px #CCC solid; border-spacing: 1px; border-collapse: collapse; }
+.selected { display: block; }
+.hidden { display: none; }
+	</style>
+</head>
+
+<body>
+	{% if message %}
+	<div sytle="clear:both; with:100%; text-align:center; margin:5px auto; color:red">{{ message|raw }}</div>
+	{% endif %}
+	<!-- Subform -- thingFactory -->
+	<script src="{{ path('docova_dlextensions') }}" language="javascript"></script>
+	<!-- End Subform -- thingFactory -->
+	<form action="{{ path('docova_adminwfstep', { 'step' : step.getId }) }}" method="post" >
+		<div style="border-top:1px #CCC solid; border-bottom:1px #CCC solid; background-color:#ECE9D8; height:32px; clear:both; width:100%" >
+			<input type="button" id="close" value="Close" onclick="CloseDocument();">
+			<input type="submit" id="Save_Close" value="Save and Close" >
+		</div>
+		<ul>
+			<li id="general" class="active">General Settings</li>
+			<li id="actions">Actions</li>
+		</ul>
+		<table class="container selected">
+			<tr>
+				<td>Step name: </td><td><input type="text" name="wfTitle" value="{% if step %}{{ step.getStepName }}{% endif %}" ></td>
+			</tr>
+			<tr>
+				<td>Step type: </td>
+				<td>
+					<label><input type="radio" name="wfAction" value="1" {% if step and step.getStepType == 1 %}checked="checked"{% endif %} > Start</label>
+					<label><input type="radio" name="wfAction" value="2" {% if step and step.getStepType == 2 %}checked="checked"{% endif %}> Review</label>
+					<label><input type="radio" name="wfAction" value="3" {% if step and step.getStepType == 3 %}checked="checked"{% endif %}> Approve</label>
+					<label><input type="radio" name="wfAction" value="4" {% if step and step.getStepType == 4 %}checked="checked"{% endif %}> End</label>
+				</td>
+			</tr>
+			<tr>
+				<td>Document Status: </td><td><input type="text" name="wfDocStatus" value="{% if step %}{{ step.getDocStatus }}{% endif %}" ></td>
+			</tr>
+			<tr>
+				<td>Position: </td><td><input type="text" name="wfOrder" value="{% if step %}{{ step.getPosition + 1 }}{% endif %}" > of {% if step %}{{ step.getWorkflow.getSteps.count }}{% endif %}</td>
+			</tr>
+			<tr>
+				<td>Distribution: </td><td><label><input type="radio" name="wfType" value="1" {% if step and (not step.getDistribution or step.getDistribution == 1) %}checked="checked"{% endif %} > Serial</label> <label><input type="radio" name="wfType" value="2" {% if step and step.getDistribution == 2 %}checked="checked"{% endif %}> Parallel</label></td>
+			</tr>
+			<tr>
+				<td>Participants: </td>
+				<td>
+					{% set participants = '' %}
+					{% if step and step.getOtherParticipant.count > 0 %}
+					{% for op in step.getOtherParticipant %}
+						{% set participants = op.getUserNameDnAbbreviated ~ ',' %}
+					{% endfor %}
+					{% set participants = participants[:participants|length -1] %}
+					{% endif %}
+					<label><input type="checkbox" name="wfEnableAuthorParticipant" value="1" {% if step and (step.getParticipants == 1 or step.getParticipants == 3) %}checked="checked"{% endif %} > Document author</label>
+					<div style="{% if not step or (step.getDistribution != 1 or step.getParticipants == 1 or step.getParticipants == 3) %}display:none{% endif %}">
+						or <br>
+						<textarea rows="4" cols="60" readonly="readonly" name="tmpwfReviewerApproverListSingle">{{ participants }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('tmpwfReviewerApproverListSingle','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</div>
+					<div style="{% if not step or step.getDistribution != 2 %}display:none{% endif %}">
+						or <br>
+						<textarea rows="4" cols="60" readonly="readonly" name="tmpwfReviewerApproverListMulti">{{ participants }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('tmpwfReviewerApproverListMulti','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</div>
+					<label><input type="checkbox" name="wfReviewerApproverSelect" value="1" {% if step and step.getParticipants > 1 %}checked="checked"{% endif %} > Allow author to modify participant names</label>
+				</td>
+			</tr>
+			<tr>
+				<td>Allow approver to edit document? </td><td><label><input type="radio" name="wfApproverEdit" value="1" {% if step and step.getApproverEdit == true %}checked="checked"{% endif %}> Yes</label>&nbsp;<label><input type="radio" name="wfApproverEdit" value="0" {% if step and step.getApproverEdit == false %}checked="checked"{% endif %} > No</label></td>
+			</tr>
+			<tr>
+				<td>Optional Review/Approve comments? </td><td><label><input type="checkbox" name="wfOptionalComments" value="1" {% if step and step.getOptionalComments == true %}checked="checked"{% endif %} > Yes</label></td>
+			</tr>
+			<tr>
+				<td>Approve button label: </td>
+				<td>
+					Custom button label @Formula:<br>
+					<textarea rows="4" cols="60" name="wfCustomApproveButtonLabel"></textarea>
+					<p>@Formula that returns the text string. "Approve" will be used if left blank.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Decline button label: </td>
+				<td>
+					Custom button label @Formula:<br>
+					<textarea rows="4" cols="60" name="wfCustomDeclineButtonLabel"></textarea>
+					<p>@Formula that returns the text string. "Decline" will be used if left blank.</p>
+				</td>
+			</tr>
+			<tr>
+				<td>Workflow buttons visibility: </td>
+				<td>
+					Hide workflow buttons when:
+					<label><input type="checkbox" name="wfHideButtons" value="R" {% if step and step.getHideReading == true %}checked="checked"{% endif %}> Reading</label> 
+					<label><input type="checkbox" name="wfHideButtons" value="E" {% if step and step.getHideEditing == true %}checked="checked"{% endif %}> Editing</label> 
+					<label><input type="checkbox" name="wfHideButtons" value="C" {% if step and step.getHideCustom == true %}checked="checked"{% endif %}> Custom</label>
+					
+					<div {% if not step or step.getHideCustom != true %}style="display:none;"{% endif %}>
+						<p>Custom hide when @Formula:<br>
+						<textarea rows="4" cols="60" name="wfCustomButtonsHideWhen"></textarea>
+						</p>
+						<p>@Formula that returns 1 or @true (hide) or 0 or @false (show).</p>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+		<table class="container hidden">
+			<tr>
+				<td colspan="2"><b>When the step is being...</b></td>
+			</tr>
+			<tr>
+				<td colspan="2"><b>Activated</b></td>
+			</tr>
+			<tr>
+				<td>Actions: </td>
+				<td>
+					<label><input type="checkbox" name="wfEnableActivateMsg" value="1" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSendMessage == true %}checked="checked"{% endif %}></label>
+					<select name="wfActivateMsg">
+						<option {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getMessage.getMessageName == 'DEFAULT_ACTIVATE' and step_actions['ACTIVATE'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="ACTIVATE">Default
+						{% if system_messages|length > 0 %}
+						{% for msg in system_messages %}
+						<option value="{{ msg.getId }}" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+						{% endfor %}
+						{% endif %}
+					</select> message 
+					<p>
+						to: <label><input type="checkbox" name="wfActivateNotifyParticipants" value="P" {% if step_actions['ACTIVATE'] is defined and (step_actions['ACTIVATE'].getToOptions == 3 or step_actions['ACTIVATE'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+						<label><input type="checkbox" name="wfActivateNotifyParticipants" value="A" {% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+						<br> and/or: <br>
+						{% set nameslist = '' %}
+						{% if step_actions['ACTIVATE'] is defined and step_actions['ACTIVATE'].getSendTo.count > 0 %}
+							{% for item in step_actions['ACTIVATE'].getSendTo %}
+								{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+							{% endfor %}
+							{% set nameslist = nameslist[1:] %}
+						{% endif %}
+						<textarea rows="4" cols="60" name="wfActivateNotifyList">{{ nameslist }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('wfActivateNotifyList','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><b>Completed</b></td>
+			</tr>
+			<tr>
+				<td>Actions: </td>
+				<td>
+					<label><input type="checkbox" name="wfEnableCompleteMsg" value="1" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSendMessage == true %}checked="checked"{% endif %}></label>
+					<select name="wfCompleteMsg">
+						<option {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getMessage.getMessageName == 'DEFAULT_COMPLETE' and step_actions['COMPLETE'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="COMPLETE">Default
+						{% if system_messages|length > 0 %}
+						{% for msg in system_messages %}
+						<option value="{{ msg.getId }}" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+						{% endfor %}
+						{% endif %}
+					</select> message 
+					<p>
+						to: <label><input type="checkbox" name="wfCompleteNotifyParticipants" value="P" {% if step_actions['COMPLETE'] is defined and (step_actions['COMPLETE'].getToOptions == 3 or step_actions['COMPLETE'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+						<label><input type="checkbox" name="wfCompleteNotifyParticipants" value="A" {% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+						<br> and/or: <br>
+						{% set nameslist = '' %}
+						{% if step_actions['COMPLETE'] is defined and step_actions['COMPLETE'].getSendTo.count > 0 %}
+							{% for item in step_actions['COMPLETE'].getSendTo %}
+								{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+							{% endfor %}
+							{% set nameslist = nameslist[1:] %}
+						{% endif %}
+						<textarea rows="4" cols="60" name="wfCompleteNotifyList">{{ nameslist }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('wfCompleteNotifyList','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><b>Declined</b></td>
+			</tr>
+			<tr>
+				<td>Actions: </td>
+				<td>
+					<label><input type="checkbox" name="wfEnableDeclineMsg" value="1" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendMessage == true %}checked="checked"{% endif %}></label>
+					<select name="wfDeclineMsg">
+						<option {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getMessage.getMessageName == 'DEFAULT_DECLINE' and step_actions['DECLINE'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="DECLINE">Default
+						{% if system_messages|length > 0 %}
+						{% for msg in system_messages %}
+						<option value="{{ msg.getId }}" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+						{% endfor %}
+						{% endif %}
+					</select> message 
+					<p>
+						to: <label><input type="checkbox" name="wfDeclineNotifyParticipants" value="P" {% if step_actions['DECLINE'] is defined and (step_actions['DECLINE'].getToOptions == 3 or step_actions['DECLINE'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+						<label><input type="checkbox" name="wfDeclineNotifyParticipants" value="A" {% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+						<br> and/or: <br>
+						{% set nameslist = '' %}
+						{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendTo.count > 0 %}
+							{% for item in step_actions['DECLINE'].getSendTo %}
+								{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+							{% endfor %}
+							{% set nameslist = nameslist[1:] %}
+						{% endif %}
+						<textarea rows="4" cols="60" name="wfDeclineNotifyList">{{ nameslist }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('wfDeclineNotifyList','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><b>Paused</b></td>
+			</tr>
+			<tr>
+				<td>Actions: </td>
+				<td>
+					<label><input type="checkbox" name="wfEnablePauseMsg" value="1" {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getSendMessage == true %}checked="checked"{% endif %}></label>
+					<select name="wfPauseMsg">
+						<option {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getMessage.getMessageName == 'DEFAULT_PAUSE' and step_actions['PAUSE'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="PAUSE">Default
+						{% if system_messages|length > 0 %}
+						{% for msg in system_messages %}
+						<option value="{{ msg.getId }}" {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+						{% endfor %}
+						{% endif %}
+					</select> message 
+					<p>
+						to: <label><input type="checkbox" name="wfPauseNotifyParticipants" value="P" {% if step_actions['PAUSE'] is defined and (step_actions['PAUSE'].getToOptions == 3 or step_actions['PAUSE'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+						<label><input type="checkbox" name="wfPauseNotifyParticipants" value="A" {% if step_actions['PAUSE'] is defined and step_actions['PAUSE'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+						<br> and/or: <br>
+						{% set nameslist = '' %}
+						{% if step_actions['DECLINE'] is defined and step_actions['DECLINE'].getSendTo.count > 0 %}
+							{% for item in step_actions['DECLINE'].getSendTo %}
+								{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+							{% endfor %}
+							{% set nameslist = nameslist[1:] %}
+						{% endif %}
+						<textarea rows="4" cols="60" name="wfPauseNotifyList">{{ nameslist }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('wfPauseNotifyList','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><b>Cancelled</b></td>
+			</tr>
+			<tr>
+				<td>Actions: </td>
+				<td>
+					<label><input type="checkbox" name="wfEnableCancelMsg" value="1" {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSendMessage == true %}checked="checked"{% endif %}></label>
+					<select name="wfCancelMsg">
+						<option {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getMessage.getMessageName == 'DEFAULT_CANCEL' and step_actions['CANCEL'].getMessage.getSystemic == true %}selected="selected"{% endif %} value="CANCEL">Default
+						{% if system_messages|length > 0 %}
+						{% for msg in system_messages %}
+						<option value="{{ msg.getId }}" {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+						{% endfor %}
+						{% endif %}
+					</select> message 
+					<p>
+						to: <label><input type="checkbox" name="wfCancelNotifyParticipants" value="P" {% if step_actions['CANCEL'] is defined and (step_actions['CANCEL'].getToOptions == 3 or step_actions['CANCEL'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+						<label><input type="checkbox" name="wfCancelNotifyParticipants" value="A" {% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+						<br> and/or: <br>
+						{% set nameslist = '' %}
+						{% if step_actions['CANCEL'] is defined and step_actions['CANCEL'].getSendTo.count > 0 %}
+							{% for item in step_actions['CANCEL'].getSendTo %}
+								{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+							{% endfor %}
+							{% set nameslist = nameslist[1:] %}
+						{% endif %}
+						<textarea rows="4" cols="60" name="wfCancelNotifyList">{{ nameslist }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('wfCancelNotifyList','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><b>Delayed</b></td>
+			</tr>
+			<tr>
+				<td>Actions: </td>
+				<td>
+					If not completed within: 
+					<input type="text" name="wfDelayCompleteThreshold" value="{% if step_actions['DELAY'] is defined %}{{ step_actions['DELAY'].getDueDays }}{% endif %}" > day(s)
+					<label><input type="checkbox" name="wfEnableDelayMsg" value="1" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSendMessage == true %}checked="checked"{% endif %}></label>
+					<select name="wfDelayMsg">
+						<option value="DELAY" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getMessage.getMessageName == 'DEFAULT_DELAY' and step_actions['DELAY'].getMessage.getSystemic == true %}selected="selected"{% endif %}>Default
+						{% if system_messages|length > 0 %}
+						{% for msg in system_messages %}
+						<option value="{{ msg.getId }}" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+						{% endfor %}
+						{% endif %}
+					</select> message 
+					<p>
+						to: <label><input type="checkbox" name="wfDelayNotifyParticipants" value="P" {% if step_actions['DELAY'] is defined and (step_actions['DELAY'].getToOptions == 3 or step_actions['DELAY'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+						<label><input type="checkbox" name="wfDelayNotifyParticipants" value="A" {% if step_actions['DELAY'] is defined and step_actions['DELAY'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+						<br> and/or: <br>
+						{% set nameslist = '' %}
+						{% if step_actions['DELAY'] is defined and step_actions['DELAY'].getSendTo.count > 0 %}
+							{% for item in step_actions['DELAY'].getSendTo %}
+								{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+							{% endfor %}
+							{% set nameslist = nameslist[1:] %}
+						{% endif %}
+						<textarea rows="4" cols="60" name="wfDelayNotifyList">{{ nameslist }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('wfDelayNotifyList','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</p>
+					<hr style="clear:both;">
+					If not completed within further: 
+					<input type="text" name="wfDelayEsclThreshold" value="{% if step_actions['DELAYESCL'] is defined %}{{ step_actions['DELAYESCL'].getDueDays }}{% endif %}"> day(s)
+					<label><input type="checkbox" name="wfEnableDelayEsclMsg" value="1" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSendMessage == true %}checked="checked"{% endif %}></label>
+					<select name="wfDelayEsclMsg">
+						<option value="DELAYESCL" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getMessage.getMessageName == 'DEFAULT_DELAYESCL' and step_actions['DELAYESCL'].getMessage.getSystemic == true %}selected="selected"{% endif %}>Default
+						{% if system_messages|length > 0 %}
+						{% for msg in system_messages %}
+						<option value="{{ msg.getId }}" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getMessage.getId == msg.getId %}selected="selected"{% endif %}>{{ msg.getMessageName }}
+						{% endfor %}
+						{% endif %}
+					</select> escalation message 
+					<p>
+						to: <label><input type="checkbox" name="wfDelayEsclNotifyParticipants" value="P" {% if step_actions['DELAYESCL'] is defined and (step_actions['DELAYESCL'].getToOptions == 3 or step_actions['DELAYESCL'].getToOptions == 1) %}checked="checked"{% endif %}> participants</label>
+						<label><input type="checkbox" name="wfDelayEsclNotifyParticipants" value="A" {% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getToOptions > 1 %}checked="checked"{% endif %}> author</label>
+						<br> and/or: <br>
+						{% set nameslist = '' %}
+						{% if step_actions['DELAYESCL'] is defined and step_actions['DELAYESCL'].getSendTo.count > 0 %}
+							{% for item in step_actions['DELAYESCL'].getSendTo %}
+								{% set nameslist = ',' ~ item.getUserNameDnAbbreviated ~ nameslist %}
+							{% endfor %}
+							{% set nameslist = nameslist[1:] %}
+						{% endif %}
+						<textarea rows="4" cols="60" name="wfDelayEsclNotifyList">{{ nameslist }}</textarea>
+						<button style="width: 20px; height: 18px;" onclick="showAddressDialog('wfDelayEsclNotifyList','multi')" type="button">
+							<img alt="add" src="{{ asset('bundles/docova/images/icons/vwicn004.gif') }}" align="top">
+						</button>
+					</p>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

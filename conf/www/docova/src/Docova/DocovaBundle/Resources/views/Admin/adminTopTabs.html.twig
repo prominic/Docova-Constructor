@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<META content="0" http-equiv="expires">
+<META content="0" http-equiv="cache-control">
+<META content="no-cache" http-equiv="Pragma">
+<link rel="stylesheet" href="{{ asset('bundles/docova/css/smoothness/jquery-ui.css') }}">
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ asset('bundles/docova/jquery/jquery-ui.js') }}"></script>
+{% include 'DocovaBundle:Default:scriptMessagesTranslation.html.twig' %}
+<script language="JavaScript" type="text/javascript">
+var tabTemplate,
+	tabs = null;
+
+$(function() {
+	tabTemplate = "<li><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>{% trans %}Remove Tab{% endtrans %}</span></li>";
+	//var tabContentHtml = '';
+
+	tabs = $( "#tabs" ).tabs();
+	tabs.tabs({heightStyle: "fill"});
+	tabs.tabs({ active: 1 });
+
+	// Click on close icon function to close the tab and the frame
+	tabs.delegate( "span.ui-icon-close", "click", function() {
+		if (tabs.find('li').length > 1) {
+	      panelId = $( this ).closest( "li" ).attr( "aria-controls" );
+		  if ($( "#" + panelId ).index() > 1) {
+			  var index = $( "#" + panelId ).index(),
+			  	  current = tabs.tabs('option', 'active');
+
+			  $( this ).closest( "li" ).remove().attr( "aria-controls" );
+	      	  parent.fsAdminContentFrameset.children[index].src = "";
+			  parent.fsAdminContentFrameset.removeChild(parent.fsAdminContentFrameset.children[index]);
+			  $( "#" + panelId ).remove();
+		      tabs.tabs( "refresh" );
+		      if (current != index) {
+		  		var rows_str = '40';
+		  		var diff = (current < (index - 1)) ? 2 : 1;
+				for (var x = 2; x <= parent.fsAdminContentFrameset.children.length; x++) {
+					if (x - diff == current) {
+						rows_str += ',*';
+					}
+					else {
+						rows_str += ',0';
+					}
+				}
+				parent.fsAdminContentFrameset.rows = rows_str;
+			  }
+		  }
+		  else { return false; }
+		}
+		else { return false; }
+	});
+
+	// makes the frame of the clicked tab visible and the rest invisible
+	tabs.tabs({beforeActivate : function(event, ui) {
+		var rows_str = '40';
+		for (var x = 2; x <= parent.fsAdminContentFrameset.children.length; x++) {
+			if (x - 1 == ui.newTab.index() + 1) {
+				rows_str += ',*';
+			}
+			else {
+				rows_str += ',0';
+			}
+		}
+		parent.fsAdminContentFrameset.rows = rows_str;
+	}});
+
+});
+
+//actual addTab function: adds new tab using the input from the form
+function addTab(label, tabId) {
+  var id = "tabs-" + tabId,
+    li = $( tabTemplate.replace( /#\{href\}/g, "#" + id ).replace( /#\{label\}/g, label ) );
+
+  tabs.find( ".ui-tabs-nav" ).append( li );
+  tabs.append( "<div id='" + id + "'></div>" );
+  tabs.tabs( 'option', 'active', tabs.find('li').length);
+  tabs.tabs( "refresh" );
+  tabs.tabs( 'option', 'active', tabs.find('li').length-1 );
+}
+
+//remove tab based on index
+function removeTabByIndex(tabIndex) {
+	if (tabs.find('li').length > 1 && tabIndex > 0) {
+		var panelId = tabs.find( '.ui-tabs-nav li:eq(' + tabIndex + ')' ).attr( "aria-controls" );
+		tabs.find( '.ui-tabs-nav li:eq(' + tabIndex + ')' ).remove();
+		tabs.find('#' + panelId ).remove();
+		tabs.tabs('refresh');
+		//tabs.tabs("remove", tabIndex);
+		parent.fsAdminContentFrameset.children[tabIndex + 1].src = "";
+		parent.fsAdminContentFrameset.removeChild(parent.fsAdminContentFrameset.children[tabIndex + 1]);
+	}
+}
+
+function activateFirstTab()
+{
+	tabs.tabs( "option", "active", 0 );
+}
+</script>
+<style type="text/css">
+* { font-family: verdana,arial,sans-sertif; font-size: 13px; }
+#tabs UL { min-height: 25px !important; }
+</style>
+</head>
+<body  SCROLL="no">
+	<div id="tabs">
+		<ul>
+			<li><a href="#firstFxTab">{% trans %}Libraries{% endtrans %}</a></li>
+		</ul>
+		<div id="firstFxTab"></div>
+	</div>
+</body>
+</html>
