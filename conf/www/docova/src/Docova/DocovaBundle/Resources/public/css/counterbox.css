@@ -1,9 +1,0 @@
-/**
- * Supplied CSS for jQuery counter box
- * @author: Javad Rahimi
-*/
-DIV.docova-counterbox {	padding:20px; text-align:center; font-size:2.5em; clear:both; margin:0 5px 12px 5px; width:auto; }
-DIV.counterbox-borders-on { border: 1px solid #e0dede; }
-DIV.counterbox-title { display:block; width:100%; margin:5px auto; font-size:0.5em; }
-DIV.counterbox-unit-container { padding-left:2px; }
-DIV.counterbox-icon-top I { clear:both; display:block; margin:3px auto; padding-left:2px; padding-right:2px; }

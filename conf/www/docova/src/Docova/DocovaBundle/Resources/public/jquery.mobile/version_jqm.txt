@@ -1,2 +1,0 @@
-jQuery Mobile 1.4.5
-CUSTOMIZED jquery.mobile.js by DLI.tools to stop double encoding of url 

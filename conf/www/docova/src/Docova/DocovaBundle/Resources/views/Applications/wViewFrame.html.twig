@@ -1,9 +1,0 @@
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<frameset id="fsContentFrameset" ROWS="40,*" FRAMEBORDER="0" BORDER="0" FRAMESPACING="0">
-	<frame TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" id="fraTabbedTable" name="fraTabbedTable" SRC="{{ path('docova_tabtableview') }}?ReadForm&title={{ app.request.query.get('title') }}">
-	<frame TOPMARGIN="0" LEFTMARGIN="0" MARGINHEIGHT="0" MARGINWIDTH="0" FRAMEBORDER="0" BORDER="0" id="appViewMain" name="appViewMain" SRC="{{ path('docova_homepage')[:path('docova_homepage')|length - 1] }}/{{ app.request.query.get('surl') }}">
-</frameset>
-</html>

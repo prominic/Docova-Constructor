@@ -1,7 +1,0 @@
-docova:
-    resource: "@DocovaBundle/Resources/config/routing.yml"
-    prefix:   /Docova
-
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation

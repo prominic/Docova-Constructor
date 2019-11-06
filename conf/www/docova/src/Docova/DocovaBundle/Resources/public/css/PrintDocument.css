@@ -1,1 +1,0 @@
-body {	border: 0;            background: none;}body, td{	font-family:arial,sans-serif;	font-size:80%}/* hides button on top and uploader attachment section */#FormHeader{    display: none;}/*  main div*/#divContentSection{	height:auto; 	max-height:100%; 	width:100%; 	position: relative;	overflow: visible !important;	padding: 0; 	margin: 0;	border: 0;}
