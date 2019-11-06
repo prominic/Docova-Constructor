@@ -1,0 +1,24 @@
+---
+# tasks file for nginx
+
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+  become: yes
+- name: Install nginx
+  apt: 
+    name: ['nginx', 'git', 'unzip']
+- name: Start nginx
+  become: yes
+  service:
+    name: nginx
+    state: started
+
+- name: Update nginx confs for Docova + PHP
+  template: "src=../templates/default-site.conf dest=/etc/nginx/sites-available/{{ id }} owner=www-data group=www-data mode=0644"
+  become: yes
+
+- name: Enable site
+  file: src=/etc/nginx/sites-available/{{ id }} dest=/etc/nginx/sites-enabled/{{ id }} owner=www-data group=www-data state=link
+  notify:
+    - restart nginx
+  become: yes

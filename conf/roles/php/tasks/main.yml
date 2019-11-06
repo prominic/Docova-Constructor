@@ -1,0 +1,58 @@
+---
+# tasks file for php
+
+- 
+  name: Purging all Prior versions of PHP
+  apt:
+    state: absent
+    name:
+      - php-common
+- 
+  name: Update all packages to the latest version
+  apt:
+    name:
+      - php-zip
+      - php-xsl
+      - php-xmlrpc
+      - php-xml
+      - php-tidy
+      - php-sybase
+      - php-soap
+      - php-readline
+      - php-pspell
+      - php-pgsql
+      - php-opcache
+      - php-odbc
+      - php-mysql
+      - php-sqlite3
+      - php-ldap
+      - php-mbstring
+      - php-json
+      - php-intl
+      - php-imap
+      - php-gmp
+      - php-gd
+      - php-fpm
+      - php-dev
+      - php-dba
+      - php-curl
+      - php-common
+      - php-cli
+      - php-cgi
+      - php-bz2
+      - php-bcmath
+      - php-interbase
+      - php-pdo-firebird
+      - php-fileinfo
+      - php-exif
+      - php-apcu
+- name: Setup php-fpm
+  replace: dest=/etc/php/fpm/php.ini regexp="(;cgi.fix_pathinfo=1)" replace="cgi.fix_pathinfo=0"
+  notify:
+    - restart nginx
+  become: yes
+- name: Add php settings
+  template: src=../../nginx/templates/nginx-docova-common.conf dest=/etc/nginx/nginx-docova-common.conf owner=www-data group=www-data mode=0644
+  notify:
+    - restart nginx
+  become: yes

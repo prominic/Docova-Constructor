@@ -109,6 +109,7 @@ class Hosts
         server.vm.provision :ansible_local do |ansible|
           ansible.playbook = "Setup.yml"
           ansible.extra_vars = { ip:host['ip'], id:host['identifier'], ansible_python_interpreter: "python3" }
+		  ansible.compatibility_mode = "2.0"
         end
       end
     end

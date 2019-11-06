@@ -1,0 +1,51 @@
+---
+# tasks file for Docova Deployment
+- name: Create webroot
+  file:
+    state: directory
+    path: /var/html/www/
+    owner: www-data
+    group: www-data
+    mode: 0755
+  become: yes
+- 
+  name: Check if Docova directory exists in /var/html/www/docova
+  stat: path=/var/html/www/docova
+  register: check_path  
+- 
+  name: Copying Docova Bundle Zip
+  copy:
+    src: /vagrant/roles/www-data/templates/docova.zip
+    dest: /tmp/docova.zip 
+- 
+  name: Extract Docova
+  unarchive:
+    src: /tmp/docova.zip
+    dest: /tmp
+    owner: www-data
+    group: www-data
+    copy: no
+  become: yes
+  when: not check_path.stat.exists
+- 
+  name: Move Docova install files
+  command: mv /tmp/docova /var/html/www/docova
+  become: yes
+  when: not check_path.stat.exists
+  notify:
+    - restart nginx
+#- 
+#  name: Add Modified  Paramters.yml
+#  template: "src=paramters.yml dest=/srv/www/{{ id }}/paramters.yml"
+#  become: yes
+#- 
+#  name: Update Docova config file
+#  lineinfile:
+#    dest: "/srv/www/{{ id }}/paramters.yml"
+#    regexp: "{{ item.regexp }}"
+#    line: "{{ item.line }}"
+#  with_items:
+#    - {'regexp': "define\\('DB_NAME', '(.)+'\\);", 'line': "define('DB_NAME', '{{docova_db_name}}');"}
+#    - {'regexp': "define\\('DB_USER', '(.)+'\\);", 'line': "define('DB_USER', '{{docova_db_user}}');"}
+#    - {'regexp': "define\\('DB_PASSWORD', '(.)+'\\);", 'line': "define('DB_PASSWORD', '{{docova_db_password}}');"}
+#  become: yes
