@@ -6,48 +6,48 @@
   apt:
     state: absent
     name:
-      - php-common
+      - php7.1-common
 - 
   name: Update all packages to the latest version
   apt:
     name:
-      - php-zip
-      - php-xsl
-      - php-xmlrpc
-      - php-xml
-      - php-tidy
-      - php-sybase
-      - php-soap
-      - php-readline
-      - php-pspell
-      - php-pgsql
-      - php-opcache
-      - php-odbc
-      - php-mysql
-      - php-sqlite3
-      - php-ldap
-      - php-mbstring
-      - php-json
-      - php-intl
-      - php-imap
-      - php-gmp
-      - php-gd
-      - php-fpm
-      - php-dev
-      - php-dba
-      - php-curl
-      - php-common
-      - php-cli
-      - php-cgi
-      - php-bz2
-      - php-bcmath
-      - php-interbase
-      - php-pdo-firebird
-      - php-fileinfo
-      - php-exif
-      - php-apcu
+      - php7.1-zip
+      - php7.1-xsl
+      - php7.1-xmlrpc
+      - php7.1-xml
+      - php7.1-tidy
+      - php7.1-sybase
+      - php7.1-soap
+      - php7.1-readline
+      - php7.1-pspell
+      - php7.1-pgsql
+      - php7.1-opcache
+      - php7.1-odbc
+      - php7.1-mysql
+      - php7.1-sqlite3
+      - php7.1-ldap
+      - php7.1-mbstring
+      - php7.1-json
+      - php7.1-intl
+      - php7.1-imap
+      - php7.1-gmp
+      - php7.1-gd
+      - php7.1-fpm
+      - php7.1-dev
+      - php7.1-dba
+      - php7.1-curl
+      - php7.1-common
+      - php7.1-cli
+      - php7.1-cgi
+      - php7.1-bz2
+      - php7.1-bcmath
+      - php7.1-interbase
+      - php7.1-pdo-firebird
+      - php7.1-fileinfo
+      - php7.1-exif
+      - php7.1-apcu
 - name: Setup php-fpm
-  replace: dest=/etc/php/7.2/fpm/php.ini regexp="(;cgi.fix_pathinfo=1)" replace="cgi.fix_pathinfo=0"
+  replace: dest=/etc/php/7.1/fpm/php.ini regexp="(;cgi.fix_pathinfo=1)" replace="cgi.fix_pathinfo=0"
   notify:
     - restart nginx
   become: yes
