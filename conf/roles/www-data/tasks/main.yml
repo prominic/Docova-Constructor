@@ -34,10 +34,17 @@
   when: not check_path.stat.exists
   notify:
     - restart nginx
-#- 
-#  name: Add Modified  Paramters.yml
-#  template: "src=paramters.yml dest=/srv/www/{{ id }}/paramters.yml"
-#  become: yes
+- 
+  name: Set Docova Document Permissions
+  file:
+    state: directory
+    path: { item }
+    owner: www-data
+    group: www-data
+    mode: 0755
+    items:
+     - /var/html/www/docova/web/upload-attachments
+  become: yes
 - 
   name: Update Docova config file
   lineinfile:
