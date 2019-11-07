@@ -6,7 +6,7 @@
   become: yes
 - name: Install nginx
   apt: 
-    name: ['nginx', 'git', 'unzip']
+    name: ['nginx', 'git', 'unzip','curl','dos2unix']
 - name: Start nginx
   become: yes
   service:
