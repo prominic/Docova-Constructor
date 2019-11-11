@@ -66,10 +66,7 @@ class Hosts
         # VirtulBox machine configuration
         server.vm.provider :virtualbox do |vb|
           vb.name = host['identifier']
-          vb.customize ['modifyvm', :id, '--ostype', 'Ubuntu_64']
-		  vb.customize ['setextradata', 'global', 'GUI/MaxGuestResolution', 'any']
-		  vb.customize ['setextradata', :id, 'CustomVideoMode1', '1366x768x32']
-		  
+          vb.customize ['modifyvm', :id, '--ostype', 'Ubuntu_64']		  
           if host.has_key?('provider')
             host['provider'].each do |param|
               vb.customize ['modifyvm', :id, "--#{param['directive']}", param['value']]
@@ -108,7 +105,7 @@ class Hosts
         ##Start Ansible Loop
         server.vm.provision :ansible_local do |ansible|
           ansible.playbook = "Setup.yml"
-          ansible.extra_vars = { ip:host['ip'], id:host['identifier'],   mailer_password:host['mailer_password'], sender_address:host['sender_address'], client_id:host['client_id'],client_secret:host['client_secret'], client_directory:host['client_directory'], google_api_key:host['google_api_key'], weather_api_key:host['weather_api_key'], database_name:host['database_name'], database_user:host['database_user'], database_password:host['database_password'], ldap_username:host['ldap_username'], ldap_password:host['ldap_password'], ldap_domain:host['ldap_domain'], ldap_adkey:host['ldap_adkey'], ldap_groupkey:host['ldap_groupkey'], mailer_user:host['mailer_user'], ansible_python_interpreter: "python3" }
+          ansible.extra_vars = { ip:host['ip'], id:host['identifier'], mailer_password:host['mailer_password'], sender_address:host['sender_address'], client_id:host['client_id'],client_secret:host['client_secret'], client_directory:host['client_directory'], google_api_key:host['google_api_key'], weather_api_key:host['weather_api_key'], database_name:host['database_name'], database_user:host['database_user'], database_password:host['database_password'], ldap_username:host['ldap_username'], ldap_password:host['ldap_password'], ldap_domain:host['ldap_domain'], ldap_adkey:host['ldap_adkey'], ldap_groupkey:host['ldap_groupkey'], mailer_user:host['mailer_user'], ansible_python_interpreter: "python3" }
 		  ansible.compatibility_mode = "2.0"
         end
       end
