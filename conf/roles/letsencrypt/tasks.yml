@@ -1,0 +1,25 @@
+# Alternative first step:
+- name: Create a challenge for sample.com using a account key file.
+  letsencrypt:
+    account_key_src: /etc/pki/cert/private/account.key
+    csr: /etc/pki/cert/csr/sample.com.csr
+    dest: /etc/httpd/ssl/sample.com.crt
+    fullchain_dest: /etc/httpd/ssl/sample.com-fullchain.crt
+  register: sample_com_challenge
+
+# perform the necessary steps to fulfill the challenge
+# for example:
+#
+# - copy:
+#     dest: /var/www/html/{{ sample_com_challenge['challenge_data']['sample.com']['http-01']['resource'] }}
+#     content: "{{ sample_com_challenge['challenge_data']['sample.com']['http-01']['resource_value'] }}"
+#     when: sample_com_challenge is changed
+
+- name: Let the challenge be validated and retrieve the cert and intermediate certificate
+  letsencrypt:
+    account_key_src: /etc/pki/cert/private/account.key
+    csr: /etc/pki/cert/csr/sample.com.csr
+    dest: /etc/httpd/ssl/sample.com.crt
+    fullchain_dest: /etc/httpd/ssl/sample.com-fullchain.crt
+    chain_dest: /etc/httpd/ssl/sample.com-intermediate.crt
+    data: "{{ sample_com_challenge }}"
