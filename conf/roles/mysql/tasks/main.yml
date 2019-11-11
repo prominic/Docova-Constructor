@@ -15,7 +15,7 @@
     password: "{{ mysql_root_password }}"
     priv: "*.*:ALL,GRANT"
   with_items:
-    - "{{ ansible_hostname }}"
+    - "{{ id }}"
     - 127.0.0.1
     - ::1
     - localhost
@@ -28,19 +28,19 @@
 - name: Create mysql user
   become: true
   mysql_user:
-    name: "{{ docova_db_user }}"
-    password: "{{ docova_db_password }}"
+    name: "{{ database_user }}"
+    password: "{{ database_password }}"
     priv: "*.*:ALL"
 
 - name: Create mysql database
   become: true
   mysql_db:
-    name: "{{ docova_db_name }}"
+    name: "{{ database_name }}"
     state: present
 
 - name: Delete anonymous MySQL server user for $server_hostname
   become: true
-  action: mysql_user user="" host="{{ server_hostname }}" state="absent"
+  action: mysql_user user="" host="{{ id }}" state="absent"
   
 - name: Delete anonymous MySQL server user for localhost
   become: true
@@ -52,9 +52,9 @@
 
 - name: Update mysql root password for all root accounts
   become: true
-  mysql_user: name=root host={{ server_hostname }} password={{ mysql_root_password }} priv=*.*:ALL,GRANT
+  mysql_user: name=root host={{ id }} password={{ mysql_root_password }} priv=*.*:ALL,GRANT
   with_items:
-    - "{{ ansible_hostname }}"
+    - "{{ id }}"
     - 127.0.0.1
     - ::1
     - localhost
