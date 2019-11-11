@@ -1,7 +1,7 @@
 # Variables for Role Certbot certs.
 certbot_create_if_missing: false
 certbot_create_method: standalone
-certbot_admin_email: "{{ mailer_address }}"
+certbot_admin_email: "{{ mailer_user }}"
 certbot_create_standalone_stop_services:
   - nginx
 apache_vhosts:
