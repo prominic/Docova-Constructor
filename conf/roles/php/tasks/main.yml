@@ -5,12 +5,12 @@
   apt_repository: 
     repo="ppa:ondrej/php" 
     update_cache=yes
-#- 
-#  name: Purging all Prior versions of PHP
-#  apt:
-#    state: absent
-#    name:
-#      - php-common
+- 
+  name: Purging all Prior versions of PHP
+  apt:
+    state: absent
+    name:
+      - php-*
 - 
   name: Update all packages to the latest version
   apt:
