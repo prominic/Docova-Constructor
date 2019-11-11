@@ -1,8 +1,8 @@
 # Variables for Role Certbot certs.
 certbot_create_if_missing: false
 certbot_create_method: standalone
-certbot_admin_email: {{ email_adress }}
+certbot_admin_email: "{{ mailer_address }}"
 certbot_create_standalone_stop_services:
   - nginx
 apache_vhosts:
-    - {servername: "{{ id }}", documentroot: "/var/www/abcyourdomain.com"}
+    - {servername: "{{ id }}", documentroot: "/var/html/www/docova/web"}
