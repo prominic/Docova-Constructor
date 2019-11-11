@@ -35,13 +35,17 @@
   notify:
     - restart nginx
 - 
+  name: Check if Docova directory exists in /var/html/www/docova/web/upload-attachments
+  stat: path=/var/html/www/docova/web/upload-attachments
+  register: check_path  
+- 
   name: Set Docova Document Permissions
   file:
     state: directory
     path: { item }
     owner: www-data
     group: www-data
-    mode: 0755
+    mode: 0775
     items:
      - /var/html/www/docova/web/upload-attachments
   become: yes
@@ -54,8 +58,21 @@
   with_items:
     - {'regexp': "database_driver:", 'line': "    database_driver: pdo_mysql"}
     - {'regexp': "database_port:", 'line': "    database_port: 3306"}
-    - {'regexp': "database_name:", 'line': "    database_name: {{docova_db_name}}"}
-    - {'regexp': "database_user:", 'line': "    database_user: {{docova_db_user}}"}
-    - {'regexp': "database_password:", 'line': "    database_password: {{docova_db_password}}"}
+    - {'regexp': "database_name:", 'line': "    database_name: {{database_name}}"}
+    - {'regexp': "database_user:", 'line': "    database_user: {{database_user}}"}
+    - {'regexp': "database_password:", 'line': "    database_password: {{database_password}}"}
   notify:
     - restart nginx
+    - restart php-fpm
+- 
+  name: Setting Autoindex Cron Job
+  cron:
+    name: "Autoindex"
+    minute: "*/5"
+    job: "sudo bash /var/html/www/docova/autoindex.sc"
+- 
+  name: Setting DailyLifeCycle Cron Job
+  cron:
+    name: "DailyLifeCycle"
+    minute: "0"
+    job: "sudo bash /var/html/www/docova/dailylifecycle.sc"
