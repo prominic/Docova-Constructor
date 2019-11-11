@@ -1,17 +1,1 @@
-# Docova database settings
-docova_db_name: docova_db_dev
-docova_db_user: docova_user
-docova_db_password: L1m1t3dd12
-  
-mysql_port: 3306
-mysql_root_password: root
-
-auto_up_disable: true
-
-server_hostname: "{{id}}"
-
-# Docova Version
-docova_version: x.x.x
-docova_sha1sum: fbe0ee1d9010265be200fe50b86f341587187302
-
 
