@@ -46,7 +46,7 @@
     owner: www-data
     group: www-data
     mode: 0755
-    with_items:
+  with_items:
      - /var/html/www/docova/web/upload-attachments
   become: yes
 - 
