@@ -1,12 +1,16 @@
 ---
 # tasks file for php
-
+- 
+  name: "Add repository for PHP 7.1"
+  apt_repository: 
+    repo="ppa:ondrej/php" 
+    update_cache=yes
 - 
   name: Purging all Prior versions of PHP
   apt:
     state: absent
     name:
-      - php7.1-common
+      - php-common
 - 
   name: Update all packages to the latest version
   apt:
