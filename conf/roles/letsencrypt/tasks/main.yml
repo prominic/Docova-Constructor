@@ -22,12 +22,10 @@
   service: 
     name: "{{ item }}"
     state: stopped
-  with_items: 
-    - "{{ certbot_create_standalone_stop_services }}"
+  with_items: "{{ certbot_create_standalone_stop_services }}"
 - 
-  name: "Generate new certificate if one does not exist"
+  name: "Generate new"
   shell: "certbot certonly --standalone --noninteractive --agree-tos --email {{ certbot_admin_email }} -d {{ item.item.servername}}"
-  when: "item.stat.exists == False"
   with_items: "{{ letsencrypt_cert.results }}"
 - 
   name: "Start services after cert has been generated."
