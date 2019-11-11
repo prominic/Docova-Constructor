@@ -5,12 +5,22 @@
   apt_repository: 
     repo="ppa:ondrej/php" 
     update_cache=yes
-- 
-  name: Purging all Prior versions of PHP
+    
+- name: Purge PHP version packages (besides the currently chosen php_version).
   apt:
+    name: "{{ php_versions_debian | reject('search', 'php') | list }}"
     state: absent
-    name:
-      - php-*
+    purge: true
+    force: true
+  register: php_version_purge
+
+- name: Also purge php-common package if any versions were just purged.
+  apt:
+    name: php-common
+    state: absent
+    purge: true
+    force: true
+  when: php_version_purge.changed | bool
 - 
   name: Update all packages to the latest version
   apt:
