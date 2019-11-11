@@ -19,7 +19,7 @@
     name: "{{ item }}"
     state: stopped
   with_items:
-          -  "{{ certbot_create_standalone_stop_services }}"
+    -  "{{ certbot_create_standalone_stop_services }}"
 - name: Generate new certificate if one does not exist
   shell: "certbot certonly --standalone --noninteractive --agree-tos --email {{ certbot_admin_email }} -d {{ item.item.servername}}"
   with_items: "{{ letsencrypt_cert.results }}"
