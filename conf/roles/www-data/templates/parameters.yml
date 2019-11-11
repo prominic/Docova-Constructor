@@ -2,27 +2,27 @@ parameters:
     database_driver: pdo_mysql
     database_host: {{ ip }} #Database host name or IP (preferred to use IP)
     database_port: 3306 #MySQL port
-    database_name: {{ docova_db_name }} #Database name for DOCOVA in MySQL 
-    database_user: {{ db_username }} #Database user name
-    database_password: {{ db_pass }} #Database password
-    ldap_username: {{ ldap_email_address }} #Email address enabled in AD to be used for LDAP
-    ldap_password: {{ ldap_email_address_pass }} #The LDAP email password
+    database_name: {{ database_name }} #Database name for DOCOVA in MySQL 
+    database_user: {{ database_user }} #Database user name
+    database_password: {{ database_password }} #Database password
+    ldap_username: {{ ldap_username }} #Email address enabled in AD to be used for LDAP
+    ldap_password: {{ ldap_password }} #The LDAP email password
     ldap_domain: {{ ldap_domain }} #Defined domain name for AD/LDAP
     ldap_adkey: {{ ldap_adkey }} #Default unique key name in AD/LDAP (e.g. SamAccountName, CN, UserName, ...)
     ldap_groupkey: {{ ldap_groupkey }} #Default unique key name in AD/LDAP for groups (e.g. DisplayName, PrincipalName, ...) 
     mailer_transport: smtp #Mailing transportation type (usually SMTP)
     mailer_host: {{ ip }} #Mailing host IP
-    mailer_user: {{ email_address }} #Email address to be used for emailing process
-    mailer_password: {{ email_pass }} #The email address's password
+    mailer_user: {{ mailer_user }} #Email address to be used for emailing process
+    mailer_password: {{ mailer_password }} #The email address's password
     sender_address: {{ sender_address }} #Email address to be shown as sender on emailing process
     locale: en #DOCOVA locale (default to English)
     secret: 550e822a52e9e2409087e81c7cc3aaa4cbec9ceb #No change is needed for this parameter
     document_root: '/var/html/www/docova/attachments/' #Directory where attachments should be uploaded
-    domino_username: {{ domino_username }}
-    domino_password: {{ domino_passworde }}
-    domino_services_url: {{ domino_services_url }}
-    datamigrator_path: {{ datamigrator_path }}
-    client_id: {{ client_id }}#1234-1234-1234-1234 If client wants SSO enabled in DOCOVA, their Client ID shoud be set here
+    domino_username: null
+    domino_password: null
+    domino_services_url: null
+    datamigrator_path: null
+    client_id: {{ client_id }} #1234-1234-1234-1234 If client wants SSO enabled in DOCOVA, their Client ID shoud be set here
     client_secret: {{ client_secret }} #If client wants SSO enabled in DOCOVA, their Client Secret should be set here
     client_directory: {{ client_directory }} #123-123-123-123 #If client wants SSO enabled in DOCOVA, their Client Directory code should be set here
     google_api_key: {{ google_api_key }} #If client wants to use Google Map API in DOCOVA, their API key should be set here
