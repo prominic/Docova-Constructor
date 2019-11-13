@@ -33,3 +33,25 @@
     name: "{{ item }}"
     state: started
   with_items: "{{ certbot_create_standalone_stop_services }}"
+- 
+  lineinfile: 
+    dest: "/etc/nginx/sites-enabled/{{ id }}"
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+  name: "Enabling SSL in Nginx"
+  notify: 
+    - "restart nginx"
+    - "restart php7.1-fpm"
+  with_items: 
+    - 
+      line: "    #ssl_certificate"
+      regexp: "ssl_certificate  /etc/letsencrypt/live/{{ id }}/fullchain.pem;"
+    - 
+      line: "    #ssl_certificate_key"
+      regexp: "ssl_certificate_key /etc/letsencrypt/live/{{ id }}/privkey.pem;"
+    - 
+      line: "    #ssl_protocols"
+      regexp: "ssl_protocols TLSv1 TLSv1.1 TLSv1.2;"
+    - 
+      line: "    #ssl_ciphers"
+      regexp: "ssl_ciphers HIGH:!aNULL:!MD5;"
