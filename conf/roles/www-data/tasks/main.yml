@@ -34,7 +34,7 @@
   when: not check_path.stat.exists
   notify:
     - restart nginx
-- name: Create webroot
+- name: Create document_root
   file:
     state: directory
     path: "{{ document_root }}"
@@ -95,7 +95,8 @@
     job: "sudo bash /var/html/www/docova/dailylifecycle.sc"
 - 
   name: "Running setUpDOCOVA"
+  become: yes
   shell: |
-      sudo bash /var/html/www/docova/setUpDOCOVA.sh <<EOF
+      bash /var/html/www/docova/setUpDOCOVA.sh <<EOF
       y
       EOF
