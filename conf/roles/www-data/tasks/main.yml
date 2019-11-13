@@ -109,6 +109,6 @@
   become: true
   name: "Running setUpDOCOVA"
   shell: |-
-      bash /var/html/www/docova/setUpDOCOVA.sh <<EOF
+      bash cd setUpDOCOVA.sc <<EOF
       y
       EOF
