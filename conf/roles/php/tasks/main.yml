@@ -1,30 +1,26 @@
----
-# tasks file for php
+--- 
 - 
+  apt_repository: "repo=\"ppa:ondrej/php\" update_cache=yes"
   name: "Add repository for PHP 7.1"
-  apt_repository: 
-    repo="ppa:ondrej/php" 
-    update_cache=yes
-    
-- name: Purge PHP version packages (besides the currently chosen php_version).
-  apt:
-    name: "php*"
-    state: absent
-    purge: true
-    force: true
-  register: php_version_purge
-
-- name: Also purge php-common package if any versions were just purged.
-  apt:
-    name: php-common
-    state: absent
-    purge: true
-    force: true
-  when: php_version_purge.changed | bool
 - 
-  name: Update all packages to the latest version
-  apt:
-    name:
+  apt: 
+    force: true
+    name: php*
+    purge: true
+    state: absent
+  name: "Purge PHP version packages (besides the currently chosen php_version)."
+  register: php_version_purge
+- 
+  apt: 
+    force: true
+    name: php-common
+    purge: true
+    state: absent
+  name: "Also purge php-common package if any versions were just purged."
+  when: "php_version_purge.changed | bool"
+- 
+  apt: 
+    name: 
       - php7.1-zip
       - php7.1-xsl
       - php7.1-xmlrpc
@@ -60,13 +56,16 @@
       - php7.1-fileinfo
       - php7.1-exif
       - php7.1-apcu
-- name: Setup php-fpm
-  replace: dest=/etc/php/7.1/fpm/php.ini regexp="(;cgi.fix_pathinfo=1)" replace="cgi.fix_pathinfo=0"
-  notify:
-    - restart nginx
-  become: yes
-- name: Add php settings
-  template: src=../../nginx/templates/nginx-docova-common.conf dest=/etc/nginx/nginx-docova-common.conf owner=www-data group=www-data mode=0644
-  notify:
-    - restart nginx
-  become: yes
+  name: "Update all packages to the latest version"
+- 
+  become: true
+  name: "Setup php-fpm"
+  notify: 
+    - "restart nginx"
+  replace: "dest=/etc/php/7.1/fpm/php.ini regexp=\"(;cgi.fix_pathinfo=1)\" replace=\"cgi.fix_pathinfo=0\""
+- 
+  become: true
+  name: "Add php settings"
+  notify: 
+    - "restart nginx"
+  template: "src=../../nginx/templates/nginx-docova-common.conf dest=/etc/nginx/nginx-docova-common.conf owner=www-data group=www-data mode=0644"
