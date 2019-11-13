@@ -112,7 +112,12 @@
 - 
   become: true
   name: "Running setUpDOCOVA"
+  register: result
   shell: |-
       bash /var/html/www/docova/setUpDOCOVA.sc <<EOF
       y
       EOF
+- "setUpDOCOVA OutPut"
+  debug:
+    var: result
+    verbosity: 2
