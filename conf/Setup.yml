@@ -56,4 +56,4 @@
       role: www-data
     - 
       role: letsencrypt
-      when: "run_letsencrypt == 'Yes'"
+      when: run_letsencrypt 
