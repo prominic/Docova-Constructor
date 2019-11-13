@@ -17,7 +17,7 @@ parameters:
     sender_address: {{ sender_address }} #Email address to be shown as sender on emailing process
     locale: en #DOCOVA locale (default to English)
     secret: 550e822a52e9e2409087e81c7cc3aaa4cbec9ceb #No change is needed for this parameter
-    document_root: '/var/html/www/docova/attachments/' #Directory where attachments should be uploaded
+    document_root: {{ document_root }} #Directory where attachments should be uploaded
     domino_username: null
     domino_password: null
     domino_services_url: null
