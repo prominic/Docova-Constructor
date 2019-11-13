@@ -120,7 +120,8 @@
       bash /var/html/www/docova/setUpDOCOVA.sc <<EOF
       y
       EOF
-- "Output of setUpDOCOVA"
+- 
+  name: "Output of setUpDOCOVA"
   debug:
     var: result
     verbosity: 2
