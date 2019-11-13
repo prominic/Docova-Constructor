@@ -76,7 +76,7 @@
   name: "Update Docova config file"
   notify: 
     - "restart nginx"
-    - "restart php-fpm"
+    - "restart php7.1-fpm"
   with_items: 
     - 
       line: "    database_driver: pdo_mysql"
