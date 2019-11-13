@@ -7,6 +7,7 @@
     owner: www-data
     path: /var/html/www/
     state: directory
+    recurse: yes
   name: "Create webroot"
 - 
   name: "Check if Docova directory exists in /var/html/www/docova"
@@ -42,6 +43,7 @@
     owner: www-data
     path: "{{ document_root }}"
     state: directory
+    recurse: yes
   name: "Create document_root"
 - 
   name: "Check if Docova directory exists in {{ document_root }}"
@@ -52,6 +54,7 @@
   file: 
     group: www-data
     mode: 0755
+    recurse: yes
     owner: www-data
     path: 
       item: ~
