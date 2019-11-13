@@ -34,9 +34,17 @@
   when: not check_path.stat.exists
   notify:
     - restart nginx
+- name: Create webroot
+  file:
+    state: directory
+    path: "{{ document_root }}"
+    owner: www-data
+    group: www-data
+    mode: 0755
+  become: yes
 - 
-  name: Check if Docova directory exists in /var/html/www/docova/web/attachments
-  stat: path=/var/html/www/docova/web/attachments
+  name: Check if Docova directory exists in {{ document_root }}
+  stat: "path={{ document_root }}"
   register: check_path  
 - 
   name: Set Docova Document Permissions
