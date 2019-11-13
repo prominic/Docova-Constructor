@@ -41,6 +41,8 @@
         name: aptitude
         state: present
       name: "Ensuring Aptitude is installed."
+    - debug:
+        msg: run_letsencrypt
   roles: 
     - 
       role: nginx
