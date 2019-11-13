@@ -54,4 +54,4 @@
       role: www-data
     - 
       role: letsencrypt
-      when: ansible_facts['run_letsencrypt'] == 'Yes'
+      when: "{{ run_letsencrypt }} == 'Yes'"
