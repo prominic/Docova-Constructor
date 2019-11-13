@@ -66,10 +66,7 @@
     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/images
     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/public/js/custom
     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/views/DesignElements
-    - /var/html/www/docova/var/logs
-    - /var/html/www/docova/var/sessions
-    - /var/html/www/docova/var/cache
-    - /var/html/www/docova/web/upload
+    - /var/html/www/docova/var/
     - "{{ document_root }}"
 - 
   lineinfile: 
