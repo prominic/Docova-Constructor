@@ -38,7 +38,7 @@
   become: true
   file: 
     group: www-data
-    mode: 493
+    mode: 0755
     owner: www-data
     path: "{{ document_root }}"
     state: directory
