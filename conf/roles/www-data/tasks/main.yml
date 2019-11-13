@@ -3,7 +3,7 @@
   become: true
   file: 
     group: www-data
-    mode: 493
+    mode: 0755
     owner: www-data
     path: /var/html/www/
     state: directory
@@ -51,7 +51,7 @@
   become: true
   file: 
     group: www-data
-    mode: 493
+    mode: 0755
     owner: www-data
     path: 
       item: ~
