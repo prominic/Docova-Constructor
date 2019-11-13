@@ -39,7 +39,7 @@
   become: true
   file: 
     group: www-data
-    mode: 0755
+    mode: 0777
     owner: www-data
     path: "{{ document_root }}"
     state: directory
@@ -53,7 +53,7 @@
   become: true
   file: 
     group: www-data
-    mode: 0755
+    mode: 0777
     recurse: yes
     owner: www-data
     path: 
