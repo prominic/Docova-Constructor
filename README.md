@@ -168,14 +168,14 @@ vagrant up
 #### Example of a Succesful run:
 
 ```powershell
-  vagrant up --provision
+ vagrant up
 Bringing machine 'Docova-2-new' up with 'virtualbox' provider...
 ==> Docova-2-new: Checking if box 'peru/ubuntu-18.04-server-amd64' version '20191101.01' is up to date...
 ==> Docova-2-new: Running provisioner: shell...
-    Docova-2-new: Running: /tmp/vagrant-shell20191112-23170-1dt1c3y.sh
+    Docova-2-new: Running: /tmp/vagrant-shell20191113-8943-8ant21.sh
     Docova-2-new: A Branch is not specified, Skipping addition of branch
 ==> Docova-2-new: Running provisioner: shell...
-    Docova-2-new: Running: /tmp/vagrant-shell20191112-23170-1mucu57.sh
+    Docova-2-new: Running: /tmp/vagrant-shell20191113-8943-6obskj.sh
     Docova-2-new: alias ..='cd ..'
     Docova-2-new: alias ...='cd ../..'
     Docova-2-new: alias h='cd ~'
@@ -183,6 +183,7 @@ Bringing machine 'Docova-2-new' up with 'virtualbox' provider...
     Docova-2-new: alias ll='ls -la'
     Docova-2-new: Reading package lists...
     Docova-2-new: Building dependency tree...
+    Docova-2-new:
     Docova-2-new: Reading state information...
     Docova-2-new: python-apt is already the newest version (1.6.4).
     Docova-2-new: The following packages were automatically installed and are no longer required:
@@ -191,7 +192,7 @@ Bringing machine 'Docova-2-new' up with 'virtualbox' provider...
     Docova-2-new:   libaprutil1-ldap libjs-jquery libjs-sphinxdoc libjs-underscore liblua5.2-0
     Docova-2-new:   libpcre2-8-0 libsodium23
     Docova-2-new: Use 'sudo apt autoremove' to remove them.
-    Docova-2-new: 0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+    Docova-2-new: 0 upgraded, 0 newly installed, 0 to remove and 29 not upgraded.
 ==> Docova-2-new: Running provisioner: ansible_local...
     Docova-2-new: Running ansible-playbook...
 
@@ -202,6 +203,11 @@ ok: [Docova-2-new]
 
 TASK [Ensuring Aptitude is installed.] *****************************************
 ok: [Docova-2-new]
+
+TASK [debug] *******************************************************************
+ok: [Docova-2-new] => {
+    "msg": "run_letsencrypt"
+}
 
 TASK [nginx : Update apt cache] ************************************************
 ok: [Docova-2-new]
@@ -234,10 +240,10 @@ TASK [mysql : Copy .my.cnf file with root password credentials] ****************
 ok: [Docova-2-new]
 
 TASK [mysql : Create mysql user] ***********************************************
-ok: [Docova-2-new]
+changed: [Docova-2-new]
 
 TASK [mysql : Create mysql database] *******************************************
-changed: [Docova-2-new]
+ok: [Docova-2-new]
 
 TASK [mysql : Create mysql database] *******************************************
 changed: [Docova-2-new]
@@ -329,9 +335,9 @@ changed: [Docova-2-new] => (item=/var/docova/attachments/)
 TASK [www-data : Update Docova config file] ************************************
 ok: [Docova-2-new] => (item={u'regexp': u'database_driver:', u'line': u'    database_driver: pdo_mysql'})
 ok: [Docova-2-new] => (item={u'regexp': u'database_port:', u'line': u'    database_port: 3306'})
-ok: [Docova-2-new] => (item={u'regexp': u'database_name:', u'line': u'    database_name: docova_db'})
-ok: [Docova-2-new] => (item={u'regexp': u'database_user:', u'line': u'    database_user: docova_user'})
-ok: [Docova-2-new] => (item={u'regexp': u'database_password:', u'line': u'    database_password: RandH38Uy'})
+changed: [Docova-2-new] => (item={u'regexp': u'database_name:', u'line': u'    database_name: database_name'})
+changed: [Docova-2-new] => (item={u'regexp': u'database_user:', u'line': u'    database_user: database_user'})
+changed: [Docova-2-new] => (item={u'regexp': u'database_password:', u'line': u'    database_password: database_password'})
 
 TASK [www-data : Setting Autoindex Cron Job] ***********************************
 ok: [Docova-2-new]
@@ -341,6 +347,46 @@ ok: [Docova-2-new]
 
 TASK [www-data : Running setUpDOCOVA] ******************************************
 changed: [Docova-2-new]
+
+TASK [www-data : Running setUpDOCOVA] ******************************************
+changed: [Docova-2-new]
+
+TASK [letsencrypt : Upgrade System] ********************************************
+
+changed: [Docova-2-new]
+
+TASK [letsencrypt : Add certbot repository] ************************************
+changed: [Docova-2-new]
+
+TASK [letsencrypt : Install Certbot's Nginx package] ***************************
+changed: [Docova-2-new]
+
+TASK [letsencrypt : Check if certificate already exists.] **********************
+ok: [Docova-2-new] => (item={u'servername': u'docova-new.int.dc-01.m4kr.net', u'documentroot': u'/var/html/www/docova/web'})
+
+TASK [letsencrypt : Stop services to allow certbot to generate a cert.] ********
+changed: [Docova-2-new] => (item=nginx)
+
+TASK [letsencrypt : Generate new] **********************************************
+changed: [Docova-2-new] => (item={'failed': False, u'stat': {u'exists': False}, 'ansible_loop_var': u'item', 'item': {u'servername': u'docova-new.int.dc-01.m4kr.net', u'documentroot': u'/var/html/www/docova/web'}, u'invocation': {u'module_args': {u'follow': False, u'get_checksum': True, u'path': u'/etc/letsencrypt/live/docova-new.int.dc-01.m4kr.net/cert.pem', u'checksum_algorithm': u'sha1', u'get_md5': False, u'get_mime': True, u'get_attributes': True}}, u'changed': False})
+
+TASK [letsencrypt : Start services after cert has been generated.] *************
+changed: [Docova-2-new] => (item=nginx)
+
+TASK [letsencrypt : Enabling SSL in Nginx] *************************************
+changed: [Docova-2-new] => (item={u'regexp': u'ssl_certificate  /etc/letsencrypt/live/docova-new.int.dc-01.m4kr.net/fullchain.pem;', u'line': u'    #ssl_certificate'})
+changed: [Docova-2-new] => (item={u'regexp': u'ssl_certificate_key /etc/letsencrypt/live/docova-new.int.dc-01.m4kr.net/privkey.pem;', u'line': u'    #ssl_certificate_key'})
+changed: [Docova-2-new] => (item={u'regexp': u'ssl_protocols TLSv1 TLSv1.1 TLSv1.2;', u'line': u'    #ssl_protocols'})
+changed: [Docova-2-new] => (item={u'regexp': u'ssl_ciphers HIGH:!aNULL:!MD5;', u'line': u'    #ssl_ciphers'})
+
+RUNNING HANDLER [www-data : restart php7.1-fpm] ********************************
+changed: [Docova-2-new]
+
+RUNNING HANDLER [letsencrypt : restart nginx] **********************************
+changed: [Docova-2-new]
+
+PLAY RECAP *********************************************************************
+Docova-2-new               : ok=52   changed=19   unreachable=0    failed=0    skipped=2    rescued=0    ignored=0
 ```
 </p>
 </details>
