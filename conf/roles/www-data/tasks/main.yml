@@ -35,8 +35,8 @@
   notify:
     - restart nginx
 - 
-  name: Check if Docova directory exists in /var/html/www/docova/web/upload-attachments
-  stat: path=/var/html/www/docova/web/upload-attachments
+  name: Check if Docova directory exists in /var/html/www/docova/web/attachments
+  stat: path=/var/html/www/docova/web/attachments
   register: check_path  
 - 
   name: Set Docova Document Permissions
@@ -47,7 +47,16 @@
     group: www-data
     mode: 0755
   with_items:
-     - /var/html/www/docova/web/upload-attachments
+     - /var/html/www/docova/src/Docova/DocovaBundle/Agents
+     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/public/css/custom
+     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/images
+     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/public/js/custom
+     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/views/DesignElements
+     - /var/html/www/docova/var/logs
+     - /var/html/www/docova/var/sessions
+     - /var/html/www/docova/var/cache
+     - /var/html/www/docova/web/upload
+     - {{ document_root }}
   become: yes
 - 
   name: Update Docova config file
@@ -76,3 +85,9 @@
     name: "DailyLifeCycle"
     minute: "0"
     job: "sudo bash /var/html/www/docova/dailylifecycle.sc"
+- 
+  name: "Running setUpDOCOVA"
+  shell: |
+      sudo bash /var/html/www/docova/setUpDOCOVA.sc <<EOF
+      y
+      EOF
