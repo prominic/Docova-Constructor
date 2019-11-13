@@ -120,5 +120,5 @@
 - 
   name: "Output of setUpDOCOVA"
   debug:
-    var: result
+    msg: "{{ result.stdout }}"
     verbosity: 2
