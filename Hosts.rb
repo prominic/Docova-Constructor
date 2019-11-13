@@ -85,10 +85,8 @@ class Hosts
               group: folder['group'] ||= 'vagrant',
               mount_options: mount_opts
             end
-        end
-		
-        
-		# Add Branch Files to Vagrant Share on VM
+        end        
+	# Add Branch Files to Vagrant Share on VM
         if host.has_key?('branch')
             server.vm.provision 'shell' do |s|
               s.path = scriptsPath + '/add-branch.sh'
@@ -105,7 +103,7 @@ class Hosts
         ##Start Ansible Loop
         server.vm.provision :ansible_local do |ansible|
           ansible.playbook = "Setup.yml"
-          ansible.extra_vars = { ip:host['ip'], id:host['identifier'], document_root:host['document_root'], mysql_root_password:host['mysql_root_password'], mailer_password:host['mailer_password'], sender_address:host['sender_address'], client_id:host['client_id'],client_secret:host['client_secret'], client_directory:host['client_directory'], google_api_key:host['google_api_key'], weather_api_key:host['weather_api_key'], database_name:host['database_name'], database_user:host['database_user'], database_password:host['database_password'], ldap_username:host['ldap_username'], ldap_password:host['ldap_password'], ldap_domain:host['ldap_domain'], ldap_adkey:host['ldap_adkey'], ldap_groupkey:host['ldap_groupkey'], mailer_user:host['mailer_user'], ansible_python_interpreter: "python3" }
+          ansible.extra_vars = { ip:host['ip'], id:host['identifier'], document_root:host['document_root'], run_letsencrypt:host['run_letsencrypt'], mysql_root_password:host['mysql_root_password'], mailer_password:host['mailer_password'], sender_address:host['sender_address'], client_id:host['client_id'],client_secret:host['client_secret'], client_directory:host['client_directory'], google_api_key:host['google_api_key'], weather_api_key:host['weather_api_key'], database_name:host['database_name'], database_user:host['database_user'], database_password:host['database_password'], ldap_username:host['ldap_username'], ldap_password:host['ldap_password'], ldap_domain:host['ldap_domain'], ldap_adkey:host['ldap_adkey'], ldap_groupkey:host['ldap_groupkey'], mailer_user:host['mailer_user'], ansible_python_interpreter: "python3" }
 		  ansible.compatibility_mode = "2.0"
         end
       end
