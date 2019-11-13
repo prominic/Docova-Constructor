@@ -1,102 +1,114 @@
----
-# tasks file for Docova Deployment
-- name: Create webroot
-  file:
-    state: directory
+--- 
+- 
+  become: true
+  file: 
+    group: www-data
+    mode: 493
+    owner: www-data
     path: /var/html/www/
-    owner: www-data
-    group: www-data
-    mode: 0755
-  become: yes
+    state: directory
+  name: "Create webroot"
 - 
-  name: Check if Docova directory exists in /var/html/www/docova
+  name: "Check if Docova directory exists in /var/html/www/docova"
+  register: check_path
   stat: path=/var/html/www/docova
-  register: check_path  
 - 
-  name: Copying Docova Bundle Zip
-  copy:
+  copy: 
+    dest: /tmp/docova.zip
     src: /vagrant/roles/www-data/templates/docova.zip
-    dest: /tmp/docova.zip 
+  name: "Copying Docova Bundle Zip"
 - 
-  name: Extract Docova
-  unarchive:
-    src: /tmp/docova.zip
+  become: true
+  name: "Extract Docova"
+  unarchive: 
+    copy: false
     dest: /tmp
-    owner: www-data
     group: www-data
-    copy: no
-  become: yes
-  when: not check_path.stat.exists
+    owner: www-data
+    src: /tmp/docova.zip
+  when: "not check_path.stat.exists"
 - 
-  name: Move Docova install files
-  command: mv /tmp/docova /var/html/www/docova
-  become: yes
-  when: not check_path.stat.exists
-  notify:
-    - restart nginx
-- name: Create document_root
-  file:
-    state: directory
+  become: true
+  command: "mv /tmp/docova /var/html/www/docova"
+  name: "Move Docova install files"
+  notify: 
+    - "restart nginx"
+  when: "not check_path.stat.exists"
+- 
+  become: true
+  file: 
+    group: www-data
+    mode: 493
+    owner: www-data
     path: "{{ document_root }}"
-    owner: www-data
-    group: www-data
-    mode: 0755
-  become: yes
-- 
-  name: Check if Docova directory exists in {{ document_root }}
-  stat: "path={{ document_root }}"
-  register: check_path  
-- 
-  name: Set Docova Document Permissions
-  file:
     state: directory
-    path: { item }
-    owner: www-data
+  name: "Create document_root"
+- 
+  name: "Check if Docova directory exists in {{ document_root }}"
+  register: check_path
+  stat: "path={{ document_root }}"
+- 
+  become: true
+  file: 
     group: www-data
-    mode: 0755
-  with_items:
-     - /var/html/www/docova/src/Docova/DocovaBundle/Agents
-     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/public/css/custom
-     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/images
-     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/public/js/custom
-     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/views/DesignElements
-     - /var/html/www/docova/var/logs
-     - /var/html/www/docova/var/sessions
-     - /var/html/www/docova/var/cache
-     - /var/html/www/docova/web/upload
-     - "{{ document_root }}"
-  become: yes
+    mode: 493
+    owner: www-data
+    path: 
+      item: ~
+    state: directory
+  name: "Set Docova Document Permissions"
+  with_items: 
+    - /var/html/www/docova/src/Docova/DocovaBundle/Agents
+    - /var/html/www/docova/src/Docova/DocovaBundle/Resources/public/css/custom
+    - /var/html/www/docova/src/Docova/DocovaBundle/Resources/images
+    - /var/html/www/docova/src/Docova/DocovaBundle/Resources/public/js/custom
+    - /var/html/www/docova/src/Docova/DocovaBundle/Resources/views/DesignElements
+    - /var/html/www/docova/var/logs
+    - /var/html/www/docova/var/sessions
+    - /var/html/www/docova/var/cache
+    - /var/html/www/docova/web/upload
+    - "{{ document_root }}"
 - 
-  name: Update Docova config file
-  lineinfile:
-    dest: "/var/html/www/docova/app/config/parameters.yml"
-    regexp: "{{ item.regexp }}"
+  lineinfile: 
+    dest: /var/html/www/docova/app/config/parameters.yml
     line: "{{ item.line }}"
-  with_items:
-    - {'regexp': "database_driver:", 'line': "    database_driver: pdo_mysql"}
-    - {'regexp': "database_port:", 'line': "    database_port: 3306"}
-    - {'regexp': "database_name:", 'line': "    database_name: {{database_name}}"}
-    - {'regexp': "database_user:", 'line': "    database_user: {{database_user}}"}
-    - {'regexp': "database_password:", 'line': "    database_password: {{database_password}}"}
-  notify:
-    - restart nginx
-    - restart php-fpm
+    regexp: "{{ item.regexp }}"
+  name: "Update Docova config file"
+  notify: 
+    - "restart nginx"
+    - "restart php-fpm"
+  with_items: 
+    - 
+      line: "    database_driver: pdo_mysql"
+      regexp: "database_driver:"
+    - 
+      line: "    database_port: 3306"
+      regexp: "database_port:"
+    - 
+      line: "    database_name: {{database_name}}"
+      regexp: "database_name:"
+    - 
+      line: "    database_user: {{database_user}}"
+      regexp: "database_user:"
+    - 
+      line: "    database_password: {{database_password}}"
+      regexp: "database_password:"
 - 
-  name: Setting Autoindex Cron Job
-  cron:
-    name: "Autoindex"
-    minute: "*/5"
+  cron: 
     job: "sudo bash /var/html/www/docova/autoindex.sc"
+    minute: "*/5"
+    name: Autoindex
+  name: "Setting Autoindex Cron Job"
 - 
-  name: Setting DailyLifeCycle Cron Job
-  cron:
-    name: "DailyLifeCycle"
-    minute: "0"
+  cron: 
     job: "sudo bash /var/html/www/docova/dailylifecycle.sc"
+    minute: "0"
+    name: DailyLifeCycle
+  name: "Setting DailyLifeCycle Cron Job"
 - 
+  become: true
   name: "Running setUpDOCOVA"
-  become: yes
-  shell: |
+  shell: |-
       bash /var/html/www/docova/setUpDOCOVA.sh <<EOF
       y
       EOF
