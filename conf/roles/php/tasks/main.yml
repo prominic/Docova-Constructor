@@ -8,7 +8,7 @@
     
 - name: Purge PHP version packages (besides the currently chosen php_version).
   apt:
-    name: "{{ php_versions_debian | reject('search', 'php') | list }}"
+    name: "php*"
     state: absent
     purge: true
     force: true
