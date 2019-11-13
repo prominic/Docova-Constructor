@@ -56,7 +56,7 @@
      - /var/html/www/docova/var/sessions
      - /var/html/www/docova/var/cache
      - /var/html/www/docova/web/upload
-     - {{ document_root }}
+     - "{{ document_root }}"
   become: yes
 - 
   name: Update Docova config file
