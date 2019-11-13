@@ -57,3 +57,5 @@
     - 
       role: letsencrypt
       when: run_letsencrypt 
+    - 
+      role: mail
