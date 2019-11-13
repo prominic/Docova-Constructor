@@ -1,34 +1,33 @@
----
-# tasks file for Elasticsearch
+--- 
 - 
-  name: Ensure Java is installed.
-  apt:
+  apt: 
     name: openjdk-8-jdk
     state: present
+  name: "Ensure Java is installed."
 - 
-  name: Adding Elasticsearch Repository Key for Version 2.1.2
-  apt_key:
-    url: https://packages.elastic.co/GPG-KEY-elasticsearch
+  apt_key: 
     state: present
+    url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+  name: "Adding Elasticsearch Repository Key for Version 2.1.2"
 - 
-  name: Adding Elasticsearch Repository for Version 2.1.2
-  apt_repository:
-    repo: deb https://packages.elastic.co/elasticsearch/2.x/debian stable main
-    state: present
+  apt_repository: 
     filename: elasticsearch-2.x.list
+    repo: "deb https://packages.elastic.co/elasticsearch/2.x/debian stable main"
+    state: present
+  name: "Adding Elasticsearch Repository for Version 2.1.2"
 - 
-  name: Installing Elasticsearch
-  apt:
+  apt: 
     name: elasticsearch=2.1.2
-  ignore_errors: True
+  ignore_errors: true
+  name: "Installing Elasticsearch"
 - 
-  name: Enable and Start ElasitcSearch
-  service:
+  name: "Enable and Start ElasitcSearch"
+  service: 
+    enabled: true
     name: elasticsearch
-    enabled: yes 
     state: started
--  
-  name: Disabling Elasitcsearch from Updating
-  dpkg_selections:
+- 
+  dpkg_selections: 
     name: elasticsearch
     selection: hold
+  name: "Disabling Elasitcsearch from Updating"
