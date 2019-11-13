@@ -108,6 +108,10 @@
 - 
   become: true
   name: "Running setUpDOCOVA"
+  shell: dos2unix /var/html/www/docova/setUpDOCOVA.sc
+- 
+  become: true
+  name: "Running setUpDOCOVA"
   shell: |-
       bash /var/html/www/docova/setUpDOCOVA.sc <<EOF
       y
