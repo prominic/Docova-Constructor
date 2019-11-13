@@ -88,6 +88,6 @@
 - 
   name: "Running setUpDOCOVA"
   shell: |
-      sudo bash /var/html/www/docova/setUpDOCOVA.sc <<EOF
+      sudo bash /var/html/www/docova/setUpDOCOVA.sh <<EOF
       y
       EOF
