@@ -34,17 +34,24 @@
   become: true
   gather_facts: true
   hosts: all
-  pre_tasks:
+  pre_tasks: 
     - 
-      name: Ensuring Aptitude is installed.
-      apt:
+      apt: 
+        force_apt_get: true
         name: aptitude
         state: present
-        force_apt_get: yes
-  roles:
-    - nginx
-    - mysql
-    - php
-    - elasticsearch212
-    - www-data
-    - letsencrypt
+      name: "Ensuring Aptitude is installed."
+  roles: 
+    - 
+      role: nginx
+    - 
+      role: mysql
+    - 
+      role: php
+    - 
+      role: elasticsearch212
+    - 
+      role: www-data
+    - 
+      role: letsencrypt
+      when: "{{ run_letsencrypt }} == 'Yes"
