@@ -41,7 +41,7 @@
     group: www-data
     mode: 0777
     owner: www-data
-    path: "{{ document_root }}"
+    path: "{{ document_root }}/Docova/_storage"
     state: directory
     recurse: yes
   name: "Create document_root"
@@ -93,28 +93,35 @@
     - 
       line: "    database_password: {{database_password}}"
       regexp: "database_password:"
+    - 
+      line: "    document_root: {{document_root}}"
+      regexp: "document_root:"
 - 
   cron: 
-    job: "sudo bash /var/html/www/docova/autoindex.sc"
+    job: "sudo bash /var/html/www/docova/autoindex.sh"
     minute: "*/5"
     name: Autoindex
   name: "Setting Autoindex Cron Job"
 - 
   cron: 
-    job: "sudo bash /var/html/www/docova/dailylifecycle.sc"
-    minute: "0"
+    job: "sudo bash /var/html/www/docova/agentrunner.sh"
+    minute: "*/5"
+    name: AgentRunner
+  name: "Setting AgentRunner Cron Job"
+- 
+  cron: 
+    job: "sudo bash /var/html/www/docova/dailylifecycle.sh"
+    hour: "0"
     name: DailyLifeCycle
   name: "Setting DailyLifeCycle Cron Job"
 - 
   become: true
   name: "Running setUpDOCOVA"
-  shell: dos2unix /var/html/www/docova/setUpDOCOVA.sc
-- 
-  become: true
-  name: "Running setUpDOCOVA"
   register: result
+  args: 
+    chdir: /var/html/www/docova
   shell: |-
-      bash /var/html/www/docova/setUpDOCOVA.sc <<EOF
+      bash /var/html/www/docova/setUpDOCOVA.sh << EOF
       y
       EOF
 - 
