@@ -55,6 +55,7 @@
     group: www-data
     mode: 0777
     recurse: yes
+    group: www-data
     owner: www-data
     path: 
       item: ~
