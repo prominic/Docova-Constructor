@@ -52,7 +52,6 @@
 - 
   become: true
   file: 
-    group: www-data
     mode: 0777
     recurse: yes
     group: www-data
