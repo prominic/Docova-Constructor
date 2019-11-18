@@ -27,6 +27,15 @@
     name: elasticsearch
     state: started
 - 
+  name: "Check if mapper plugin exists"
+  register: check_path
+  stat: path=/usr/share/elasticsearch/plugins/mapper-attachments
+-
+  name: "Install Elasticsearch mapper attachment plugin."
+  become: true
+  shell: /usr/share/elasticsearch/bin/plugin install elasticsearch/elasticsearch-mapper-attachments/3.1.2
+  when: "not check_path.stat.exists"
+- 
   dpkg_selections: 
     name: elasticsearch
     selection: hold
