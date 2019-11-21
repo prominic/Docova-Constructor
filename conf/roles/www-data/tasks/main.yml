@@ -67,6 +67,7 @@
     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/public/js/custom
     - /var/html/www/docova/src/Docova/DocovaBundle/Resources/views/DesignElements
     - /var/html/www/docova/var/
+    - /var/html/www/docova/web/ 
     - "{{ document_root }}"
 - 
   lineinfile: 
@@ -98,19 +99,19 @@
       regexp: "document_root:"
 - 
   cron: 
-    job: "sudo bash /var/html/www/docova/autoindex.sh"
+    job: "/var/html/www/docova/autoindex.sh"
     minute: "*/5"
     name: Autoindex
   name: "Setting Autoindex Cron Job"
 - 
   cron: 
-    job: "sudo bash /var/html/www/docova/agentrunner.sh"
+    job: "/var/html/www/docova/agentrunner.sh"
     minute: "*/5"
     name: AgentRunner
   name: "Setting AgentRunner Cron Job"
 - 
   cron: 
-    job: "sudo bash /var/html/www/docova/dailylifecycle.sh"
+    job: "/var/html/www/docova/dailylifecycle.sh"
     hour: "0"
     name: DailyLifeCycle
   name: "Setting DailyLifeCycle Cron Job"
