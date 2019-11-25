@@ -8,6 +8,7 @@
     name: 
       - nginx
       - git
+      - tar
       - unzip
       - curl
       - dos2unix
