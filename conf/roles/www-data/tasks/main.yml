@@ -26,6 +26,7 @@
     dest: /tmp
     group: www-data
     owner: www-data
+    remote_src=yes
     src: /tmp/docova.zip
   when: "not check_path.stat.exists"
 - 
